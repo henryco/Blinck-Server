@@ -1,20 +1,21 @@
-package net.henryco.blinckserver.mvc.controller;
+package net.henryco.blinckserver.mvc.controller.pub;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
- * @author Henry on 21/08/17.
+ * @author Henry on 22/08/17.
  */
-@RestController
-@RequestMapping("/enter/facebook")
-public class LoginController {
+@RestController @RequestMapping("/public")
+public class PublicInfoController {
+
+	private static final String JSON = "application/json; charset=UTF-8";
 
 
-	@RequestMapping(value = "/permissions", method = GET, produces = "application/json; charset=UTF-8")
+
+	@RequestMapping(value = "/facebook/permissions", method = GET, produces = JSON)
 	public String[] getRequestedFbPermissions() {
 
 		return new String[]{
@@ -29,11 +30,5 @@ public class LoginController {
 		};
 	}
 
-	@RequestMapping(method = GET)
-	public String logIn(@RequestParam("token") String fbToken) {
-
-		System.out.println(fbToken);
-		return "";
-	}
 
 }
