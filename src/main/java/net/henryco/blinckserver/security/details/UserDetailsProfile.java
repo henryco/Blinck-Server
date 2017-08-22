@@ -28,7 +28,7 @@ public class UserDetailsProfile implements UserDetails {
 	@Override
 	public String getPassword() {
 		System.out.println("UserDetailsProfile::PASSWORD");
-		return null;
+		return "password1";
 	}
 
 	@Override
