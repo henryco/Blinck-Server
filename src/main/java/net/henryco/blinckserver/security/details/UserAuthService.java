@@ -17,7 +17,7 @@ public class UserAuthService implements UserDetailsService {
 
 		// TODO: 22/08/17
 		System.out.println("UserDetailsService::"+username);
-		return new UserDetailsProfile(username);
+		return new UserDetailsProfile(username, new UserAuthProfile());
 	}
 
 }

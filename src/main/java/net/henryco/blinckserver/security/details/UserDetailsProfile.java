@@ -13,47 +13,49 @@ public class UserDetailsProfile implements UserDetails {
 
 
  	private final String username;
-	public UserDetailsProfile(String username) {
+ 	private final UserAuthProfile authProfile;
+
+
+	public UserDetailsProfile(String username,
+							  UserAuthProfile authProfile) {
 		this.username = username;
-		System.out.println("UserDetailsProfile");
+		this.authProfile = authProfile;
 	}
 
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return AuthorityUtils.createAuthorityList(/* TODO string array*/);
+		return AuthorityUtils.createAuthorityList(authProfile.getAuthoritiesArray());
 	}
 
 
 	@Override
 	public String getPassword() {
-		System.out.println("UserDetailsProfile::PASSWORD");
-		return "password1";
+		return authProfile.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		System.out.println("UserDetailsProfile::NAME");
 		return username;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return true;
+		return !authProfile.isExpired();
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return !authProfile.isLocked();
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return true;
+		return !authProfile.isExpired();
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return authProfile.isEnabled();
 	}
 }
