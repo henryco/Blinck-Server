@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
  * @author Henry on 21/08/17.
  */
 @Configuration
-@Import({SecurityConfiguration.class})
+//@Import({SecurityConfiguration.class})
 public class MainConfiguration {
 
 
