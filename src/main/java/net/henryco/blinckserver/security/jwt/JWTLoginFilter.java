@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security;
+package net.henryco.blinckserver.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +35,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 		AccountCredentials credentials = new ObjectMapper()
 				.readValue(req.getInputStream(), AccountCredentials.class);
+
+		System.out.println(credentials);
 		return getAuthenticationManager().authenticate(
 				new UsernamePasswordAuthenticationToken(
 						credentials.getUsername(),
@@ -54,5 +56,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 			throws IOException, ServletException {
 
 		TokenAuthService.addAuthentication(res, auth.getName());
+		System.out.println("SUCCESSFULLY AUTH");
 	}
 }

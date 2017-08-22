@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security;
+package net.henryco.blinckserver.security.jwt;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security;
+package net.henryco.blinckserver.security.jwt;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +24,8 @@ public class JWTAuthFilter extends GenericFilterBean {
 						 FilterChain filterChain) throws IOException, ServletException {
 
 		Authentication authentication = TokenAuthService.getAuthentication((HttpServletRequest)request);
+
+		System.out.println("FILTRATION");
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		filterChain.doFilter(request, response);
