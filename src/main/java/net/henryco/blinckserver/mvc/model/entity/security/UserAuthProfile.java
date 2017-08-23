@@ -18,14 +18,33 @@ import javax.persistence.Table;
 @Table(name = "USER_PROFILE_AUTH")
 public class UserAuthProfile implements BlinckAuthorityEntity {
 
-	@Column @Id private long id;
+
+	private @Id @Column(
+			name = "auth_id",
+			unique = true
+	) long id;
 
 
-	@Column(nullable = false) private boolean enabled;
-	@Column(nullable = false) private boolean locked;
-	@Column(nullable = false) private boolean expired;
+	private @Column(
+			nullable = false
+	) boolean enabled;
 
-	@Column private String authorities;
+
+	private @Column(
+			nullable = false
+	) boolean locked;
+
+
+	private @Column(
+			nullable = false
+	) boolean expired;
+
+
+	private @Column(
+			nullable = false
+	) String authorities;
+
+
 	@Column private String password;
 
 

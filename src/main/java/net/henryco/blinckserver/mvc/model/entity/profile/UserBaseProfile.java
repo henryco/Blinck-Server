@@ -2,6 +2,7 @@ package net.henryco.blinckserver.mvc.model.entity.profile;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 
 import javax.persistence.*;
 
@@ -12,7 +13,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "USER_PROFILE")
 public class UserBaseProfile {
-
 
 
 	private @Id @Column(
@@ -26,15 +26,22 @@ public class UserBaseProfile {
 	) String birthday;
 
 
-	private @ManyToOne(
+	private @OneToOne(
 			cascade = CascadeType.ALL,
 			optional = false
 	) @JoinColumn(
-			table = "USER_PROFILE_NAME",
 			name = "name_id",
 			unique = true
 	) UserNameEntity userName;
 
+
+	private @OneToOne(
+			cascade = CascadeType.ALL,
+			optional = false
+	) @JoinColumn(
+			name = "auth_id",
+			unique = true
+	) UserAuthProfile authProfile;
 
 
 }

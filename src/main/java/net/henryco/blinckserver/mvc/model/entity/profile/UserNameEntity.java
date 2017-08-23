@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class UserNameEntity {
 
 
-	private @Id  @Column(
+	private @Id @Column(
 			name = "name_id",
 			unique = true
 	) @GeneratedValue(
@@ -22,8 +22,11 @@ public class UserNameEntity {
 	) long id;
 
 
-	@Column private String username;
-	@Column private String firstName;
+	private @Column(
+			nullable = false
+	) String firstName;
+
+
 	@Column private String secondName;
 	@Column private String lastName;
 
