@@ -6,9 +6,8 @@ import lombok.NoArgsConstructor;
 /**
  * @author Henry on 22/08/17.
  */ @Data @NoArgsConstructor
-public class LoginCredentials {
+public class LoginFacebookCredentials {
 
-	private String facebook_uid;
 	private String facebook_access_token;
 
 }

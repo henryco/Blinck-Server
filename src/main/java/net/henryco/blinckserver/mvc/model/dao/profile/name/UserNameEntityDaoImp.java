@@ -3,13 +3,13 @@ package net.henryco.blinckserver.mvc.model.dao.profile.name;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserNameEntity;
 import net.henryco.blinckserver.mvc.model.repository.profile.UserNameProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author Henry on 23/08/17.
  */
 
-@Component
+@Repository
 public class UserNameEntityDaoImp implements UserNameEntityDao {
 
 

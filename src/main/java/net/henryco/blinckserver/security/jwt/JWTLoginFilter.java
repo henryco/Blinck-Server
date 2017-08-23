@@ -21,14 +21,14 @@ import java.util.Collections;
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 
-	private final TokenAuthService tokenAuthService;
+	private final TokenAuthenticationService userTokenAuthService;
 
 	public JWTLoginFilter(String url,
 						  AuthenticationManager authManager,
-						  TokenAuthService tokenAuthService) {
+						  TokenAuthenticationService userTokenAuthService) {
 		super(new AntPathRequestMatcher(url));
 		setAuthenticationManager(authManager);
-		this.tokenAuthService = tokenAuthService;
+		this.userTokenAuthService = userTokenAuthService;
 	}
 
 
@@ -38,13 +38,12 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 												HttpServletResponse res)
 			throws AuthenticationException, IOException, ServletException {
 
-		LoginCredentials credentials = new ObjectMapper()
-				.readValue(req.getInputStream(), LoginCredentials.class);
+		LoginFacebookCredentials credentials = new ObjectMapper()
+				.readValue(req.getInputStream(), LoginFacebookCredentials.class);
 
 		return getAuthenticationManager().authenticate(
 				new UsernamePasswordAuthenticationToken(
-						credentials.getFacebook_uid(),
-						credentials.getFacebook_access_token(),
+						null, credentials.getFacebook_access_token(),
 						Collections.emptyList()
 				)
 		);
@@ -59,6 +58,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 											Authentication auth)
 			throws IOException, ServletException {
 
-		tokenAuthService.addAuthentication(res, auth.getName());
+		userTokenAuthService.addAuthentication(res, auth.getName());
 	}
 }

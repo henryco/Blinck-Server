@@ -18,10 +18,10 @@ import java.io.IOException;
 public class JWTAuthFilter extends GenericFilterBean {
 
 
-	private final TokenAuthService tokenAuthService;
+	private final TokenAuthenticationService userTokenAuthService;
 
-	public JWTAuthFilter(TokenAuthService tokenAuthService) {
-		this.tokenAuthService = tokenAuthService;
+	public JWTAuthFilter(TokenAuthenticationService userTokenAuthService) {
+		this.userTokenAuthService = userTokenAuthService;
 	}
 
 
@@ -30,7 +30,7 @@ public class JWTAuthFilter extends GenericFilterBean {
 						 ServletResponse response,
 						 FilterChain filterChain) throws IOException, ServletException {
 
-		Authentication authentication = tokenAuthService.getAuthentication((HttpServletRequest)request);
+		Authentication authentication = userTokenAuthService.getAuthentication((HttpServletRequest)request);
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		filterChain.doFilter(request, response);

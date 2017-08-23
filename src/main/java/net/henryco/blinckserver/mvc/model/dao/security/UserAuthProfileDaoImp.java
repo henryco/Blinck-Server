@@ -3,12 +3,12 @@ package net.henryco.blinckserver.mvc.model.dao.security;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import net.henryco.blinckserver.mvc.model.repository.security.UserAuthProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author Henry on 23/08/17.
  */
-@Component
+@Repository
 public class UserAuthProfileDaoImp implements UserAuthProfileDao {
 
 	private final UserAuthProfileRepository profileRepository;

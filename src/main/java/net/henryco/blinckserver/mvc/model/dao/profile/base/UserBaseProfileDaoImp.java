@@ -3,12 +3,12 @@ package net.henryco.blinckserver.mvc.model.dao.profile.base;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
 import net.henryco.blinckserver.mvc.model.repository.profile.UserBaseProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author Henry on 23/08/17.
  */
-@Component
+@Repository
 public class UserBaseProfileDaoImp implements UserBaseProfileDao {
 
 	private final UserBaseProfileRepository baseProfileRepository;

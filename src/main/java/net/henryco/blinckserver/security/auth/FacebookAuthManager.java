@@ -43,7 +43,6 @@ public class FacebookAuthManager implements AuthenticationManager {
 			throws AuthenticationException {
 
 
-		Object user_id = authentication.getPrincipal();
 		Object facebook_token = authentication.getCredentials();
 
 		Facebook facebook = new FacebookTemplate(facebook_token.toString());
@@ -51,18 +50,13 @@ public class FacebookAuthManager implements AuthenticationManager {
 			throw new SessionAuthenticationException("FACEBOOK UNAUTHORIZED");
 
 		User userProfile = facebook.userOperations().getUserProfile();
-		String id = userProfile.getId();
-
-		if (!user_id.toString().equals(id))
-			throw new BadCredentialsException("Facebook uid != user_id");
 
 		UserDetails userDetails = loadDetails(userProfile);
 		if (!primaryCheck(userDetails))
 			throw new InsufficientAuthenticationException("Account is disabled");
 
 		return new UsernamePasswordAuthenticationToken(
-				userDetails.getUsername(),
-				null,
+				userDetails.getUsername(), null,
 				Collections.emptyList()
 		);
 	}
