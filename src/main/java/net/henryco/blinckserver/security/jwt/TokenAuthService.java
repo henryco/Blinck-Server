@@ -1,10 +1,15 @@
 package net.henryco.blinckserver.security.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,42 +20,57 @@ import java.util.Date;
 /**
  * @author Henry on 22/08/17.
  */
+
+@Service
+@PropertySource("classpath:/static/props/base.properties")
 @SuppressWarnings("WeakerAccess")
-public class TokenAuthService {
+public final class TokenAuthService {
 
-	private static final long EXPIRATION_TIME = 864_000_000; // 10 days
+	private final String app_secret;
+	private final String default_role;
+	private final String header_string;
+	private final String token_prefix;
 
-	private static final String SECRET = "jnfv78rg34badfhvq784";
-	private static final String TOKEN_PREFIX = "Bearer";
-	private static final String HEADER_STRING = "Authorization";
-	private static final String ROLE_USER = "ROLE_USER";
+	private final long expiration_time;
 
-	@SuppressWarnings("WeakerAccess")
-	public static void addAuthentication(HttpServletResponse res, String username) {
-		String JWT = Jwts.builder()
-				.setSubject(username)
-				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-				.signWith(SignatureAlgorithm.HS512, SECRET)
-				.compact();
-		res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+
+	@Autowired
+	public TokenAuthService(Environment environment) {
+		app_secret = environment.getProperty("security.jwt.secret");
+		default_role = environment.getProperty("security.roles.default", "ROLE_USER");
+		header_string = environment.getProperty("security.jwt.header", "Authorization");
+		token_prefix = environment.getProperty("security.jwt.prefix", "Bearer");
+		expiration_time = Long.decode(environment.getProperty("security.jwt.expiration", "864_000_000"));
 	}
 
 
-	@SuppressWarnings("WeakerAccess")
-	public static Authentication getAuthentication(HttpServletRequest request) {
+	public void addAuthentication(HttpServletResponse res, String username) {
+		String JWT = Jwts.builder()
+				.setSubject(username)
+				.setExpiration(new Date(System.currentTimeMillis() + expiration_time))
+				.signWith(SignatureAlgorithm.HS512, app_secret)
+				.compact();
+		res.addHeader(header_string, token_prefix + " " + JWT);
+	}
 
-		String token = request.getHeader(HEADER_STRING);
+
+
+	public Authentication getAuthentication(HttpServletRequest request) {
+
+		final String token = request.getHeader(header_string);
 		if (token == null) return null;
 
-		String user = Jwts.parser()
-				.setSigningKey(SECRET)
-				.parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-				.getBody()
-		.getSubject();
+		final String user;
+		try {
+			user = Jwts.parser()
+					.setSigningKey(app_secret)
+					.parseClaimsJws(token.replace(token_prefix, "")).getBody()
+			.getSubject();
+		} catch (ExpiredJwtException e) { return null; }
 
 		return user == null ? null
 		: new UsernamePasswordAuthenticationToken(user, null,
-				Collections.singletonList(new SimpleGrantedAuthority(ROLE_USER))
+				Collections.singletonList(new SimpleGrantedAuthority(default_role))
 		);
 	}
 

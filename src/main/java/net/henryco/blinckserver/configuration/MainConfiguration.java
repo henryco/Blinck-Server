@@ -7,7 +7,10 @@ import org.springframework.context.annotation.Import;
  * @author Henry on 21/08/17.
  */
 @Configuration
-@Import({WebSecurityConfiguration.class})
+@Import({
+		WebSecurityConfiguration.class,
+		WebMvcConfiguration.class
+})
 public class MainConfiguration {
 
 

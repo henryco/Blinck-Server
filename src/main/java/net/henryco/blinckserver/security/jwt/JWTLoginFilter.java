@@ -21,9 +21,14 @@ import java.util.Collections;
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 
-	public JWTLoginFilter(String url, AuthenticationManager authManager) {
+	private final TokenAuthService tokenAuthService;
+
+	public JWTLoginFilter(String url,
+						  AuthenticationManager authManager,
+						  TokenAuthService tokenAuthService) {
 		super(new AntPathRequestMatcher(url));
 		setAuthenticationManager(authManager);
+		this.tokenAuthService = tokenAuthService;
 	}
 
 
@@ -54,6 +59,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 											Authentication auth)
 			throws IOException, ServletException {
 
-		TokenAuthService.addAuthentication(res, auth.getName());
+		tokenAuthService.addAuthentication(res, auth.getName());
 	}
 }

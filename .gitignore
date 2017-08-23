@@ -2,6 +2,10 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 
+### SPRING ###
+application.properties
+/src/main/resources/static/props/base.properties
+
 ### STS ###
 .apt_generated
 .classpath
