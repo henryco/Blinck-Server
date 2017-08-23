@@ -40,7 +40,7 @@ public final class TokenAuthService {
 		default_role = environment.getProperty("security.roles.default", "ROLE_USER");
 		header_string = environment.getProperty("security.jwt.header", "Authorization");
 		token_prefix = environment.getProperty("security.jwt.prefix", "Bearer");
-		expiration_time = Long.decode(environment.getProperty("security.jwt.expiration", "864_000_000"));
+		expiration_time = Long.decode(environment.getProperty("security.jwt.expiration", "864000000"));
 	}
 
 
