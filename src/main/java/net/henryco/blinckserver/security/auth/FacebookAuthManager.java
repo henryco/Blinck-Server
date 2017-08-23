@@ -50,7 +50,7 @@ public class FacebookAuthManager implements AuthenticationManager {
 		String id = userProfile.getId();
 
 		if (!principal.toString().equals(id))
-			throw new BadCredentialsException("fb uid != principal");
+			throw new BadCredentialsException("Facebook uid != principal");
 
 
 

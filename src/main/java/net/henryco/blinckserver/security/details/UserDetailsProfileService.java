@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
  * @author Henry on 22/08/17.
  */
 @Service
-public class UserProfileDetailsService implements UserDetailsService {
+public class UserDetailsProfileService implements UserDetailsService {
 
 
 	private final UserAuthProfileDao authProfileDao;
 
 	@Autowired
-	public UserProfileDetailsService(UserAuthProfileDao authProfileDao) {
+	public UserDetailsProfileService(UserAuthProfileDao authProfileDao) {
 		this.authProfileDao = authProfileDao;
 	}
 

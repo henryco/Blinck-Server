@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.model.repository;
+package net.henryco.blinckserver.mvc.model.repository.security;
 
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
