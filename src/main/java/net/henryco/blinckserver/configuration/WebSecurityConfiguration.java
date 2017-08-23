@@ -1,7 +1,6 @@
 package net.henryco.blinckserver.configuration;
 
 import net.henryco.blinckserver.security.auth.FacebookAuthManager;
-import net.henryco.blinckserver.security.details.UserAuthService;
 import net.henryco.blinckserver.security.jwt.JWTAuthFilter;
 import net.henryco.blinckserver.security.jwt.JWTLoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -20,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 @ComponentScan(basePackageClasses = {
-		UserAuthService.class, FacebookAuthManager.class
+		UserDetailsService.class, FacebookAuthManager.class
 })
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 

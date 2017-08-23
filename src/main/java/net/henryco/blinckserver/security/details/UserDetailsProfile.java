@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.security.details;
 
+import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,20 +13,17 @@ import java.util.Collection;
 public class UserDetailsProfile implements UserDetails {
 
 
- 	private final String username;
  	private final UserAuthProfile authProfile;
 
 
-	public UserDetailsProfile(String username,
-							  UserAuthProfile authProfile) {
-		this.username = username;
+	public UserDetailsProfile(UserAuthProfile authProfile) {
 		this.authProfile = authProfile;
 	}
 
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return AuthorityUtils.createAuthorityList(authProfile.getAuthoritiesArray());
+		return AuthorityUtils.createAuthorityList(authProfile.getAuthorityArray());
 	}
 
 
@@ -36,7 +34,7 @@ public class UserDetailsProfile implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return username;
+		return Long.toString(authProfile.getId());
 	}
 
 	@Override
