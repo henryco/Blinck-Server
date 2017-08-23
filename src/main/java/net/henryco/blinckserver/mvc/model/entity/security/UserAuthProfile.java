@@ -3,6 +3,7 @@ package net.henryco.blinckserver.mvc.model.entity.security;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.util.BlinckAuthorityEntity;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 
 @Entity @Data
 @NoArgsConstructor
+@Proxy(lazy = false)
 @Table(name = "USER_PROFILE_AUTH")
 public class UserAuthProfile implements BlinckAuthorityEntity {
 

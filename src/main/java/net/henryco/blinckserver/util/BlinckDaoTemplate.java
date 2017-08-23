@@ -3,10 +3,11 @@ package net.henryco.blinckserver.util;
 /**
  * @author Henry on 23/08/17.
  */
-public interface BlinckDaoTemplate<T, ID> {
+public interface BlinckDaoTemplate<ENTITY, ID_TYPE> {
 
-	T getById(ID id);
-	void save(T entity);
-	void deleteById(ID id);
+	ENTITY getById(ID_TYPE id);
+	ENTITY save(ENTITY entity);
+	boolean isExists(ID_TYPE id);
+	void deleteById(ID_TYPE id);
 
 }

@@ -1,6 +1,7 @@
-package net.henryco.blinckserver.mvc.service;
+package net.henryco.blinckserver.mvc.service.data;
 
 import net.henryco.blinckserver.mvc.model.dao.profile.base.UserBaseProfileDao;
+import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,13 @@ public class UserBaseProfileService {
 		this.baseProfileDao = baseProfileDao;
 	}
 
+	public UserBaseProfile save(UserBaseProfile profile) {
+		return baseProfileDao.save(profile);
+	}
 
+	public boolean isUserExists(Long id) {
+		return baseProfileDao.isExists(id);
+	}
 
 
 }

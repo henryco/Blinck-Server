@@ -33,15 +33,13 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 												HttpServletResponse res)
 			throws AuthenticationException, IOException, ServletException {
 
-		AccountCredentials credentials = new ObjectMapper()
-				.readValue(req.getInputStream(), AccountCredentials.class);
-
-		System.out.println(credentials);
+		LoginCredentials credentials = new ObjectMapper()
+				.readValue(req.getInputStream(), LoginCredentials.class);
 
 		return getAuthenticationManager().authenticate(
 				new UsernamePasswordAuthenticationToken(
-						credentials.getUsername(),
-						credentials.getPassword(),
+						credentials.getFacebook_uid(),
+						credentials.getFacebook_access_token(),
 						Collections.emptyList()
 				)
 		);

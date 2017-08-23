@@ -25,12 +25,17 @@ public class UserAuthProfileDaoImp implements UserAuthProfileDao {
 	}
 
 	@Override
-	public void save(UserAuthProfile entity) {
-		profileRepository.save(entity);
+	public boolean isExists(Long id) {
+		return profileRepository.exists(id);
+	}
+
+	@Override
+	public UserAuthProfile save(UserAuthProfile entity) {
+		return profileRepository.save(entity);
 	}
 
 	@Override
 	public void deleteById(Long id) {
-		profileRepository.delete(id);
+		throw new RuntimeException("You cannot delete sub entity");
 	}
 }

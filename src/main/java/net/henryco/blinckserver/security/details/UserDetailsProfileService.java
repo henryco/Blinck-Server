@@ -1,7 +1,6 @@
 package net.henryco.blinckserver.security.details;
 
 import net.henryco.blinckserver.mvc.model.dao.security.UserAuthProfileDao;
-import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,10 +24,10 @@ public class UserDetailsProfileService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		UserAuthProfile profile = authProfileDao.getById(Long.decode(username));
-		if (profile == null) throw new UsernameNotFoundException(username+ " does not exist!");
-
-		return new UserDetailsProfile(profile);
+		Long id = Long.decode(username);
+		if (!authProfileDao.isExists(id))
+			throw new UsernameNotFoundException(username+ " does not exist!");
+		return new UserDetailsProfile(authProfileDao.getById(id));
 	}
 
 }

@@ -3,6 +3,7 @@ package net.henryco.blinckserver.mvc.model.entity.profile;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
  */
 @Entity @Data
 @NoArgsConstructor
+@Proxy(lazy = false)
 @Table(name = "USER_PROFILE")
 public class UserBaseProfile {
 
@@ -22,8 +24,19 @@ public class UserBaseProfile {
 
 
 	private @Column(
-			name = "birthday"
+			name = "birthday",
+			nullable = false
 	) String birthday;
+
+
+	private @Column(
+			name = "email"
+	) String email;
+
+
+	private @Column(
+			name = "about"
+	) String about;
 
 
 	private @OneToOne(

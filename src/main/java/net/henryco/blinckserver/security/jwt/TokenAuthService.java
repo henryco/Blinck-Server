@@ -23,7 +23,7 @@ public class TokenAuthService {
 	private static final String SECRET = "jnfv78rg34badfhvq784";
 	private static final String TOKEN_PREFIX = "Bearer";
 	private static final String HEADER_STRING = "Authorization";
-
+	private static final String ROLE_USER = "ROLE_USER";
 
 	@SuppressWarnings("WeakerAccess")
 	public static void addAuthentication(HttpServletResponse res, String username) {
@@ -49,8 +49,9 @@ public class TokenAuthService {
 		.getSubject();
 
 		return user == null ? null
-				: new UsernamePasswordAuthenticationToken(user, null,
-				Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+		: new UsernamePasswordAuthenticationToken(user, null,
+				Collections.singletonList(new SimpleGrantedAuthority(ROLE_USER))
+		);
 	}
 
 

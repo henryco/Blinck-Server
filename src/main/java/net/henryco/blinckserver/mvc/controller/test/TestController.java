@@ -16,8 +16,8 @@ public class TestController {
 
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String hello(Authentication authentication) {
-		System.out.println(authentication.getAuthorities());
+	public String hello() {
+
 		return "hello";
 	}
 

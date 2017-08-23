@@ -2,6 +2,7 @@ package net.henryco.blinckserver.mvc.model.entity.profile;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
  */
 @Entity @Data
 @NoArgsConstructor
+@Proxy(lazy = false)
 @Table(name = "USER_PROFILE_NAME")
 public class UserNameEntity {
 
