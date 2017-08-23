@@ -1,9 +1,10 @@
 package net.henryco.blinckserver.configuration;
 
 import net.henryco.blinckserver.security.auth.FacebookAuthManager;
-import net.henryco.blinckserver.security.jwt.JWTAuthFilter;
-import net.henryco.blinckserver.security.jwt.JWTLoginFilter;
-import net.henryco.blinckserver.security.jwt.TokenAuthenticationService;
+import net.henryco.blinckserver.security.jwt.credentials.LoginFacebookCredentials;
+import net.henryco.blinckserver.security.jwt.filter.JWTAuthFilter;
+import net.henryco.blinckserver.security.jwt.filter.JWTLoginFilter;
+import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
@@ -61,7 +62,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 				.addFilterBefore( // We filter the api/login requests
-						new JWTLoginFilter("/login/**", facebookAuthManager, userTokenAuthService),
+						new JWTLoginFilter(
+								"/login/**",
+								facebookAuthManager,
+								userTokenAuthService,
+								LoginFacebookCredentials.class),
 						UsernamePasswordAuthenticationFilter.class
 				)
 //				.addFilterBefore(

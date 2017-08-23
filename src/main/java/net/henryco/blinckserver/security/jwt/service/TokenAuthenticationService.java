@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security.jwt;
+package net.henryco.blinckserver.security.jwt.service;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
