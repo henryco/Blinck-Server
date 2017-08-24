@@ -16,16 +16,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.GenericFilterBean;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import java.io.IOException;
 
 /**
  * @author Henry on 21/08/17.
@@ -73,7 +65,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 
-				.addFilterBefore( // We filter the api/login requests
+				.addFilterBefore( // We filter the api/ USER login requests
 						new JWTLoginFilter(
 								"/login/**",
 								facebookAuthManager,
@@ -83,7 +75,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 						UsernamePasswordAuthenticationFilter.class
 				)
 
-				.addFilterBefore(
+				.addFilterBefore( // We filter the api/ ADMIN login requests
 						new JWTLoginFilter(
 								"/admin/login/**",
 								authenticationManager(),
@@ -93,12 +85,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 						UsernamePasswordAuthenticationFilter.class
 				)
 
-				.addFilterBefore(
+				.addFilterBefore( // Reset all of your Privileges
 						new ResetFilter(),
 						UsernamePasswordAuthenticationFilter.class
 				)
 
-				.addFilterBefore(
+				.addFilterBefore( // Check your admin Privileges
 						new JWTAuthFilter("/admin/panel/**", adminTokenAuthService),
 						UsernamePasswordAuthenticationFilter.class
 				)
