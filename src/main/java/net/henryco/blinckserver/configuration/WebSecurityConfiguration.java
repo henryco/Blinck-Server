@@ -5,6 +5,7 @@ import net.henryco.blinckserver.security.jwt.credentials.LoginAdminCredentials;
 import net.henryco.blinckserver.security.jwt.credentials.LoginFacebookCredentials;
 import net.henryco.blinckserver.security.jwt.filter.JWTAuthFilter;
 import net.henryco.blinckserver.security.jwt.filter.JWTLoginFilter;
+import net.henryco.blinckserver.security.jwt.filter.ResetFilter;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,8 +16,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.GenericFilterBean;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import java.io.IOException;
 
 /**
  * @author Henry on 21/08/17.
@@ -69,7 +78,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 								"/login/**",
 								facebookAuthManager,
 								userTokenAuthService,
-								LoginFacebookCredentials.class),
+								LoginFacebookCredentials.class
+						),
 						UsernamePasswordAuthenticationFilter.class
 				)
 
@@ -83,7 +93,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 						UsernamePasswordAuthenticationFilter.class
 				)
 
-				// TODO: 24/08/17 ADD TOKEN AUTH FILTER FOR ADMINS
+				.addFilterBefore(
+						new ResetFilter(),
+						UsernamePasswordAuthenticationFilter.class
+				)
+
+				.addFilterBefore(
+						new JWTAuthFilter("/admin/panel/**", adminTokenAuthService),
+						UsernamePasswordAuthenticationFilter.class
+				)
 
 				.addFilterBefore( // And filter other requests to check the presence of JWT in header
 						new JWTAuthFilter(userTokenAuthService),

@@ -42,7 +42,7 @@ public class FacebookAuthManager implements AuthenticationManager {
 	public Authentication authenticate(Authentication authentication)
 			throws AuthenticationException {
 
-
+		Object facebook_uid = authentication.getPrincipal();
 		Object facebook_token = authentication.getCredentials();
 
 		Facebook facebook = new FacebookTemplate(facebook_token.toString());
@@ -50,6 +50,8 @@ public class FacebookAuthManager implements AuthenticationManager {
 			throw new SessionAuthenticationException("FACEBOOK UNAUTHORIZED");
 
 		User userProfile = facebook.userOperations().getUserProfile();
+		if (!userProfile.getId().equals(facebook_uid.toString()))
+			throw new BadCredentialsException("Invalid user id or token");
 
 		UserDetails userDetails = loadDetails(userProfile);
 		if (!primaryCheck(userDetails))

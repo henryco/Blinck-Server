@@ -9,10 +9,18 @@ import lombok.Setter;
 public final class LoginFacebookCredentials extends JWTLoginCredentials {
 
 	@Getter @Setter
-	private String facebook_access_token;
+	private String facebook_uid;
+
+	@Getter @Setter
+	private String facebook_token;
+
+	@Override
+	public String getPrincipal() {
+		return facebook_uid;
+	}
 
 	@Override
 	public String getCredentials() {
-		return facebook_access_token;
+		return facebook_token;
 	}
 }
