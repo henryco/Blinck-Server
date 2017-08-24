@@ -83,6 +83,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 						UsernamePasswordAuthenticationFilter.class
 				)
 
+				// TODO: 24/08/17 ADD TOKEN AUTH FILTER FOR ADMINS
+
 				.addFilterBefore( // And filter other requests to check the presence of JWT in header
 						new JWTAuthFilter(userTokenAuthService),
 						UsernamePasswordAuthenticationFilter.class
