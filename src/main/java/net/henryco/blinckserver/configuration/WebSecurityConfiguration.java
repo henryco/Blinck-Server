@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.configuration;
 
 import net.henryco.blinckserver.security.auth.FacebookAuthManager;
+import net.henryco.blinckserver.security.jwt.credentials.LoginAdminCredentials;
 import net.henryco.blinckserver.security.jwt.credentials.LoginFacebookCredentials;
 import net.henryco.blinckserver.security.jwt.filter.JWTAuthFilter;
 import net.henryco.blinckserver.security.jwt.filter.JWTLoginFilter;
@@ -29,6 +30,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Qualifier("UserTokenAuthService")
 	private final TokenAuthenticationService userTokenAuthService;
+
 	@Qualifier("AdminTokenAuthService")
 	private final TokenAuthenticationService adminTokenAuthService;
 
@@ -61,6 +63,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/login/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
+
 				.addFilterBefore( // We filter the api/login requests
 						new JWTLoginFilter(
 								"/login/**",
@@ -69,9 +72,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 								LoginFacebookCredentials.class),
 						UsernamePasswordAuthenticationFilter.class
 				)
-//				.addFilterBefore(
-//
-//				)
+
+				.addFilterBefore(
+						new JWTLoginFilter(
+								"/admin/login/**",
+								authenticationManager(),
+								adminTokenAuthService,
+								LoginAdminCredentials.class
+						),
+						UsernamePasswordAuthenticationFilter.class
+				)
+
 				.addFilterBefore( // And filter other requests to check the presence of JWT in header
 						new JWTAuthFilter(userTokenAuthService),
 						UsernamePasswordAuthenticationFilter.class
@@ -85,7 +96,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService)
 				.and()
 				.inMemoryAuthentication()
-				.withUser("admin")
+				.withUser("21371488420")
 				.password("password")
 		.roles("ADMIN", "USER");
 	}

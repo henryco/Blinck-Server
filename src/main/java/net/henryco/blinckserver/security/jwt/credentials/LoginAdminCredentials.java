@@ -8,12 +8,12 @@ import lombok.Setter;
  */
 public final class LoginAdminCredentials extends JWTLoginCredentials {
 
-	@Getter @Setter private String username;
+	@Getter @Setter private String user_id;
 	@Getter @Setter private String password;
 
 	@Override
 	public String getPrincipal() {
-		return username;
+		return user_id;
 	}
 
 	@Override

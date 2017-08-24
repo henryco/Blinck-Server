@@ -1,8 +1,6 @@
 package net.henryco.blinckserver.security.jwt.service;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -61,7 +59,7 @@ public abstract class TokenAuthenticationService {
 					.setSigningKey(getTokenSecret())
 					.parseClaimsJws(token.replace(getTokenPrefix(), "")).getBody()
 					.getSubject();
-		} catch (ExpiredJwtException e) { return null; }
+		} catch (JwtException e) { return null; }
 
 		return user == null ? null
 				: new UsernamePasswordAuthenticationToken(user, null,
