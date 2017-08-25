@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.integration.security;
 
 import net.henryco.blinckserver.testutils.HTTPTestUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,14 +9,13 @@ import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import static org.springframework.http.HttpMethod.GET;
 
@@ -25,7 +25,7 @@ import static org.springframework.http.HttpMethod.GET;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class GreetingTest {
+public class EndPointAccessTest {
 
 	@LocalServerPort private int port;
 	private TestRestTemplate restTemplate;
@@ -35,23 +35,39 @@ public class GreetingTest {
 		restTemplate = new TestRestTemplate();
 	}
 
-	@Test
-	public void testGreeting() throws URISyntaxException {
 
-		URI uri = HTTPTestUtils.newURI("/test", port);
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add("Content-Type","application/json");
-
-
-		ResponseEntity<String> greeting = restTemplate.exchange(
-				new RequestEntity(httpHeaders, GET, uri),
-				String.class
+	private ResponseEntity simpleGetRequest(String endPoint, int port) {
+		return restTemplate.exchange(
+				new RequestEntity(
+						GET, HTTPTestUtils.newURI(endPoint, port)
+				), String.class
 		);
-
-		System.out.println("\n"+greeting);
-		System.out.println(greeting.getStatusCodeValue());
 	}
 
+
+
+	@Test
+	public void testRootEndPointAccess() {
+
+		ResponseEntity response = simpleGetRequest("/", port);
+		Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+	}
+
+
+	@Test
+	public void testPublicEndPointAccess() {
+
+		ResponseEntity response = simpleGetRequest("/public", port);
+		Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+	}
+
+
+	@Test
+	public void testProtectedEndPointAccess() {
+
+		ResponseEntity response = simpleGetRequest("/protected", port);
+		Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+	}
 
 
 }

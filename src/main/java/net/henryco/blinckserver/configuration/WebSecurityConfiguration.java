@@ -67,7 +67,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				.addFilterBefore( // We filter the api/ USER login requests
 						new JWTLoginFilter(
-								"/login/**",
+								"/login/user/**",
 								facebookAuthManager,
 								userTokenAuthService,
 								LoginFacebookCredentials.class
@@ -77,7 +77,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				.addFilterBefore( // We filter the api/ ADMIN login requests
 						new JWTLoginFilter(
-								"/admin/login/**",
+								"/login/admin/**",
 								authenticationManager(),
 								adminTokenAuthService,
 								LoginAdminCredentials.class
@@ -91,7 +91,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				)
 
 				.addFilterBefore( // Check your admin Privileges
-						new JWTAuthFilter("/admin/panel/**", adminTokenAuthService),
+						new JWTAuthFilter(
+								"/protected/admin/**",
+								adminTokenAuthService
+						),
 						UsernamePasswordAuthenticationFilter.class
 				)
 
