@@ -8,5 +8,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface UserAuthProfileRepository extends JpaRepository<UserAuthProfile, Long> {
 
-
 }
