@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * @author Henry on 24/08/17.
  */
-public final class ResetFilter extends GenericFilterBean {
+public final class JWTResetFilter extends GenericFilterBean {
 	@Override
 	public void doFilter(ServletRequest request,
 						 ServletResponse response,

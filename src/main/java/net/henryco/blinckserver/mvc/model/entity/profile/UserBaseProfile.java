@@ -11,8 +11,7 @@ import javax.persistence.*;
  * @author Henry on 23/08/17.
  */
 @Entity @Data
-@NoArgsConstructor
-@Proxy(lazy = false)
+@NoArgsConstructor @Proxy
 @Table(name = "USER_PROFILE")
 public class UserBaseProfile {
 

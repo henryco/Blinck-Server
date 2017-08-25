@@ -5,7 +5,7 @@ import net.henryco.blinckserver.security.jwt.credentials.LoginAdminCredentials;
 import net.henryco.blinckserver.security.jwt.credentials.LoginFacebookCredentials;
 import net.henryco.blinckserver.security.jwt.filter.JWTAuthFilter;
 import net.henryco.blinckserver.security.jwt.filter.JWTLoginFilter;
-import net.henryco.blinckserver.security.jwt.filter.ResetFilter;
+import net.henryco.blinckserver.security.jwt.filter.JWTResetFilter;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -86,7 +86,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				)
 
 				.addFilterBefore( // Reset all of your Privileges
-						new ResetFilter(),
+						new JWTResetFilter(),
 						UsernamePasswordAuthenticationFilter.class
 				)
 

@@ -3,7 +3,7 @@
 !gradle/wrapper/gradle-wrapper.jar
 
 ### SPRING ###
-application.properties
+/src/main/resources/application.properties
 /src/main/resources/static/props/base.properties
 
 ### STS ###
