@@ -1,6 +1,6 @@
 package net.henryco.blinckserver.integration.security;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import net.henryco.blinckserver.integration.security.help.JsonForm;
 import net.henryco.blinckserver.utils.HTTPTestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -19,52 +20,8 @@ import org.springframework.web.client.ResourceAccessException;
 import static org.springframework.http.HttpMethod.GET;
 
 
-
-
-final class AdminJsonPostForm {
-
-	@JsonProperty String user_id;
-	@JsonProperty String password;
-
-	AdminJsonPostForm(final String user_id,
-					  final String password) {
-
-		this.user_id = user_id;
-		this.password = password;
-	}
-
-	static AdminJsonPostForm randomOne() {
-		return new AdminJsonPostForm(
-				HTTPTestUtils.randomNumberString(), // random uid
-				HTTPTestUtils.randomNumberString() // random password
-		);
-	}
-}
-
-
-
-final class UserJsonPostForm {
-
-	@JsonProperty String facebook_uid;
-	@JsonProperty String facebook_token;
-
-	UserJsonPostForm(final String facebook_uid,
-					 final String facebook_token) {
-		this.facebook_uid = facebook_uid;
-		this.facebook_token = facebook_token;
-	}
-
-	static UserJsonPostForm randomOne() {
-		return new UserJsonPostForm(
-				HTTPTestUtils.randomNumberString(), // random uid
-				HTTPTestUtils.randomNumberString() // random password
-		);
-	}
-}
-
-
-
 @RunWith(SpringRunner.class)
+@PropertySource("classpath:/static/props/base.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AuthorizationTest {
 
@@ -80,7 +37,7 @@ public class AuthorizationTest {
 
 
 
-	private ResponseEntity simplePOST(String endPoint, Object postObject) {
+	private ResponseEntity<String> simplePOST(String endPoint, Object postObject) {
 		return restTemplate.exchange(
 				RequestEntity.post(HTTPTestUtils.newURI(endPoint, port))
 						.accept(MediaType.APPLICATION_JSON)
@@ -131,11 +88,11 @@ public class AuthorizationTest {
 		for (int i = 0; i < 20; i++) try {
 
 			ResponseEntity entity1 = simplePOST(
-					ADMIN_LOGIN_ENDPOINT, AdminJsonPostForm.randomOne()
+					ADMIN_LOGIN_ENDPOINT, JsonForm.AdminLoginPost.randomOne()
 			);
 
 			ResponseEntity entity2 = simplePOST(
-					USER_LOGIN_ENDPOINT, UserJsonPostForm.randomOne()
+					USER_LOGIN_ENDPOINT, JsonForm.UserLoginPost.randomOne()
 			);
 
 			responseEntityStatusErrorAssertion(entity1);
@@ -156,11 +113,11 @@ public class AuthorizationTest {
 	public void authorizationWrongPostFormTest() {
 
 		ResponseEntity entity1 = simplePOST(
-				ADMIN_LOGIN_ENDPOINT, UserJsonPostForm.randomOne()
+				ADMIN_LOGIN_ENDPOINT, JsonForm.UserLoginPost.randomOne()
 		);
 
 		ResponseEntity entity2 = simplePOST(
-				USER_LOGIN_ENDPOINT, AdminJsonPostForm.randomOne()
+				USER_LOGIN_ENDPOINT, JsonForm.AdminLoginPost.randomOne()
 		);
 
 		assert entity1 != null;
@@ -179,7 +136,7 @@ public class AuthorizationTest {
 		String pass = environment.getProperty("security.default.admin.password");
 
 		ResponseEntity entity = simplePOST(
-				ADMIN_LOGIN_ENDPOINT, new AdminJsonPostForm(name, pass)
+				ADMIN_LOGIN_ENDPOINT, new JsonForm.AdminLoginPost(name, pass)
 		);
 
 		responseEntityStatusErrorAssertion(entity);
