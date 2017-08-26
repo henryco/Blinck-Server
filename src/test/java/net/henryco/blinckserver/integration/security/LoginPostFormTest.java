@@ -23,7 +23,7 @@ import static org.springframework.http.HttpMethod.GET;
 @RunWith(SpringRunner.class)
 @PropertySource("classpath:/static/props/base.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AuthorizationTest {
+public class LoginPostFormTest {
 
 	private static final String ADMIN_LOGIN_ENDPOINT = "/login/admin";
 	private static final String USER_LOGIN_ENDPOINT = "/login/user";
