@@ -3,27 +3,25 @@ package net.henryco.blinckserver.integration.security;
 import net.henryco.blinckserver.integration.security.help.JsonForm;
 import net.henryco.blinckserver.integration.security.help.MockFacebookUser;
 import net.henryco.blinckserver.mvc.service.action.UserDataService;
+import net.henryco.blinckserver.mvc.service.security.UserTokenAuthService;
+import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import net.henryco.blinckserver.utils.HTTPTestUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.*;
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.facebook.api.User;
-import org.springframework.social.facebook.api.impl.FacebookTemplate;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-
-import java.util.Locale;
+import java.lang.reflect.Method;
 
 import static net.henryco.blinckserver.utils.HTTPTestUtils.randomNumberString;
 import static org.springframework.http.HttpMethod.GET;
@@ -39,11 +37,8 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 public class EndPointAccessTest {
 
 
-
-
 	private static final String HEADER_ACCESS_TOKEN_NAME = "Authorization";
 	private static final String LOGIN_ENDPOINT_ADMIN = "/login/admin";
-	private static final String LOGIN_ENDPOINT_USER = "/login/user";
 
 	private static final String ROOT_ENDPOINT = "/";
 	private static final String PUBLIC_ENDPOINT = "/public";
@@ -51,57 +46,6 @@ public class EndPointAccessTest {
 
 	private static final String ADMIN_ENDPOINT = "/protected/admin";
 	private static final String USER_ENDPOINT = "/protected/user";
-
-
-	private @LocalServerPort int port;
-	private @Autowired Environment environment;
-	private @Autowired UserDataService userDataService;
-
-	private TestRestTemplate restTemplate;
-	private MockFacebookUser mockFacebookUser;
-
-
-	private ResponseEntity<String> fastGetRequest(String endPoint) {
-		return restTemplate.exchange(
-				new RequestEntity(
-						GET, HTTPTestUtils.newURI(endPoint, port)
-				), String.class
-		);
-	}
-
-	private ResponseEntity<String> authorizedGetRequest(String endPoint, String authToken) {
-
-		return restTemplate.exchange(
-				RequestEntity.get(HTTPTestUtils.newURI(endPoint, port))
-						.header(HEADER_ACCESS_TOKEN_NAME, authToken)
-						.accept(MediaType.APPLICATION_JSON)
-						.build(),
-				String.class
-		);
-	}
-
-	private ResponseEntity<String> fastPostRequest(String endPoint, JsonForm postForm) {
-		return restTemplate.exchange(
-				RequestEntity.post(HTTPTestUtils.newURI(endPoint, port))
-						.accept(MediaType.APPLICATION_JSON)
-						.body(postForm),
-				String.class
-		);
-	}
-
-	private String getForAdminAuthToken() {
-		return fastPostRequest(
-				LOGIN_ENDPOINT_ADMIN, new JsonForm.AdminLoginPost(
-						environment.getProperty("security.default.admin.name"),
-						environment.getProperty("security.default.admin.password")
-				)
-		).getHeaders().get(HEADER_ACCESS_TOKEN_NAME).get(0);
-	}
-
-	private String getForUserAuthToken() {
-		// TODO: 26/08/17
-		return "";
-	}
 
 
 	private static String randomUserPath() {
@@ -122,17 +66,74 @@ public class EndPointAccessTest {
 
 
 
+	private @LocalServerPort int port;
+	private TestRestTemplate restTemplate;
+
+
+	private @Autowired Environment environment;
+	private @Autowired UserDataService userDataService;
+	private @Autowired UserTokenAuthService userTokenAuthService;
+
+
+
+
+	private ResponseEntity<String> fastGetRequest(String endPoint) {
+		return restTemplate.exchange(
+				new RequestEntity(
+						GET, HTTPTestUtils.newURI(endPoint, port)
+				), String.class
+		);
+	}
+
+
+	private ResponseEntity<String> authorizedGetRequest(String endPoint, String authToken) {
+
+		return restTemplate.exchange(
+				RequestEntity.get(HTTPTestUtils.newURI(endPoint, port))
+						.header(HEADER_ACCESS_TOKEN_NAME, authToken)
+						.accept(MediaType.APPLICATION_JSON)
+						.build(),
+				String.class
+		);
+	}
+
+
+	private ResponseEntity<String> fastPostRequest(String endPoint, JsonForm postForm) {
+		return restTemplate.exchange(
+				RequestEntity.post(HTTPTestUtils.newURI(endPoint, port))
+						.accept(MediaType.APPLICATION_JSON)
+						.body(postForm),
+				String.class
+		);
+	}
+
+
+	private String getForAdminAuthToken() {
+		return fastPostRequest(
+				LOGIN_ENDPOINT_ADMIN, new JsonForm.AdminLoginPost(
+						environment.getProperty("security.default.admin.name"),
+						environment.getProperty("security.default.admin.password")
+				)
+		).getHeaders().get(HEADER_ACCESS_TOKEN_NAME).get(0);
+	}
+
+
+	private String getForUserAuthToken() throws Exception{
+
+		final String tokenCreatorMethod = "createAuthenticationToken";
+		final String tokenOwnerName = MockFacebookUser.getInstance().getUser().getId();
+		final Method method = TokenAuthenticationService.class.getDeclaredMethod(tokenCreatorMethod, String.class);
+		method.setAccessible(true);
+		return method.invoke(userTokenAuthService, tokenOwnerName).toString();
+	}
+
+
 
 
 	@Before
 	public void setUp() {
 
-		mockFacebookUser = MockFacebookUser.newInstance(
-				environment.getProperty("facebook.app.id"),
-				environment.getProperty("facebook.app.secret")
-		);
-
-		userDataService.addNewFacebookUser(mockFacebookUser.getUser());
+		userDataService.addNewFacebookUserIfNotExist(MockFacebookUser.getInstance().getUser());
 		restTemplate = new TestRestTemplate();
 	}
 
@@ -253,45 +254,55 @@ public class EndPointAccessTest {
 
 
 	@Test
-	public void testRootEndPointAuthorizedAsUser() {
+	public void testRootEndPointAuthorizedAsUser() throws Exception {
 
 		final String authorization = getForUserAuthToken();
-		// TODO: 26/08/17
+
+		assert FORBIDDEN != authorizedGetRequest(ROOT_ENDPOINT, authorization).getStatusCode();
+		assert FORBIDDEN != authorizedGetRequest(randomRootPath(), authorization).getStatusCode();
 	}
 
 
 
 	@Test
-	public void testPublicEndPointAuthorizedAsUser() {
+	public void testPublicEndPointAuthorizedAsUser() throws Exception {
 
 		final String authorization = getForUserAuthToken();
-		// TODO: 26/08/17
+
+		assert FORBIDDEN != authorizedGetRequest(PUBLIC_ENDPOINT, authorization).getStatusCode();
+		assert FORBIDDEN != authorizedGetRequest(randomPublicPath(), authorization).getStatusCode();
 	}
 
 
 
 	@Test
-	public void testProtectedEndPointAuthorizedAsUser() {
+	public void testProtectedEndPointAuthorizedAsUser() throws Exception {
 
 		final String authorization = getForUserAuthToken();
-		// TODO: 26/08/17
+
+		assert FORBIDDEN != authorizedGetRequest(PROTECTED_ENDPOINT, authorization).getStatusCode();
+		assert FORBIDDEN != authorizedGetRequest(randomProtectedPath(), authorization).getStatusCode();
 	}
 
 
 
 	@Test
-	public void testUserEndPointAuthorizedAsUser() {
+	public void testUserEndPointAuthorizedAsUser() throws Exception {
 
 		final String authorization = getForUserAuthToken();
-		// TODO: 26/08/17
+
+		assert FORBIDDEN != authorizedGetRequest(USER_ENDPOINT, authorization).getStatusCode();
+		assert FORBIDDEN != authorizedGetRequest(randomUserPath(), authorization).getStatusCode();
 	}
 
 
 
 	@Test
-	public void testAdminEndPointAuthorizedAsUser() {
+	public void testAdminEndPointAuthorizedAsUser() throws Exception {
 
 		final String authorization = getForUserAuthToken();
-		// TODO: 26/08/17
+
+		assert FORBIDDEN == authorizedGetRequest(ADMIN_ENDPOINT, authorization).getStatusCode();
+		assert FORBIDDEN == authorizedGetRequest(randomAdminPath(), authorization).getStatusCode();
 	}
 }

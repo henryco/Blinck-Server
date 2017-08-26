@@ -3,6 +3,8 @@ package net.henryco.blinckserver.security.auth;
 import net.henryco.blinckserver.mvc.service.action.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -23,9 +25,12 @@ import java.util.Collections;
 /**
  * @author Henry on 23/08/17.
  */
-@Component
+@Component @PropertySource("classpath:/static/props/base.properties")
 public class FacebookAuthManager implements AuthenticationManager {
 
+
+	private @Value("facebook.app.id") String app_id;
+	private @Value("facebook.app.namespace") String app_namespace;
 
 	private final UserDetailsService detailsService;
 	private final UserDataService userDataService;
@@ -46,11 +51,12 @@ public class FacebookAuthManager implements AuthenticationManager {
 		Object facebook_uid = authentication.getPrincipal();
 		Object facebook_token = authentication.getCredentials();
 
-		Facebook facebook = new FacebookTemplate(facebook_token.toString());
+		Facebook facebook = new FacebookTemplate(facebook_token.toString(), app_namespace, app_id);
 		if (!facebook.isAuthorized())
 			throw new SessionAuthenticationException("FACEBOOK UNAUTHORIZED");
 
-		User userProfile = facebook.userOperations().getUserProfile();
+		User userProfile = facebook.userOperations().getUserProfile(facebook_uid.toString());
+
 		if (!userProfile.getId().equals(facebook_uid.toString()))
 			throw new BadCredentialsException("Invalid user id or token");
 

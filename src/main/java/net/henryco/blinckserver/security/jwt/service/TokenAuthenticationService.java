@@ -36,13 +36,17 @@ public abstract class TokenAuthenticationService {
 	}
 
 
-
-	public final void addAuthentication(HttpServletResponse res, String username) {
-		String JWT = Jwts.builder()
+	private String createAuthenticationToken(String username) {
+		return Jwts.builder()
 				.setSubject(username)
 				.setExpiration(new Date(System.currentTimeMillis() + getExpirationTime()))
 				.signWith(SignatureAlgorithm.HS512, getTokenSecret())
-				.compact();
+		.compact();
+	}
+
+
+	public final void addAuthentication(HttpServletResponse res, String username) {
+		String JWT = createAuthenticationToken(username);
 		res.addHeader(getTokenHeader(), getTokenPrefix() + " " + JWT);
 	}
 

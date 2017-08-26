@@ -26,6 +26,16 @@ public class UserDataService {
 	}
 
 
+
+
+	@Transactional
+	public void addNewFacebookUserIfNotExist(User userProfile) {
+		final Long id = Long.decode(userProfile.getId());
+		if (baseProfileDao.isExists(id)) return;
+		addNewFacebookUser(userProfile);
+	}
+
+
 	@Transactional
 	public void addNewFacebookUser(User userProfile) {
 
@@ -59,7 +69,11 @@ public class UserDataService {
 
 
 	public void deleteUser(long id) {
-		baseProfileDao.deleteById(id);
+		if (baseProfileDao.isExists(id))
+			baseProfileDao.deleteById(id);
 	}
 
+	public void deleteUser(String id) {
+		deleteUser(Long.decode(id));
+	}
 }

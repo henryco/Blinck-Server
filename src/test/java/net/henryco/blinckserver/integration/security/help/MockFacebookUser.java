@@ -4,32 +4,37 @@ import net.henryco.blinckserver.utils.HTTPTestUtils;
 import org.springframework.social.facebook.api.TestUser;
 import org.springframework.social.facebook.api.User;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
-import org.springframework.social.facebook.connect.FacebookServiceProvider;
-import org.springframework.social.oauth2.AccessGrant;
-import org.springframework.social.oauth2.OAuth2Operations;
 
 import java.util.Locale;
 
 /**
  * @author Henry on 26/08/17.
  */
+@SuppressWarnings("UnusedReturnValue")
 public final class MockFacebookUser {
 
 	private static MockFacebookUser instance;
 
-	public synchronized static MockFacebookUser newInstance(String appId, String appSecret, String permissions) {
+	public synchronized static MockFacebookUser getInstance(String appId,
+															String appSecret,
+															String appNamespace,
+															String permissions) {
 		if (MockFacebookUser.instance == null)
-			instance = new MockFacebookUser(appId, appSecret, permissions);
+			instance = new MockFacebookUser(appId, appSecret, appNamespace, permissions);
 		return MockFacebookUser.instance;
 	}
-	public static MockFacebookUser newInstance(String appId, String appSecret) {
-		return newInstance(appId, appSecret, "");
+
+	public static MockFacebookUser getInstance(String appId, String appSecret, String appNamespace) {
+		return getInstance(appId, appSecret, appNamespace, "");
+	}
+
+	public static MockFacebookUser getInstance() {
+		return getInstance("", "", "", "");
 	}
 
 
 
-
-
+	private final String appNamespace;
 	private final String permissions;
 	private final String appSecret;
 	private final String appId;
@@ -39,8 +44,9 @@ public final class MockFacebookUser {
 	private User facebookUser;
 
 
-	private MockFacebookUser(String appId, String appSecret, String permissions) {
+	private MockFacebookUser(String appId, String appSecret, String appNamespace, String permissions) {
 
+		this.appNamespace = appNamespace;
 		this.permissions = permissions;
 		this.appSecret = appSecret;
 		this.appId = appId;
@@ -52,14 +58,13 @@ public final class MockFacebookUser {
 
 	public MockFacebookUser createRandom() {
 
-		OAuth2Operations oauth = new FacebookServiceProvider(appId, appSecret, null).getOAuthOperations();
-		AccessGrant clientGrant = oauth.authenticateClient();
-
-		this.clientFacebook = new FacebookTemplate(clientGrant.getAccessToken(), "", appId);
-		this.testUser = createTestUser();
+//		OAuth2Operations oauth = new FacebookServiceProvider(appId, appSecret, appNamespace).getOAuthOperations();
+//		AccessGrant clientGrant = oauth.authenticateClient();//
+//		this.clientFacebook = new FacebookTemplate(clientGrant.getAccessToken(), appNamespace, appId);
+//		this.testUser = wipeUser().createTestUser();
 
 		this.facebookUser = new User(
-				testUser.getId(),
+				HTTPTestUtils.randomNumberString(),
 				HTTPTestUtils.randomNumberString(),
 				HTTPTestUtils.randomNumberString(),
 				HTTPTestUtils.randomNumberString(),
@@ -70,13 +75,14 @@ public final class MockFacebookUser {
 	}
 
 
+	public MockFacebookUser wipeUser() {
+		if (testUser != null)
+			clientFacebook.testUserOperations().deleteTestUser(testUser.getId());
+		return this;
+	}
+
 
 	private TestUser createTestUser() {
-
-		if (testUser != null) {
-			clientFacebook.testUserOperations().deleteTestUser(testUser.getId());
-		}
-
 		return clientFacebook.testUserOperations().createTestUser(
 				true,
 				permissions,
@@ -86,13 +92,14 @@ public final class MockFacebookUser {
 
 
 
-
 	public User getUser() {
 		return facebookUser;
 	}
 
-	public String getAccessToken() {
-		if (testUser == null) return null;
-		return testUser.getAccessToken();
-	}
+//	public String getAccessToken() {
+//		if (testUser == null) return null;
+//		return testUser.getAccessToken();
+//	}
+
+
 }
