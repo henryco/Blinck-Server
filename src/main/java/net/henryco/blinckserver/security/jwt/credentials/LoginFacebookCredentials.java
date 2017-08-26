@@ -1,11 +1,14 @@
 package net.henryco.blinckserver.security.jwt.credentials;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * @author Henry on 22/08/17.
  */
+@AllArgsConstructor @NoArgsConstructor
 public final class LoginFacebookCredentials extends JWTLoginCredentials {
 
 	@Getter @Setter

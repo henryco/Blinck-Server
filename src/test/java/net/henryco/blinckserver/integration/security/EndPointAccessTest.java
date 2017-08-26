@@ -30,13 +30,8 @@ public class EndPointAccessTest {
 	@LocalServerPort private int port;
 	private TestRestTemplate restTemplate;
 
-	@Before
-	public void setUp() {
-		restTemplate = new TestRestTemplate();
-	}
 
-
-	private ResponseEntity simpleGetRequest(String endPoint, int port) {
+	private ResponseEntity simpleGetRequest(String endPoint) {
 		return restTemplate.exchange(
 				new RequestEntity(
 						GET, HTTPTestUtils.newURI(endPoint, port)
@@ -46,28 +41,40 @@ public class EndPointAccessTest {
 
 
 
-	@Test
-	public void testRootEndPointAccess() {
+	@Before
+	public void setUp() {
+		restTemplate = new TestRestTemplate();
+	}
 
-		ResponseEntity response = simpleGetRequest("/", port);
+
+	@Test
+	public void testRootEndPointAccessUnauthorized() {
+
+		ResponseEntity response = simpleGetRequest("/");
 		Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
 
 	@Test
-	public void testPublicEndPointAccess() {
+	public void testPublicEndPointAccessUnauthorized() {
 
-		ResponseEntity response = simpleGetRequest("/public", port);
+		ResponseEntity response = simpleGetRequest("/public");
 		Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
 
 	@Test
-	public void testProtectedEndPointAccess() {
+	public void testProtectedEndPointAccessUnauthorized() {
 
-		ResponseEntity response = simpleGetRequest("/protected", port);
+		ResponseEntity response = simpleGetRequest("/protected");
 		Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 	}
 
+
+
+	@Test
+	public void testRootEndPointAccessAuthorizedAsAdmin() {
+
+	}
 
 }

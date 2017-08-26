@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Random;
 
 /**
  * @author Henry on 25/08/17.
@@ -17,7 +18,7 @@ public interface HTTPTestUtils {
 			return new URI(http + ":" + port + path);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			return null;
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 
@@ -32,4 +33,11 @@ public interface HTTPTestUtils {
 		return httpHeaders;
 	}
 
+	static String randomNumberString(long bound) {
+		return Long.toString(Math.abs((long) (new Random().nextGaussian() * bound)));
+	}
+
+	static String randomNumberString() {
+		return randomNumberString(1_000_000_000L);
+	}
 }
