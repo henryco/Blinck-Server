@@ -1,7 +1,7 @@
 package net.henryco.blinckserver.integration.security;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import net.henryco.blinckserver.testutils.HTTPTestUtils;
+import net.henryco.blinckserver.utils.HTTPTestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

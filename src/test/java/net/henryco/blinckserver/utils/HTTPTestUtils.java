@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.testutils;
+package net.henryco.blinckserver.utils;
 
 import org.springframework.http.HttpHeaders;
 
