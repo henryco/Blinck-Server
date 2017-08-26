@@ -92,6 +92,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 						UsernamePasswordAuthenticationFilter.class
 				)
 
+
+				.addFilterBefore( // And filter other requests to check the presence of JWT in header
+						new JWTAuthFilter(userTokenAuthService),
+						UsernamePasswordAuthenticationFilter.class
+				)
+
 				.addFilterBefore( // Check your admin Privileges
 						new JWTAuthFilter(
 								"/protected/admin/**",
@@ -100,10 +106,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 						UsernamePasswordAuthenticationFilter.class
 				)
 
-				.addFilterBefore( // And filter other requests to check the presence of JWT in header
-						new JWTAuthFilter(userTokenAuthService),
-						UsernamePasswordAuthenticationFilter.class
-				);
+		;
 	}
 
 

@@ -27,7 +27,7 @@ public interface HTTPTestUtils {
 	}
 
 
-	static HttpHeaders jsonTypeHeader() {
+	static HttpHeaders newJsonTypeHeader() {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("Content-Type","application/json");
 		return httpHeaders;

@@ -118,8 +118,7 @@ public class EndPointAccessTest {
 	}
 
 
-	private String getForUserAuthToken() throws Exception{
-
+	private String getForUserAuthToken() throws Exception {
 		final String tokenCreatorMethod = "createAuthenticationToken";
 		final String tokenOwnerName = MockFacebookUser.getInstance().getUser().getId();
 		final Method method = TokenAuthenticationService.class.getDeclaredMethod(tokenCreatorMethod, String.class);
@@ -140,7 +139,7 @@ public class EndPointAccessTest {
 
 
 	@Test
-	public void testPublicAdminAuthorization() throws Exception {
+	public void testPublicAdminAuthorization() {
 		assert getForAdminAuthToken() != null;
 	}
 
