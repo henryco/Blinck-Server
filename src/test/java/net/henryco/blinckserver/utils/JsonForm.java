@@ -1,7 +1,6 @@
-package net.henryco.blinckserver.integration.security.help;
+package net.henryco.blinckserver.utils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import net.henryco.blinckserver.utils.HTTPTestUtils;
 
 /**
  * @author Henry on 26/08/17.

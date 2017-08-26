@@ -13,17 +13,17 @@ public interface HTTPTestUtils {
 
 	String DEFAULT_URI = "http://localhost";
 
-	static URI newURI(String http, String path, int port) {
+	static URI newURI(String host, String endpoint, int port) {
 		try {
-			return new URI(http + ":" + port + path);
+			return new URI(host + ":" + port + endpoint);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
 		}
 	}
 
-	static URI newURI(String path, int port) {
-		return newURI(DEFAULT_URI, path, port);
+	static URI newURI(String endpoint, int port) {
+		return newURI(DEFAULT_URI, endpoint, port);
 	}
 
 

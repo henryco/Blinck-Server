@@ -1,6 +1,5 @@
-package net.henryco.blinckserver.integration.security.help;
+package net.henryco.blinckserver.utils;
 
-import net.henryco.blinckserver.utils.HTTPTestUtils;
 import org.springframework.social.facebook.api.TestUser;
 import org.springframework.social.facebook.api.User;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
