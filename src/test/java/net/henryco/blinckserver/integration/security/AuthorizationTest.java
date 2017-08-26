@@ -121,15 +121,20 @@ public class AuthorizationTest {
 
 
 	@Test
-	public void adminAuthorizationGoodPostFormTest() {
+	public void authorizationGoodPostFormTest() {
 
 		for (int i = 0; i < 20; i++) try {
 
-			ResponseEntity entity = simplePOST(
+			ResponseEntity entity1 = simplePOST(
 					ADMIN_LOGIN_ENDPOINT, AdminJsonPostForm.randomOne()
 			);
 
-			responseEntityStatusErrorAssertion(entity);
+			ResponseEntity entity2 = simplePOST(
+					USER_LOGIN_ENDPOINT, UserJsonPostForm.randomOne()
+			);
+
+			responseEntityStatusErrorAssertion(entity1);
+			responseEntityStatusErrorAssertion(entity2);
 
 		} catch (ResourceAccessException e) {
 			/* EXCEPTION MEANS PROCESS WAS SUCCESSFUL, BUT CREDENTIALS WAS BAD,
