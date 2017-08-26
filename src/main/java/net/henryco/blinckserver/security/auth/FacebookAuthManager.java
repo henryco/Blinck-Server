@@ -2,6 +2,7 @@ package net.henryco.blinckserver.security.auth;
 
 import net.henryco.blinckserver.mvc.service.action.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;

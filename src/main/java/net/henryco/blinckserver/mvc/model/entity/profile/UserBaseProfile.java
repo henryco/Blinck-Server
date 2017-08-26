@@ -23,8 +23,7 @@ public class UserBaseProfile {
 
 
 	private @Column(
-			name = "birthday",
-			nullable = false
+			name = "birthday"
 	) String birthday;
 
 

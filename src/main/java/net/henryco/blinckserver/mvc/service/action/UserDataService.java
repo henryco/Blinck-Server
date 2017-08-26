@@ -4,9 +4,11 @@ import net.henryco.blinckserver.mvc.model.dao.profile.base.UserBaseProfileDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserNameEntity;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Henry on 23/08/17.
@@ -24,10 +26,10 @@ public class UserDataService {
 	}
 
 
-
+	@Transactional
 	public void addNewFacebookUser(User userProfile) {
 
-		final Long id = Long.decode( userProfile.getId());
+		final Long id = Long.decode(userProfile.getId());
 		if (baseProfileDao.isExists(id))
 			throw new RuntimeException("User: ["+id+"] already exists!");
 
@@ -53,10 +55,6 @@ public class UserDataService {
 		userBaseProfile.setAuthProfile(userAuthProfile);
 
 		baseProfileDao.save(userBaseProfile);
-
-		System.out.println("\n\n"+userBaseProfile+"\n\n");
-
-		System.out.println("\n"+baseProfileDao.getById(id)+"\n\n");
 	}
 
 

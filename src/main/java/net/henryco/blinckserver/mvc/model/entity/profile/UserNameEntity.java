@@ -19,8 +19,6 @@ public class UserNameEntity {
 	private @Id @Column(
 			name = "name_id",
 			unique = true
-	) @GeneratedValue(
-			strategy = GenerationType.AUTO
 	) long id;
 
 
