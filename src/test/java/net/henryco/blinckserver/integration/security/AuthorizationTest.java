@@ -5,9 +5,11 @@ import net.henryco.blinckserver.utils.HTTPTestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +72,10 @@ public class AuthorizationTest {
 	private static final String USER_LOGIN_ENDPOINT = "/login/user";
 
 
-	@LocalServerPort private int port;
+	private @LocalServerPort int port;
+	private @Autowired Environment environment;
+
+
 	private TestRestTemplate restTemplate;
 
 
@@ -167,5 +172,18 @@ public class AuthorizationTest {
 
 
 
+	@Test
+	public void inMemoryAdminAuthorizationTest() {
+
+		String name = environment.getProperty("security.default.admin.name");
+		String pass = environment.getProperty("security.default.admin.password");
+
+		ResponseEntity entity = simplePOST(
+				ADMIN_LOGIN_ENDPOINT, new AdminJsonPostForm(name, pass)
+		);
+
+		responseEntityStatusErrorAssertion(entity);
+		assert entity.getStatusCode().is2xxSuccessful();
+	}
 
 }

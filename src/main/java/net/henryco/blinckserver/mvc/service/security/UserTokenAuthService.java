@@ -26,7 +26,7 @@ public final class UserTokenAuthService extends TokenAuthenticationService {
 	@Autowired
 	public UserTokenAuthService(Environment environment) {
 		app_secret = environment.getProperty("security.jwt.secret.user");
-		default_role = environment.getProperty("security.roles.default");
+		default_role = environment.getProperty("security.default.role");
 		header_string = environment.getProperty("security.jwt.header");
 		token_prefix = environment.getProperty("security.jwt.prefix");
 		expiration_time = Long.decode(environment.getProperty("security.jwt.expiration", "864000000"));
