@@ -51,18 +51,9 @@ public abstract class BlinckIntegrationTest {
 	}
 
 
-
 	@Before
 	public final void setUpIntegrationTest() {
 		restTemplate = new TestRestTemplate();
 	}
-
-
-
-	@Test
-	public final void connectionTest() {
-		assert !fastGetRequest("/").getStatusCode().is5xxServerError();
-	}
-
 
 }

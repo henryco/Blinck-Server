@@ -1,9 +1,8 @@
 package net.henryco.blinckserver.unit.helper;
 
+import net.henryco.blinckserver.unit.BlinckUnitTest;
 import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import java.lang.reflect.Method;
 
@@ -13,9 +12,7 @@ import static net.henryco.blinckserver.util.test.BlinckTestUtil.getMethod;
  * @author Henry on 27/08/17.
  */
 
-@RunWith(JUnit4.class)
-public class BlinckTestNameTest {
-
+public class BlinckTestNameTest extends BlinckUnitTest {
 
 	@Test
 	public void methodOneTest() throws Exception {

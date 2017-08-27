@@ -1,22 +1,20 @@
 package net.henryco.blinckserver.integration.security.endpoint;
 
 import net.henryco.blinckserver.integration.BlinckIntegrationTest;
-import net.henryco.blinckserver.util.test.BlinckTestUtil;
-import net.henryco.blinckserver.utils.JsonForm;
-import net.henryco.blinckserver.utils.MockFacebookUser;
 import net.henryco.blinckserver.mvc.service.action.UserDataService;
 import net.henryco.blinckserver.mvc.service.security.UserTokenAuthService;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
+import net.henryco.blinckserver.util.test.BlinckTestUtil;
 import net.henryco.blinckserver.utils.HTTPTestUtils;
+import net.henryco.blinckserver.utils.JsonForm;
+import net.henryco.blinckserver.utils.MockFacebookUser;
 import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.reflect.Method;
 
@@ -26,10 +24,8 @@ import static net.henryco.blinckserver.utils.HTTPTestUtils.randomNumberString;
  * @author Henry on 25/08/17.
  */
 
-@RunWith(SpringRunner.class)
 @PropertySource("classpath:/static/props/base.properties")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class EndPointAccessTest extends BlinckIntegrationTest {
+public abstract class EndPointAccessTest extends BlinckIntegrationTest {
 
 
 	static final String HEADER_ACCESS_TOKEN_NAME = "Authorization";
@@ -50,7 +46,6 @@ public class EndPointAccessTest extends BlinckIntegrationTest {
 	public void setUp() {
 		userDataService.addNewFacebookUserIfNotExist(MockFacebookUser.getInstance().getUser());
 	}
-
 
 
 	protected ResponseEntity<String> authorizedGetRequest(String endPoint, String authToken) {
