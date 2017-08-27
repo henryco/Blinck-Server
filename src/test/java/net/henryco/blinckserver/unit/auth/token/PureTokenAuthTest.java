@@ -25,7 +25,7 @@ public class PureTokenAuthTest extends TokenAuthTest {
 
 		testLoop.test(() -> {
 			final String value = randomNumberString();
-			assert !getCoderMethod().invoke(createService(new Random().nextLong()), value).equals(value);
+			assert !getCoderMethod().invoke(createJwtService(new Random().nextLong()), value).equals(value);
 		});
 	}
 
@@ -33,7 +33,7 @@ public class PureTokenAuthTest extends TokenAuthTest {
 	@Test
 	public void tokenSingleServiceCodeDeCodeTest() throws Exception {
 
-		TokenAuthenticationService service = createService(tokenExpTime);
+		TokenAuthenticationService service = createJwtService(tokenExpTime);
 
 		final Method deCoder = getDeCoderMethod();
 		final Method coder = getCoderMethod();
@@ -49,10 +49,10 @@ public class PureTokenAuthTest extends TokenAuthTest {
 	public void tokenMultiServiceCodeDeCodeSimilarTest() throws Exception {
 
 		testLoop.test(() -> {
-			String coded = getCoderMethod().invoke(createService(tokenExpTime), randomNumberString()).toString();
+			String coded = getCoderMethod().invoke(createJwtService(tokenExpTime), randomNumberString()).toString();
 
 			try {
-				getDeCoderMethod().invoke(createService(tokenExpTime), coded);
+				getDeCoderMethod().invoke(createJwtService(tokenExpTime), coded);
 			} catch (InvocationTargetException e) {
 				assert e.getTargetException() instanceof SignatureException;
 			}
@@ -66,8 +66,8 @@ public class PureTokenAuthTest extends TokenAuthTest {
 		testLoop.test(() -> {
 			final String value = randomNumberString();
 
-			final String tokenOne = getCoderMethod().invoke(createService(tokenExpTime), value).toString();
-			final String tokenTwo = getCoderMethod().invoke(createService(tokenExpTime), value).toString();
+			final String tokenOne = getCoderMethod().invoke(createJwtService(tokenExpTime), value).toString();
+			final String tokenTwo = getCoderMethod().invoke(createJwtService(tokenExpTime), value).toString();
 
 			assert !tokenOne.equals(tokenTwo);
 		});
@@ -79,12 +79,12 @@ public class PureTokenAuthTest extends TokenAuthTest {
 	public void tokenExpirationTimeTest() throws Exception {
 
 		final long expTimeMs = 10L;
-		final TokenAuthenticationService service = createService(expTimeMs);
+		final TokenAuthenticationService service = createJwtService(expTimeMs);
 		final Object token = getCoderMethod().invoke(service, randomNumberString());
 
 		for (int i = 0; i < 10; i++) {
 
-			Thread.sleep(expTimeMs);
+			Thread.sleep(expTimeMs + 1);
 
 			try {
 				getDeCoderMethod().invoke(service, token);
