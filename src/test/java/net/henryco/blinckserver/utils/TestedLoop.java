@@ -10,6 +10,7 @@ public final class TestedLoop {
 		this.times = times;
 	}
 
+	@FunctionalInterface
 	public interface TestedRunnable {
 		void run() throws Exception;
 	}

@@ -1,15 +1,19 @@
 package net.henryco.blinckserver.unit.auth;
 
+import io.jsonwebtoken.SignatureException;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import net.henryco.blinckserver.unit.BlinckUnitTest;
 import net.henryco.blinckserver.util.test.BlinckTestUtil;
-import net.henryco.blinckserver.utils.HTTPTestUtils;
 import net.henryco.blinckserver.utils.TestedLoop;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import java.util.Random;
+
+import static net.henryco.blinckserver.utils.HTTPTestUtils.randomNumberString;
 
 /**
  * @author Henry on 27/08/17.
@@ -47,10 +51,11 @@ final class RandomSecretTokenService extends TokenAuthenticationService {
 public class TokenAuthTest extends BlinckUnitTest {
 
 	private static final TestedLoop testLoop = new TestedLoop(100);
+	private static final Long tokenExpTime = 1_000_000L;
 
 	private static TokenAuthenticationService createService(Long expTime) {
 		return new RandomSecretTokenService(
-				HTTPTestUtils.randomNumberString(),
+				randomNumberString(),
 				expTime
 		);
 	}
@@ -76,25 +81,27 @@ public class TokenAuthTest extends BlinckUnitTest {
 
 
 	@Test
-	public void createdTokenSimilarityTest() throws Exception {
+	public void createdTokenIsNotSimilarTest() throws Exception {
 
 		final Method coder = getCoderMethod();
-		final String value = HTTPTestUtils.randomNumberString();
+		final String value = randomNumberString();
 
 		testLoop.test(() -> {
 			assert !coder.invoke(createService(new Random().nextLong()), value).equals(value);
 		});
 	}
-	
+
+
+
 	@Test
 	public void tokenSingleServiceCodeDeCodeTest() throws Exception {
 
-		TokenAuthenticationService service = createService(1_000_000L);
+		TokenAuthenticationService service = createService(tokenExpTime);
 
-		final Method coder = getCoderMethod();
 		final Method deCoder = getDeCoderMethod();
+		final Method coder = getCoderMethod();
 
-		final String value = HTTPTestUtils.randomNumberString();
+		final String value = randomNumberString();
 
 		testLoop.test(() -> {
 			assert deCoder.invoke(service, coder.invoke(service, value)).equals(value);
@@ -103,8 +110,22 @@ public class TokenAuthTest extends BlinckUnitTest {
 
 
 
+	@Test
+	public void tokenMultiServiceCodeDeCodeTest() throws Exception {
 
+		testLoop.test(() -> {
 
+			String coded = getCoderMethod().invoke(createService(tokenExpTime), randomNumberString()).toString();
+
+			try {
+				getDeCoderMethod().invoke(createService(tokenExpTime), coded);
+			} catch (InvocationTargetException e) {
+				assert e.getTargetException() instanceof SignatureException;
+			}
+
+		});
+
+	}
 
 
 }
