@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.Random;
 
-import static net.henryco.blinckserver.utils.HTTPTestUtils.randomNumberString;
+import static net.henryco.blinckserver.utils.TestUtils.randomNumberString;
 
 /**
  * @author Henry on 27/08/17.

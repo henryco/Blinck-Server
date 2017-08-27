@@ -9,7 +9,7 @@ import java.util.Random;
 /**
  * @author Henry on 25/08/17.
  */
-public interface HTTPTestUtils {
+public interface TestUtils {
 
 	String DEFAULT_URI = "http://localhost";
 

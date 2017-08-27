@@ -1,9 +1,8 @@
 package net.henryco.blinckserver.integration;
 
 import net.henryco.blinckserver.utils.JsonForm;
-import net.henryco.blinckserver.utils.HTTPTestUtils;
+import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
@@ -35,7 +34,7 @@ public abstract class BlinckIntegrationTest {
 	protected final ResponseEntity<String> fastGetRequest(String endPoint) {
 		return restTemplate.exchange(
 				new RequestEntity(
-						GET, HTTPTestUtils.newURI(endPoint, port)
+						GET, TestUtils.newURI(endPoint, port)
 				), String.class
 		);
 	}
@@ -43,7 +42,7 @@ public abstract class BlinckIntegrationTest {
 
 	protected final ResponseEntity<String> fastPostRequest(String endPoint, JsonForm postForm) {
 		return restTemplate.exchange(
-				RequestEntity.post(HTTPTestUtils.newURI(endPoint, port))
+				RequestEntity.post(TestUtils.newURI(endPoint, port))
 						.accept(MediaType.APPLICATION_JSON)
 						.body(postForm),
 				String.class

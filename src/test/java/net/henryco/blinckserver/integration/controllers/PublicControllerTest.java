@@ -1,7 +1,7 @@
 package net.henryco.blinckserver.integration.controllers;
 
 import net.henryco.blinckserver.integration.BlinckIntegrationTest;
-import net.henryco.blinckserver.utils.HTTPTestUtils;
+import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Test;
 
 import java.net.URI;
@@ -20,7 +20,7 @@ public class PublicControllerTest extends BlinckIntegrationTest {
 	@Test
 	public void facebookPermissionsListTest() {
 
-		final URI uri = HTTPTestUtils.newURI(FACEBOOK_PERMISSIONS_ENDPOINT, port);
+		final URI uri = TestUtils.newURI(FACEBOOK_PERMISSIONS_ENDPOINT, port);
 		List<String> strings = Arrays.asList(restTemplate.getForEntity(uri, String[].class).getBody());
 
 		assert strings.contains("read_custom_friendlists");

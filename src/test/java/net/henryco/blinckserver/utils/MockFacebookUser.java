@@ -63,10 +63,10 @@ public final class MockFacebookUser {
 //		this.testUser = wipeUser().createTestUser();
 
 		this.facebookUser = new User(
-				HTTPTestUtils.randomNumberString(),
-				HTTPTestUtils.randomNumberString(),
-				HTTPTestUtils.randomNumberString(),
-				HTTPTestUtils.randomNumberString(),
+				TestUtils.randomNumberString(),
+				TestUtils.randomNumberString(),
+				TestUtils.randomNumberString(),
+				TestUtils.randomNumberString(),
 				"Helicopter",
 				Locale.getDefault()
 		);

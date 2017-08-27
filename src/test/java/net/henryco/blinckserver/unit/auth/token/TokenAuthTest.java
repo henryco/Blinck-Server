@@ -4,7 +4,7 @@ import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import net.henryco.blinckserver.unit.BlinckUnitTest;
 import net.henryco.blinckserver.utils.TestedLoop;
 
-import static net.henryco.blinckserver.utils.HTTPTestUtils.randomNumberString;
+import static net.henryco.blinckserver.utils.TestUtils.randomNumberString;
 
 /**
  * @author Henry on 27/08/17.

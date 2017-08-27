@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Random;
 
-import static net.henryco.blinckserver.utils.HTTPTestUtils.randomNumberString;
+import static net.henryco.blinckserver.utils.TestUtils.randomNumberString;
 
 /**
  * @author Henry on 27/08/17.

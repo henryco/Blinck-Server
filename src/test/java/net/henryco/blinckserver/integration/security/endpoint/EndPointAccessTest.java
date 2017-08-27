@@ -5,7 +5,7 @@ import net.henryco.blinckserver.mvc.service.action.UserDataService;
 import net.henryco.blinckserver.mvc.service.security.UserTokenAuthService;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import net.henryco.blinckserver.util.test.BlinckTestUtil;
-import net.henryco.blinckserver.utils.HTTPTestUtils;
+import net.henryco.blinckserver.utils.TestUtils;
 import net.henryco.blinckserver.utils.JsonForm;
 import net.henryco.blinckserver.utils.MockFacebookUser;
 import org.junit.Before;
@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.lang.reflect.Method;
 
-import static net.henryco.blinckserver.utils.HTTPTestUtils.randomNumberString;
+import static net.henryco.blinckserver.utils.TestUtils.randomNumberString;
 
 /**
  * @author Henry on 25/08/17.
@@ -50,7 +50,7 @@ public abstract class EndPointAccessTest extends BlinckIntegrationTest {
 	protected ResponseEntity<String> authorizedGetRequest(String endPoint, String authToken) {
 
 		return restTemplate.exchange(
-				RequestEntity.get(HTTPTestUtils.newURI(endPoint, port))
+				RequestEntity.get(TestUtils.newURI(endPoint, port))
 						.header(HEADER_ACCESS_TOKEN_NAME, authToken)
 						.accept(MediaType.APPLICATION_JSON)
 						.build(),
