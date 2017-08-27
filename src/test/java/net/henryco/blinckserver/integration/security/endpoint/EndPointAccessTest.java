@@ -9,7 +9,6 @@ import net.henryco.blinckserver.utils.HTTPTestUtils;
 import net.henryco.blinckserver.utils.JsonForm;
 import net.henryco.blinckserver.utils.MockFacebookUser;
 import org.junit.Before;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
