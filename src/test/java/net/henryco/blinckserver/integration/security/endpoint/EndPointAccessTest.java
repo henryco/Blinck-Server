@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.integration.security.endpoint;
 
 import net.henryco.blinckserver.integration.BlinckIntegrationTest;
+import net.henryco.blinckserver.util.test.BlinckTestUtil;
 import net.henryco.blinckserver.utils.JsonForm;
 import net.henryco.blinckserver.utils.MockFacebookUser;
 import net.henryco.blinckserver.mvc.service.action.UserDataService;
@@ -80,8 +81,8 @@ public class EndPointAccessTest extends BlinckIntegrationTest {
 
 		final String tokenCreatorMethod = "createAuthenticationToken";
 		final String tokenOwnerName = MockFacebookUser.getInstance().getUser().getId();
-		final Method method = TokenAuthenticationService.class.getDeclaredMethod(tokenCreatorMethod, String.class);
-		method.setAccessible(true);
+		final Method method = BlinckTestUtil.getMethod(TokenAuthenticationService.class, tokenCreatorMethod);
+
 		return method.invoke(userTokenAuthService, tokenOwnerName).toString();
 	}
 

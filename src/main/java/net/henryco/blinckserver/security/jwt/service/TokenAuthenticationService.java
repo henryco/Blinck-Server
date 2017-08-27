@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.security.jwt.service;
 
 import io.jsonwebtoken.*;
+import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,6 +37,7 @@ public abstract class TokenAuthenticationService {
 	}
 
 
+	@BlinckTestName("createAuthenticationToken")
 	private String createAuthenticationToken(String username) {
 		return Jwts.builder()
 				.setSubject(username)

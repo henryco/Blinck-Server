@@ -61,15 +61,7 @@ public abstract class BlinckIntegrationTest {
 
 	@Test
 	public final void connectionTest() {
-
-		ResponseEntity<String> entity = restTemplate.exchange(
-				new RequestEntity(
-						GET, HTTPTestUtils.newURI("/", port)
-				), String.class
-		);
-
-		assert entity != null;
-		assert entity.getStatusCode().is2xxSuccessful();
+		assert !fastGetRequest("/").getStatusCode().is5xxServerError();
 	}
 
 
