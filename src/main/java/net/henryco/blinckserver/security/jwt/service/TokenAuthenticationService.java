@@ -37,6 +37,7 @@ public abstract class TokenAuthenticationService {
 	}
 
 
+
 	@BlinckTestName("createAuthenticationToken")
 	private String createAuthenticationToken(String username) {
 		return Jwts.builder()
@@ -47,11 +48,23 @@ public abstract class TokenAuthenticationService {
 	}
 
 
+	@BlinckTestName("readAuthenticationToken")
+	private String readAuthenticationToken(String token) {
+
+		if (token == null) return null;
+
+		return Jwts.parser()
+				.setSigningKey(getTokenSecret())
+				.parseClaimsJws(token.replace(getTokenPrefix(), "")).getBody()
+		.getSubject();
+	}
+
+
+
 	public final void addAuthentication(HttpServletResponse res, String username) {
 		String JWT = createAuthenticationToken(username);
 		res.addHeader(getTokenHeader(), getTokenPrefix() + " " + JWT);
 	}
-
 
 
 	public final Authentication getAuthentication(HttpServletRequest request) {
@@ -61,10 +74,7 @@ public abstract class TokenAuthenticationService {
 
 		final String user;
 		try {
-			user = Jwts.parser()
-					.setSigningKey(getTokenSecret())
-					.parseClaimsJws(token.replace(getTokenPrefix(), "")).getBody()
-					.getSubject();
+			user = readAuthenticationToken(token);
 		} catch (JwtException e) { return null; }
 
 		return user == null ? null
