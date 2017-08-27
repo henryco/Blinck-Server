@@ -68,7 +68,7 @@ public class HttpTokenAuthTest extends TokenAuthTest {
 			HttpServletResponse response = createJwtResponse(service, principal);
 			HttpServletRequest request = createJwtRequest(header, response.getHeader(header));
 
-			Authentication authentication = service.getAuthentication(request);;
+			Authentication authentication = service.getAuthentication(request);
 
 			assert authentication != null;
 			assert authentication.getPrincipal().equals(principal);
