@@ -15,6 +15,8 @@ public class BlackList {
 
 	private @Id @Column(
 			unique = true
+	) @GeneratedValue(
+			strategy = GenerationType.AUTO
 	) long id;
 
 
