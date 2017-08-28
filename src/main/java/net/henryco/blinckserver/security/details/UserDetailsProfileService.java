@@ -24,6 +24,7 @@ public class UserDetailsProfileService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+		if (username == null) throw new UsernameNotFoundException("username is NULL!");
 		Long id = Long.decode(username);
 		if (!authProfileDao.isExists(id))
 			throw new UsernameNotFoundException(username+ " does not exist!");

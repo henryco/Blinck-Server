@@ -3,6 +3,7 @@ package net.henryco.blinckserver.unit.auth.token;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import net.henryco.blinckserver.unit.BlinckUnitTest;
 import net.henryco.blinckserver.utils.TestedLoop;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import static net.henryco.blinckserver.utils.TestUtils.randomNumberString;
 
@@ -33,6 +34,11 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 		private RandomSecretTokenService setPrefix(String prefix) {
 			this.prefix = prefix;
 			return this;
+		}
+
+		@Override
+		protected UserDetailsService getUserDetailsService() {
+			return null;
 		}
 
 		@Override
