@@ -1,12 +1,11 @@
-package net.henryco.blinckserver.mvc.model.entity.relations.dual;
+package net.henryco.blinckserver.mvc.model.entity.relation.conversation;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
-import net.henryco.blinckserver.mvc.model.entity.relations.ConversationEntity;
+import net.henryco.blinckserver.mvc.model.entity.relation.SubParty;
 
 import javax.persistence.*;
-
 import java.util.Date;
 
 import static javax.persistence.CascadeType.ALL;
@@ -18,7 +17,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  */
 @Entity @Data
 @NoArgsConstructor
-public class DualConversation implements ConversationEntity<Long, UserBaseProfile> {
+public class SubPartyConversation {
 
 
 	private @Id @Column(
@@ -55,8 +54,8 @@ public class DualConversation implements ConversationEntity<Long, UserBaseProfil
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "relation_id"
-	) DualRelation dualRelationId;
+			name = "sub_party_id"
+	) SubParty subParty;
 
 
 }

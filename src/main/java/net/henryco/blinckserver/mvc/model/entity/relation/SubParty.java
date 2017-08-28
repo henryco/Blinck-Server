@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.model.entity.relations.group;
+package net.henryco.blinckserver.mvc.model.entity.relation;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import static javax.persistence.GenerationType.AUTO;
  */
 @Entity @Data
 @NoArgsConstructor
-public class GroupConversation {
+public class SubParty {
 
 
 	private @Id @Column(
@@ -23,7 +23,7 @@ public class GroupConversation {
 			unique = true
 	) @GeneratedValue(
 			strategy = AUTO
-	) long id;
+	) Long id;
 
 
 }

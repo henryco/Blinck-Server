@@ -13,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class BlackList {
 
+
 	private @Id @Column(
 			unique = true
 	) @GeneratedValue(

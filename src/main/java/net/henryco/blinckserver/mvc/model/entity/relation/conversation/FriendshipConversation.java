@@ -1,21 +1,24 @@
-package net.henryco.blinckserver.mvc.model.entity.relations.dual;
+package net.henryco.blinckserver.mvc.model.entity.relation.conversation;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
+import net.henryco.blinckserver.mvc.model.entity.relation.Friendship;
 
 import javax.persistence.*;
 
+import java.util.Date;
+
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
  * @author Henry on 28/08/17.
  */
 @Entity @Data
 @NoArgsConstructor
-public class DualRelation {
+public class FriendshipConversation {
 
 
 	private @Id @Column(
@@ -23,28 +26,37 @@ public class DualRelation {
 			unique = true
 	) @GeneratedValue(
 			strategy = AUTO
-	) long id;
+	) Long id;
 
 
 	private @Column(
-			name = "relation_type"
-	) int relationType;
+			name = "message",
+			length = 512
+	) String message;
+
+
+	private @Column(
+			name = "time_stamp",
+			updatable = false
+	) @Temporal(
+			TIMESTAMP
+	) Date date;
 
 
 	private @ManyToOne(
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "user_id_1"
-	) UserBaseProfile userId1;
+			name = "author_id"
+	) UserBaseProfile author;
 
 
 	private @ManyToOne(
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "user_id_2"
-	) UserBaseProfile userId2;
+			name = "friendship_id"
+	) Friendship friendship;
 
 
 }
