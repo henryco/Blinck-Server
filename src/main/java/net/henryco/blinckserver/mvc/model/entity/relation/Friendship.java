@@ -26,8 +26,8 @@ public class Friendship {
 
 
 	private @Column(
-			name = "relation_type"
-	) Integer relationType;
+			name = "friendship_type"
+	) Integer friendshipType;
 
 
 	private @ManyToOne(
