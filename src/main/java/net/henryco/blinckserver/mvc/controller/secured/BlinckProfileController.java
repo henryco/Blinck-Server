@@ -1,6 +1,12 @@
 package net.henryco.blinckserver.mvc.controller.secured;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.stream.Collectors;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 
 /**
@@ -9,6 +15,19 @@ import org.springframework.security.core.Authentication;
 public interface BlinckProfileController {
 
 	String profile();
-	String[] permissions(Authentication authentication);
+
+
+	default @RequestMapping(
+			method = GET,
+			value = "/permissions"
+	) String[] permissions(Authentication authentication) {
+
+		return authentication
+				.getAuthorities()
+				.stream()
+				.map(GrantedAuthority::getAuthority)
+				.collect(Collectors.toList())
+		.toArray(new String[0]);
+	}
 
 }
