@@ -2,12 +2,11 @@ package net.henryco.blinckserver.mvc.model.entity.relation;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
 
 /**
@@ -24,6 +23,22 @@ public class SubParty {
 	) @GeneratedValue(
 			strategy = AUTO
 	) Long id;
+
+
+	private @ManyToOne(
+			cascade = ALL,
+			optional = false
+	) @JoinColumn(
+			name = "party_id"
+	) Party party;
+
+
+	private @ManyToOne(
+			cascade = ALL,
+			optional = false
+	) @JoinColumn(
+			name = "user_id"
+	) UserBaseProfile user;
 
 
 }
