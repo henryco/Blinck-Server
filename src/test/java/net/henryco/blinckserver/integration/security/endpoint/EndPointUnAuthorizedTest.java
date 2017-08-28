@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.integration.security.endpoint;
 
+import net.henryco.blinckserver.integration.BlinckIntegrationAccessTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,7 +9,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 /**
  * @author Henry on 27/08/17.
  */
-public class EndPointUnAuthorizedTest extends EndPointAccessTest {
+public class EndPointUnAuthorizedTest extends BlinckIntegrationAccessTest {
 
 
 	@Test

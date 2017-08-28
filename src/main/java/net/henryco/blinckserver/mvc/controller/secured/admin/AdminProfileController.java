@@ -15,10 +15,8 @@ public class AdminProfileController implements BlinckProfileController {
 
 
 
-	public @RequestMapping(
-			method = GET,
-			value = "/profile"
-	) @Override String profile() {
+	@Override
+	public String profile() {
 		return "wellcome admin";
 	}
 

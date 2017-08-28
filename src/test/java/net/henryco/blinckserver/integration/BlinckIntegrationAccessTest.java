@@ -1,6 +1,5 @@
-package net.henryco.blinckserver.integration.security.endpoint;
+package net.henryco.blinckserver.integration;
 
-import net.henryco.blinckserver.integration.BlinckIntegrationTest;
 import net.henryco.blinckserver.mvc.service.action.UserDataService;
 import net.henryco.blinckserver.mvc.service.security.UserTokenAuthService;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
@@ -24,16 +23,16 @@ import static net.henryco.blinckserver.utils.TestUtils.randomNumberString;
  */
 
 @PropertySource("classpath:/static/props/base.properties")
-public abstract class EndPointAccessTest extends BlinckIntegrationTest {
+public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest {
 
 
-	static final String HEADER_ACCESS_TOKEN_NAME = "Authorization";
-	static final String LOGIN_ENDPOINT_ADMIN = "/login/admin";
-	static final String ROOT_ENDPOINT = "/";
-	static final String PUBLIC_ENDPOINT = "/public";
-	static final String PROTECTED_ENDPOINT = "/protected";
-	static final String ADMIN_ENDPOINT = "/protected/admin";
-	static final String USER_ENDPOINT = "/protected/user";
+	protected static final String HEADER_ACCESS_TOKEN_NAME = "Authorization";
+	protected static final String LOGIN_ENDPOINT_ADMIN = "/login/admin";
+	protected static final String ROOT_ENDPOINT = "/";
+	protected static final String PUBLIC_ENDPOINT = "/public";
+	protected static final String PROTECTED_ENDPOINT = "/protected";
+	protected static final String ADMIN_ENDPOINT = "/protected/admin";
+	protected static final String USER_ENDPOINT = "/protected/user";
 
 
 	private @Autowired UserDataService userDataService;
@@ -42,21 +41,27 @@ public abstract class EndPointAccessTest extends BlinckIntegrationTest {
 
 
 	@Before
-	public void setUp() {
+	public final void setUp() {
 		userDataService.addNewFacebookUserIfNotExist(MockFacebookUser.getInstance().getUser());
 	}
 
 
 	protected ResponseEntity<String> authorizedGetRequest(String endPoint, String authToken) {
+		return authorizedGetRequest(endPoint, authToken, String.class);
+	}
 
+	protected <T> ResponseEntity<T> authorizedGetRequest(String endPoint,
+														 String authToken,
+														 Class<T> responseType) {
 		return restTemplate.exchange(
 				RequestEntity.get(TestUtils.newURI(endPoint, port))
 						.header(HEADER_ACCESS_TOKEN_NAME, authToken)
 						.accept(MediaType.APPLICATION_JSON)
 						.build(),
-				String.class
+				responseType
 		);
 	}
+
 
 
 	protected String getForAdminAuthToken() {
@@ -83,19 +88,19 @@ public abstract class EndPointAccessTest extends BlinckIntegrationTest {
 
 
 
-	static String randomUserPath() {
+	protected static String randomUserPath() {
 		return USER_ENDPOINT + "/" + randomNumberString();
 	}
-	static String randomAdminPath() {
+	protected static String randomAdminPath() {
 		return ADMIN_ENDPOINT + "/" + randomNumberString();
 	}
-	static String randomRootPath() {
+	protected static String randomRootPath() {
 		return ROOT_ENDPOINT + "/" + randomNumberString();
 	}
-	static String randomPublicPath() {
+	protected static String randomPublicPath() {
 		return PUBLIC_ENDPOINT + "/" + randomNumberString();
 	}
-	static String randomProtectedPath() {
+	protected static String randomProtectedPath() {
 		return PROTECTED_ENDPOINT + "/" + randomNumberString();
 	}
 

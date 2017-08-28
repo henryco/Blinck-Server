@@ -14,10 +14,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class UserProfileController implements BlinckProfileController {
 
 
-	public @RequestMapping(
-			method = GET,
-			value = "/profile"
-	) @Override String profile() {
+
+	@Override
+	public String profile() {
 		return "wellcome user";
 	}
 

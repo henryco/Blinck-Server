@@ -1,11 +1,12 @@
 package net.henryco.blinckserver.integration.security.endpoint;
 
+import net.henryco.blinckserver.integration.BlinckIntegrationAccessTest;
 import org.junit.Test;
 
 /**
  * @author Henry on 27/08/17.
  */
-public class EndPointAuthorizationTest extends EndPointAccessTest {
+public class EndPointAuthorizationTest extends BlinckIntegrationAccessTest {
 
 
 	@Test
