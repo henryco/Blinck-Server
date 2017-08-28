@@ -17,6 +17,7 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 
 		private String header;
 		private String prefix;
+		private String role;
 		private final String secret;
 		private final Long expTime;
 
@@ -33,6 +34,11 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 
 		private RandomSecretTokenService setPrefix(String prefix) {
 			this.prefix = prefix;
+			return this;
+		}
+
+		private RandomSecretTokenService setDefaultRole(String role) {
+			this.role = role;
 			return this;
 		}
 
@@ -60,9 +66,21 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 		protected String getTokenPrefix() {
 			return prefix == null ? super.getTokenPrefix() : prefix;
 		}
+
+		@Override
+		protected String getDefaultRole() {
+			return role == null ? super.getDefaultRole() : role;
+		}
+
 	}
 
+
+
+
 	protected static final TestedLoop testLoop = new TestedLoop(100);
+
+
+	// TODO: 28/08/17       REPLACE WITH BUILDER !!!   vvv
 
 	protected static TokenAuthenticationService createJwtService(Long expTime) {
 		return new RandomSecretTokenService(
@@ -80,6 +98,14 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 																 String prefix) {
 		return new RandomSecretTokenService(randomNumberString(), expTime)
 				.setHeader(header).setPrefix(prefix);
+	}
+
+	protected static TokenAuthenticationService createJwtService(Long expTime,
+																 String header,
+																 String prefix,
+																 String role) {
+		return new RandomSecretTokenService(randomNumberString(), expTime)
+				.setHeader(header).setPrefix(prefix).setDefaultRole(role);
 	}
 
 	protected static TokenAuthenticationService createJwtService(Long expTime, String header) {

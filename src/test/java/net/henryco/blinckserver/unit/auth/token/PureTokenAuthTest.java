@@ -5,9 +5,11 @@ import io.jsonwebtoken.SignatureException;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import net.henryco.blinckserver.util.test.BlinckTestUtil;
 import org.junit.Test;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Random;
 
 import static net.henryco.blinckserver.utils.TestUtils.randomNumberString;
@@ -96,6 +98,40 @@ public class PureTokenAuthTest extends TokenAuthTest {
 
 
 
+	@Test @SuppressWarnings("unchecked")
+	public void tokenDefaultRolGrantTest() throws Exception {
+
+		testLoop.test(() -> {
+
+			final String DEFAULT_ROLE = "ROLE_"+randomNumberString();
+
+			Collection<? extends GrantedAuthority> authorities =
+					(Collection<? extends GrantedAuthority>)
+							getDefaultAuthorityGranterMethod().invoke(getJwtService(DEFAULT_ROLE));
+
+			assert !authorities.isEmpty();
+			assert authorities.stream().anyMatch(auth -> auth.getAuthority().equals(DEFAULT_ROLE));
+		});
+	}
+
+
+	@Test
+	public void tokenGrantAuthorityWithoutDetailsServiceTest() throws Exception {
+
+		testLoop.test(() -> {
+
+			final String ROLE = "ROLE_"+randomNumberString();
+			Object aut = getAuthorityGranterMethod().invoke(getJwtService(ROLE), randomNumberString());
+			Object def = getDefaultAuthorityGranterMethod().invoke(getJwtService(ROLE));
+
+			assert aut.equals(def);
+		});
+	}
+
+
+
+
+
 	private static Method getCoderMethod() {
 		return BlinckTestUtil.getMethod(
 				TokenAuthenticationService.class,
@@ -111,4 +147,29 @@ public class PureTokenAuthTest extends TokenAuthTest {
 		);
 	}
 
+
+	private static Method getDefaultAuthorityGranterMethod() {
+		return BlinckTestUtil.getMethod(
+				TokenAuthenticationService.class,
+				"grantDefaultAuthorities"
+		);
+	}
+
+
+	private static Method getAuthorityGranterMethod() {
+		return BlinckTestUtil.getMethod(
+				TokenAuthenticationService.class,
+				"grantAuthorities"
+		);
+	}
+
+
+	private static TokenAuthenticationService getJwtService(String DEFAULT_ROLE) {
+		return createJwtService(
+				tokenExpTime,
+				randomNumberString(),
+				randomNumberString(),
+				DEFAULT_ROLE
+		);
+	}
 }
