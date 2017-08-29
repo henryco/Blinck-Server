@@ -73,4 +73,6 @@ public class MockFacebookUserTest extends BlinckUnitTest {
 	private static boolean stringNutNullAndNotEmpty(String s) {
 		return s != null && !s.isEmpty();
 	}
+
+
 }

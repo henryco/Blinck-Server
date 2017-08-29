@@ -1,13 +1,15 @@
 package net.henryco.blinckserver.util.dao;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * @author Henry on 23/08/17.
  */
 public interface BlinckDaoTemplate<ENTITY, ID_TYPE> {
 
-	ENTITY getById(ID_TYPE id);
-	ENTITY save(ENTITY entity);
-	boolean isExists(ID_TYPE id);
-	void deleteById(ID_TYPE id);
+	@Transactional ENTITY getById(ID_TYPE id);
+	@Transactional ENTITY save(ENTITY entity);
+	@Transactional boolean isExists(ID_TYPE id);
+	@Transactional void deleteById(ID_TYPE id);
 
 }

@@ -13,6 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.social.facebook.api.User;
 
 import java.lang.reflect.Method;
 
@@ -37,7 +38,6 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 
 	private @Autowired UserDataService userDataService;
 	private @Autowired UserTokenAuthService userTokenAuthService;
-
 
 
 	@Before

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * @author Henry on 23/08/17.
  */
 @Service
-public class UserBaseProfileService implements BlinckDaoTemplateProvider<UserBaseProfile, Long> {
+public class UserBaseProfileService extends BlinckDaoTemplateProvider<UserBaseProfile, Long> {
 
 	private final UserBaseProfileDao baseProfileDao;
 
@@ -22,7 +22,7 @@ public class UserBaseProfileService implements BlinckDaoTemplateProvider<UserBas
 
 
 	@Override
-	public BlinckDaoTemplate<UserBaseProfile, Long> provideDao() {
+	protected BlinckDaoTemplate<UserBaseProfile, Long> provideDao() {
 		return baseProfileDao;
 	}
 
