@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.model.dao.profile.base;
+package net.henryco.blinckserver.mvc.model.dao.profile;
 
 import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
 import net.henryco.blinckserver.util.BlinckDaoTemplate;

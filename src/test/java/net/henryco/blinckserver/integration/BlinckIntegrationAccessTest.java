@@ -1,6 +1,6 @@
 package net.henryco.blinckserver.integration;
 
-import net.henryco.blinckserver.mvc.service.action.UserDataService;
+import net.henryco.blinckserver.mvc.service.data.UserDataService;
 import net.henryco.blinckserver.mvc.service.security.UserTokenAuthService;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import net.henryco.blinckserver.util.test.BlinckTestUtil;

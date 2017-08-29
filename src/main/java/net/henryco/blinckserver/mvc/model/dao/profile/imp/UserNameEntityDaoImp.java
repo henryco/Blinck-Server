@@ -1,5 +1,6 @@
-package net.henryco.blinckserver.mvc.model.dao.profile.name;
+package net.henryco.blinckserver.mvc.model.dao.profile.imp;
 
+import net.henryco.blinckserver.mvc.model.dao.profile.UserNameEntityDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserNameEntity;
 import net.henryco.blinckserver.mvc.model.repository.profile.UserNameProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,9 @@
-package net.henryco.blinckserver.mvc.service.action;
+package net.henryco.blinckserver.mvc.service.data;
 
-import net.henryco.blinckserver.mvc.model.dao.profile.base.UserBaseProfileDao;
+import net.henryco.blinckserver.mvc.model.dao.profile.UserBaseProfileDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserNameEntity;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.User;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,7 @@
 package net.henryco.blinckserver.security.auth;
 
-import net.henryco.blinckserver.mvc.service.action.UserDataService;
+import net.henryco.blinckserver.mvc.service.data.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,6 +1,6 @@
-package net.henryco.blinckserver.mvc.service.data;
+package net.henryco.blinckserver.mvc.service.profile;
 
-import net.henryco.blinckserver.mvc.model.dao.profile.base.UserBaseProfileDao;
+import net.henryco.blinckserver.mvc.model.dao.profile.UserBaseProfileDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
