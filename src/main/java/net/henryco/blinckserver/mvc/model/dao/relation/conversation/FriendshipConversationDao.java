@@ -1,7 +1,7 @@
 package net.henryco.blinckserver.mvc.model.dao.relation.conversation;
 
 import net.henryco.blinckserver.mvc.model.entity.relation.conversation.FriendshipConversation;
-import net.henryco.blinckserver.util.BlinckDaoTemplate;
+import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
 
 /**
  * @author Henry on 29/08/17.

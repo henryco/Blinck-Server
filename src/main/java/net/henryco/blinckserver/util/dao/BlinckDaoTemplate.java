@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.util;
+package net.henryco.blinckserver.util.dao;
 
 /**
  * @author Henry on 23/08/17.
