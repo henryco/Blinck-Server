@@ -1,6 +1,6 @@
 package net.henryco.blinckserver.mvc.model.dao.relation.core;
 
-import net.henryco.blinckserver.mvc.model.entity.relation.Friendship;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
 
 /**

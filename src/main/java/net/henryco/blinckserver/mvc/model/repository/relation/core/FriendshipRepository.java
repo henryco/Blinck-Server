@@ -1,6 +1,6 @@
-package net.henryco.blinckserver.mvc.model.repository.relations.dual;
+package net.henryco.blinckserver.mvc.model.repository.relation.core;
 
-import net.henryco.blinckserver.mvc.model.entity.relation.Friendship;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

@@ -1,7 +1,7 @@
 package net.henryco.blinckserver.mvc.model.dao.relation.core.imp;
 
 import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
-import net.henryco.blinckserver.mvc.model.entity.relation.SubParty;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
 import org.springframework.stereotype.Repository;
 
 /**

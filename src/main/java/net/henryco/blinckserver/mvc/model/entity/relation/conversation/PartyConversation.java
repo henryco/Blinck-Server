@@ -3,7 +3,7 @@ package net.henryco.blinckserver.mvc.model.entity.relation.conversation;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
-import net.henryco.blinckserver.mvc.model.entity.relation.Party;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 
 import javax.persistence.*;
 

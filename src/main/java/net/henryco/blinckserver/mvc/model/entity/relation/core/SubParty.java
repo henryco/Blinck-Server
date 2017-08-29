@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.model.entity.relation;
+package net.henryco.blinckserver.mvc.model.entity.relation.core;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
