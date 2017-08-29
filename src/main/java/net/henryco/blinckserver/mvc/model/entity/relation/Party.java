@@ -42,7 +42,8 @@ public class Party {
 	) @JoinColumn(
 			name = "sub_party_1",
 			unique = true,
-			updatable = false
+			updatable = false,
+			referencedColumnName = "sub_party_id"
 	) SubParty subParty1;
 
 
@@ -53,7 +54,8 @@ public class Party {
 	) @JoinColumn(
 			name = "sub_party_2",
 			unique = true,
-			updatable = false
+			updatable = false,
+			referencedColumnName = "sub_party_id"
 	) SubParty subParty2;
 
 

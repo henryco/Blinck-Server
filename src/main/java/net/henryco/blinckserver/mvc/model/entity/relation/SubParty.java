@@ -25,6 +25,13 @@ public class SubParty {
 	) Long id;
 
 
+	private @Column(
+			name = "sub_party_id",
+			unique = true,
+			nullable = false
+	) Long subPartyId;
+
+
 	private @ManyToOne(
 			cascade = ALL,
 			optional = false

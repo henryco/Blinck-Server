@@ -54,7 +54,8 @@ public class SubPartyConversation {
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "sub_party_id"
+			name = "sub_party_id",
+			referencedColumnName = "sub_party_id"
 	) SubParty subParty;
 
 
