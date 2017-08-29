@@ -34,9 +34,11 @@ public class UserDataService {
 		addNewFacebookUser(userProfile);
 	}
 
+
 	@Transactional
 	public void addNewFacebookUser(User userProfile) {
-		baseProfileDao.save(createNewUser(userProfile, ROLE_USER));
+		UserBaseProfile user = createNewUser(userProfile, ROLE_USER);
+		baseProfileDao.save(user);
 	}
 
 
@@ -46,10 +48,12 @@ public class UserDataService {
 			baseProfileDao.deleteById(id);
 	}
 
+
 	@Transactional
 	public void deleteUser(String id) {
 		deleteUser(Long.decode(id));
 	}
+
 
 
 	private UserBaseProfile createNewUser(User user, String ... authorities) {
@@ -57,9 +61,9 @@ public class UserDataService {
 		final Long id = Long.decode(user.getId());
 		if (baseProfileDao.isExists(id))
 			throw new RuntimeException("User: ["+id+"] already exists!");
-
 		return createUserEntity(user, authorities);
 	}
+
 
 
 	@BlinckTestName("createUserEntity")
