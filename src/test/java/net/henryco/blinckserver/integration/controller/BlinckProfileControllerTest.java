@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.integration.controllers;
+package net.henryco.blinckserver.integration.controller;
 
 import net.henryco.blinckserver.integration.BlinckIntegrationAccessTest;
 import org.junit.Test;

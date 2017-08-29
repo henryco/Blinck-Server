@@ -10,7 +10,7 @@ public class EndPointAuthorizationTest extends BlinckIntegrationAccessTest {
 
 
 	@Test
-	public void testPublicAdminAuthorization() {
+	public void testPublicAdminAuthorization() throws Exception {
 		assert getForAdminAuthToken() != null;
 	}
 

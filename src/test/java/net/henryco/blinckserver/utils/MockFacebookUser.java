@@ -1,9 +1,10 @@
 package net.henryco.blinckserver.utils;
 
-import org.springframework.social.facebook.api.TestUser;
+import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.social.facebook.api.User;
-import org.springframework.social.facebook.api.impl.FacebookTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -32,23 +33,25 @@ public final class MockFacebookUser {
 	}
 
 
+	private final List<String> idList;
 
-	private final String appNamespace;
-	private final String permissions;
-	private final String appSecret;
-	private final String appId;
+//	private final String appNamespace;
+//	private final String permissions;
+//	private final String appSecret;
+//	private final String appId;
 
-	private FacebookTemplate clientFacebook;
-	private TestUser testUser;
+//	private FacebookTemplate clientFacebook;
+//	private TestUser testUser;
 	private User facebookUser;
 
 
 	private MockFacebookUser(String appId, String appSecret, String appNamespace, String permissions) {
 
-		this.appNamespace = appNamespace;
-		this.permissions = permissions;
-		this.appSecret = appSecret;
-		this.appId = appId;
+		this.idList = new ArrayList<>();
+//		this.appNamespace = appNamespace;
+//		this.permissions = permissions;
+//		this.appSecret = appSecret;
+//		this.appId = appId;
 
 		createRandom();
 	}
@@ -63,7 +66,7 @@ public final class MockFacebookUser {
 //		this.testUser = wipeUser().createTestUser();
 
 		this.facebookUser = new User(
-				TestUtils.randomNumberString(),
+				createNewRandomId(),
 				TestUtils.randomNumberString(),
 				TestUtils.randomNumberString(),
 				TestUtils.randomNumberString(),
@@ -74,20 +77,20 @@ public final class MockFacebookUser {
 	}
 
 
-	public MockFacebookUser wipeUser() {
-		if (testUser != null)
-			clientFacebook.testUserOperations().deleteTestUser(testUser.getId());
-		return this;
-	}
-
-
-	private TestUser createTestUser() {
-		return clientFacebook.testUserOperations().createTestUser(
-				true,
-				permissions,
-				"Blinck Test User"
-		);
-	}
+//	public MockFacebookUser wipeUser() {
+//		if (testUser != null)
+//			clientFacebook.testUserOperations().deleteTestUser(testUser.getId());
+//		return this;
+//	}
+//
+//
+//	private TestUser createTestUser() {
+//		return clientFacebook.testUserOperations().createTestUser(
+//				true,
+//				permissions,
+//				"Blinck Test User"
+//		);
+//	}
 
 
 
@@ -101,4 +104,15 @@ public final class MockFacebookUser {
 //	}
 
 
+	@BlinckTestName("createNewRandomId")
+	private String createNewRandomId() {
+
+		while (true) {
+			String id = TestUtils.randomNumberString();
+			if (!idList.contains(id)) {
+				idList.add(id);
+				return id;
+			}
+		}
+	}
 }

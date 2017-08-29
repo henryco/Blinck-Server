@@ -77,8 +77,6 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 
 
 
-	protected static final TestedLoop testLoop = new TestedLoop(100);
-
 
 	// TODO: 28/08/17       REPLACE WITH BUILDER !!!   vvv
 
