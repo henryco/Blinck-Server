@@ -4,6 +4,7 @@ import net.henryco.blinckserver.mvc.model.dao.profile.UserBaseProfileDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserNameEntity;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
+import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.User;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserDataService {
 
-	private final static String ROLE_USER = "ROLE_USER";
+	private static final String ROLE_USER = "ROLE_USER";
+	private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
 	private final UserBaseProfileDao baseProfileDao;
 
@@ -26,7 +28,6 @@ public class UserDataService {
 
 
 
-
 	@Transactional
 	public void addNewFacebookUserIfNotExist(User userProfile) {
 		final Long id = Long.decode(userProfile.getId());
@@ -34,45 +35,57 @@ public class UserDataService {
 		addNewFacebookUser(userProfile);
 	}
 
-
 	@Transactional
 	public void addNewFacebookUser(User userProfile) {
+		baseProfileDao.save(createNewUser(userProfile, ROLE_USER));
+	}
 
-		final Long id = Long.decode(userProfile.getId());
+	@Transactional
+	public void addNewAdminUser(User userProfile) {
+		baseProfileDao.save(createNewUser(userProfile, ROLE_USER, ROLE_ADMIN));
+	}
+
+	@Transactional
+	public void deleteUser(long id) {
+		if (baseProfileDao.isExists(id))
+			baseProfileDao.deleteById(id);
+	}
+
+	@Transactional
+	public void deleteUser(String id) {
+		deleteUser(Long.decode(id));
+	}
+
+
+
+	@BlinckTestName("createNewUser")
+	private UserBaseProfile createNewUser(User user, String ... authorities) {
+
+		final Long id = Long.decode(user.getId());
 		if (baseProfileDao.isExists(id))
 			throw new RuntimeException("User: ["+id+"] already exists!");
 
 		UserNameEntity userNameEntity = new UserNameEntity();
 		userNameEntity.setId(id);
-		userNameEntity.setFirstName(userProfile.getFirstName());
-		userNameEntity.setSecondName(userProfile.getMiddleName());
-		userNameEntity.setLastName(userProfile.getLastName());
+		userNameEntity.setFirstName(user.getFirstName());
+		userNameEntity.setSecondName(user.getMiddleName());
+		userNameEntity.setLastName(user.getLastName());
 
 		UserAuthProfile userAuthProfile = new UserAuthProfile();
 		userAuthProfile.setId(id);
 		userAuthProfile.setEnabled(true);
 		userAuthProfile.setExpired(false);
 		userAuthProfile.setLocked(false);
-		userAuthProfile.setAuthorityArray(ROLE_USER);
+		userAuthProfile.setAuthorityArray(authorities);
 
 		UserBaseProfile userBaseProfile = new UserBaseProfile();
 		userBaseProfile.setId(id);
-		userBaseProfile.setBirthday(userProfile.getBirthday());
-		userBaseProfile.setEmail(userProfile.getEmail());
-		userBaseProfile.setAbout(userProfile.getAbout());
+		userBaseProfile.setBirthday(user.getBirthday());
+		userBaseProfile.setEmail(user.getEmail());
+		userBaseProfile.setAbout(user.getAbout());
 		userBaseProfile.setUserName(userNameEntity);
 		userBaseProfile.setAuthProfile(userAuthProfile);
 
-		baseProfileDao.save(userBaseProfile);
-	}
-
-
-	public void deleteUser(long id) {
-		if (baseProfileDao.isExists(id))
-			baseProfileDao.deleteById(id);
-	}
-
-	public void deleteUser(String id) {
-		deleteUser(Long.decode(id));
+		return userBaseProfile;
 	}
 }
