@@ -15,15 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * @author Henry on 29/08/17.
  */
 public class UserDataServiceTest extends BlinckIntegrationTest {
 
-
-	private static final TestedLoop testLoop = new TestedLoop(100);
 
 	private @Autowired UserDataService userDataService;
 	private @Autowired UserBaseProfileService baseProfileService;
@@ -33,18 +30,35 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 	@Test
 	public void addAndDeleteUserTest() throws Exception {
 
-		testLoop.test(() -> {
+		new TestedLoop(100).test(() -> {
 			User user = MockFacebookUser.getInstance().createRandom().getUser();
 
-			if (new Random().nextGaussian() > 0)
-				userDataService.addNewFacebookUser(user);
-			else userDataService.addNewAdminUser(user);
+			userDataService.addNewFacebookUser(user);
 
 			assert baseProfileService.isExists(Long.decode(user.getId()));
 			userDataService.deleteUser(user.getId());
 
 			assert !baseProfileService.isExists(Long.decode(user.getId()));
 		});
+	}
+
+
+	@Test @Transactional
+	public void addEntityTest() throws Exception {
+
+		final User user = MockFacebookUser.getInstance().createRandom().getUser();
+		final String[] authorities = {UserDataService.ROLE_USER};
+
+		userDataService.addNewFacebookUser(user);
+
+		Method createUserEntity = BlinckTestUtil.getMethod(
+				UserDataService.class, "createUserEntity"
+		);
+		UserBaseProfile baseProfile = (UserBaseProfile) createUserEntity.invoke(
+				null, user, authorities
+		);
+
+		assert baseProfileService.getById(baseProfile.getId()).equals(baseProfile);
 	}
 
 
@@ -75,25 +89,6 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 		assert !baseProfile.getAuthProfile().isLocked();
 		assert baseProfile.getAuthProfile().getPassword() == null;
 		assert Arrays.equals(baseProfile.getAuthProfile().getAuthorityArray(), authorities);
-	}
-
-
-	@Test @Transactional
-	public void addEntityTest() throws Exception {
-
-		final User user = MockFacebookUser.getInstance().createRandom().getUser();
-		final String[] authorities = {UserDataService.ROLE_USER};
-
-		userDataService.addNewFacebookUser(user);
-
-		Method createUserEntity = BlinckTestUtil.getMethod(
-				UserDataService.class, "createUserEntity"
-		);
-		UserBaseProfile baseProfile = (UserBaseProfile) createUserEntity.invoke(
-				null, user, authorities
-		);
-
-		assert baseProfileService.getById(baseProfile.getId()).equals(baseProfile);
 	}
 
 

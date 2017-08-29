@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security.details;
+package net.henryco.blinckserver.security.details.user;
 
 import net.henryco.blinckserver.mvc.model.dao.security.UserAuthProfileDao;
 import org.springframework.beans.factory.annotation.Autowired;

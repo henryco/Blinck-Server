@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDataService {
 
 	public static final String ROLE_USER = "ROLE_USER";
-	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
 	private final UserBaseProfileDao baseProfileDao;
 
@@ -40,10 +39,6 @@ public class UserDataService {
 		baseProfileDao.save(createNewUser(userProfile, ROLE_USER));
 	}
 
-	@Transactional
-	public void addNewAdminUser(User userProfile) {
-		baseProfileDao.save(createNewUser(userProfile, ROLE_USER, ROLE_ADMIN));
-	}
 
 	@Transactional
 	public void deleteUser(long id) {
