@@ -65,6 +65,15 @@ public class UserDataService {
 		if (baseProfileDao.isExists(id))
 			throw new RuntimeException("User: ["+id+"] already exists!");
 
+		return createUserEntity(user, authorities);
+	}
+
+
+	@BlinckTestName("createUserEntity")
+	private static UserBaseProfile createUserEntity(User user, String ... authorities) {
+
+		final Long id = Long.decode(user.getId());
+
 		UserNameEntity userNameEntity = new UserNameEntity();
 		userNameEntity.setId(id);
 		userNameEntity.setFirstName(user.getFirstName());
@@ -88,4 +97,5 @@ public class UserDataService {
 
 		return userBaseProfile;
 	}
+
 }
