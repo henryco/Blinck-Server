@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserDataService {
 
-	private static final String ROLE_USER = "ROLE_USER";
-	private static final String ROLE_ADMIN = "ROLE_ADMIN";
+	public static final String ROLE_USER = "ROLE_USER";
+	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
 	private final UserBaseProfileDao baseProfileDao;
 
@@ -57,8 +57,6 @@ public class UserDataService {
 	}
 
 
-
-	@BlinckTestName("createNewUser")
 	private UserBaseProfile createNewUser(User user, String ... authorities) {
 
 		final Long id = Long.decode(user.getId());

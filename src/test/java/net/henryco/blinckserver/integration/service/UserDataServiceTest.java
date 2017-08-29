@@ -11,6 +11,7 @@ import net.henryco.blinckserver.utils.TestedLoop;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.User;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -67,17 +68,33 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 		assert baseProfile != null;
 		assert baseProfile.getUserName() != null;
 		assert baseProfile.getAuthProfile() != null;
-
 		assert baseProfile.getId() == baseProfile.getUserName().getId();
 		assert baseProfile.getId() == baseProfile.getAuthProfile().getId();
-
 		assert baseProfile.getAuthProfile().isEnabled();
 		assert !baseProfile.getAuthProfile().isExpired();
 		assert !baseProfile.getAuthProfile().isLocked();
 		assert baseProfile.getAuthProfile().getPassword() == null;
-
 		assert Arrays.equals(baseProfile.getAuthProfile().getAuthorityArray(), authorities);
-
 	}
+
+
+	@Test @Transactional
+	public void addEntityTest() throws Exception {
+
+		final User user = MockFacebookUser.getInstance().createRandom().getUser();
+		final String[] authorities = {UserDataService.ROLE_USER};
+
+		userDataService.addNewFacebookUser(user);
+
+		Method createUserEntity = BlinckTestUtil.getMethod(
+				UserDataService.class, "createUserEntity"
+		);
+		UserBaseProfile baseProfile = (UserBaseProfile) createUserEntity.invoke(
+				null, user, authorities
+		);
+
+		assert baseProfileService.getById(baseProfile.getId()).equals(baseProfile);
+	}
+
 
 }
