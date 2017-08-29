@@ -2,7 +2,7 @@ package net.henryco.blinckserver.mvc.model.entity.security;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.util.BlinckAuthorityEntity;
+import net.henryco.blinckserver.util.entity.BlinckAuthorityEntity;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.Column;

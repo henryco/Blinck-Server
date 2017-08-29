@@ -1,4 +1,6 @@
-package net.henryco.blinckserver.util;
+package net.henryco.blinckserver.util.entity;
+
+import net.henryco.blinckserver.util.Utils;
 
 /**
  * @author Henry on 23/08/17.
