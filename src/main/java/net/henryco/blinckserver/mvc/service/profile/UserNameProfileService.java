@@ -1,7 +1,7 @@
 package net.henryco.blinckserver.mvc.service.profile;
 
-import net.henryco.blinckserver.mvc.model.dao.security.UserAuthProfileDao;
-import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
+import net.henryco.blinckserver.mvc.model.dao.profile.UserNameEntityDao;
+import net.henryco.blinckserver.mvc.model.entity.profile.UserNameEntity;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
 import net.henryco.blinckserver.util.dao.BlinckDaoTemplateProvider;
@@ -10,20 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @author Henry on 23/08/17.
+ * @author Henry on 29/08/17.
  */
 @Service
-public class UserAuthProfileService extends BlinckDaoProvider<UserAuthProfile, Long> {
+public class UserNameProfileService extends BlinckDaoProvider<UserNameEntity, Long> {
 
 
 	@Autowired
-	public UserAuthProfileService(UserAuthProfileDao authProfileDao) {
-		super(authProfileDao);
+	public UserNameProfileService(UserNameEntityDao nameEntityDao) {
+		super(nameEntityDao);
 	}
 
 	@Override
 	public void deleteById(Long id) {
-		throw new BlinckEntityRemovalForbiddenException(UserAuthProfile.class);
+		throw new BlinckEntityRemovalForbiddenException(UserNameEntity.class);
 	}
 
 }

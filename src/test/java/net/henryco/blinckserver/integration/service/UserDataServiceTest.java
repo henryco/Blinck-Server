@@ -3,7 +3,9 @@ package net.henryco.blinckserver.integration.service;
 import net.henryco.blinckserver.integration.BlinckIntegrationTest;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
 import net.henryco.blinckserver.mvc.service.data.UserDataService;
+import net.henryco.blinckserver.mvc.service.profile.UserAuthProfileService;
 import net.henryco.blinckserver.mvc.service.profile.UserBaseProfileService;
+import net.henryco.blinckserver.mvc.service.profile.UserNameProfileService;
 import net.henryco.blinckserver.util.test.BlinckTestUtil;
 import net.henryco.blinckserver.utils.MockFacebookUser;
 import net.henryco.blinckserver.utils.TestUtils;
@@ -24,7 +26,8 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 
 	private @Autowired UserDataService userDataService;
 	private @Autowired UserBaseProfileService baseProfileService;
-
+	private @Autowired UserAuthProfileService authProfileService;
+	private @Autowired UserNameProfileService nameProfileService;
 
 
 	@Test
@@ -39,6 +42,8 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 			userDataService.deleteUser(user.getId());
 
 			assert !baseProfileService.isExists(Long.decode(user.getId()));
+			assert !authProfileService.isExists(Long.decode(user.getId()));
+			assert !nameProfileService.isExists(Long.decode(user.getId()));
 		});
 	}
 
