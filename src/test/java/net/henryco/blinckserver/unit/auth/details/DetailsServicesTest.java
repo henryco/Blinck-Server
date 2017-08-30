@@ -94,7 +94,6 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 							   final boolean removable) {
 			super(repository, removable);
 		}
-
 	}
 
 
@@ -136,7 +135,6 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 		public @Override void
 		setAuthorities(String authorities) {
 		}
-
 	}
 
 
