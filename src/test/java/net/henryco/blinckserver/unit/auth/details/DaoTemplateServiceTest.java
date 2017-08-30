@@ -2,8 +2,12 @@ package net.henryco.blinckserver.unit.auth.details;
 
 
 import net.henryco.blinckserver.security.details.BlinckDetailsProfileService;
+import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
+import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
+import net.henryco.blinckserver.util.entity.BlinckEntityRemovalForbiddenException;
 import org.junit.Test;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -14,29 +18,97 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class DaoTemplateServiceTest extends DetailsServicesTest {
 
 
+	private static final String KEY_ID = testEntity.getId().toString();
+
+	private static BlinckDetailsProfileService<Float>
+	createDetailsService(BlinckDaoTemplate<TestEntity, Float> daoTemplate) {
+		return new TestDetailsService(
+				daoTemplate,
+				Float::parseFloat,	// KEY: String -> Float
+				String::valueOf		// KEY: Float -> String
+		);
+	}
+
+	private static void
+	assertDetails(UserDetails userDetails) {
+		assert userDetails != null;
+		assert userDetails.getUsername().equals(KEY_ID);
+	}
+
+
+
 
 	@Test
 	public void pureDaoTemplateTest() {
 
-		final String id = testEntity.getId().toString();
+		BlinckDaoTemplate<TestEntity, Float>
+				pureDaoTemplate = new TestDaoTemplatePure();
+
+		BlinckDetailsProfileService<Float> service =
+				createDetailsService(pureDaoTemplate);
+
+		UserDetailsService detailsService = service;
+		UserDetails userDetails = detailsService.loadUserByUsername(KEY_ID);
+
+		assertDetails(userDetails);
+	}
+
+
+
+	@Test
+	public void daoTemplateProviderTest() {
 
 		BlinckDaoTemplate<TestEntity, Float>
 				pureDaoTemplate = new TestDaoTemplatePure();
 
-		BlinckDetailsProfileService<Float> service = new TestDetailsService(
-				pureDaoTemplate,
-				Float::parseFloat,	// KEY: String -> Float
-				String::valueOf		// KEY: Float -> String
-		);
+		BlinckDaoProvider<TestEntity, Float>
+				provider = new TestDaoTemplateProvided(pureDaoTemplate);
 
-		UserDetailsService detailsService = service;
-		UserDetails userDetails = detailsService.loadUserByUsername(id);
+		BlinckDetailsProfileService<Float>
+				service = createDetailsService(provider);
 
-		assert userDetails != null;
-		assert userDetails.getUsername().equals(id);
+		assertDetails(service.loadUserByUsername(KEY_ID));
 	}
 
 
+
+	@Test
+	public void repositoryProviderTest() {
+
+		TestEntity entity = DetailsServicesTest.testEntity;
+
+		JpaRepository<TestEntity, Float> jpaRepo = testJpaRepo;
+
+		BlinckRepositoryProvider<TestEntity, Float>
+				repositoryProvider = new TestRepositoryProvider(jpaRepo, false);
+
+		assert repositoryProvider.isExists(entity.getId());
+		assert repositoryProvider.getById(entity.getId()) == entity;
+
+		try {
+			repositoryProvider.deleteById(entity.getId());
+			assert false;
+		} catch (BlinckEntityRemovalForbiddenException e) {
+			// WE CANT REMOVE BECAUSE: (REMOVABLE == FALSE)
+			assert true;
+		}
+	}
+
+
+
+	@Test
+	public void repositoryProviderDetailsServiceTest() {
+
+		JpaRepository<TestEntity, Float> jpaRepo = testJpaRepo;
+
+		BlinckRepositoryProvider<TestEntity, Float>
+				repositoryProvider = new TestRepositoryProvider(jpaRepo, false);
+
+		BlinckDetailsProfileService<Float>
+				service = createDetailsService(repositoryProvider);
+
+		assertDetails(service.loadUserByUsername(KEY_ID));
+	}
 
 
 

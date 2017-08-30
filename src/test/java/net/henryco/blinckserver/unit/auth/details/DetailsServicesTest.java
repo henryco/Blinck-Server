@@ -32,8 +32,6 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 
 
 
-
-
 	protected static final class
 	TestDetailsService extends
 			BlinckDetailsProfileService<Float> {
@@ -45,8 +43,6 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 			super(authProfileDao, keyConverter, keyDeConverter);
 		}
 	}
-
-
 
 
 
@@ -77,8 +73,6 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 
 
 
-
-
 	protected static final class
 	TestDaoTemplateProvided extends
 			BlinckDaoProvider<TestEntity, Float> {
@@ -88,8 +82,6 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 			super(daoTemplate);
 		}
 	}
-
-
 
 
 
@@ -104,8 +96,6 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 		}
 
 	}
-
-
 
 
 
