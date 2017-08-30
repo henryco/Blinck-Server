@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.lang.reflect.Method;
 
-import static net.henryco.blinckserver.utils.TestUtils.randomNumberString;
+import static net.henryco.blinckserver.utils.TestUtils.randomGaussNumberString;
 
 /**
  * @author Henry on 25/08/17.
@@ -88,19 +88,19 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 
 
 	protected static String randomUserPath() {
-		return USER_ENDPOINT + "/" + randomNumberString();
+		return USER_ENDPOINT + "/" + TestUtils.randomGaussNumberString();
 	}
 	protected static String randomAdminPath() {
-		return ADMIN_ENDPOINT + "/" + randomNumberString();
+		return ADMIN_ENDPOINT + "/" + TestUtils.randomGaussNumberString();
 	}
 	protected static String randomRootPath() {
-		return ROOT_ENDPOINT + "/" + randomNumberString();
+		return ROOT_ENDPOINT + "/" + TestUtils.randomGaussNumberString();
 	}
 	protected static String randomPublicPath() {
-		return PUBLIC_ENDPOINT + "/" + randomNumberString();
+		return PUBLIC_ENDPOINT + "/" + TestUtils.randomGaussNumberString();
 	}
 	protected static String randomProtectedPath() {
-		return PROTECTED_ENDPOINT + "/" + randomNumberString();
+		return PROTECTED_ENDPOINT + "/" + TestUtils.randomGaussNumberString();
 	}
 
 }

@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.model.entity.profile;
+package net.henryco.blinckserver.mvc.model.entity.profile.pub;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,12 @@ public class UserNameEntity {
 	) String firstName;
 
 
-	@Column private String secondName;
-	@Column private String lastName;
+	private @Column
+	String secondName;
+
+
+	private @Column
+	String lastName;
+
 
 }

@@ -2,7 +2,7 @@ package net.henryco.blinckserver.mvc.model.entity.infrastructure;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
 
 import javax.persistence.*;
 
@@ -24,7 +24,7 @@ public class BlackList {
 	private @ManyToOne(
 			cascade = CascadeType.ALL,
 			optional = false,
-			targetEntity = UserBaseProfile.class
+			targetEntity = UserCoreProfile.class
 	) @JoinColumn(
 			name = "block_owner_id"
 	) long userId;
@@ -33,7 +33,7 @@ public class BlackList {
 	private @ManyToOne(
 			cascade = CascadeType.ALL,
 			optional = false,
-			targetEntity = UserBaseProfile.class
+			targetEntity = UserCoreProfile.class
 	) @JoinColumn(
 			name = "blocked_id"
 	) long blockedUserId;

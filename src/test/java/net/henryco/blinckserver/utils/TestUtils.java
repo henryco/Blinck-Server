@@ -33,11 +33,19 @@ public interface TestUtils {
 		return httpHeaders;
 	}
 
-	static String randomNumberString(long bound) {
+	static String randomGaussNumberString(long bound) {
 		return Long.toString(Math.abs((long) (new Random().nextGaussian() * bound)));
 	}
 
-	static String randomNumberString() {
-		return randomNumberString(1_000_000_000L);
+	static String randomGaussNumberString() {
+		return randomGaussNumberString(1_000_000_000L);
+	}
+
+	static String randomNumberString(int bound) {
+		return Integer.toString(new Random().nextInt(bound));
+	}
+
+	static String randomNumberString(int boundMin, int boundMax) {
+		return Integer.toString(Math.max(boundMin, new Random().nextInt(boundMax)));
 	}
 }

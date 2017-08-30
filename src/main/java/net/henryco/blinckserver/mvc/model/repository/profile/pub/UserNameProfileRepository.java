@@ -1,6 +1,6 @@
-package net.henryco.blinckserver.mvc.model.repository.profile;
+package net.henryco.blinckserver.mvc.model.repository.profile.pub;
 
-import net.henryco.blinckserver.mvc.model.entity.profile.UserNameEntity;
+import net.henryco.blinckserver.mvc.model.entity.profile.pub.UserNameEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

@@ -2,10 +2,10 @@ package net.henryco.blinckserver.unit.auth.token;
 
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import net.henryco.blinckserver.unit.BlinckUnitTest;
-import net.henryco.blinckserver.utils.TestedLoop;
+import net.henryco.blinckserver.utils.TestUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import static net.henryco.blinckserver.utils.TestUtils.randomNumberString;
+import static net.henryco.blinckserver.utils.TestUtils.randomGaussNumberString;
 
 /**
  * @author Henry on 27/08/17.
@@ -82,7 +82,7 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 
 	protected static TokenAuthenticationService createJwtService(Long expTime) {
 		return new RandomSecretTokenService(
-				randomNumberString(),
+				TestUtils.randomGaussNumberString(),
 				expTime
 		);
 	}
@@ -90,7 +90,7 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 	protected static TokenAuthenticationService createJwtService(Long expTime,
 																 String header,
 																 String prefix) {
-		return new RandomSecretTokenService(randomNumberString(), expTime)
+		return new RandomSecretTokenService(TestUtils.randomGaussNumberString(), expTime)
 				.setHeader(header).setPrefix(prefix);
 	}
 
@@ -98,12 +98,12 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 																 String header,
 																 String prefix,
 																 String role) {
-		return new RandomSecretTokenService(randomNumberString(), expTime)
+		return new RandomSecretTokenService(TestUtils.randomGaussNumberString(), expTime)
 				.setHeader(header).setPrefix(prefix).setDefaultRole(role);
 	}
 
 	protected static TokenAuthenticationService createJwtService(Long expTime, String header) {
-		return new RandomSecretTokenService(randomNumberString(), expTime).setHeader(header);
+		return new RandomSecretTokenService(TestUtils.randomGaussNumberString(), expTime).setHeader(header);
 	}
 
 	protected static TokenAuthenticationService createJwtService(String header) {

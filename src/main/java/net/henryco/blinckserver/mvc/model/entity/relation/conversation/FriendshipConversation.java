@@ -2,7 +2,7 @@ package net.henryco.blinckserver.mvc.model.entity.relation.conversation;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 
 import javax.persistence.*;
@@ -48,7 +48,8 @@ public class FriendshipConversation {
 			optional = false
 	) @JoinColumn(
 			name = "author_id"
-	) UserBaseProfile author;
+	)
+	UserCoreProfile author;
 
 
 	private @ManyToOne(

@@ -21,8 +21,8 @@ public interface JsonForm {
 
 		public static AdminLoginPost randomOne() {
 			return new AdminLoginPost(
-					TestUtils.randomNumberString(), // random uid
-					TestUtils.randomNumberString() // random password
+					TestUtils.randomGaussNumberString(), // random uid
+					TestUtils.randomGaussNumberString() // random password
 			);
 		}
 	}
@@ -41,8 +41,8 @@ public interface JsonForm {
 
 		public static UserLoginPost randomOne() {
 			return new UserLoginPost(
-					TestUtils.randomNumberString(), // random uid
-					TestUtils.randomNumberString() // random password
+					TestUtils.randomGaussNumberString(), // random uid
+					TestUtils.randomGaussNumberString() // random password
 			);
 		}
 	}

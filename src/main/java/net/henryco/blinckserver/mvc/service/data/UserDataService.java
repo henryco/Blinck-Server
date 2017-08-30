@@ -1,14 +1,21 @@
 package net.henryco.blinckserver.mvc.service.data;
 
-import net.henryco.blinckserver.mvc.model.dao.profile.UserBaseProfileDao;
-import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
-import net.henryco.blinckserver.mvc.model.entity.profile.UserNameEntity;
+import net.henryco.blinckserver.mvc.model.dao.profile.core.UserCoreProfileDao;
+import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.priv.UserPrivateProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.pub.UserNameEntity;
+import net.henryco.blinckserver.mvc.model.entity.profile.pub.UserPublicProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import net.henryco.blinckserver.util.test.BlinckTestName;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author Henry on 23/08/17.
@@ -17,11 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDataService {
 
 	public static final String ROLE_USER = "ROLE_USER";
+	public static final String FB_DATE_FORMAT = "MM/dd/yyyy";
 
-	private final UserBaseProfileDao baseProfileDao;
+	private final UserCoreProfileDao baseProfileDao;
 
 	@Autowired
-	public UserDataService(UserBaseProfileDao baseProfileDao) {
+	public UserDataService(UserCoreProfileDao baseProfileDao) {
 		this.baseProfileDao = baseProfileDao;
 	}
 
@@ -37,7 +45,7 @@ public class UserDataService {
 
 	@Transactional
 	public void addNewFacebookUser(User userProfile) {
-		UserBaseProfile user = createNewUser(userProfile, ROLE_USER);
+		UserCoreProfile user = createNewUser(userProfile, ROLE_USER);
 		baseProfileDao.save(user);
 	}
 
@@ -56,7 +64,7 @@ public class UserDataService {
 
 
 
-	private UserBaseProfile createNewUser(User user, String ... authorities) {
+	private UserCoreProfile createNewUser(User user, String ... authorities) {
 
 		final Long id = Long.decode(user.getId());
 		if (baseProfileDao.isExists(id))
@@ -67,7 +75,7 @@ public class UserDataService {
 
 
 	@BlinckTestName("createUserEntity")
-	private static UserBaseProfile createUserEntity(User user, String ... authorities) {
+	private static UserCoreProfile createUserEntity(User user, String ... authorities) {
 
 		final Long id = Long.decode(user.getId());
 
@@ -77,21 +85,44 @@ public class UserDataService {
 		userNameEntity.setSecondName(user.getMiddleName());
 		userNameEntity.setLastName(user.getLastName());
 
+		UserPublicProfile userPublicProfile = new UserPublicProfile();
+		userPublicProfile.setId(id);
+		userPublicProfile.setGender(user.getGender());
+		userPublicProfile.setAbout(user.getAbout());
+		userPublicProfile.setBirthday(parseFacebookDate(user.getBirthday()));
+		userPublicProfile.setUserName(userNameEntity);
+
+		UserPrivateProfile userPrivateProfile = new UserPrivateProfile();
+		userPrivateProfile.setId(id);
+		userPrivateProfile.setEmail(user.getEmail());
+
 		UserAuthProfile userAuthProfile = new UserAuthProfile();
 		userAuthProfile.setId(id);
 		userAuthProfile.setExpired(false);
 		userAuthProfile.setLocked(false);
 		userAuthProfile.setAuthorityArray(authorities);
 
-		UserBaseProfile userBaseProfile = new UserBaseProfile();
-		userBaseProfile.setId(id);
-		userBaseProfile.setBirthday(user.getBirthday());
-		userBaseProfile.setEmail(user.getEmail());
-		userBaseProfile.setAbout(user.getAbout());
-		userBaseProfile.setUserName(userNameEntity);
-		userBaseProfile.setAuthProfile(userAuthProfile);
+		UserCoreProfile userCoreProfile = new UserCoreProfile();
+		userCoreProfile.setId(id);
+		userCoreProfile.setPrivateProfile(userPrivateProfile);
+		userCoreProfile.setPublicProfile(userPublicProfile);
+		userCoreProfile.setAuthProfile(userAuthProfile);
 
-		return userBaseProfile;
+		return userCoreProfile;
 	}
+
+
+	@BlinckTestName("parseFacebookDate")
+	private static Date parseFacebookDate(String date) {
+
+		try {
+			return new SimpleDateFormat(FB_DATE_FORMAT).parse(date);
+
+		} catch (ParseException | NullPointerException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 
 }

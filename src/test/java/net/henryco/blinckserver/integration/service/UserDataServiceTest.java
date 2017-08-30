@@ -1,7 +1,8 @@
 package net.henryco.blinckserver.integration.service;
 
 import net.henryco.blinckserver.integration.BlinckIntegrationTest;
-import net.henryco.blinckserver.mvc.model.entity.profile.UserBaseProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
+import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import net.henryco.blinckserver.mvc.service.data.UserDataService;
 import net.henryco.blinckserver.mvc.service.profile.UserAuthProfileService;
 import net.henryco.blinckserver.mvc.service.profile.UserBaseProfileService;
@@ -10,13 +11,17 @@ import net.henryco.blinckserver.util.test.BlinckTestUtil;
 import net.henryco.blinckserver.utils.MockFacebookUser;
 import net.henryco.blinckserver.utils.TestUtils;
 import net.henryco.blinckserver.utils.TestedLoop;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * @author Henry on 29/08/17.
@@ -28,6 +33,24 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 	private @Autowired UserBaseProfileService baseProfileService;
 	private @Autowired UserAuthProfileService authProfileService;
 	private @Autowired UserNameProfileService nameProfileService;
+
+
+
+	@Test
+	public void parseFacebookDateTest() throws Exception {
+
+		final String birthday = "06/26/1995";
+		Method parseFacebookDate = BlinckTestUtil.getMethod(
+				UserDataService.class,
+				"parseFacebookDate"
+		);
+		Object date = parseFacebookDate.invoke(null, birthday);
+		DateTime dateTime = new DateTime(date);
+
+		assert dateTime.getYear() == 1995;
+		assert dateTime.getMonthOfYear() == 6;
+		assert dateTime.getDayOfMonth() == 26;
+	}
 
 
 	@Test
@@ -59,7 +82,7 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 		Method createUserEntity = BlinckTestUtil.getMethod(
 				UserDataService.class, "createUserEntity"
 		);
-		UserBaseProfile baseProfile = (UserBaseProfile) createUserEntity.invoke(
+		UserCoreProfile baseProfile = (UserCoreProfile) createUserEntity.invoke(
 				null, user, authorities
 		);
 
@@ -72,29 +95,43 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 
 		final User user = MockFacebookUser.getInstance().createRandom().getUser();
 		final String[] authorities = {
-				TestUtils.randomNumberString(),
-				TestUtils.randomNumberString()
+				TestUtils.randomGaussNumberString(),
+				TestUtils.randomGaussNumberString()
 		};
 
 		Method createUserEntity = BlinckTestUtil.getMethod(
-				UserDataService.class, "createUserEntity"
+				UserDataService.class,
+				"createUserEntity"
 		);
 
-		UserBaseProfile baseProfile = (UserBaseProfile) createUserEntity.invoke(
+		UserCoreProfile baseProfile = (UserCoreProfile) createUserEntity.invoke(
 				null, user, authorities
 		);
 
-		assert baseProfile != null;
-		assert baseProfile.getUserName() != null;
-		assert baseProfile.getAuthProfile() != null;
-		assert baseProfile.getId() == baseProfile.getUserName().getId();
-		assert baseProfile.getId() == baseProfile.getAuthProfile().getId();
-		assert baseProfile.getAuthProfile().isEnabled();
-		assert !baseProfile.getAuthProfile().isExpired();
-		assert !baseProfile.getAuthProfile().isLocked();
-		assert baseProfile.getAuthProfile().getPassword() == null;
+		profileIdAssertion(baseProfile);
+		profileAuthAssertion(baseProfile.getAuthProfile());
+
 		assert Arrays.equals(baseProfile.getAuthProfile().getAuthorityArray(), authorities);
 	}
 
+
+
+	private static void
+	profileAuthAssertion(UserAuthProfile authProfile) {
+		assert authProfile != null;
+		assert authProfile.isEnabled();
+		assert !authProfile.isExpired();
+		assert !authProfile.isLocked();
+		assert authProfile.getPassword() == null;
+	}
+
+	private static void
+	profileIdAssertion(UserCoreProfile coreProfile) {
+		assert coreProfile != null;
+		assert coreProfile.getId() == coreProfile.getPublicProfile().getId();
+		assert coreProfile.getId() == coreProfile.getPrivateProfile().getId();
+		assert coreProfile.getId() == coreProfile.getAuthProfile().getId();
+		assert coreProfile.getId() == coreProfile.getPublicProfile().getUserName().getId();
+	}
 
 }

@@ -3,9 +3,11 @@ package net.henryco.blinckserver.utils;
 import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.social.facebook.api.User;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * @author Henry on 26/08/17.
@@ -31,7 +33,6 @@ public final class MockFacebookUser {
 	public static MockFacebookUser getInstance() {
 		return getInstance("", "", "", "");
 	}
-
 
 	private final List<String> idList;
 
@@ -67,12 +68,25 @@ public final class MockFacebookUser {
 
 		this.facebookUser = new User(
 				createNewRandomId(),
-				TestUtils.randomNumberString(),
-				TestUtils.randomNumberString(),
-				TestUtils.randomNumberString(),
+				TestUtils.randomGaussNumberString(),
+				TestUtils.randomGaussNumberString(),
+				TestUtils.randomGaussNumberString(),
 				"Helicopter",
 				Locale.getDefault()
 		);
+
+		String MM = TestUtils.randomNumberString(1, 12);
+		String DD = TestUtils.randomNumberString(1, 26);
+		String YYYY = TestUtils.randomNumberString(1990, 2000);
+
+		try {
+			Field birthDayField = User.class.getDeclaredField("birthday");
+			birthDayField.setAccessible(true);
+			birthDayField.set(facebookUser, MM + "/" + DD + "/" +YYYY);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return this;
 	}
 
@@ -108,7 +122,7 @@ public final class MockFacebookUser {
 	private String createNewRandomId() {
 
 		while (true) {
-			String id = TestUtils.randomNumberString();
+			String id = TestUtils.randomGaussNumberString();
 			if (!idList.contains(id)) {
 				idList.add(id);
 				return id;

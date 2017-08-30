@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.social.facebook.api.User;
 
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +17,7 @@ import java.util.Objects;
  */
 public class MockFacebookUserTest extends BlinckUnitTest {
 
+	private static final String FB_DATE_FORMAT = "MM/dd/yyyy";
 
 	@Test
 	public void randomIdGeneratorTest() throws Exception {
@@ -70,7 +72,18 @@ public class MockFacebookUserTest extends BlinckUnitTest {
 	}
 
 
-	private static boolean stringNutNullAndNotEmpty(String s) {
+	@Test
+	public void randomBirthdayDateTest() throws Exception {
+
+		testLoop.test(() -> {
+			User user = MockFacebookUser.getInstance().createRandom().getUser();
+			new SimpleDateFormat(FB_DATE_FORMAT).parse(user.getBirthday());
+		});
+	}
+
+
+	private static boolean
+	stringNutNullAndNotEmpty(String s) {
 		return s != null && !s.isEmpty();
 	}
 

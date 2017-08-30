@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import net.henryco.blinckserver.util.test.BlinckTestUtil;
+import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -12,7 +13,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Random;
 
-import static net.henryco.blinckserver.utils.TestUtils.randomNumberString;
+import static net.henryco.blinckserver.utils.TestUtils.randomGaussNumberString;
 
 /**
  * @author Henry on 27/08/17.
@@ -26,7 +27,7 @@ public class PureTokenAuthTest extends TokenAuthTest {
 	public void createdTokenIsNotSimilarTest() throws Exception {
 
 		testLoop.test(() -> {
-			final String value = randomNumberString();
+			final String value = TestUtils.randomGaussNumberString();
 			assert !getCoderMethod().invoke(createJwtService(new Random().nextLong()), value).equals(value);
 		});
 	}
@@ -41,7 +42,7 @@ public class PureTokenAuthTest extends TokenAuthTest {
 		final Method coder = getCoderMethod();
 
 		testLoop.test(() -> {
-			final String value = randomNumberString();
+			final String value = TestUtils.randomGaussNumberString();
 			assert deCoder.invoke(service, coder.invoke(service, value)).equals(value);
 		});
 	}
@@ -51,7 +52,7 @@ public class PureTokenAuthTest extends TokenAuthTest {
 	public void tokenMultiServiceCodeDeCodeSimilarTest() throws Exception {
 
 		testLoop.test(() -> {
-			String coded = getCoderMethod().invoke(createJwtService(tokenExpTime), randomNumberString()).toString();
+			String coded = getCoderMethod().invoke(createJwtService(tokenExpTime), TestUtils.randomGaussNumberString()).toString();
 
 			try {
 				getDeCoderMethod().invoke(createJwtService(tokenExpTime), coded);
@@ -66,7 +67,7 @@ public class PureTokenAuthTest extends TokenAuthTest {
 	public void createdTokenMultiServiceIsNotSimilar() throws Exception {
 
 		testLoop.test(() -> {
-			final String value = randomNumberString();
+			final String value = TestUtils.randomGaussNumberString();
 
 			final String tokenOne = getCoderMethod().invoke(createJwtService(tokenExpTime), value).toString();
 			final String tokenTwo = getCoderMethod().invoke(createJwtService(tokenExpTime), value).toString();
@@ -82,7 +83,7 @@ public class PureTokenAuthTest extends TokenAuthTest {
 
 		final long expTimeMs = 10L;
 		final TokenAuthenticationService service = createJwtService(expTimeMs);
-		final Object token = getCoderMethod().invoke(service, randomNumberString());
+		final Object token = getCoderMethod().invoke(service, TestUtils.randomGaussNumberString());
 
 		for (int i = 0; i < 10; i++) {
 
@@ -103,7 +104,7 @@ public class PureTokenAuthTest extends TokenAuthTest {
 
 		testLoop.test(() -> {
 
-			final String DEFAULT_ROLE = "ROLE_"+randomNumberString();
+			final String DEFAULT_ROLE = "ROLE_"+ TestUtils.randomGaussNumberString();
 
 			Collection<? extends GrantedAuthority> authorities =
 					(Collection<? extends GrantedAuthority>)
@@ -120,8 +121,8 @@ public class PureTokenAuthTest extends TokenAuthTest {
 
 		testLoop.test(() -> {
 
-			final String ROLE = "ROLE_"+randomNumberString();
-			Object aut = getAuthorityGranterMethod().invoke(getJwtService(ROLE), randomNumberString());
+			final String ROLE = "ROLE_"+ TestUtils.randomGaussNumberString();
+			Object aut = getAuthorityGranterMethod().invoke(getJwtService(ROLE), TestUtils.randomGaussNumberString());
 			Object def = getDefaultAuthorityGranterMethod().invoke(getJwtService(ROLE));
 
 			assert aut.equals(def);
@@ -167,8 +168,8 @@ public class PureTokenAuthTest extends TokenAuthTest {
 	private static TokenAuthenticationService getJwtService(String DEFAULT_ROLE) {
 		return createJwtService(
 				tokenExpTime,
-				randomNumberString(),
-				randomNumberString(),
+				TestUtils.randomGaussNumberString(),
+				TestUtils.randomGaussNumberString(),
 				DEFAULT_ROLE
 		);
 	}
