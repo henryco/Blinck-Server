@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * @author Henry on 30/08/17.
  */
-public interface AdminAuthProfileRepository extends JpaRepository<AdminAuthProfile, Long> {
+public interface AdminAuthProfileRepository extends JpaRepository<AdminAuthProfile, String> {
 
 }

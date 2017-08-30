@@ -5,17 +5,22 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.function.Function;
 
 /**
  * @author Henry on 30/08/17.
  */
-public class BlinckDetailsProfile implements UserDetails {
+public class BlinckDetailsProfile<KEY extends Serializable> implements UserDetails {
 
-	private final BlinckAuthorityEntity authProfile;
+	private final BlinckAuthorityEntity<KEY> authProfile;
+	private final Function<KEY, String> keyConverter;
 
-	public BlinckDetailsProfile(BlinckAuthorityEntity authProfile) {
+	public BlinckDetailsProfile(BlinckAuthorityEntity<KEY> authProfile,
+								Function<KEY, String> keyDeConverter) {
 		this.authProfile = authProfile;
+		this.keyConverter = keyDeConverter;
 	}
 
 
@@ -31,7 +36,7 @@ public class BlinckDetailsProfile implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return Long.toString(authProfile.getId());
+		return keyConverter.apply(authProfile.getId());
 	}
 
 	@Override

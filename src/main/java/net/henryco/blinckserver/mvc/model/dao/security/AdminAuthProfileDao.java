@@ -6,6 +6,6 @@ import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
 /**
  * @author Henry on 30/08/17.
  */
-public interface AdminAuthProfileDao extends BlinckDaoTemplate<AdminAuthProfile, Long> {
+public interface AdminAuthProfileDao extends BlinckDaoTemplate<AdminAuthProfile, String> {
 
 }

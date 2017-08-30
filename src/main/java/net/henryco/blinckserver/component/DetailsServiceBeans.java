@@ -16,28 +16,42 @@ import java.util.function.Function;
 public class DetailsServiceBeans {
 
 
-	public @Bean Function<String, Long> detailsKeyConverterLong() {
+	public @Bean Function<String, Long> stringToLongConverter() {
 		return Long::decode;
 	}
 
 
+	public @Bean Function<String, String> stringToStringConverter() {
+		return String::new;
+	}
+
+
+	public @Bean Function<Long, String> longToStringConverter() {
+		return l -> Long.toString(l);
+	}
+
+
+
 	public @Bean UserDetailsService profileDetailsServiceUser(
 			UserAuthProfileDao authProfileDao,
-			Function<String, Long> keyConverter) {
+			Function<String, Long> keyConverter,
+			Function<Long, String> keyDeConverter) {
 
 		return new BlinckDetailsProfileService<>(
 				authProfileDao,
-				keyConverter
+				keyConverter,
+				keyDeConverter
 		);
 	}
 
 
 	public @Bean UserDetailsService profileDetailsServiceAdmin(
 			AdminAuthProfileDao authProfileDao,
-			Function<String, Long> keyConverter) {
+			Function<String, String> keyConverter) {
 
 		return new BlinckDetailsProfileService<>(
 				authProfileDao,
+				keyConverter,
 				keyConverter
 		);
 	}

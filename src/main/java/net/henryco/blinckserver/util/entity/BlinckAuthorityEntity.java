@@ -2,13 +2,15 @@ package net.henryco.blinckserver.util.entity;
 
 import net.henryco.blinckserver.util.Utils;
 
+import java.io.Serializable;
+
 /**
  * @author Henry on 23/08/17.
  */
-public interface BlinckAuthorityEntity {
+public interface BlinckAuthorityEntity<KEY extends Serializable> {
 
 
-	long getId();
+	KEY getId();
 
 	boolean isLocked();
 	boolean isExpired();

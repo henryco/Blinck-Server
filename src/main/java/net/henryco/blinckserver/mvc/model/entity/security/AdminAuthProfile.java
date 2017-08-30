@@ -17,13 +17,13 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Proxy(lazy = false)
 @Table(name = "ADMIN_PROFILE_AUTH")
-public class AdminAuthProfile implements BlinckAuthorityEntity {
+public class AdminAuthProfile implements BlinckAuthorityEntity<String> {
 
 
 	private @Id @Column(
-			name = "auth_id",
+			name = "username",
 			unique = true
-	) long id;
+	) String id;
 
 
 	private @Column(

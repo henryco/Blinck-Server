@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class AdminAuthProfileDaoImp
-		extends BlinckRepositoryProvider<AdminAuthProfile, Long>
+		extends BlinckRepositoryProvider<AdminAuthProfile, String>
 		implements AdminAuthProfileDao {
 
 
