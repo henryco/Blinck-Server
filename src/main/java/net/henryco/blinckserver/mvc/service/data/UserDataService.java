@@ -79,7 +79,6 @@ public class UserDataService {
 
 		UserAuthProfile userAuthProfile = new UserAuthProfile();
 		userAuthProfile.setId(id);
-		userAuthProfile.setEnabled(true);
 		userAuthProfile.setExpired(false);
 		userAuthProfile.setLocked(false);
 		userAuthProfile.setAuthorityArray(authorities);

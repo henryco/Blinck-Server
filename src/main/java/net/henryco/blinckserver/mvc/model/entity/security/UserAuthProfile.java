@@ -29,11 +29,6 @@ public class UserAuthProfile implements BlinckAuthorityEntity<Long> {
 
 	private @Column(
 			nullable = false
-	) boolean enabled;
-
-
-	private @Column(
-			nullable = false
 	) boolean locked;
 
 
@@ -49,8 +44,15 @@ public class UserAuthProfile implements BlinckAuthorityEntity<Long> {
 
 	public @Override
 	String getPassword() {
-		// users don't use internal passwords
+		// Users don't use internal passwords
 		return null;
+	}
+
+
+	public @Override
+	boolean isEnabled() {
+		// Always enabled, but might be locked
+		return true;
 	}
 
 }

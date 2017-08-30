@@ -33,11 +33,6 @@ public class AdminAuthProfile implements BlinckAuthorityEntity<String> {
 
 	private @Column(
 			nullable = false
-	) boolean locked;
-
-
-	private @Column(
-			nullable = false
 	) boolean expired;
 
 
@@ -49,5 +44,11 @@ public class AdminAuthProfile implements BlinckAuthorityEntity<String> {
 	private @Column
 	String password;
 
+
+	public @Override
+	boolean isLocked() {
+		// Always unlocked, but might be disabled
+		return false;
+	}
 
 }
