@@ -33,12 +33,13 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 
 
 	protected static final class
-	TestDetailsService extends BlinckDetailsProfileService<Float> {
+	TestDetailsService extends
+			BlinckDetailsProfileService<Float> {
 
-		public TestDetailsService(
-				BlinckDaoTemplate<? extends BlinckAuthorityEntity<Float>, Float> authProfileDao,
-				Function<String, Float> keyConverter,
-				Function<Float, String> keyDeConverter) {
+		public
+		TestDetailsService(BlinckDaoTemplate<? extends BlinckAuthorityEntity<Float>, Float> authProfileDao,
+						   Function<String, Float> keyConverter,
+						   Function<Float, String> keyDeConverter) {
 			super(authProfileDao, keyConverter, keyDeConverter);
 		}
 	}
@@ -48,25 +49,26 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 
 
 	protected static final class
-	TestDaoTemplatePure implements BlinckDaoTemplate<TestEntity, Float> {
+	TestDaoTemplatePure implements
+			BlinckDaoTemplate<TestEntity, Float> {
 
-		@Override
-		public TestEntity getById(Float id) {
+		public @Override TestEntity
+		getById(Float id) {
 			return testRepo.get(id);
 		}
 
-		@Override
-		public TestEntity save(TestEntity testEntity) {
+		public @Override TestEntity
+		save(TestEntity testEntity) {
 			return testRepo.put(testEntity.getId(), testEntity);
 		}
 
-		@Override
-		public boolean isExists(Float id) {
+		public @Override boolean
+		isExists(Float id) {
 			return testRepo.containsKey(id);
 		}
 
-		@Override
-		public void deleteById(Float id) {
+		public @Override void
+		deleteById(Float id) {
 			testRepo.remove(id);
 		}
 	}
@@ -76,9 +78,11 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 
 
 	protected static final class
-	TestDaoTemplateProvided extends BlinckDaoProvider<TestEntity, Float> {
+	TestDaoTemplateProvided extends
+			BlinckDaoProvider<TestEntity, Float> {
 
-		public TestDaoTemplateProvided(BlinckDaoTemplate<TestEntity, Float> daoTemplate) {
+		public
+		TestDaoTemplateProvided(BlinckDaoTemplate<TestEntity, Float> daoTemplate) {
 			super(daoTemplate);
 		}
 	}
@@ -88,9 +92,11 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 
 
 	protected static final class
-	TestRepositoryProvider extends BlinckRepositoryProvider<TestEntity, Float> {
+	TestRepositoryProvider extends
+			BlinckRepositoryProvider<TestEntity, Float> {
 
-		public TestRepositoryProvider(JpaRepository<TestEntity, Float> repository, boolean removable) {
+		public
+		TestRepositoryProvider(JpaRepository<TestEntity, Float> repository, boolean removable) {
 			super(repository, removable);
 		}
 
@@ -101,35 +107,52 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 
 
 	protected static final class
-	TestEntity implements BlinckAuthorityEntity<Float> {
-		@Override public Float getId() {
+	TestEntity implements
+			BlinckAuthorityEntity<Float> {
+
+		public @Override Float
+		getId() {
 			return 42F;
 		}
-		@Override public boolean isLocked() {
+
+		public @Override boolean
+		isLocked() {
 			return true;
 		}
-		@Override public boolean isExpired() {
+
+		public @Override boolean
+		isExpired() {
 			return false;
 		}
-		@Override public boolean isEnabled() {
+
+		public @Override boolean
+		isEnabled() {
 			return true;
 		}
-		@Override public String getPassword() {
+
+		public @Override String
+		getPassword() {
 			return "test_password";
 		}
-		@Override public String getAuthorities() {
+
+		public @Override String
+		getAuthorities() {
 			return "[ROLE_TEST]";
 		}
-		@Override public void setAuthorities(String authorities) {
 
+		public @Override void
+		setAuthorities(String authorities) {
 		}
+
 	}
 
 
 
 
 	private static final
-	Map<Float, TestEntity> testRepo = Collections.singletonMap(42F, new TestEntity());
+	Map<Float, TestEntity> testRepo = Collections.singletonMap(
+			42F, new TestEntity()
+	);
 
 
 
