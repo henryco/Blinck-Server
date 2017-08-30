@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.function.Function;
+
 /**
  * @author Henry on 30/08/17.
  */
@@ -14,24 +16,31 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class DetailsServiceBeans {
 
 
+	public @Bean Function<String, Long> detailsKeyConverterLong() {
+		return Long::decode;
+	}
+
 
 	public @Bean UserDetailsService profileDetailsServiceUser(
-			UserAuthProfileDao authProfileDao) {
+			UserAuthProfileDao authProfileDao,
+			Function<String, Long> keyConverter) {
 
 		return new BlinckDetailsProfileService<>(
 				authProfileDao,
-				Long::decode
+				keyConverter
 		);
 	}
 
 
 	public @Bean UserDetailsService profileDetailsServiceAdmin(
-			AdminAuthProfileDao authProfileDao) {
+			AdminAuthProfileDao authProfileDao,
+			Function<String, Long> keyConverter) {
 
 		return new BlinckDetailsProfileService<>(
 				authProfileDao,
-				Long::decode
+				keyConverter
 		);
 	}
+
 
 }
