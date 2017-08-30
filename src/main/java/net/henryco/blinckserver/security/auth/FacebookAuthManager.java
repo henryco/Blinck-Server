@@ -2,6 +2,7 @@ package net.henryco.blinckserver.security.auth;
 
 import net.henryco.blinckserver.mvc.service.data.UserDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +37,8 @@ public class FacebookAuthManager implements AuthenticationManager {
 
 
 	@Autowired
-	public FacebookAuthManager(UserDetailsService detailsService,
+	public FacebookAuthManager(@Qualifier("profileDetailsServiceUser")
+										   UserDetailsService detailsService,
 							   UserDataService userDataService) {
 		this.detailsService = detailsService;
 		this.userDataService = userDataService;

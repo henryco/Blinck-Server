@@ -1,6 +1,6 @@
-package net.henryco.blinckserver.security.details.user;
+package net.henryco.blinckserver.security.details;
 
-import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
+import net.henryco.blinckserver.util.entity.BlinckAuthorityEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,15 +8,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 /**
- * @author Henry on 22/08/17.
+ * @author Henry on 30/08/17.
  */
-public class UserDetailsProfile implements UserDetails {
+public class BlinckDetailsProfile implements UserDetails {
 
+	private final BlinckAuthorityEntity authProfile;
 
- 	private final UserAuthProfile authProfile;
-
-
-	public UserDetailsProfile(UserAuthProfile authProfile) {
+	public BlinckDetailsProfile(BlinckAuthorityEntity authProfile) {
 		this.authProfile = authProfile;
 	}
 
@@ -25,7 +23,6 @@ public class UserDetailsProfile implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return AuthorityUtils.createAuthorityList(authProfile.getAuthorityArray());
 	}
-
 
 	@Override
 	public String getPassword() {
@@ -56,4 +53,5 @@ public class UserDetailsProfile implements UserDetails {
 	public boolean isEnabled() {
 		return authProfile.isEnabled();
 	}
+
 }

@@ -15,11 +15,14 @@ import org.springframework.stereotype.Service;
 @PropertySource("classpath:/static/props/base.properties")
 public final class AdminTokenAuthService extends TokenAuthenticationService {
 
+
 	private final UserDetailsService detailsService;
 	private final String token_secret;
 
 	@Autowired
-	public AdminTokenAuthService(UserDetailsService detailsService, Environment environment) {
+	public AdminTokenAuthService(@Qualifier("profileDetailsServiceAdmin")
+											 UserDetailsService detailsService,
+								 Environment environment) {
 		this.token_secret = environment.getProperty("security.jwt.secret.admin");
 		this.detailsService = detailsService;
 	}

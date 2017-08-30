@@ -3,8 +3,6 @@ package net.henryco.blinckserver.mvc.service.profile;
 import net.henryco.blinckserver.mvc.model.dao.profile.UserNameEntityDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserNameEntity;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
-import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
-import net.henryco.blinckserver.util.dao.BlinckDaoTemplateProvider;
 import net.henryco.blinckserver.util.entity.BlinckEntityRemovalForbiddenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

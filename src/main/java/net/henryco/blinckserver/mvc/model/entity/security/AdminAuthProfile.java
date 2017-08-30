@@ -11,14 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * @author Henry on 22/08/17.
+ * @author Henry on 30/08/17.
  */
-
 @Entity @Data
 @NoArgsConstructor
 @Proxy(lazy = false)
-@Table(name = "USER_PROFILE_AUTH")
-public class UserAuthProfile implements BlinckAuthorityEntity {
+@Table(name = "ADMIN_PROFILE_AUTH")
+public class AdminAuthProfile implements BlinckAuthorityEntity {
 
 
 	private @Id @Column(

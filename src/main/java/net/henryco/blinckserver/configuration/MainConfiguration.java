@@ -1,17 +1,14 @@
 package net.henryco.blinckserver.configuration;
 
+import net.henryco.blinckserver.component.BlinckBeansConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
  * @author Henry on 21/08/17.
  */
-@Configuration
-@Import({
+@Configuration @Import({
 		WebSecurityConfiguration.class,
-		WebMvcConfiguration.class
-})
-public class MainConfiguration {
-
-
-}
+		WebMvcConfiguration.class,
+		BlinckBeansConfiguration.class
+}) public abstract class MainConfiguration { }

@@ -24,19 +24,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * @author Henry on 21/08/17.
  */
-@Configuration
-@ComponentScan(basePackageClasses = {
-		UserDetailsService.class,
+
+@PropertySource("classpath:/static/props/base.properties")
+@Configuration @ComponentScan(basePackageClasses = {
 		FacebookAuthManager.class
-}) @PropertySource("classpath:/static/props/base.properties")
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+}) public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Qualifier("UserTokenAuthService")
+
 	private final TokenAuthenticationService userTokenAuthService;
-
-	@Qualifier("AdminTokenAuthService")
 	private final TokenAuthenticationService adminTokenAuthService;
-
 
 	private final UserDetailsService userDetailsService;
 	private final AuthenticationManager facebookAuthManager;
@@ -44,11 +40,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
 	@Autowired
-	public WebSecurityConfiguration(UserDetailsService userDetailsService,
-									AuthenticationManager facebookAuthManager,
-									TokenAuthenticationService userTokenAuthService,
-									TokenAuthenticationService adminTokenAuthService) {
-
+	public WebSecurityConfiguration(@Qualifier("profileDetailsServiceAdmin") UserDetailsService userDetailsService,
+									@Qualifier("facebookAuthManager") AuthenticationManager facebookAuthManager,
+									@Qualifier("UserTokenAuthService") TokenAuthenticationService userTokenAuthService,
+									@Qualifier("AdminTokenAuthService") TokenAuthenticationService adminTokenAuthService
+	) {
 		this.userDetailsService = userDetailsService;
 		this.facebookAuthManager = facebookAuthManager;
 		this.userTokenAuthService = userTokenAuthService;

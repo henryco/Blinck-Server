@@ -8,15 +8,27 @@ import net.henryco.blinckserver.util.Utils;
 public interface BlinckAuthorityEntity {
 
 
+	long getId();
+
+	boolean isLocked();
+	boolean isExpired();
+	boolean isEnabled();
+
+	String getPassword();
 	String getAuthorities();
+
+
+
 	@Deprecated void setAuthorities(String authorities);
 
 
-	default String[] getAuthorityArray() {
+	default
+	String[] getAuthorityArray() {
 		return Utils.stringToArray(getAuthorities());
 	}
 
-	default void setAuthorityArray(String ... authorities) {
+	default
+	void setAuthorityArray(String ... authorities) {
 		setAuthorities(Utils.arrayToString(authorities));
 	}
 
