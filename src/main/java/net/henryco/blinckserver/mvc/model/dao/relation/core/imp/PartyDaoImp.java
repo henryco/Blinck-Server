@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PartyDaoImp
 		extends BlinckRepositoryProvider<Party, Long>
-		implements PartyDao{
+		implements PartyDao {
 
 	public PartyDaoImp(PartyRepository repository) {
 		super(repository);

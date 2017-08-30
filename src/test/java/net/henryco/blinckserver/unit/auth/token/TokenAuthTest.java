@@ -87,10 +87,6 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 		);
 	}
 
-	protected static TokenAuthenticationService createJwtService() {
-		return createJwtService(1_000_000L);
-	}
-
 	protected static TokenAuthenticationService createJwtService(Long expTime,
 																 String header,
 																 String prefix) {
