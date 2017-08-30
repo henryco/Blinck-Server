@@ -6,6 +6,7 @@ import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
 import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import net.henryco.blinckserver.util.entity.BlinckAuthorityEntity;
+import org.junit.Test;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.lang.reflect.Method;
@@ -20,12 +21,13 @@ import java.util.function.Function;
 public abstract class DetailsServicesTest extends BlinckUnitTest {
 
 
+
 	protected interface
 	JpaRepositoryUsedMethods {
 		String GET_ONE = "getOne";
 		String SAVE = "save";
-		String IS_EXISTS = "isExists";
-		String DELETE_BY_ID = "deleteById";
+		String EXISTS = "exists";
+		String DELETE = "delete";
 	}
 
 
@@ -96,7 +98,8 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 			BlinckRepositoryProvider<TestEntity, Float> {
 
 		public
-		TestRepositoryProvider(JpaRepository<TestEntity, Float> repository, boolean removable) {
+		TestRepositoryProvider(JpaRepository<TestEntity, Float> repository,
+							   final boolean removable) {
 			super(repository, removable);
 		}
 
@@ -148,18 +151,21 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 
 
 
+	protected static final
+	TestEntity testEntity = new TestEntity();
 
-	private static final
+
+
+	protected static final
 	Map<Float, TestEntity> testRepo = Collections.singletonMap(
-			42F, new TestEntity()
+			testEntity.getId(), testEntity
 	);
 
 
 
-
-	private static final @SuppressWarnings("unchecked")
+	protected static final @SuppressWarnings("unchecked")
 	JpaRepository<TestEntity, Float> testJpaRepo = (JpaRepository<TestEntity, Float>) Proxy.newProxyInstance(
-			null, new Class[]{JpaRepository.class}, (Object proxy, Method method, Object[] args) -> {
+			ClassLoader.getSystemClassLoader(), new Class[]{JpaRepository.class}, (Object proxy, Method method, Object[] args) -> {
 
 				switch (method.getName()) {
 
@@ -172,11 +178,11 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 						testRepo.put(entity.getId(), entity);
 						return entity;
 
-					case JpaRepositoryUsedMethods.IS_EXISTS:
+					case JpaRepositoryUsedMethods.EXISTS:
 						id = (Float) args[0];
 						return testRepo.containsKey(id);
 
-					case JpaRepositoryUsedMethods.DELETE_BY_ID:
+					case JpaRepositoryUsedMethods.DELETE:
 						id = (Float) args[0];
 						testRepo.remove(id);
 						break;
@@ -185,6 +191,13 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 			}
 	);
 
+
+
+	@Test
+	public void repositoryJpaInstanceTest() {
+		assert testJpaRepo.exists(testEntity.getId());
+		assert testJpaRepo.getOne(testEntity.getId()) == testEntity;
+	}
 
 
 
