@@ -63,7 +63,6 @@ public class UserDataService {
 	}
 
 
-
 	private UserCoreProfile createNewUser(User user, String ... authorities) {
 
 		final Long id = Long.decode(user.getId());
@@ -74,8 +73,9 @@ public class UserDataService {
 
 
 
-	@BlinckTestName("createUserEntity")
-	private static UserCoreProfile createUserEntity(User user, String ... authorities) {
+
+	private static @BlinckTestName("createUserEntity")
+	UserCoreProfile createUserEntity(User user, String ... authorities) {
 
 		final Long id = Long.decode(user.getId());
 
@@ -87,7 +87,6 @@ public class UserDataService {
 
 		return userCoreProfile;
 	}
-
 
 
 	private static
