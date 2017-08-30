@@ -18,10 +18,7 @@ import org.springframework.social.facebook.api.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * @author Henry on 29/08/17.
@@ -54,7 +51,7 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 
 
 	@Test
-	public void addAndDeleteUserTest() throws Exception {
+	public void saveAndDeleteUserEntityTest() throws Exception {
 
 		new TestedLoop(100).test(() -> {
 			User user = MockFacebookUser.getInstance().createRandom().getUser();
@@ -72,21 +69,20 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 
 
 	@Test @Transactional
-	public void addEntityTest() throws Exception {
+	public void saveUserEntityInDataBaseIdentityTest() throws Exception {
 
 		final User user = MockFacebookUser.getInstance().createRandom().getUser();
+		final Long id = Long.decode(user.getId());
 		final String[] authorities = {UserDataService.ROLE_USER};
+
+		final Method create = getEntityCreatorMethod();
 
 		userDataService.addNewFacebookUser(user);
 
-		Method createUserEntity = BlinckTestUtil.getMethod(
-				UserDataService.class, "createUserEntity"
-		);
-		UserCoreProfile baseProfile = (UserCoreProfile) createUserEntity.invoke(
-				null, user, authorities
-		);
+		UserCoreProfile baseProfile = (UserCoreProfile) create.invoke(null, user, authorities);
+		UserCoreProfile profile = baseProfileService.getById(id);
 
-		assert baseProfileService.getById(baseProfile.getId()).equals(baseProfile);
+		assert profile.equals(baseProfile);
 	}
 
 
@@ -94,19 +90,13 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 	public void userEntityCreationTest() throws Exception {
 
 		final User user = MockFacebookUser.getInstance().createRandom().getUser();
+		final Method create = getEntityCreatorMethod();
 		final String[] authorities = {
 				TestUtils.randomGaussNumberString(),
 				TestUtils.randomGaussNumberString()
 		};
 
-		Method createUserEntity = BlinckTestUtil.getMethod(
-				UserDataService.class,
-				"createUserEntity"
-		);
-
-		UserCoreProfile baseProfile = (UserCoreProfile) createUserEntity.invoke(
-				null, user, authorities
-		);
+		UserCoreProfile baseProfile = (UserCoreProfile) create.invoke(null, user, authorities);
 
 		profileIdAssertion(baseProfile);
 		profileAuthAssertion(baseProfile.getAuthProfile());
@@ -115,9 +105,16 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 	}
 
 
+	private static
+	Method getEntityCreatorMethod() {
+		return BlinckTestUtil.getMethod(
+				UserDataService.class,
+				"createUserEntity"
+		);
+	}
 
-	private static void
-	profileAuthAssertion(UserAuthProfile authProfile) {
+	private static
+	void profileAuthAssertion(UserAuthProfile authProfile) {
 		assert authProfile != null;
 		assert authProfile.isEnabled();
 		assert !authProfile.isExpired();
@@ -125,8 +122,8 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 		assert authProfile.getPassword() == null;
 	}
 
-	private static void
-	profileIdAssertion(UserCoreProfile coreProfile) {
+	private static
+	void profileIdAssertion(UserCoreProfile coreProfile) {
 		assert coreProfile != null;
 		assert coreProfile.getId() == coreProfile.getPublicProfile().getId();
 		assert coreProfile.getId() == coreProfile.getPrivateProfile().getId();
