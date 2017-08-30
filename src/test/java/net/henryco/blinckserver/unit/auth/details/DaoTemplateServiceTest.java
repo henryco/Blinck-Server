@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.unit.auth.details;
 
 
+import net.henryco.blinckserver.security.details.BlinckDetailsProfile;
 import net.henryco.blinckserver.security.details.BlinckDetailsProfileService;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
@@ -10,6 +11,8 @@ import org.junit.Test;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.function.Function;
 
 /**
  * @author Henry on 30/08/17.
@@ -35,6 +38,25 @@ public class DaoTemplateServiceTest extends DetailsServicesTest {
 		assert userDetails.getUsername().equals(KEY_ID);
 	}
 
+
+
+	@Test
+	public void detailsProfileTest() {
+
+		TestEntity entity = DetailsServicesTest.testEntity;
+
+		Function<Float, String>
+				decoder = String::valueOf; // KEY: Float -> String
+
+		UserDetails userDetails = new BlinckDetailsProfile<>(
+				entity, decoder
+		);
+
+		String username = userDetails.getUsername();
+		String decoded = decoder.apply(entity.getId());
+
+		assert decoded.equals(username);
+	}
 
 
 
