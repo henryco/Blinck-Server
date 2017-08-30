@@ -7,7 +7,6 @@ import net.henryco.blinckserver.mvc.model.entity.profile.pub.UserNameEntity;
 import net.henryco.blinckserver.mvc.model.entity.profile.pub.UserPublicProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import net.henryco.blinckserver.util.test.BlinckTestName;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.User;
 import org.springframework.stereotype.Service;
