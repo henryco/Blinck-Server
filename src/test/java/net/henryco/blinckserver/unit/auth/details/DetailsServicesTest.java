@@ -102,6 +102,9 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 	TestEntity implements
 			BlinckAuthorityEntity<Float> {
 
+		private String
+				authorities = "[ROLE_TEST]";
+
 		public @Override Float
 		getId() {
 			return 42F;
@@ -129,11 +132,12 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 
 		public @Override String
 		getAuthorities() {
-			return "[ROLE_TEST]";
+			return authorities;
 		}
 
 		public @Override void
 		setAuthorities(String authorities) {
+			this.authorities = authorities;
 		}
 	}
 

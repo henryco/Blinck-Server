@@ -40,6 +40,22 @@ public class DaoTemplateServiceTest extends DetailsServicesTest {
 
 
 
+
+	@Test
+	public void authorityEntityTest() {
+
+		final String someAuthority = "ROLE_WTF";
+
+		TestEntity entity = new TestEntity();
+		entity.setAuthorityArray(someAuthority);
+
+		assert entity.getAuthorities().equals("["+someAuthority+"]");
+		assert entity.getAuthorityArray().length == 1;
+		assert entity.getAuthorityArray()[0].equals(someAuthority);
+	}
+
+
+
 	@Test
 	public void detailsProfileTest() {
 
