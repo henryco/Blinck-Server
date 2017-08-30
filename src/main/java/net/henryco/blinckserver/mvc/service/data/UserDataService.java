@@ -79,45 +79,69 @@ public class UserDataService {
 
 		final Long id = Long.decode(user.getId());
 
-		UserNameEntity userNameEntity = new UserNameEntity();
-		userNameEntity.setId(id);
-		userNameEntity.setFirstName(user.getFirstName());
-		userNameEntity.setSecondName(user.getMiddleName());
-		userNameEntity.setLastName(user.getLastName());
+		UserCoreProfile userCoreProfile = new UserCoreProfile();
+		userCoreProfile.setId(id);
+		userCoreProfile.setPrivateProfile(createUserPrivateProfile(id, user));
+		userCoreProfile.setPublicProfile(createUserPublicProfile(id, user));
+		userCoreProfile.setAuthProfile(createUserAuthProfile(id, authorities));
 
-		UserPublicProfile userPublicProfile = new UserPublicProfile();
-		userPublicProfile.setId(id);
-		userPublicProfile.setGender(user.getGender());
-		userPublicProfile.setAbout(user.getAbout());
-		userPublicProfile.setBirthday(parseFacebookDate(user.getBirthday()));
-		userPublicProfile.setUserName(userNameEntity);
+		return userCoreProfile;
+	}
+
+
+
+	private static
+	UserPrivateProfile createUserPrivateProfile(Long id, User user) {
 
 		UserPrivateProfile userPrivateProfile = new UserPrivateProfile();
 		userPrivateProfile.setId(id);
 		userPrivateProfile.setEmail(user.getEmail());
+		return userPrivateProfile;
+	}
+
+
+	private static
+	UserAuthProfile createUserAuthProfile(Long id, String ... authorities){
 
 		UserAuthProfile userAuthProfile = new UserAuthProfile();
 		userAuthProfile.setId(id);
 		userAuthProfile.setExpired(false);
 		userAuthProfile.setLocked(false);
 		userAuthProfile.setAuthorityArray(authorities);
-
-		UserCoreProfile userCoreProfile = new UserCoreProfile();
-		userCoreProfile.setId(id);
-		userCoreProfile.setPrivateProfile(userPrivateProfile);
-		userCoreProfile.setPublicProfile(userPublicProfile);
-		userCoreProfile.setAuthProfile(userAuthProfile);
-
-		return userCoreProfile;
+		return userAuthProfile;
 	}
 
 
-	@BlinckTestName("parseFacebookDate")
-	private static Date parseFacebookDate(String date) {
+	private static
+	UserNameEntity createUserNameEntity(Long id, User user) {
 
+		UserNameEntity userNameEntity = new UserNameEntity();
+		userNameEntity.setFirstName(user.getFirstName());
+		userNameEntity.setSecondName(user.getMiddleName());
+		userNameEntity.setLastName(user.getLastName());
+		userNameEntity.setId(id);
+		return userNameEntity;
+	}
+
+
+	private static
+	UserPublicProfile createUserPublicProfile(Long id, User user) {
+
+		UserPublicProfile userPublicProfile = new UserPublicProfile();
+		userPublicProfile.setId(id);
+		userPublicProfile.setGender(user.getGender());
+		userPublicProfile.setAbout(user.getAbout());
+		userPublicProfile.setBirthday(parseFacebookDate(user.getBirthday()));
+		userPublicProfile.setUserName(createUserNameEntity(id, user));
+		return userPublicProfile;
+	}
+
+
+	private static
+	@BlinckTestName("parseFacebookDate")
+	Date parseFacebookDate(String date) {
 		try {
 			return new SimpleDateFormat(FB_DATE_FORMAT).parse(date);
-
 		} catch (ParseException | NullPointerException e) {
 			e.printStackTrace();
 			return null;
