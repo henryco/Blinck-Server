@@ -47,8 +47,10 @@ public class UserAuthProfile implements BlinckAuthorityEntity<Long> {
 	) String authorities;
 
 
-	private @Column
-	String password;
-
+	public @Override
+	String getPassword() {
+		// users don't use internal passwords
+		return null;
+	}
 
 }
