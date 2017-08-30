@@ -2,30 +2,21 @@ package net.henryco.blinckserver.mvc.model.dao.relation.conversation.imp;
 
 import net.henryco.blinckserver.mvc.model.dao.relation.conversation.PartyConversationDao;
 import net.henryco.blinckserver.mvc.model.entity.relation.conversation.PartyConversation;
+import net.henryco.blinckserver.mvc.model.repository.relation.conversation.PartyConversationRepository;
+import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
  * @author Henry on 29/08/17.
  */
 @Repository
-public class PartyConversationDaoImp implements PartyConversationDao {
-	@Override
-	public PartyConversation getById(Long id) {
-		return null;
+public class PartyConversationDaoImp
+		extends BlinckRepositoryProvider<PartyConversation, Long>
+		implements PartyConversationDao {
+
+	public PartyConversationDaoImp(PartyConversationRepository repository) {
+		super(repository);
 	}
 
-	@Override
-	public PartyConversation save(PartyConversation partyConversation) {
-		return null;
-	}
-
-	@Override
-	public boolean isExists(Long id) {
-		return false;
-	}
-
-	@Override
-	public void deleteById(Long id) {
-
-	}
 }

@@ -25,8 +25,9 @@ public abstract class BlinckRepositoryProvider<ENTITY, KEY extends Serializable>
 		this(repository, true);
 	}
 
-	protected JpaRepository<ENTITY, KEY> provideRepository() {
-		return repository;
+	@SuppressWarnings("unchecked")
+	protected <T extends JpaRepository<ENTITY, KEY>> T provideRepository() {
+		return (T) repository;
 	}
 
 	@Override

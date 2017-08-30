@@ -3,6 +3,7 @@ package net.henryco.blinckserver.mvc.model.dao.profile.imp;
 import net.henryco.blinckserver.mvc.model.dao.profile.UserNameEntityDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserNameEntity;
 import net.henryco.blinckserver.mvc.model.repository.profile.UserNameProfileRepository;
+import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,34 +12,15 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public class UserNameEntityDaoImp implements UserNameEntityDao {
+public class UserNameEntityDaoImp
+		extends BlinckRepositoryProvider<UserNameEntity, Long>
+		implements UserNameEntityDao {
 
-
-	private final UserNameProfileRepository nameProfileRepository;
 
 	@Autowired
 	public UserNameEntityDaoImp(UserNameProfileRepository nameProfileRepository) {
-		this.nameProfileRepository = nameProfileRepository;
+		super(nameProfileRepository, false);
 	}
 
 
-	@Override
-	public UserNameEntity getById(Long id) {
-		return nameProfileRepository.getOne(id);
-	}
-
-	@Override
-	public boolean isExists(Long id) {
-		return nameProfileRepository.exists(id);
-	}
-
-	@Override
-	public UserNameEntity save(UserNameEntity entity) {
-		return nameProfileRepository.save(entity);
-	}
-
-	@Override
-	public void deleteById(Long id) {
-		throw new RuntimeException("You cannot delete sub entity");
-	}
 }
