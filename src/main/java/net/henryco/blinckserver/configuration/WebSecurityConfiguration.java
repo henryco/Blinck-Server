@@ -25,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @author Henry on 21/08/17.
  */
 
+@SuppressWarnings("UnusedReturnValue")
 @PropertySource("classpath:/static/props/base.properties")
 @Configuration @ComponentScan(basePackageClasses = {
 		FacebookAuthManager.class
@@ -37,6 +38,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 	private final UserDetailsService userDetailsService;
 	private final AuthenticationManager facebookAuthManager;
 
+	private @Value("${security.default.admin.name}") String admin_name;
+	private @Value("${security.default.admin.password}") String admin_pass;
 
 
 	@Autowired
@@ -52,63 +55,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 	}
 
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-
-		http.csrf().disable()
-				.authorizeRequests()
-				.antMatchers("/").permitAll()
-				.antMatchers(HttpMethod.GET, "/public/**").permitAll()
-				.antMatchers("/login/**").permitAll()
-				.anyRequest().authenticated()
-				.and()
-
-				.addFilterBefore( // We filter the api/ USER login requests
-						new JWTLoginFilter(
-								"/login/user/**",
-								facebookAuthManager,
-								userTokenAuthService,
-								LoginFacebookCredentials.class
-						),
-						UsernamePasswordAuthenticationFilter.class
-				)
-
-				.addFilterBefore( // We filter the api/ ADMIN login requests
-						new JWTLoginFilter(
-								"/login/admin/**",
-								authenticationManager(),
-								adminTokenAuthService,
-								LoginAdminCredentials.class
-						),
-						UsernamePasswordAuthenticationFilter.class
-				)
-
-				.addFilterBefore( // Reset all of your Privileges
-						new JWTResetFilter(),
-						UsernamePasswordAuthenticationFilter.class
-				)
-
-
-				.addFilterBefore( // And filter requests to check the presence of JWT in header
-						new JWTAuthFilter(userTokenAuthService),
-						UsernamePasswordAuthenticationFilter.class
-				)
-
-				.addFilterBefore( // Check your admin Privileges
-						new JWTAuthFilter(
-								"/protected/admin/**",
-								adminTokenAuthService
-						),
-						UsernamePasswordAuthenticationFilter.class
-				)
-
-		;
-	}
-
-
-
-	private @Value("${security.default.admin.name}") String admin_name;
-	private @Value("${security.default.admin.password}") String admin_pass;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -118,6 +64,72 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 				.withUser(admin_name)
 				.password(admin_pass)
 		.roles("ADMIN", "USER");
+	}
+
+
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+
+		HttpSecurity httpSecurity = http.csrf().disable();
+		httpSecurity = authorizeRequests(httpSecurity);
+		httpSecurity = filterUserLoginRequest(httpSecurity);
+		httpSecurity = filterAdminLoginRequest(httpSecurity);
+		filterJwtHeader(httpSecurity);
+	}
+
+
+
+
+
+	private HttpSecurity authorizeRequests(HttpSecurity http) throws Exception {
+		return http.authorizeRequests()
+				.antMatchers("/").permitAll()
+				.antMatchers(HttpMethod.GET, "/public/**").permitAll()
+				.antMatchers("/login/**").permitAll()
+				.anyRequest().authenticated()
+		.and();
+	}
+
+
+	private HttpSecurity filterUserLoginRequest(HttpSecurity http) {
+		return http.addFilterBefore( // We filter the api/ USER login requests
+				new JWTLoginFilter(
+						"/login/user/**",
+						facebookAuthManager,
+						userTokenAuthService,
+						LoginFacebookCredentials.class
+				), UsernamePasswordAuthenticationFilter.class
+		);
+	}
+
+
+	private HttpSecurity filterAdminLoginRequest(HttpSecurity http) throws Exception {
+		return http.addFilterBefore( // We filter the api/ ADMIN login requests
+				new JWTLoginFilter(
+						"/login/admin/**",
+						authenticationManager(),
+						adminTokenAuthService,
+						LoginAdminCredentials.class
+				), UsernamePasswordAuthenticationFilter.class
+		);
+	}
+
+
+	private HttpSecurity filterJwtHeader(HttpSecurity http) {
+
+		return http.addFilterBefore(
+				new JWTResetFilter(),
+				UsernamePasswordAuthenticationFilter.class
+		).addFilterBefore(
+				new JWTAuthFilter(userTokenAuthService),
+				UsernamePasswordAuthenticationFilter.class
+		).addFilterBefore(
+				new JWTAuthFilter(
+						"/protected/admin/**",
+						adminTokenAuthService
+				), UsernamePasswordAuthenticationFilter.class
+		);
 	}
 
 

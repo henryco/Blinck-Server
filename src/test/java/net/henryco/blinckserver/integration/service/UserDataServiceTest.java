@@ -105,16 +105,16 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 	}
 
 
-	private static
-	Method getEntityCreatorMethod() {
+	private static Method
+	getEntityCreatorMethod() {
 		return BlinckTestUtil.getMethod(
 				UserDataService.class,
 				"createUserEntity"
 		);
 	}
 
-	private static
-	void profileAuthAssertion(UserAuthProfile authProfile) {
+	private static void
+	profileAuthAssertion(UserAuthProfile authProfile) {
 		assert authProfile != null;
 		assert authProfile.isEnabled();
 		assert !authProfile.isExpired();
@@ -122,8 +122,8 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 		assert authProfile.getPassword() == null;
 	}
 
-	private static
-	void profileIdAssertion(UserCoreProfile coreProfile) {
+	private static void
+	profileIdAssertion(UserCoreProfile coreProfile) {
 		assert coreProfile != null;
 		assert coreProfile.getId() == coreProfile.getPublicProfile().getId();
 		assert coreProfile.getId() == coreProfile.getPrivateProfile().getId();
