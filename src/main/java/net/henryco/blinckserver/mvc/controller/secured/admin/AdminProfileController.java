@@ -1,12 +1,19 @@
 package net.henryco.blinckserver.mvc.controller.secured.admin;
 
 import net.henryco.blinckserver.mvc.controller.secured.BlinckProfileController;
+import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
 import net.henryco.blinckserver.mvc.service.data.AdminDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -38,5 +45,18 @@ public class AdminProfileController implements BlinckProfileController {
 		}
 	}
 
+
+	public @RequestMapping(
+			method = GET,
+			produces = JSON,
+			value = "/verification"
+	) String[] getAdminVerificationList(@RequestParam int n) {
+
+		return adminDataService
+				.getVerificationQueue(n)
+				.stream()
+				.map(AdminVerificationQueue::getAdminProfile)
+		.toArray(String[]::new);
+	}
 
 }
