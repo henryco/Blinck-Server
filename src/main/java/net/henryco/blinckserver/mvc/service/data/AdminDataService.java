@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -70,6 +71,25 @@ public class AdminDataService {
 		authProfileDao.save(profile);
 		verificationQueueDao.deleteByAdminProfileId(username);
 	}
+
+
+	@Transactional
+	public void deleteProfile(String username) {
+		authProfileDao.deleteById(username);
+	}
+
+
+	@Transactional
+	public Collection<AdminVerificationQueue> getVerificationQueue(int size) {
+		return verificationQueueDao.getLast(size);
+	}
+
+
+	@Transactional
+	public Collection<AdminVerificationQueue> getVerificationQueue() {
+		return verificationQueueDao.getAll();
+	}
+
 
 
 
