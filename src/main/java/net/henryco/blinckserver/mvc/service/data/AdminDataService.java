@@ -1,10 +1,14 @@
 package net.henryco.blinckserver.mvc.service.data;
 
 import net.henryco.blinckserver.mvc.model.dao.security.AdminAuthProfileDao;
+import net.henryco.blinckserver.mvc.model.dao.security.AdminVerificationQueueDao;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminAuthProfile;
+import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * @author Henry on 31/08/17.
@@ -19,9 +23,13 @@ public class AdminDataService {
 
 
 	private final AdminAuthProfileDao authProfileDao;
+	private final AdminVerificationQueueDao verificationQueueDao;
+
 
 	@Autowired
-	public AdminDataService(AdminAuthProfileDao authProfileDao) {
+	public AdminDataService(AdminVerificationQueueDao verificationQueueDao,
+							AdminAuthProfileDao authProfileDao) {
+		this.verificationQueueDao = verificationQueueDao;
 		this.authProfileDao = authProfileDao;
 	}
 
@@ -31,7 +39,12 @@ public class AdminDataService {
 
 		if (authProfileDao.isExists(name))
 			throw new RuntimeException(name + "is already exist!");
-		authProfileDao.save(createNewAdminProfile(name, password));
+
+		AdminAuthProfile profile = createNewAdminProfile(name, password);
+		AdminVerificationQueue queue = createNewAdminVerification(profile.getId());
+
+		authProfileDao.save(profile);
+		verificationQueueDao.save(queue);
 	}
 
 
@@ -39,7 +52,12 @@ public class AdminDataService {
 	public void addNewAdminIfNotExist(String name, String password) {
 
 		if (authProfileDao.isExists(name)) return;
-		authProfileDao.save(createNewAdminProfile(name, password));
+
+		AdminAuthProfile profile = createNewAdminProfile(name, password);
+		AdminVerificationQueue queue = createNewAdminVerification(profile.getId());
+
+		authProfileDao.save(profile);
+		verificationQueueDao.save(queue);
 	}
 
 
@@ -56,4 +74,12 @@ public class AdminDataService {
 	}
 
 
+	private static AdminVerificationQueue
+	createNewAdminVerification(String adminId) {
+
+		AdminVerificationQueue queue = new AdminVerificationQueue();
+		queue.setAdminProfile(adminId);
+		queue.setRegistrationTime(new Date(System.currentTimeMillis()));
+		return queue;
+	}
 }
