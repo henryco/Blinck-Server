@@ -39,12 +39,7 @@ public class AdminDataService {
 
 		if (authProfileDao.isExists(name))
 			throw new RuntimeException(name + "is already exist!");
-
-		AdminAuthProfile profile = createNewAdminProfile(name, password);
-		AdminVerificationQueue queue = createNewAdminVerification(profile.getId());
-
-		authProfileDao.save(profile);
-		verificationQueueDao.save(queue);
+		saveAdmin(name, password);
 	}
 
 
@@ -52,6 +47,12 @@ public class AdminDataService {
 	public void addNewAdminIfNotExist(String name, String password) {
 
 		if (authProfileDao.isExists(name)) return;
+		saveAdmin(name, password);
+	}
+
+
+	@Transactional
+	protected void saveAdmin(String name, String password) {
 
 		AdminAuthProfile profile = createNewAdminProfile(name, password);
 		AdminVerificationQueue queue = createNewAdminVerification(profile.getId());
