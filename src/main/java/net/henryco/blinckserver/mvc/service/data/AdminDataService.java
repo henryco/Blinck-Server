@@ -107,8 +107,20 @@ public class AdminDataService {
 
 
 	@Transactional
-	public Collection<AdminVerificationQueue> getVerificationQueue(int size) {
-		return verificationQueueDao.getLast(size);
+	public Collection<AdminAuthProfile> getAdminProfiles(int n) {
+		return authProfileDao.getLast(n);
+	}
+
+
+	@Transactional
+	public Collection<AdminAuthProfile> getAdminProfiles() {
+		return authProfileDao.getAll();
+	}
+
+
+	@Transactional
+	public Collection<AdminVerificationQueue> getVerificationQueue(int n) {
+		return verificationQueueDao.getLast(n);
 	}
 
 

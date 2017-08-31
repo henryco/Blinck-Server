@@ -63,7 +63,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 				.inMemoryAuthentication()
 				.withUser(admin_name)
 				.password(admin_pass)
-		.roles("ADMIN", "USER");
+		.roles("MODERATOR", "ADMIN", "USER");
 	}
 
 
