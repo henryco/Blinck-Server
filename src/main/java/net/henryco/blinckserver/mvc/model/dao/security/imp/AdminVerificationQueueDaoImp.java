@@ -7,6 +7,7 @@ import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+
 /**
  * @author Henry on 31/08/17.
  */
@@ -21,5 +22,20 @@ public class AdminVerificationQueueDaoImp
 		super(repository);
 	}
 
+
+	private AdminVerificationQueueRepository getRepository() {
+		return provideRepository();
+	}
+
+
+	@Override
+	public void deleteByAdminProfileId(String id) {
+		getRepository().deleteAdminVerificationQueueByAdminProfile(id);
+	}
+
+	@Override
+	public AdminVerificationQueue getByAdminProfileId(String id) {
+		return getRepository().getAdminVerificationQueueByAdminProfile(id);
+	}
 
 }

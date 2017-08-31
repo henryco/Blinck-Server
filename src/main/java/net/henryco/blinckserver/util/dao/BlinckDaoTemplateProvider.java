@@ -2,6 +2,8 @@ package net.henryco.blinckserver.util.dao;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author Henry on 29/08/17.
  */
@@ -32,4 +34,18 @@ public abstract class BlinckDaoTemplateProvider<ENTITY, ID_TYPE>
 		provideDao().deleteById(id);
 	}
 
+	@Override
+	public List<ENTITY> getLast(int n) {
+		return provideDao().getLast(n);
+	}
+
+	@Override @Transactional
+	public List<ENTITY> getAll() {
+		return provideDao().getAll();
+	}
+
+	@Override @Transactional
+	public long count() {
+		return provideDao().count();
+	}
 }

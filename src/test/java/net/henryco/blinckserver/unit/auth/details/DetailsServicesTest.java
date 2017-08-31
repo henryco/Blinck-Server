@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -68,6 +69,21 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 		public @Override void
 		deleteById(Float id) {
 			testRepo.remove(id);
+		}
+
+		@Override
+		public List<TestEntity> getLast(int n) {
+			return getAll();
+		}
+
+		@Override
+		public List<TestEntity> getAll() {
+			return Collections.singletonList(testEntity);
+		}
+
+		@Override
+		public long count() {
+			return 1;
 		}
 	}
 
