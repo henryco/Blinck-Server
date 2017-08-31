@@ -4,6 +4,7 @@ import net.henryco.blinckserver.mvc.controller.secured.BlinckProfileController;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
 import net.henryco.blinckserver.mvc.service.data.AdminDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,6 +51,8 @@ public class AdminProfileController implements BlinckProfileController {
 			method = GET,
 			produces = JSON,
 			value = "/verification"
+	) @Secured(
+			{"ROLE_MODERATOR"}
 	) String[] getAdminVerificationList(@RequestParam int n) {
 
 		return adminDataService
