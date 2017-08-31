@@ -15,10 +15,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public interface BlinckProfileController {
 
 
-	@RequestMapping(
+	default @RequestMapping(
 			method = GET,
 			value = "/profile"
-	) String profile();
+	) String profile() {
+		return "wellcome in your profile page";
+	}
 
 
 	default @RequestMapping(

@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 /**
  * @author Henry on 31/08/17.
@@ -74,6 +73,30 @@ public class AdminDataService {
 
 
 	@Transactional
+	public void addAuthority(String name, String authority) {
+
+		AdminAuthProfile profile = authProfileDao.getById(name);
+		List<String> authList = getAuthList(profile);
+
+		if (!authList.contains(authority)) {
+			authList.add(authority);
+			authProfileDao.save(saveAuthList(profile, authList));
+		}
+	}
+
+	@Transactional
+	public void removeAuthority(String name, String authority) {
+
+		AdminAuthProfile profile = authProfileDao.getById(name);
+		List<String> authList = getAuthList(profile);
+
+		if (authList.contains(authority)) {
+			authList.remove(authority);
+			authProfileDao.save(saveAuthList(profile, authList));
+		}
+	}
+
+	@Transactional
 	public void deleteProfile(String username) {
 		authProfileDao.deleteById(username);
 	}
@@ -113,5 +136,19 @@ public class AdminDataService {
 		queue.setAdminProfile(adminId);
 		queue.setRegistrationTime(new Date(System.currentTimeMillis()));
 		return queue;
+	}
+
+
+	private static List<String>
+	getAuthList(AdminAuthProfile profile) {
+		List<String> authList = new LinkedList<>();
+		authList.addAll(Arrays.asList(profile.getAuthorityArray()));
+		return authList;
+	}
+
+	private static AdminAuthProfile
+	saveAuthList(AdminAuthProfile profile, List<String> authList) {
+		profile.setAuthorityArray(authList.toArray(new String[0]));
+		return profile;
 	}
 }
