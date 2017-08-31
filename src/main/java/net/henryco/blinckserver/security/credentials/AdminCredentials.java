@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security.jwt.credentials;
+package net.henryco.blinckserver.security.credentials;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
  * @author Henry on 24/08/17.
  */
 @AllArgsConstructor @NoArgsConstructor
-public final class LoginAdminCredentials extends JWTLoginCredentials {
+public final class AdminCredentials extends JWTLoginCredentials {
 
 	@Getter @Setter private String user_id;
 	@Getter @Setter private String password;

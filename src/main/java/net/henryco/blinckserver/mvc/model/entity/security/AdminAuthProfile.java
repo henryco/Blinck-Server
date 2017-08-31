@@ -17,7 +17,8 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Proxy(lazy = false)
 @Table(name = "ADMIN_PROFILE_AUTH")
-public class AdminAuthProfile implements BlinckAuthorityEntity<String> {
+public class AdminAuthProfile
+		implements BlinckAuthorityEntity<String> {
 
 
 	private @Id @Column(

@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security.jwt.credentials;
+package net.henryco.blinckserver.security.credentials;
 
 import org.springframework.security.core.GrantedAuthority;
 

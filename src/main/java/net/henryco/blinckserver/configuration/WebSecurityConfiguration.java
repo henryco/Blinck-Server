@@ -1,8 +1,8 @@
 package net.henryco.blinckserver.configuration;
 
 import net.henryco.blinckserver.security.auth.FacebookAuthManager;
-import net.henryco.blinckserver.security.jwt.credentials.LoginAdminCredentials;
-import net.henryco.blinckserver.security.jwt.credentials.LoginFacebookCredentials;
+import net.henryco.blinckserver.security.credentials.AdminCredentials;
+import net.henryco.blinckserver.security.credentials.FacebookCredentials;
 import net.henryco.blinckserver.security.jwt.filter.JWTAuthFilter;
 import net.henryco.blinckserver.security.jwt.filter.JWTLoginFilter;
 import net.henryco.blinckserver.security.jwt.filter.JWTResetFilter;
@@ -86,6 +86,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 		return http.authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers(HttpMethod.GET, "/public/**").permitAll()
+				.antMatchers("/registration/**").permitAll()
 				.antMatchers("/login/**").permitAll()
 				.anyRequest().authenticated()
 		.and();
@@ -98,7 +99,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 						"/login/user/**",
 						facebookAuthManager,
 						userTokenAuthService,
-						LoginFacebookCredentials.class
+						FacebookCredentials.class
 				), UsernamePasswordAuthenticationFilter.class
 		);
 	}
@@ -110,7 +111,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 						"/login/admin/**",
 						authenticationManager(),
 						adminTokenAuthService,
-						LoginAdminCredentials.class
+						AdminCredentials.class
 				), UsernamePasswordAuthenticationFilter.class
 		);
 	}

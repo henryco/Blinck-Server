@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.controller.login;
+package net.henryco.blinckserver.mvc.controller.acc;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
