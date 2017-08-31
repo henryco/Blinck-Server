@@ -4,6 +4,7 @@ import net.henryco.blinckserver.mvc.model.dao.security.AdminAuthProfileDao;
 import net.henryco.blinckserver.mvc.model.dao.security.AdminVerificationQueueDao;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminAuthProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
+import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +52,7 @@ public class AdminDataService {
 	}
 
 
-	@Transactional
+	@Transactional @BlinckTestName
 	protected void saveProfile(String name, String password) {
 
 		AdminAuthProfile profile = createNewAdminProfile(name, password);
@@ -69,7 +70,7 @@ public class AdminDataService {
 		profile.setEnabled(true);
 		authProfileDao.save(profile);
 		try {
-			verificationQueueDao.deleteByAdminProfileId(username);
+			verificationQueueDao.deleteById(username);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -132,8 +133,8 @@ public class AdminDataService {
 
 
 
-	private static AdminAuthProfile
-	createNewAdminProfile(String name, String password) {
+	private static @BlinckTestName
+	AdminAuthProfile createNewAdminProfile(String name, String password) {
 
 		AdminAuthProfile adminAuthProfile = new AdminAuthProfile();
 		adminAuthProfile.setId(name);
@@ -145,25 +146,26 @@ public class AdminDataService {
 	}
 
 
-	private static AdminVerificationQueue
-	createNewAdminVerification(String adminId) {
+	private static @BlinckTestName
+	AdminVerificationQueue createNewAdminVerification(String adminId) {
 
 		AdminVerificationQueue queue = new AdminVerificationQueue();
-		queue.setAdminProfile(adminId);
+		queue.setId(adminId);
 		queue.setRegistrationTime(new Date(System.currentTimeMillis()));
 		return queue;
 	}
 
 
-	private static List<String>
-	getAuthList(AdminAuthProfile profile) {
+	private static @BlinckTestName
+	List<String> getAuthList(AdminAuthProfile profile) {
 		List<String> authList = new LinkedList<>();
 		authList.addAll(Arrays.asList(profile.getAuthorityArray()));
 		return authList;
 	}
 
-	private static AdminAuthProfile
-	saveAuthList(AdminAuthProfile profile, List<String> authList) {
+
+	private static @BlinckTestName
+	AdminAuthProfile saveAuthList(AdminAuthProfile profile, List<String> authList) {
 		profile.setAuthorityArray(authList.toArray(new String[0]));
 		return profile;
 	}

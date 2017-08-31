@@ -54,7 +54,7 @@ public class AdminProfileController implements BlinckProfileController {
 		return adminDataService
 				.getVerificationQueue(n)
 				.stream()
-				.map(AdminVerificationQueue::getAdminProfile)
+				.map(AdminVerificationQueue::getId)
 		.toArray(String[]::new);
 	}
 

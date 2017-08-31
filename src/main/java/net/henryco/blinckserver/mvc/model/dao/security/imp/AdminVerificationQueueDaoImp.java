@@ -13,29 +13,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class AdminVerificationQueueDaoImp
-		extends BlinckRepositoryProvider<AdminVerificationQueue, Long>
+		extends BlinckRepositoryProvider<AdminVerificationQueue, String>
 		implements AdminVerificationQueueDao {
 
 
 	@Autowired
 	public AdminVerificationQueueDaoImp(AdminVerificationQueueRepository repository) {
 		super(repository);
-	}
-
-
-	private AdminVerificationQueueRepository getRepository() {
-		return provideRepository();
-	}
-
-
-	@Override
-	public void deleteByAdminProfileId(String id) {
-		getRepository().deleteAdminVerificationQueueByAdminProfile(id);
-	}
-
-	@Override
-	public AdminVerificationQueue getByAdminProfileId(String id) {
-		return getRepository().getAdminVerificationQueueByAdminProfile(id);
 	}
 
 }

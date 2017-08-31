@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
@@ -20,9 +18,7 @@ public class AdminVerificationQueue {
 
 	private @Id @Column(
 			unique = true
-	) @GeneratedValue(
-			strategy = AUTO
-	) Long id;
+	) String id;
 
 
 	private @Column(
@@ -30,16 +26,6 @@ public class AdminVerificationQueue {
 	) @Temporal(
 			TIMESTAMP
 	) Date registrationTime;
-
-
-	private @OneToOne(
-			cascade = ALL,
-			optional = false,
-			targetEntity = AdminAuthProfile.class
-	) @JoinColumn(
-			name = "profile_id",
-			unique = true
-	) String adminProfile;
 
 
 }

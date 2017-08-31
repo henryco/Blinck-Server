@@ -7,9 +7,6 @@ import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
 /**
  * @author Henry on 31/08/17.
  */
-public interface AdminVerificationQueueDao extends BlinckDaoTemplate<AdminVerificationQueue, Long> {
-
-	void deleteByAdminProfileId(String id);
-	AdminVerificationQueue getByAdminProfileId(String id);
+public interface AdminVerificationQueueDao extends BlinckDaoTemplate<AdminVerificationQueue, String> {
 
 }

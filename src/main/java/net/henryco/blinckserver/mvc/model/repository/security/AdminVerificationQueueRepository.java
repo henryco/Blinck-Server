@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * @author Henry on 31/08/17.
  */
-public interface AdminVerificationQueueRepository extends JpaRepository<AdminVerificationQueue, Long> {
+public interface AdminVerificationQueueRepository extends JpaRepository<AdminVerificationQueue, String> {
 
-	void deleteAdminVerificationQueueByAdminProfile(String adminProfile);
-	AdminVerificationQueue getAdminVerificationQueueByAdminProfile(String adminProfile);
 }
