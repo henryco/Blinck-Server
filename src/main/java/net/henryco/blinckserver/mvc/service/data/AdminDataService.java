@@ -68,7 +68,11 @@ public class AdminDataService {
 		AdminAuthProfile profile = authProfileDao.getById(username);
 		profile.setEnabled(true);
 		authProfileDao.save(profile);
-		verificationQueueDao.deleteByAdminProfileId(username);
+		try {
+			verificationQueueDao.deleteByAdminProfileId(username);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 
