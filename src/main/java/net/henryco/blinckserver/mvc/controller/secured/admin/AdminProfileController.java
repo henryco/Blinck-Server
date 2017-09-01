@@ -63,7 +63,7 @@ public class AdminProfileController implements BlinckProfileController {
 	public @RequestMapping(
 			method = POST,
 			consumes = JSON,
-			value = "/activate/admin/"
+			value = "/activate/admin"
 	) @Secured(
 			{"ROLE_MODERATOR"}
 	) void activateAdminProfiles(@RequestBody String[] names) {

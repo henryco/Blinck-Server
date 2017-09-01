@@ -4,6 +4,7 @@ import net.henryco.blinckserver.util.entity.BlinckAuthorityEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -24,37 +25,37 @@ public class BlinckDetailsProfile<KEY extends Serializable> implements UserDetai
 	}
 
 
-	@Override
+	@Override @Transactional
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return AuthorityUtils.createAuthorityList(authProfile.getAuthorityArray());
 	}
 
-	@Override
+	@Override @Transactional
 	public String getPassword() {
 		return authProfile.getPassword();
 	}
 
-	@Override
+	@Override @Transactional
 	public String getUsername() {
 		return keyConverter.apply(authProfile.getId());
 	}
 
-	@Override
+	@Override @Transactional
 	public boolean isAccountNonExpired() {
 		return !authProfile.isExpired();
 	}
 
-	@Override
+	@Override @Transactional
 	public boolean isAccountNonLocked() {
 		return !authProfile.isLocked();
 	}
 
-	@Override
+	@Override @Transactional
 	public boolean isCredentialsNonExpired() {
 		return !authProfile.isExpired();
 	}
 
-	@Override
+	@Override @Transactional
 	public boolean isEnabled() {
 		return authProfile.isEnabled();
 	}
