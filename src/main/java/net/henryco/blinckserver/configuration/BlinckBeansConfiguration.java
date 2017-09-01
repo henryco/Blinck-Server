@@ -1,5 +1,6 @@
-package net.henryco.blinckserver.component;
+package net.henryco.blinckserver.configuration;
 
+import net.henryco.blinckserver.security.details.DetailsServiceBeans;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -8,6 +9,4 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration @Import({
 		DetailsServiceBeans.class
-}) public abstract class BlinckBeansConfiguration {
-
-}
+}) public abstract class BlinckBeansConfiguration { }

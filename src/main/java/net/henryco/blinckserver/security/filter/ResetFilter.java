@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security.jwt.filter;
+package net.henryco.blinckserver.security.filter;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -12,7 +12,8 @@ import java.io.IOException;
 /**
  * @author Henry on 24/08/17.
  */
-public final class JWTResetFilter extends GenericFilterBean {
+public final class ResetFilter extends GenericFilterBean {
+
 	@Override
 	public void doFilter(ServletRequest request,
 						 ServletResponse response,
@@ -20,4 +21,5 @@ public final class JWTResetFilter extends GenericFilterBean {
 		SecurityContextHolder.getContext().setAuthentication(null);
 		chain.doFilter(request, response);
 	}
+
 }

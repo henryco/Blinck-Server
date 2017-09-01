@@ -1,6 +1,6 @@
-package net.henryco.blinckserver.security.jwt.filter;
+package net.henryco.blinckserver.security.filter.jwt;
 
-import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.TokenAuthenticationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -18,7 +18,7 @@ import java.io.IOException;
  * @author Henry on 22/08/17.
  */
 
-public class JWTAuthFilter extends GenericFilterBean {
+public final class JWTAuthFilter extends GenericFilterBean {
 
 
 	private final TokenAuthenticationService tokenAuthService;

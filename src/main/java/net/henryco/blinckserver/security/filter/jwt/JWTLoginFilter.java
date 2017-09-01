@@ -1,7 +1,7 @@
-package net.henryco.blinckserver.security.jwt.filter;
+package net.henryco.blinckserver.security.filter.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.TokenAuthenticationService;
 import net.henryco.blinckserver.security.credentials.JWTLoginCredentials;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +19,7 @@ import java.io.IOException;
 /**
  * @author Henry on 22/08/17.
  */
-public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
+public final class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 
 	private final TokenAuthenticationService tokenAuthService;

@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.unit.auth.token;
 
-import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.TokenAuthenticationProcessor;
+import net.henryco.blinckserver.security.token.TokenAuthenticationService;
 import net.henryco.blinckserver.unit.BlinckUnitTest;
 import net.henryco.blinckserver.utils.TestUtils;
 
@@ -37,6 +38,11 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 		private RandomSecretTokenService setDefaultRole(String role) {
 			this.role = role;
 			return this;
+		}
+
+		@Override
+		protected TokenAuthenticationProcessor getProcessor() {
+			return null;
 		}
 
 		@Override

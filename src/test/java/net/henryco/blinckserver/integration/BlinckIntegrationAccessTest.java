@@ -1,22 +1,22 @@
 package net.henryco.blinckserver.integration;
 
 import net.henryco.blinckserver.mvc.service.data.UserDataService;
+import net.henryco.blinckserver.mvc.service.security.SessionWhiteListService;
 import net.henryco.blinckserver.mvc.service.security.UserTokenAuthService;
-import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.TokenAuthenticationService;
 import net.henryco.blinckserver.util.test.BlinckTestUtil;
-import net.henryco.blinckserver.utils.TestUtils;
 import net.henryco.blinckserver.utils.JsonForm;
 import net.henryco.blinckserver.utils.MockFacebookUser;
+import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
-
-import static net.henryco.blinckserver.utils.TestUtils.randomGaussNumberString;
 
 /**
  * @author Henry on 25/08/17.
@@ -38,6 +38,7 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 
 	private @Autowired UserDataService userDataService;
 	private @Autowired UserTokenAuthService userTokenAuthService;
+	private @Autowired SessionWhiteListService whiteListService;
 
 
 	@Before
@@ -81,6 +82,8 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 		final String tokenCreatorMethod = "createAuthenticationToken";
 		final String tokenOwnerName = MockFacebookUser.getInstance().getUser().getId();
 		final Method method = BlinckTestUtil.getMethod(TokenAuthenticationService.class, tokenCreatorMethod);
+
+		whiteListService.addUserToWhiteList(Long.decode(tokenOwnerName));
 
 		return method.invoke(userTokenAuthService, tokenOwnerName, USER_ROLES).toString();
 	}

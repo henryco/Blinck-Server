@@ -23,8 +23,10 @@ public class SessionWhiteListServiceTest extends BlinckIntegrationTest {
 		Long userId = Long.decode(TestUtils.randomGaussNumberString());
 		whiteListService.addUserToWhiteList(userId);
 
+
 		assert whiteListService.getAllSessions().stream()
-				.anyMatch(session -> session.getUserId().equals(userId));
+				.anyMatch(session -> session.getUserId() != null &&
+						session.getUserId().equals(userId));
 	}
 
 
@@ -35,7 +37,8 @@ public class SessionWhiteListServiceTest extends BlinckIntegrationTest {
 		whiteListService.addAdminToWhiteList(adminId);
 
 		assert whiteListService.getAllSessions().stream()
-				.anyMatch(session -> session.getAdminId().equals(adminId));
+				.anyMatch(session -> session.getAdminId() != null &&
+						session.getAdminId().equals(adminId));
 	}
 
 
@@ -48,7 +51,8 @@ public class SessionWhiteListServiceTest extends BlinckIntegrationTest {
 		whiteListService.removeUserFromWhiteList(userId);
 
 		assert whiteListService.getAllSessions().stream()
-				.noneMatch(session -> session.getUserId().equals(userId));
+				.noneMatch(session -> session.getUserId() != null &&
+						session.getUserId().equals(userId));
 	}
 
 
@@ -61,7 +65,8 @@ public class SessionWhiteListServiceTest extends BlinckIntegrationTest {
 		whiteListService.removeAdminFromWhiteList(adminId);
 
 		assert whiteListService.getAllSessions().stream()
-				.noneMatch(session -> session.getAdminId().equals(adminId));
+				.noneMatch(session -> session.getAdminId() != null &&
+						session.getAdminId().equals(adminId));
 	}
 
 

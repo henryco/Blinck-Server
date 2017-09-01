@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security.jwt.service;
+package net.henryco.blinckserver.security.token;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +30,8 @@ import java.util.stream.Stream;
 @SuppressWarnings("WeakerAccess")
 public abstract class TokenAuthenticationService {
 
+
+	protected abstract TokenAuthenticationProcessor getProcessor();
 
 	protected abstract String getTokenSecret();
 
@@ -65,26 +67,30 @@ public abstract class TokenAuthenticationService {
 
 		String JWT = createAuthenticationToken(auth.getName(), stream.toArray(String[]::new));
 		res.addHeader(getTokenHeader(), getTokenPrefix() + " " + JWT);
+
+		if (getProcessor() != null) getProcessor().addAuthentication(auth);
 	}
 
 
-
+	@SuppressWarnings("ConstantConditions")
 	public final Authentication getAuthentication(HttpServletRequest request) {
 
-		final String token = request.getHeader(getTokenHeader());
-		if (token == null) return null;
-
-		TokenPayload payload;
 		try {
-			payload = readAuthenticationToken(token);
-		} catch (JwtException e) { return null; }
+			TokenPayload payload = readAuthenticationToken(request.getHeader(getTokenHeader()));
 
-		return payload == null ? null : new UsernamePasswordAuthenticationToken(
-				payload.username, null,
-				grantAuthorities(payload.authorities)
-		);
+			UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+					payload.username,
+					null,
+					grantAuthorities(payload.authorities)
+			);
+
+			if (getProcessor() == null) return auth;
+			return getProcessor().processAuthentication(auth);
+
+		} catch (JwtException | NullPointerException e) {
+			return null;
+		}
 	}
-
 
 
 

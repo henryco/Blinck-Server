@@ -1,6 +1,5 @@
 package net.henryco.blinckserver.configuration;
 
-import net.henryco.blinckserver.component.BlinckBeansConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 

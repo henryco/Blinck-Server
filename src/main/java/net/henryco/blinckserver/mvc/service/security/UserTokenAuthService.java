@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.mvc.service.security;
 
-import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.TokenAuthenticationProcessor;
+import net.henryco.blinckserver.security.token.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 @PropertySource("classpath:/static/props/base.properties")
 public final class UserTokenAuthService extends TokenAuthenticationService {
 
+	private final TokenAuthenticationProcessor processor;
+
 	private final String app_secret;
 	private final String default_role;
 	private final String header_string;
@@ -24,12 +27,17 @@ public final class UserTokenAuthService extends TokenAuthenticationService {
 
 
 	@Autowired
-	public UserTokenAuthService(Environment environment) {
+	public UserTokenAuthService(Environment environment,
+								@Qualifier("userTokenPostProcessor")
+										TokenAuthenticationProcessor processor) {
+
 		expiration_time = Long.decode(environment.getProperty("security.jwt.expiration", "864000000"));
 		app_secret = environment.getProperty("security.jwt.secret.user");
 		default_role = environment.getProperty("security.default.role");
 		header_string = environment.getProperty("security.jwt.header");
 		token_prefix = environment.getProperty("security.jwt.prefix");
+
+		this.processor = processor;
 	}
 
 	@Override
@@ -57,4 +65,9 @@ public final class UserTokenAuthService extends TokenAuthenticationService {
 		return token_prefix != null ? token_prefix : super.getTokenPrefix();
 	}
 
+
+	@Override
+	protected TokenAuthenticationProcessor getProcessor() {
+		return processor;
+	}
 }

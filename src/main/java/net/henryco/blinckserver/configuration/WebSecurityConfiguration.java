@@ -3,10 +3,10 @@ package net.henryco.blinckserver.configuration;
 import net.henryco.blinckserver.security.auth.FacebookAuthManager;
 import net.henryco.blinckserver.security.credentials.AdminCredentials;
 import net.henryco.blinckserver.security.credentials.FacebookCredentials;
-import net.henryco.blinckserver.security.jwt.filter.JWTAuthFilter;
-import net.henryco.blinckserver.security.jwt.filter.JWTLoginFilter;
-import net.henryco.blinckserver.security.jwt.filter.JWTResetFilter;
-import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
+import net.henryco.blinckserver.security.filter.jwt.JWTAuthFilter;
+import net.henryco.blinckserver.security.filter.jwt.JWTLoginFilter;
+import net.henryco.blinckserver.security.filter.ResetFilter;
+import net.henryco.blinckserver.security.token.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -119,18 +119,24 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 	private HttpSecurity filterJwtHeader(HttpSecurity http) {
 
-		return http.addFilterBefore(
-				new JWTResetFilter(),
-				UsernamePasswordAuthenticationFilter.class
-		).addFilterBefore(
-				new JWTAuthFilter(userTokenAuthService),
-				UsernamePasswordAuthenticationFilter.class
-		).addFilterBefore(
-				new JWTAuthFilter(
-						"/protected/admin/**",
-						adminTokenAuthService
-				), UsernamePasswordAuthenticationFilter.class
-		);
+		return http
+				.addFilterBefore(
+						new ResetFilter(),
+						UsernamePasswordAuthenticationFilter.class
+				)
+
+				.addFilterBefore(
+						new JWTAuthFilter(userTokenAuthService),
+						UsernamePasswordAuthenticationFilter.class
+				)
+
+				.addFilterBefore(
+						new JWTAuthFilter(
+								"/protected/admin/**",
+								adminTokenAuthService
+						), UsernamePasswordAuthenticationFilter.class
+				)
+		;
 	}
 
 

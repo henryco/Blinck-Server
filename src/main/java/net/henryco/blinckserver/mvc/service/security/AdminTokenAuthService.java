@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.mvc.service.security;
 
-import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.TokenAuthenticationProcessor;
+import net.henryco.blinckserver.security.token.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
@@ -15,11 +16,17 @@ import org.springframework.stereotype.Service;
 public final class AdminTokenAuthService extends TokenAuthenticationService {
 
 
+	private final TokenAuthenticationProcessor processor;
 	private final String token_secret;
 
+
 	@Autowired
-	public AdminTokenAuthService(Environment environment) {
+	public AdminTokenAuthService(Environment environment,
+								 @Qualifier("adminTokenPostProcessor")
+										 TokenAuthenticationProcessor processor) {
+
 		this.token_secret = environment.getProperty("security.jwt.secret.admin");
+		this.processor = processor;
 	}
 
 	@Override
@@ -30,6 +37,11 @@ public final class AdminTokenAuthService extends TokenAuthenticationService {
 	@Override
 	protected String getDefaultRole() {
 		return "ROLE_ADMIN";
+	}
+
+	@Override
+	protected TokenAuthenticationProcessor getProcessor() {
+		return processor;
 	}
 
 }

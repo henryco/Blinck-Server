@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.component;
+package net.henryco.blinckserver.security.details;
 
 import net.henryco.blinckserver.mvc.model.dao.security.AdminAuthProfileDao;
 import net.henryco.blinckserver.mvc.model.dao.security.UserAuthProfileDao;

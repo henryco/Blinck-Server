@@ -1,6 +1,6 @@
 package net.henryco.blinckserver.unit.auth.token;
 
-import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.TokenAuthenticationService;
 import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
