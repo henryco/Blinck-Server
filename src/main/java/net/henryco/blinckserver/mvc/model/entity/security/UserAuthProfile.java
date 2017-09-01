@@ -34,11 +34,6 @@ public class UserAuthProfile implements BlinckAuthorityEntity<Long> {
 
 	private @Column(
 			nullable = false
-	) boolean expired;
-
-
-	private @Column(
-			nullable = false
 	) String authorities;
 
 
@@ -55,4 +50,10 @@ public class UserAuthProfile implements BlinckAuthorityEntity<Long> {
 		return true;
 	}
 
+
+	public @Override
+	boolean isExpired() {
+		// Never expired, because based on FB
+		return false;
+	}
 }

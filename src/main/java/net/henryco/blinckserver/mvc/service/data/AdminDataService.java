@@ -133,7 +133,6 @@ public class AdminDataService {
 		AdminAuthProfile adminAuthProfile = new AdminAuthProfile();
 		adminAuthProfile.setId(name);
 		adminAuthProfile.setPassword(password);
-		adminAuthProfile.setExpired(false);
 		adminAuthProfile.setEnabled(false);
 		adminAuthProfile.setAuthorityArray(ROLES);
 		return adminAuthProfile;

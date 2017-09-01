@@ -33,11 +33,6 @@ public class AdminAuthProfile
 
 	private @Column(
 			nullable = false
-	) boolean expired;
-
-
-	private @Column(
-			nullable = false
 	) String authorities;
 
 
@@ -50,5 +45,13 @@ public class AdminAuthProfile
 		// Always unlocked, but might be disabled
 		return false;
 	}
+
+
+	@Override
+	public boolean isExpired() {
+		// Never expired, but might be disabled
+		return false;
+	}
+
 
 }

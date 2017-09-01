@@ -103,7 +103,6 @@ public class UserDataService {
 
 		UserAuthProfile userAuthProfile = new UserAuthProfile();
 		userAuthProfile.setId(id);
-		userAuthProfile.setExpired(false);
 		userAuthProfile.setLocked(false);
 		userAuthProfile.setAuthorityArray(authorities);
 		return userAuthProfile;
