@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -101,9 +102,72 @@ public class AdminDataServiceTest extends BlinckIntegrationTest {
 
 
 	@Test @Transactional
-	public void grantingAuthorityTest() {
+	public void grantingNonExistedAuthorityTest() throws Exception {
 
+		final String randomRole = "ROLE_"+TestUtils.randomGaussNumberString();
+		final String name = saveProfile(adminDataService);
+
+		final String[] roles = adminDataService.getProfile(name).getAuthorityArray();
+
+		adminDataService.addAuthority(name, randomRole);
+
+		final String[] newRoles = adminDataService.getProfile(name).getAuthorityArray();
+
+		assert newRoles.length == roles.length + 1;
+		assert Arrays.stream(newRoles).anyMatch(r -> r.equals(randomRole));
 	}
+
+
+	@Test @Transactional @SuppressWarnings("ConstantConditions")
+	public void grantingExistedAuthorityTest() throws Exception {
+
+		final String name = saveProfile(adminDataService);
+		final String[] before = adminDataService.getProfile(name).getAuthorityArray();
+
+		final String role = Arrays.stream(before).findFirst().get();
+		assert role != null;
+
+		adminDataService.addAuthority(name, role);
+
+		final String[] after = adminDataService.getProfile(name).getAuthorityArray();
+
+		assert after.length == before.length;
+		assert Arrays.stream(after).anyMatch(s -> s.equals(role));
+	}
+
+
+	@Test @Transactional @SuppressWarnings("ConstantConditions")
+	public void removeExistedAuthorityTest() throws Exception {
+
+		final String name = saveProfile(adminDataService);
+		final String[] before = adminDataService.getProfile(name).getAuthorityArray();
+
+		final String role = Arrays.stream(before).findFirst().get();
+		assert role != null;
+
+		adminDataService.removeAuthority(name, role);
+
+		final String[] after = adminDataService.getProfile(name).getAuthorityArray();
+
+		assert after.length == before.length - 1;
+		assert Arrays.stream(after).noneMatch(s -> s.equals(role));
+	}
+
+
+	@Test @Transactional @SuppressWarnings("ConstantConditions")
+	public void removeNonExistedAuthorityTest() throws Exception {
+
+		final String randomRole = TestUtils.randomGaussNumberString();
+		final String name = saveProfile(adminDataService);
+		final String[] before = adminDataService.getProfile(name).getAuthorityArray();
+
+		adminDataService.removeAuthority(name, randomRole);
+
+		final String[] after = adminDataService.getProfile(name).getAuthorityArray();
+
+		assert before.length == after.length;
+	}
+
 
 
 	private static
