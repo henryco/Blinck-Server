@@ -172,12 +172,11 @@ public class AdminDataServiceTest extends BlinckIntegrationTest {
 
 	private static
 	String saveProfile(AdminDataService adminDataService) throws Exception {
+
 		String name = TestUtils.randomGaussNumberString();
 		String pass = TestUtils.randomGaussNumberString();
-		BlinckTestUtil.getMethod(
-				AdminDataService.class,
-				"saveProfile"
-		).invoke(adminDataService, name, pass);
+
+		adminDataService.addNewProfile(name, pass);
 		return name;
 	}
 

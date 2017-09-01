@@ -34,7 +34,7 @@ public class RegistrationController {
 		String user_id = credentials.getUser_id();
 		String password = credentials.getPassword();
 
-		adminDataService.addNewProfileIfNotExist(user_id, password);
+		adminDataService.addNewProfile(user_id, password);
 	}
 
 

@@ -37,15 +37,9 @@ public class AdminDataService {
 
 
 	@Transactional
-	public void addNewProfileIfNotExist(String name, String password) {
+	public void addNewProfile(String name, String password) {
 
 		if (authProfileDao.isExists(name)) return;
-		saveProfile(name, password);
-	}
-
-
-	@Transactional @BlinckTestName
-	protected void saveProfile(String name, String password) {
 
 		AdminAuthProfile profile = createNewAdminProfile(name, password);
 		AdminVerificationQueue queue = createNewAdminVerification(profile.getId());
@@ -80,6 +74,7 @@ public class AdminDataService {
 			authProfileDao.save(saveAuthList(profile, authList));
 		}
 	}
+
 
 	@Transactional
 	public void removeAuthority(String name, String authority) {
@@ -168,4 +163,5 @@ public class AdminDataService {
 		profile.setAuthorityArray(authList.toArray(new String[0]));
 		return profile;
 	}
+
 }
