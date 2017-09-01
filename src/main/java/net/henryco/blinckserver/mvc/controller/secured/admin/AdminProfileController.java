@@ -4,6 +4,7 @@ import net.henryco.blinckserver.mvc.controller.secured.BlinckProfileController;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminAuthProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
 import net.henryco.blinckserver.mvc.service.data.AdminDataService;
+import net.henryco.blinckserver.mvc.service.security.SessionWhiteListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +25,14 @@ public class AdminProfileController implements BlinckProfileController {
 	private static final String JSON = "application/json; charset=UTF-8";
 
 	private final AdminDataService adminDataService;
-
+	private final SessionWhiteListService whiteListService;
 
 	@Autowired
-	public AdminProfileController(AdminDataService adminDataService) {
+	public AdminProfileController(AdminDataService adminDataService,
+								  SessionWhiteListService whiteListService) {
 		this.adminDataService = adminDataService;
+		this.whiteListService = whiteListService;
 	}
-
 
 
 	public @RequestMapping(
@@ -82,6 +84,7 @@ public class AdminProfileController implements BlinckProfileController {
 						  Authentication authentication) {
 		rolesRequired(authentication, ROLE_MODERATOR);
 		adminDataService.addAuthority(name, role);
+		whiteListService.removeAdminFromWhiteList(name);
 	}
 
 
@@ -94,6 +97,38 @@ public class AdminProfileController implements BlinckProfileController {
 						   Authentication authentication) {
 		rolesRequired(authentication, ROLE_MODERATOR);
 		adminDataService.removeAuthority(name, role);
+		whiteListService.removeAdminFromWhiteList(name);
+	}
+
+
+
+	public @RequestMapping(
+			method = {GET, POST},
+			value = "/session/logout"
+	) void logOut(Authentication authentication) {
+		whiteListService.removeAdminFromWhiteList(authentication.getName());
+	}
+
+
+
+	public @RequestMapping(
+			method = POST,
+			value = "/session/logout/admin"
+	) void logOutAdmin(@RequestParam("name") String target,
+						Authentication authentication) {
+		rolesRequired(authentication, ROLE_MODERATOR);
+		whiteListService.removeAdminFromWhiteList(target);
+	}
+
+
+
+	public @RequestMapping(
+			method = POST,
+			value = "/session/logout/user"
+	) void logOutUser(@RequestParam("name") Long target,
+					   Authentication authentication) {
+		rolesRequired(authentication, ROLE_MODERATOR);
+		whiteListService.removeUserFromWhiteList(target);
 	}
 
 
