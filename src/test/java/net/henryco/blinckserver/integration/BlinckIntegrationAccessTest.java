@@ -25,6 +25,7 @@ import static net.henryco.blinckserver.utils.TestUtils.randomGaussNumberString;
 @PropertySource("classpath:/static/props/base.properties")
 public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest {
 
+	protected static final String[] USER_ROLES = {"ROLE_USER"};
 
 	protected static final String HEADER_ACCESS_TOKEN_NAME = "Authorization";
 	protected static final String LOGIN_ENDPOINT_ADMIN = "/login/admin";
@@ -81,7 +82,7 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 		final String tokenOwnerName = MockFacebookUser.getInstance().getUser().getId();
 		final Method method = BlinckTestUtil.getMethod(TokenAuthenticationService.class, tokenCreatorMethod);
 
-		return method.invoke(userTokenAuthService, tokenOwnerName).toString();
+		return method.invoke(userTokenAuthService, tokenOwnerName, USER_ROLES).toString();
 	}
 
 

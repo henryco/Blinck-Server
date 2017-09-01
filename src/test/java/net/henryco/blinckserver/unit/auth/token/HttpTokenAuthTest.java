@@ -5,12 +5,16 @@ import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static net.henryco.blinckserver.utils.TestUtils.randomGaussNumberString;
 
@@ -19,6 +23,7 @@ import static net.henryco.blinckserver.utils.TestUtils.randomGaussNumberString;
  */
 public class HttpTokenAuthTest extends TokenAuthTest {
 
+	private static final String[] ROLES_DEFAULT = {"ROLE_ONE", "ROLE_TWO"};
 
 
 	@Test
@@ -99,19 +104,33 @@ public class HttpTokenAuthTest extends TokenAuthTest {
 
 
 
-	private static HttpServletResponse createJwtResponse(TokenAuthenticationService service,
+	private static HttpServletResponse
+	createJwtResponse(TokenAuthenticationService service,
 														 String principal) {
 		HttpServletResponse response = new MockHttpServletResponse();
-		service.addAuthentication(response, principal);
+		Authentication auth = createAuthentication(principal, ROLES_DEFAULT);
+		service.addAuthentication(response, auth);
 		return response;
 	}
 
 
-	private static HttpServletRequest createJwtRequest(String header, String token) {
+	private static HttpServletRequest
+	createJwtRequest(String header, String token) {
 
 		HttpServletRequest request = new MockHttpServletRequest();
 		((MockHttpServletRequest) request).addHeader(header, token);
 		return request;
 	}
+
+
+	private static Authentication
+	createAuthentication(String name, String... roles) {
+		return new UsernamePasswordAuthenticationToken(
+				name, null, Arrays.stream(roles)
+				.map(SimpleGrantedAuthority::new)
+				.collect(Collectors.toList())
+		);
+	}
+
 
 }

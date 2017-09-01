@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 
@@ -17,8 +16,6 @@ import org.springframework.stereotype.Service;
 @PropertySource("classpath:/static/props/base.properties")
 public final class UserTokenAuthService extends TokenAuthenticationService {
 
-	private final UserDetailsService detailsService;
-
 	private final String app_secret;
 	private final String default_role;
 	private final String header_string;
@@ -27,26 +24,17 @@ public final class UserTokenAuthService extends TokenAuthenticationService {
 
 
 	@Autowired
-	public UserTokenAuthService(@Qualifier("profileDetailsServiceUser")
-											UserDetailsService detailsService,
-								Environment environment) {
+	public UserTokenAuthService(Environment environment) {
 		expiration_time = Long.decode(environment.getProperty("security.jwt.expiration", "864000000"));
 		app_secret = environment.getProperty("security.jwt.secret.user");
 		default_role = environment.getProperty("security.default.role");
 		header_string = environment.getProperty("security.jwt.header");
 		token_prefix = environment.getProperty("security.jwt.prefix");
-
-		this.detailsService = detailsService;
 	}
 
 	@Override
 	protected String getTokenSecret() {
 		return app_secret;
-	}
-
-	@Override
-	protected UserDetailsService getUserDetailsService() {
-		return detailsService;
 	}
 
 	@Override

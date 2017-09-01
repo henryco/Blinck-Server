@@ -10,10 +10,9 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
-
-import static net.henryco.blinckserver.utils.TestUtils.randomGaussNumberString;
 
 /**
  * @author Henry on 27/08/17.
@@ -52,7 +51,9 @@ public class PureTokenAuthTest extends TokenAuthTest {
 	public void tokenMultiServiceCodeDeCodeSimilarTest() throws Exception {
 
 		testLoop.test(() -> {
-			String coded = getCoderMethod().invoke(createJwtService(tokenExpTime), TestUtils.randomGaussNumberString()).toString();
+
+			final String name = TestUtils.randomGaussNumberString();
+			String coded = getCoderMethod().invoke(createJwtService(tokenExpTime), name).toString();
 
 			try {
 				getDeCoderMethod().invoke(createJwtService(tokenExpTime), coded);
@@ -116,27 +117,35 @@ public class PureTokenAuthTest extends TokenAuthTest {
 	}
 
 
-	@Test
-	public void tokenGrantAuthorityWithoutDetailsServiceTest() throws Exception {
+
+	@Test @SuppressWarnings("unchecked")
+	public void grantAuthoritiesTest() throws Exception {
 
 		testLoop.test(() -> {
 
-			final String ROLE = "ROLE_"+ TestUtils.randomGaussNumberString();
-			Object aut = getAuthorityGranterMethod().invoke(getJwtService(ROLE), TestUtils.randomGaussNumberString());
-			Object def = getDefaultAuthorityGranterMethod().invoke(getJwtService(ROLE));
+			final String DEFAULT_ROLE = "ROLE_"+ TestUtils.randomGaussNumberString();
 
-			assert aut.equals(def);
+			final String[] auth = new String[] {
+					"ROLE_" + TestUtils.randomGaussNumberString(),
+					"ROLE_" + TestUtils.randomGaussNumberString(),
+			};
+
+			Collection<? extends GrantedAuthority> roles =
+					(Collection<? extends GrantedAuthority>)
+							getAuthorityGranterMethod().invoke(getJwtService(DEFAULT_ROLE), (Object) auth);
+
+			Arrays.stream(auth).forEach(a -> {
+				assert roles.stream().anyMatch(g -> g.getAuthority().equals(a));
+			});
 		});
 	}
-
-
 
 
 
 	private static Method getCoderMethod() {
 		return BlinckTestUtil.getMethod(
 				TokenAuthenticationService.class,
-				"createAuthenticationToken"
+				"parseTo"
 		);
 	}
 
@@ -144,15 +153,7 @@ public class PureTokenAuthTest extends TokenAuthTest {
 	private static Method getDeCoderMethod() {
 		return BlinckTestUtil.getMethod(
 				TokenAuthenticationService.class,
-				"readAuthenticationToken"
-		);
-	}
-
-
-	private static Method getDefaultAuthorityGranterMethod() {
-		return BlinckTestUtil.getMethod(
-				TokenAuthenticationService.class,
-				"grantDefaultAuthorities"
+				"parseFrom"
 		);
 	}
 
@@ -161,6 +162,14 @@ public class PureTokenAuthTest extends TokenAuthTest {
 		return BlinckTestUtil.getMethod(
 				TokenAuthenticationService.class,
 				"grantAuthorities"
+		);
+	}
+
+
+	private static Method getDefaultAuthorityGranterMethod() {
+		return BlinckTestUtil.getMethod(
+				TokenAuthenticationService.class,
+				"grantDefaultAuthorities"
 		);
 	}
 

@@ -1,20 +1,28 @@
 package net.henryco.blinckserver.security.jwt.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Henry on 23/08/17.
@@ -24,8 +32,6 @@ public abstract class TokenAuthenticationService {
 
 
 	protected abstract String getTokenSecret();
-
-	protected abstract UserDetailsService getUserDetailsService();
 
 	protected String getDefaultRole() {
 		return "ROLE_USER";
@@ -44,20 +50,81 @@ public abstract class TokenAuthenticationService {
 	}
 
 
+	@Data @AllArgsConstructor @NoArgsConstructor
+	private static final class TokenPayload {
+		private String username;
+		private String[] authorities;
+	}
+
+
+
+
+	public final void addAuthentication(HttpServletResponse res, Authentication auth) {
+
+		Stream<String> stream = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority);
+
+		String JWT = createAuthenticationToken(auth.getName(), stream.toArray(String[]::new));
+		res.addHeader(getTokenHeader(), getTokenPrefix() + " " + JWT);
+	}
+
+
+
+	public final Authentication getAuthentication(HttpServletRequest request) {
+
+		final String token = request.getHeader(getTokenHeader());
+		if (token == null) return null;
+
+		TokenPayload payload;
+		try {
+			payload = readAuthenticationToken(token);
+		} catch (JwtException e) { return null; }
+
+		return payload == null ? null : new UsernamePasswordAuthenticationToken(
+				payload.username, null,
+				grantAuthorities(payload.authorities)
+		);
+	}
+
+
+
+
 
 	@BlinckTestName("createAuthenticationToken")
-	private String createAuthenticationToken(String username) {
+	private String createAuthenticationToken(String username, String ... authorities) {
+
+		try {
+			final TokenPayload payload = new TokenPayload(username, authorities);
+			return parseTo(new ObjectMapper().writeValueAsString(payload));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return parseTo(username);
+		}
+	}
+
+
+	@BlinckTestName("readAuthenticationToken")
+	private TokenPayload readAuthenticationToken(String token) {
+		try {
+			return new ObjectMapper().readValue(parseFrom(token), TokenPayload.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
+	@BlinckTestName("parseTo")
+	private String parseTo(String payload) {
 		return Jwts.builder()
-				.setSubject(username)
+				.setSubject(payload)
 				.setExpiration(new Date(System.currentTimeMillis() + getExpirationTime()))
 				.signWith(SignatureAlgorithm.HS512, getTokenSecret())
 		.compact();
 	}
 
 
-	@BlinckTestName("readAuthenticationToken")
-	private String readAuthenticationToken(String token) {
-
+	@BlinckTestName("parseFrom")
+	private String parseFrom(String token) {
 		if (token == null) return null;
 
 		return Jwts.parser()
@@ -67,42 +134,22 @@ public abstract class TokenAuthenticationService {
 	}
 
 
-	@BlinckTestName("grantDefaultAuthorities")
-	private Collection<? extends GrantedAuthority> defaultAuthorities() {
-		return Collections.singletonList(new SimpleGrantedAuthority(getDefaultRole()));
-	}
-
-
 	@BlinckTestName("grantAuthorities")
-	private Collection<? extends GrantedAuthority> grantAuthorities(String username) {
+	private Collection<? extends GrantedAuthority> grantAuthorities(String ... authorities) {
 
 		try {
-			return getUserDetailsService().loadUserByUsername(username).getAuthorities();
+			return Arrays.stream(authorities)
+					.map(SimpleGrantedAuthority::new)
+			.collect(Collectors.toList());
 		} catch (Exception ignored) { }
 		return defaultAuthorities();
 	}
 
 
-	public final void addAuthentication(HttpServletResponse res, String username) {
-		String JWT = createAuthenticationToken(username);
-		res.addHeader(getTokenHeader(), getTokenPrefix() + " " + JWT);
+	@BlinckTestName("grantDefaultAuthorities")
+	private Collection<? extends GrantedAuthority> defaultAuthorities() {
+		return Collections.singletonList(new SimpleGrantedAuthority(getDefaultRole()));
 	}
 
-
-	public final Authentication getAuthentication(HttpServletRequest request) {
-
-		final String token = request.getHeader(getTokenHeader());
-		if (token == null) return null;
-
-		final String user;
-		try {
-			user = readAuthenticationToken(token);
-		} catch (JwtException e) { return null; }
-
-		return user == null ? null :
-				new UsernamePasswordAuthenticationToken(
-						user, null, grantAuthorities(user)
-		);
-	}
 
 }

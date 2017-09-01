@@ -3,9 +3,6 @@ package net.henryco.blinckserver.unit.auth.token;
 import net.henryco.blinckserver.security.jwt.service.TokenAuthenticationService;
 import net.henryco.blinckserver.unit.BlinckUnitTest;
 import net.henryco.blinckserver.utils.TestUtils;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-import static net.henryco.blinckserver.utils.TestUtils.randomGaussNumberString;
 
 /**
  * @author Henry on 27/08/17.
@@ -40,11 +37,6 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 		private RandomSecretTokenService setDefaultRole(String role) {
 			this.role = role;
 			return this;
-		}
-
-		@Override
-		protected UserDetailsService getUserDetailsService() {
-			return null;
 		}
 
 		@Override

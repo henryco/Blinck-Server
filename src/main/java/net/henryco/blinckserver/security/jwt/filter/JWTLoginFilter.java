@@ -22,17 +22,17 @@ import java.io.IOException;
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 
-	private final TokenAuthenticationService userTokenAuthService;
+	private final TokenAuthenticationService tokenAuthService;
 	private final Class<? extends JWTLoginCredentials> loginCredentialsClass;
 
 
 	public JWTLoginFilter(String url,
 						  AuthenticationManager authManager,
-						  TokenAuthenticationService userTokenAuthService,
+						  TokenAuthenticationService tokenAuthService,
 						  Class<? extends JWTLoginCredentials> loginCredentialsClass) {
 		super(new AntPathRequestMatcher(url));
 		setAuthenticationManager(authManager);
-		this.userTokenAuthService = userTokenAuthService;
+		this.tokenAuthService = tokenAuthService;
 		this.loginCredentialsClass = loginCredentialsClass;
 	}
 
@@ -63,7 +63,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 											FilterChain chain,
 											Authentication auth)
 			throws IOException, ServletException {
-
-		userTokenAuthService.addAuthentication(res, auth.getName());
+		tokenAuthService.addAuthentication(res, auth);
 	}
 }

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,15 +15,11 @@ import org.springframework.stereotype.Service;
 public final class AdminTokenAuthService extends TokenAuthenticationService {
 
 
-	private final UserDetailsService detailsService;
 	private final String token_secret;
 
 	@Autowired
-	public AdminTokenAuthService(@Qualifier("profileDetailsServiceAdmin")
-											 UserDetailsService detailsService,
-								 Environment environment) {
+	public AdminTokenAuthService(Environment environment) {
 		this.token_secret = environment.getProperty("security.jwt.secret.admin");
-		this.detailsService = detailsService;
 	}
 
 	@Override
@@ -33,12 +28,8 @@ public final class AdminTokenAuthService extends TokenAuthenticationService {
 	}
 
 	@Override
-	protected UserDetailsService getUserDetailsService() {
-		return detailsService;
-	}
-
-	@Override
 	protected String getDefaultRole() {
 		return "ROLE_ADMIN";
 	}
+
 }

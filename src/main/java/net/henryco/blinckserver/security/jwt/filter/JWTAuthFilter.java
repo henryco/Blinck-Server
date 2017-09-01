@@ -21,18 +21,18 @@ import java.io.IOException;
 public class JWTAuthFilter extends GenericFilterBean {
 
 
-	private final TokenAuthenticationService userTokenAuthService;
+	private final TokenAuthenticationService tokenAuthService;
 	private final RequestMatcher requiresAuthenticationRequestMatcher;
 
 
-	public JWTAuthFilter(TokenAuthenticationService userTokenAuthService) {
-		this.userTokenAuthService = userTokenAuthService;
+	public JWTAuthFilter(TokenAuthenticationService tokenAuthService) {
+		this.tokenAuthService = tokenAuthService;
 		this.requiresAuthenticationRequestMatcher = null;
 	}
 
 
-	public JWTAuthFilter(String url, TokenAuthenticationService userTokenAuthService) {
-		this.userTokenAuthService = userTokenAuthService;
+	public JWTAuthFilter(String url, TokenAuthenticationService tokenAuthService) {
+		this.tokenAuthService = tokenAuthService;
 		this.requiresAuthenticationRequestMatcher = new AntPathRequestMatcher(url);
 	}
 
@@ -50,7 +50,7 @@ public class JWTAuthFilter extends GenericFilterBean {
 
 	private void checkYourPrivileges(HttpServletRequest request){
 		if (isRequestMatches(request) || isAuthNull()) {
-			Authentication authentication = userTokenAuthService.getAuthentication(request);
+			Authentication authentication = tokenAuthService.getAuthentication(request);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 	}
