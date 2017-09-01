@@ -101,9 +101,22 @@ public class AdminDataService {
 		}
 	}
 
+
+	@Transactional
+	public AdminAuthProfile getProfile(String username) {
+		if (!authProfileDao.isExists(username))
+			return null;
+		return authProfileDao.getById(username);
+	}
+
+
 	@Transactional
 	public void deleteProfile(String username) {
-		authProfileDao.deleteById(username);
+		if (authProfileDao.isExists(username)) {
+			authProfileDao.deleteById(username);
+			if (verificationQueueDao.isExists(username))
+				verificationQueueDao.deleteById(username);
+		}
 	}
 
 

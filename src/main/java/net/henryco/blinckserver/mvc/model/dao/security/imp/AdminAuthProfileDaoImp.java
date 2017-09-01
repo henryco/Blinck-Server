@@ -18,7 +18,7 @@ public class AdminAuthProfileDaoImp
 
 	@Autowired
 	public AdminAuthProfileDaoImp(AdminAuthProfileRepository repository) {
-		super(repository, false);
+		super(repository);
 	}
 
 }
