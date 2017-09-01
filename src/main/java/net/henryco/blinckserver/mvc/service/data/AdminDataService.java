@@ -35,14 +35,6 @@ public class AdminDataService {
 	}
 
 
-	@Transactional
-	public void addNewProfile(String name, String password) {
-
-		if (authProfileDao.isExists(name))
-			throw new RuntimeException(name + "is already exist!");
-		saveProfile(name, password);
-	}
-
 
 	@Transactional
 	public void addNewProfileIfNotExist(String name, String password) {
@@ -117,12 +109,6 @@ public class AdminDataService {
 			if (verificationQueueDao.isExists(username))
 				verificationQueueDao.deleteById(username);
 		}
-	}
-
-
-	@Transactional
-	public Collection<AdminAuthProfile> getAdminProfiles(int n) {
-		return authProfileDao.getLast(n);
 	}
 
 
