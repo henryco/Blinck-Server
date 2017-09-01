@@ -5,7 +5,7 @@ import net.henryco.blinckserver.mvc.model.entity.security.AdminAuthProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
 import net.henryco.blinckserver.mvc.service.data.AdminDataService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,9 +64,9 @@ public class AdminProfileController implements BlinckProfileController {
 			method = POST,
 			consumes = JSON,
 			value = "/activate/admin"
-	) @Secured(
-			{"ROLE_MODERATOR"}
-	) void activateAdminProfiles(@RequestBody String[] names) {
+	) void activateAdminProfiles(@RequestBody String[] names,
+								 Authentication authentication) {
+		checkForAuthority(authentication, ROLE_MODERATOR);
 		for (String name: names) {
 			adminDataService.activateProfile(name);
 		}
@@ -77,10 +77,10 @@ public class AdminProfileController implements BlinckProfileController {
 	public @RequestMapping(
 			method = POST,
 			value = "/authority/add"
-	) @Secured(
-			{"ROLE_MODERATOR"}
 	) void grantAuthority(@RequestParam("name") String name,
-						  @RequestParam("role") String role) {
+						  @RequestParam("role") String role,
+						  Authentication authentication) {
+		checkForAuthority(authentication, ROLE_MODERATOR);
 		adminDataService.addAuthority(name, role);
 	}
 
@@ -89,10 +89,10 @@ public class AdminProfileController implements BlinckProfileController {
 	public @RequestMapping(
 			method = POST,
 			value = "/authority/remove"
-	) @Secured(
-			{"ROLE_MODERATOR"}
 	) void removeAuthority(@RequestParam("name") String name,
-						   @RequestParam("role") String role) {
+						   @RequestParam("role") String role,
+						   Authentication authentication) {
+		checkForAuthority(authentication, ROLE_MODERATOR);
 		adminDataService.removeAuthority(name, role);
 	}
 
