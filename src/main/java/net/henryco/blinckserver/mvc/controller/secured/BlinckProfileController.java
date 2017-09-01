@@ -37,13 +37,12 @@ public interface BlinckProfileController {
 				.getAuthorities()
 				.stream()
 				.map(GrantedAuthority::getAuthority)
-				.collect(Collectors.toList())
-		.toArray(new String[0]);
+		.toArray(String[]::new);
 	}
 
 
-	default void checkForAuthority(Authentication authentication,
-								  String ... authorities) {
+	default void rolesRequired(Authentication authentication,
+							   String ... authorities) {
 		for (String auth: authorities)
 			if (authentication.getAuthorities().stream().noneMatch(sga -> sga.getAuthority().equals(auth)))
 				throw new AccessDeniedException(auth+" required");

@@ -38,14 +38,17 @@ public class JWTAuthFilter extends GenericFilterBean {
 
 
 
+
 	@Override
 	public final void doFilter(ServletRequest request,
-						 ServletResponse response,
-						 FilterChain filterChain) throws IOException, ServletException {
+							   ServletResponse response,
+							   FilterChain filterChain) throws IOException, ServletException {
 
 		checkYourPrivileges((HttpServletRequest) request);
 		filterChain.doFilter(request, response);
 	}
+
+
 
 
 	private void checkYourPrivileges(HttpServletRequest request){
@@ -55,10 +58,14 @@ public class JWTAuthFilter extends GenericFilterBean {
 		}
 	}
 
+
+
 	private boolean isRequestMatches(HttpServletRequest request) {
 		return requiresAuthenticationRequestMatcher != null &&
 				requiresAuthenticationRequestMatcher.matches(request);
 	}
+
+
 
 	private boolean isAuthNull() {
 		return requiresAuthenticationRequestMatcher == null &&

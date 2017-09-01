@@ -66,7 +66,7 @@ public class AdminProfileController implements BlinckProfileController {
 			value = "/activate/admin"
 	) void activateAdminProfiles(@RequestBody String[] names,
 								 Authentication authentication) {
-		checkForAuthority(authentication, ROLE_MODERATOR);
+		rolesRequired(authentication, ROLE_MODERATOR);
 		for (String name: names) {
 			adminDataService.activateProfile(name);
 		}
@@ -80,7 +80,7 @@ public class AdminProfileController implements BlinckProfileController {
 	) void grantAuthority(@RequestParam("name") String name,
 						  @RequestParam("role") String role,
 						  Authentication authentication) {
-		checkForAuthority(authentication, ROLE_MODERATOR);
+		rolesRequired(authentication, ROLE_MODERATOR);
 		adminDataService.addAuthority(name, role);
 	}
 
@@ -92,7 +92,7 @@ public class AdminProfileController implements BlinckProfileController {
 	) void removeAuthority(@RequestParam("name") String name,
 						   @RequestParam("role") String role,
 						   Authentication authentication) {
-		checkForAuthority(authentication, ROLE_MODERATOR);
+		rolesRequired(authentication, ROLE_MODERATOR);
 		adminDataService.removeAuthority(name, role);
 	}
 
