@@ -36,7 +36,8 @@ public class SubPartyConversation {
 
 	private @Column(
 			name = "time_stamp",
-			updatable = false
+			updatable = false,
+			nullable = false
 	) @Temporal(
 			TIMESTAMP
 	) Date date;
@@ -46,18 +47,20 @@ public class SubPartyConversation {
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "author_id"
-	)
-	UserCoreProfile author;
+			name = "author_id",
+			updatable = false
+	) UserCoreProfile author;
 
 
 	private @ManyToOne(
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
+			updatable = false,
 			name = "sub_party_id",
 			referencedColumnName = "sub_party_id"
 	) SubParty subParty;
 
+	// TODO: 02/09/17 TESTS, maybe remove hard reference
 
 }

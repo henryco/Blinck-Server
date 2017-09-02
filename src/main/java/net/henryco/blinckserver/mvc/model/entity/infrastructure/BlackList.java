@@ -2,9 +2,13 @@ package net.henryco.blinckserver.mvc.model.entity.infrastructure;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import static javax.persistence.GenerationType.AUTO;
 
 /**
  * @author Henry on 28/08/17.
@@ -17,25 +21,21 @@ public class BlackList {
 	private @Id @Column(
 			unique = true
 	) @GeneratedValue(
-			strategy = GenerationType.AUTO
+			strategy = AUTO
 	) long id;
 
 
-	private @ManyToOne(
-			cascade = CascadeType.ALL,
-			optional = false,
-			targetEntity = UserCoreProfile.class
-	) @JoinColumn(
-			name = "block_owner_id"
+	private @Column(
+			name = "block_owner_id",
+			updatable = false,
+			nullable = false
 	) long userId;
 
 
-	private @ManyToOne(
-			cascade = CascadeType.ALL,
-			optional = false,
-			targetEntity = UserCoreProfile.class
-	) @JoinColumn(
-			name = "blocked_id"
+	private @Column(
+			name = "blocked_id",
+			updatable = false,
+			nullable = false
 	) long blockedUserId;
 
 

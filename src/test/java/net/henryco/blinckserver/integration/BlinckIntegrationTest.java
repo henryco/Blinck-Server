@@ -1,6 +1,5 @@
 package net.henryco.blinckserver.integration;
 
-import net.henryco.blinckserver.utils.JsonForm;
 import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;

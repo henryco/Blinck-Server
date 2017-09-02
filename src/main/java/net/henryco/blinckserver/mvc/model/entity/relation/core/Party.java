@@ -29,7 +29,8 @@ public class Party {
 
 	private @Column(
 			name = "activation_time",
-			updatable = false
+			updatable = false,
+			nullable = false
 	) @Temporal(
 			TIMESTAMP
 	) Date activationTime;
@@ -58,5 +59,6 @@ public class Party {
 			referencedColumnName = "sub_party_id"
 	) SubParty subParty2;
 
+	// TODO: 02/09/17 TESTS
 
 }

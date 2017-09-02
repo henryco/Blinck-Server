@@ -33,7 +33,6 @@ public class TokenProcessorBeans extends BeansConfiguration {
 			}
 
 		};
-
 	}
 
 
@@ -55,7 +54,6 @@ public class TokenProcessorBeans extends BeansConfiguration {
 			}
 
 		};
-
 	}
 
 

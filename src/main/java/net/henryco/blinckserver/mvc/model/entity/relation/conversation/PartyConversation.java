@@ -37,7 +37,8 @@ public class PartyConversation {
 
 	private @Column(
 			name = "time_stamp",
-			updatable = false
+			updatable = false,
+			nullable = false
 	) @Temporal(
 			TIMESTAMP
 	) Date date;
@@ -47,7 +48,8 @@ public class PartyConversation {
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "author_id"
+			name = "author_id",
+			updatable = false
 	) UserCoreProfile author;
 
 
@@ -55,8 +57,10 @@ public class PartyConversation {
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "party_id"
+			name = "party_id",
+			updatable = false
 	) Party party;
 
+	// TODO: 02/09/17 TESTS, maybe remove hard reference
 
 }

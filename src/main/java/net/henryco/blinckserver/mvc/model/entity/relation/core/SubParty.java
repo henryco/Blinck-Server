@@ -27,8 +27,8 @@ public class SubParty {
 
 	private @Column(
 			name = "sub_party_id",
-			unique = true,
-			nullable = false
+			nullable = false,
+			updatable = false
 	) Long subPartyId;
 
 
@@ -36,7 +36,8 @@ public class SubParty {
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "party_id"
+			name = "party_id",
+			updatable = false
 	) Party party;
 
 
@@ -44,9 +45,11 @@ public class SubParty {
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "user_id"
-	)
-	UserCoreProfile user;
+			name = "user_id",
+			updatable = false,
+			unique = true
+	) UserCoreProfile user;
 
+	// TODO: 02/09/17 TESTS, maybe remove hard reference
 
 }

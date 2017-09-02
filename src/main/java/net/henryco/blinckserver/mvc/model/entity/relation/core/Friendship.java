@@ -34,18 +34,19 @@ public class Friendship {
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "user_id_1"
-	)
-	UserCoreProfile user1;
+			name = "user_id_1",
+			updatable = false
+	) UserCoreProfile user1;
 
+	// TODO: 02/09/17 TESTS, AND REMOVE (MAYBE !) hard reference
 
 	private @ManyToOne(
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "user_id_2"
-	)
-	UserCoreProfile user2;
+			name = "user_id_2",
+			updatable = false
+	) UserCoreProfile user2;
 
 
 }

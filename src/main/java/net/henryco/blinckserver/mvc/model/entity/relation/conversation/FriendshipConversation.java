@@ -37,7 +37,8 @@ public class FriendshipConversation {
 
 	private @Column(
 			name = "time_stamp",
-			updatable = false
+			updatable = false,
+			nullable = false
 	) @Temporal(
 			TIMESTAMP
 	) Date date;
@@ -47,17 +48,18 @@ public class FriendshipConversation {
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "author_id"
-	)
-	UserCoreProfile author;
+			name = "author_id",
+			updatable = false
+	) UserCoreProfile author;
 
 
 	private @ManyToOne(
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "friendship_id"
+			name = "friendship_id",
+			updatable = false
 	) Friendship friendship;
 
-
+	// TODO: 02/09/17 TESTS, maybe remove hard reference
 }

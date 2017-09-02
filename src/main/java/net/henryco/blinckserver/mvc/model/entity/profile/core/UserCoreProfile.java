@@ -14,11 +14,11 @@ import javax.persistence.*;
  */
 @Entity @Data
 @NoArgsConstructor @Proxy
-@Table(name = "USER_PROFILE")
+@Table(name = "user_profile")
 public class UserCoreProfile {
 
 
-	private @Id @Column(
+	private  @Id @Column(
 			unique = true,
 			name = "user_id"
 	) long id;

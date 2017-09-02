@@ -6,6 +6,8 @@ import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
 
 import javax.persistence.*;
 
+import static javax.persistence.GenerationType.AUTO;
+
 /**
  * @author Henry on 28/08/17.
  */
@@ -13,32 +15,32 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class ReportList {
 
+
 	private @Id @Column(
 			unique = true
 	) @GeneratedValue(
-			strategy = GenerationType.AUTO
+			strategy = AUTO
 	) long id;
 
 
-	private @ManyToOne(
-			cascade = CascadeType.ALL,
-			optional = false,
-			targetEntity = UserCoreProfile.class
-	) @JoinColumn(
-			name = "reporter_id"
+	private @Column(
+			name = "reporter_id",
+			updatable = false,
+			nullable = false
 	) long reporterId;
 
 
-	private @ManyToOne(
-			cascade = CascadeType.ALL,
-			optional = false,
-			targetEntity = UserCoreProfile.class
-	) @JoinColumn(
-			name = "reported_id"
+	private @Column(
+			name = "reported_id",
+			updatable = false,
+			nullable = false
 	) long reportedId;
 
 
 	private @Column(
-			name = "reason"
+			name = "reason",
+			updatable = false
 	) String reason;
+
+
 }
