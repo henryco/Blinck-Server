@@ -40,7 +40,7 @@ public abstract class BlinckIntegrationTest {
 	}
 
 
-	protected final ResponseEntity<String> fastPostRequest(String endPoint, JsonForm postForm) {
+	protected final ResponseEntity<String> fastPostRequest(String endPoint, Object postForm) {
 		return restTemplate.exchange(
 				RequestEntity.post(TestUtils.newURI(endPoint, port))
 						.accept(MediaType.APPLICATION_JSON)

@@ -21,6 +21,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+
 /**
  * @author Henry on 21/08/17.
  */
@@ -85,8 +88,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 	private HttpSecurity authorizeRequests(HttpSecurity http) throws Exception {
 		return http.authorizeRequests()
 				.antMatchers("/").permitAll()
-				.antMatchers(HttpMethod.GET, "/public/**").permitAll()
-				.antMatchers("/registration/**").permitAll()
+				.antMatchers(GET, "/public/**").permitAll()
+				.antMatchers(POST,"/protected/admin/registration").permitAll()
 				.antMatchers("/login/**").permitAll()
 				.anyRequest().authenticated()
 		.and();

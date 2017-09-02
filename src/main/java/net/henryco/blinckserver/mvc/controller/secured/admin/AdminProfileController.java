@@ -5,6 +5,7 @@ import net.henryco.blinckserver.mvc.model.entity.security.AdminAuthProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
 import net.henryco.blinckserver.mvc.service.data.AdminDataService;
 import net.henryco.blinckserver.mvc.service.security.SessionWhiteListService;
+import net.henryco.blinckserver.security.credentials.AdminCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,20 @@ public class AdminProfileController implements BlinckProfileController {
 		this.adminDataService = adminDataService;
 		this.whiteListService = whiteListService;
 	}
+
+
+
+	public @RequestMapping(
+			method = POST,
+			value = "/registration"
+	) void registerAdmin(@RequestBody AdminCredentials credentials) {
+
+		String user_id = credentials.getUser_id();
+		String password = credentials.getPassword();
+
+		adminDataService.addNewProfile(user_id, password);
+	}
+
 
 
 	public @RequestMapping(

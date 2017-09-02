@@ -64,6 +64,16 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 	}
 
 
+	protected void authorizedPostRequest(String endPoint, String authToken, Object postForm) {
+		restTemplate.exchange(
+				RequestEntity.post(TestUtils.newURI(endPoint, port))
+						.header(HEADER_ACCESS_TOKEN_NAME, authToken)
+						.accept(MediaType.APPLICATION_JSON)
+						.body(postForm),
+				String.class
+		);
+	}
+
 
 	protected String getForAdminAuthToken() {
 
