@@ -1,6 +1,6 @@
 package net.henryco.blinckserver.security.token;
 
-import net.henryco.blinckserver.configuration.BlinckBeansConfiguration;
+import net.henryco.blinckserver.configuration.BeansConfiguration;
 import net.henryco.blinckserver.mvc.service.security.SessionWhiteListService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +10,7 @@ import org.springframework.security.core.Authentication;
  * @author Henry on 02/09/17.
  */
 @Configuration
-public class TokenAuthProcessorBeans extends BlinckBeansConfiguration {
-
+public class TokenProcessorBeans extends BeansConfiguration {
 
 
 	public @Bean TokenAuthenticationProcessor

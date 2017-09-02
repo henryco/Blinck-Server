@@ -9,5 +9,5 @@ import org.springframework.context.annotation.Import;
 @Configuration @Import({
 		WebSecurityConfiguration.class,
 		WebMvcConfiguration.class,
-		BlinckBeansConfiguration.class
+		BeansConfiguration.class
 }) public abstract class MainConfiguration { }
