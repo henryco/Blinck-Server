@@ -47,9 +47,15 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 	}
 
 
-	protected ResponseEntity<String> authorizedGetRequest(String endPoint, String authToken) {
-		return authorizedGetRequest(endPoint, authToken, String.class);
+	protected ResponseEntity<String> authorizedGetRequest(String endPoint, String token) {
+		return authorizedGetRequest(endPoint, token, String.class);
 	}
+
+
+	protected ResponseEntity<String> authorizedPostRequest(String endPoint, String token, Object post) {
+		return authorizedPostRequest(endPoint, token, post, String.class);
+	}
+
 
 	protected <T> ResponseEntity<T> authorizedGetRequest(String endPoint,
 														 String authToken,
@@ -64,13 +70,16 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 	}
 
 
-	protected void authorizedPostRequest(String endPoint, String authToken, Object postForm) {
-		restTemplate.exchange(
+	protected <T> ResponseEntity<T> authorizedPostRequest(String endPoint,
+														  String authToken,
+														  Object postForm,
+														  Class<T> responseType) {
+		return restTemplate.exchange(
 				RequestEntity.post(TestUtils.newURI(endPoint, port))
 						.header(HEADER_ACCESS_TOKEN_NAME, authToken)
 						.accept(MediaType.APPLICATION_JSON)
 						.body(postForm),
-				String.class
+				responseType
 		);
 	}
 

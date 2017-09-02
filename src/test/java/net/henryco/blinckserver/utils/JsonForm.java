@@ -10,8 +10,8 @@ public interface JsonForm {
 
 	final class AdminLoginPost implements JsonForm {
 
-		@JsonProperty String user_id;
-		@JsonProperty String password;
+		public @JsonProperty String user_id;
+		public @JsonProperty String password;
 
 		public AdminLoginPost(final String user_id,
 							  final String password) {
@@ -30,8 +30,8 @@ public interface JsonForm {
 
 	final class UserLoginPost implements JsonForm {
 
-		@JsonProperty String facebook_uid;
-		@JsonProperty String facebook_token;
+		public @JsonProperty String facebook_uid;
+		public @JsonProperty String facebook_token;
 
 		public UserLoginPost(final String facebook_uid,
 							 final String facebook_token) {
