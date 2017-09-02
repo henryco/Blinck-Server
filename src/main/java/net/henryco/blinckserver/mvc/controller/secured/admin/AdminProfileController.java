@@ -92,7 +92,7 @@ public class AdminProfileController implements BlinckProfileController {
 
 
 	public @RequestMapping(
-			method = POST,
+			method = {GET, POST},
 			value = "/authority/add"
 	) void grantAuthority(@RequestParam("name") String name,
 						  @RequestParam("role") String role,
@@ -105,7 +105,7 @@ public class AdminProfileController implements BlinckProfileController {
 
 
 	public @RequestMapping(
-			method = POST,
+			method = {GET, POST},
 			value = "/authority/remove"
 	) void removeAuthority(@RequestParam("name") String name,
 						   @RequestParam("role") String role,
@@ -127,7 +127,7 @@ public class AdminProfileController implements BlinckProfileController {
 
 
 	public @RequestMapping(
-			method = POST,
+			method = {GET, POST},
 			value = "/session/logout/admin"
 	) void logOutAdmin(@RequestParam("name") String target,
 						Authentication authentication) {
@@ -138,7 +138,7 @@ public class AdminProfileController implements BlinckProfileController {
 
 
 	public @RequestMapping(
-			method = POST,
+			method = {GET, POST},
 			value = "/session/logout/user"
 	) void logOutUser(@RequestParam("name") Long target,
 					   Authentication authentication) {

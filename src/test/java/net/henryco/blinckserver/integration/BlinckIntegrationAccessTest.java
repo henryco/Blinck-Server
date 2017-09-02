@@ -14,6 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.social.facebook.api.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
@@ -97,17 +98,17 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 
 
 	protected String getForUserAuthToken() throws Exception {
-
-		final String tokenCreatorMethod = "createAuthenticationToken";
-		final String tokenOwnerName = MockFacebookUser.getInstance().getUser().getId();
-		final Method method = BlinckTestUtil.getMethod(TokenAuthenticationService.class, tokenCreatorMethod);
-
-		whiteListService.addUserToWhiteList(Long.decode(tokenOwnerName));
-
-		return method.invoke(userTokenAuthService, tokenOwnerName, USER_ROLES).toString();
+		return getForUserAuthToken(MockFacebookUser.getInstance().getUser());
 	}
 
+	protected String getForUserAuthToken(User user) throws Exception {
 
+		final String tokenCreatorMethod = "createAuthenticationToken";
+		final Method method = BlinckTestUtil.getMethod(TokenAuthenticationService.class, tokenCreatorMethod);
+
+		whiteListService.addUserToWhiteList(Long.decode(user.getId()));
+		return method.invoke(userTokenAuthService, user.getId(), USER_ROLES).toString();
+	}
 
 
 	protected static String randomUserPath() {
