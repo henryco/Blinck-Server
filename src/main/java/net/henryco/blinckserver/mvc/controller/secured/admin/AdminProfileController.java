@@ -119,16 +119,7 @@ public class AdminProfileController implements BlinckProfileController {
 
 	public @RequestMapping(
 			method = {GET, POST},
-			value = "/session/logout"
-	) void logOut(Authentication authentication) {
-		whiteListService.removeAdminFromWhiteList(authentication.getName());
-	}
-
-
-
-	public @RequestMapping(
-			method = {GET, POST},
-			value = "/session/logout/admin"
+			value = "/session/close/admin"
 	) void logOutAdmin(@RequestParam("name") String target,
 						Authentication authentication) {
 		rolesRequired(authentication, ROLE_MODERATOR);
@@ -139,7 +130,7 @@ public class AdminProfileController implements BlinckProfileController {
 
 	public @RequestMapping(
 			method = {GET, POST},
-			value = "/session/logout/user"
+			value = "/session/close/user"
 	) void logOutUser(@RequestParam("name") Long target,
 					   Authentication authentication) {
 		rolesRequired(authentication, ROLE_MODERATOR);

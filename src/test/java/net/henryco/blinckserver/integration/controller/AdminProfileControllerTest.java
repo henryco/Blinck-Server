@@ -20,7 +20,7 @@ public class AdminProfileControllerTest extends BlinckIntegrationAccessTest {
 	protected static final String VERIFICATION = ADMIN_ENDPOINT + "/verification?size=10000000";
 	protected static final String ACTIVATION = ADMIN_ENDPOINT + "/activate/admin";
 	protected static final String PERMISSIONS = ADMIN_ENDPOINT + "/permissions";
-	protected static final String LOGOUT = ADMIN_ENDPOINT + "/session/logout";
+	protected static final String LOGOUT = ADMIN_ENDPOINT + "/session/close";
 	protected static final String ROLE_ADD = ADMIN_ENDPOINT + "/authority/add";
 	protected static final String ROLE_REMOVE = ADMIN_ENDPOINT + "/authority/remove";
 
@@ -99,15 +99,7 @@ public class AdminProfileControllerTest extends BlinckIntegrationAccessTest {
 
 
 
-	@Test
-	public void adminLogoutSelfTest() {
 
-		final String adminAuthToken = getForAdminAuthToken();
-
-		assert authorizedGetRequest(PERMISSIONS, adminAuthToken).getStatusCode().is2xxSuccessful();
-		assert authorizedGetRequest(LOGOUT, adminAuthToken).getStatusCode().is2xxSuccessful();
-		assert authorizedGetRequest(PERMISSIONS, adminAuthToken).getStatusCode().is4xxClientError();
-	}
 
 
 

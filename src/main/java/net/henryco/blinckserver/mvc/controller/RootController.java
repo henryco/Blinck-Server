@@ -19,6 +19,7 @@ public class RootController {
 		return "redirect:/public/about";
 	}
 
+
 	public @RequestMapping(
 			method = GET,
 			value = "/profile"
@@ -33,5 +34,6 @@ public class RootController {
 	) String admin() {
 		return "redirect:/protected/admin/profile";
 	}
+
 
 }

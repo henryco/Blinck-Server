@@ -31,20 +31,27 @@ public abstract class BlinckIntegrationTest {
 
 
 	protected final ResponseEntity<String> fastGetRequest(String endPoint) {
+		return fastGetRequest(endPoint, String.class);
+	}
+
+	protected final <T> ResponseEntity<T> fastGetRequest(String endPoint, Class<T> entityType) {
 		return restTemplate.exchange(
 				new RequestEntity(
 						GET, TestUtils.newURI(endPoint, port)
-				), String.class
+				), entityType
 		);
 	}
 
-
 	protected final ResponseEntity<String> fastPostRequest(String endPoint, Object postForm) {
+		return fastPostRequest(endPoint, postForm, String.class);
+	}
+
+	protected final <T> ResponseEntity<T> fastPostRequest(String endPoint, Object postForm, Class<T> entityType) {
 		return restTemplate.exchange(
 				RequestEntity.post(TestUtils.newURI(endPoint, port))
 						.accept(MediaType.APPLICATION_JSON)
 						.body(postForm),
-				String.class
+				entityType
 		);
 	}
 

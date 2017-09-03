@@ -89,6 +89,7 @@ import static org.springframework.http.HttpMethod.POST;
 		return http.authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers(GET, "/public/**").permitAll()
+				.antMatchers(GET, "/session/**").permitAll()
 				.antMatchers(POST,"/protected/admin/registration").permitAll()
 				.antMatchers("/login/**").permitAll()
 				.anyRequest().authenticated()
