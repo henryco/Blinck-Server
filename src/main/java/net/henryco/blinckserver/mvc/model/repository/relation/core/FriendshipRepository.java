@@ -13,4 +13,5 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 	List<Friendship> getAllByUser1OrUser2OrderByDateDesc(Long user1, Long user2);
 	void removeAllByUser1OrUser2(Long user1, Long user2);
 	void removeAllByUser1AndUser2OrUser2AndUser1(Long user1, Long user2, Long user22, Long user12);
+	boolean existsByUser1AndUser2OrUser2AndUser1(Long user1, Long user2, Long user22, Long user12);
 }

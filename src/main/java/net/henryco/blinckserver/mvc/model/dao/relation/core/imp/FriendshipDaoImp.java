@@ -36,7 +36,12 @@ public class FriendshipDaoImp
 	}
 
 	@Override
-	public void deleteAllWithUsers(Long user1, Long user2) {
+	public void deleteRelationBetweenUsers(Long user1, Long user2) {
 		getRepository().removeAllByUser1AndUser2OrUser2AndUser1(user1, user2, user1, user2);
+	}
+
+	@Override
+	public boolean isRelationBetweenUsersExists(Long user1, Long user2) {
+		return getRepository().existsByUser1AndUser2OrUser2AndUser1(user1, user2, user1, user2);
 	}
 }

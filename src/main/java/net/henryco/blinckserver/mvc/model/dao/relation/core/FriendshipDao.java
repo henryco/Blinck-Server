@@ -12,5 +12,7 @@ public interface FriendshipDao extends BlinckDaoTemplate<Friendship, Long> {
 
 	List<Friendship> getAllByUserIdOrderByDateDesc(Long userId);
 	void deleteAllByUserId(Long userId);
-	void deleteAllWithUsers(Long user1, Long user2);
+	void deleteRelationBetweenUsers(Long user1, Long user2);
+	boolean isRelationBetweenUsersExists(Long user1, Long user2);
+
 }

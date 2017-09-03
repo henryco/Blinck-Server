@@ -1,7 +1,6 @@
 package net.henryco.blinckserver.mvc.service.relation.core;
 
 import net.henryco.blinckserver.mvc.model.dao.relation.core.FriendshipDao;
-import net.henryco.blinckserver.mvc.model.dao.relation.queue.FriendshipQueueDao;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,14 +17,11 @@ import java.util.List;
 public class FriendshipService {
 
 	private final FriendshipDao friendshipDao;
-	private final FriendshipQueueDao friendshipQueueDao;
 
 
 	@Autowired
-	public FriendshipService(FriendshipDao friendshipDao,
-							 FriendshipQueueDao friendshipQueueDao) {
+	public FriendshipService(FriendshipDao friendshipDao) {
 		this.friendshipDao = friendshipDao;
-		this.friendshipQueueDao = friendshipQueueDao;
 	}
 
 
@@ -67,7 +63,7 @@ public class FriendshipService {
 	 */
 	@Transactional
 	public void deleteRelationBetweenUsers(Long user1, Long user2) {
-		friendshipDao.deleteAllWithUsers(user1, user2);
+		friendshipDao.deleteRelationBetweenUsers(user1, user2);
 	}
 
 

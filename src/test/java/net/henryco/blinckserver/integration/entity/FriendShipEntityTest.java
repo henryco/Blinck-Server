@@ -109,8 +109,11 @@ public class FriendShipEntityTest extends UserEntityIntegrationTest {
 		saveFriendship(this, users[0], users[2]);
 		saveFriendship(this, users[2], users[1]);
 
+		assert friendshipDao.isRelationBetweenUsersExists(users[1], users[2]);
+
 		friendshipDao.deleteAllByUserId(users[1]);
 
+		assert !friendshipDao.isRelationBetweenUsersExists(users[1], users[2]);
 		assertionDelete(this, users);
 	}
 
@@ -124,17 +127,30 @@ public class FriendShipEntityTest extends UserEntityIntegrationTest {
 		saveFriendship(this, users[0], users[1]);
 		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 1;
 
-		friendshipDao.deleteAllWithUsers(users[1], users[0]);
+		friendshipDao.deleteRelationBetweenUsers(users[1], users[0]);
 		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 0;
 
 		saveFriendship(this, users[1], users[0]);
 		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 1;
 
-		friendshipDao.deleteAllWithUsers(users[1], users[0]);
+		friendshipDao.deleteRelationBetweenUsers(users[1], users[0]);
 		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 0;
 	}
 
 
+	@Test @Transactional
+	public void relationExistenceTest() {
+
+		Long[] users = saveNewRandomUsers(this, 2);
+
+		saveFriendship(this, users[0], users[1]);
+		assert friendshipDao.isRelationBetweenUsersExists(users[1], users[0]);
+		assert friendshipDao.isRelationBetweenUsersExists(users[0], users[1]);
+
+		friendshipDao.deleteRelationBetweenUsers(users[1], users[0]);
+		assert !friendshipDao.isRelationBetweenUsersExists(users[1], users[0]);
+		assert !friendshipDao.isRelationBetweenUsersExists(users[0], users[1]);
+	}
 
 
 	private static Long
