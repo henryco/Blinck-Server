@@ -7,6 +7,8 @@ import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Henry on 29/08/17.
  */
@@ -18,6 +20,15 @@ public class FriendshipDaoImp extends
 
 	public FriendshipDaoImp(FriendshipRepository repository) {
 		super(repository);
+	}
+
+	private FriendshipRepository getRepository() {
+		return provideRepository();
+	}
+
+	@Override
+	public List<Friendship> getAllByUserIdOrderByDateDesc(Long userId) {
+		return getRepository().getAllByUser1OrUser2OrderByDateDesc(userId, userId);
 	}
 
 }

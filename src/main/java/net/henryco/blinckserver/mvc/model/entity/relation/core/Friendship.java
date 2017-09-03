@@ -6,8 +6,11 @@ import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
 
 import javax.persistence.*;
 
+import java.util.Date;
+
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
  * @author Henry on 28/08/17.
@@ -26,27 +29,26 @@ public class Friendship {
 
 
 	private @Column(
-			name = "friendship_type"
-	) Integer friendshipType;
+			name = "relation_created",
+			updatable = false,
+			nullable = false
+	) @Temporal(
+			TIMESTAMP
+	) Date date;
 
 
-	private @ManyToOne(
-			cascade = ALL,
-			optional = false
-	) @JoinColumn(
+	private @Column(
 			name = "user_id_1",
-			updatable = false
-	) UserCoreProfile user1;
+			updatable = false,
+			nullable = false
+	) Long user1;
 
-	// TODO: 02/09/17 TESTS, AND REMOVE (MAYBE !) hard reference
 
-	private @ManyToOne(
-			cascade = ALL,
-			optional = false
-	) @JoinColumn(
+	private @Column(
 			name = "user_id_2",
-			updatable = false
-	) UserCoreProfile user2;
+			updatable = false,
+			nullable = false
+	) Long user2;
 
 
 }

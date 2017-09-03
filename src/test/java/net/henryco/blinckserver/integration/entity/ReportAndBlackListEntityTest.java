@@ -1,27 +1,20 @@
 package net.henryco.blinckserver.integration.entity;
 
-import net.henryco.blinckserver.integration.BlinckIntegrationTest;
 import net.henryco.blinckserver.mvc.model.dao.infrastructure.BlackListDao;
 import net.henryco.blinckserver.mvc.model.dao.infrastructure.ReportListDao;
-import net.henryco.blinckserver.mvc.model.dao.profile.core.UserCoreProfileDao;
 import net.henryco.blinckserver.mvc.model.entity.infrastructure.BlackList;
 import net.henryco.blinckserver.mvc.model.entity.infrastructure.ReportList;
-import net.henryco.blinckserver.mvc.service.data.UserDataService;
-import net.henryco.blinckserver.utils.MockFacebookUser;
 import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.social.facebook.api.User;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Henry on 02/09/17.
  */
-public class ReportAndBlackListEntityTest extends BlinckIntegrationTest {
+public class ReportAndBlackListEntityTest extends UserEntityIntegrationTest {
 
 
-	private @Autowired UserDataService userDataService;
-	private @Autowired UserCoreProfileDao coreProfileDao;
 	private @Autowired ReportListDao reportListDao;
 	private @Autowired BlackListDao blackListDao;
 
@@ -29,7 +22,7 @@ public class ReportAndBlackListEntityTest extends BlinckIntegrationTest {
 	@Test @Transactional
 	public void addToReportListTest() {
 
-		Long[] ids = saveNewUsers(this);
+		Long[] ids = saveNewRandomUsers(this);
 
 		long id1 = ids[0];
 		long id2 = ids[1];
@@ -46,7 +39,7 @@ public class ReportAndBlackListEntityTest extends BlinckIntegrationTest {
 	@Test @Transactional
 	public void addToBlackListTest() {
 
-		Long[] ids = saveNewUsers(this);
+		Long[] ids = saveNewRandomUsers(this);
 
 		long id1 = ids[0];
 		long id2 = ids[1];
@@ -63,7 +56,7 @@ public class ReportAndBlackListEntityTest extends BlinckIntegrationTest {
 	@Test @Transactional
 	public void removeFromReportListTest() {
 
-		Long[] ids = saveNewUsers(this);
+		Long[] ids = saveNewRandomUsers(this);
 
 		long id1 = ids[0];
 		long id2 = ids[1];
@@ -84,7 +77,7 @@ public class ReportAndBlackListEntityTest extends BlinckIntegrationTest {
 	@Test @Transactional
 	public void removeFromBlackListTest() {
 
-		Long[] ids = saveNewUsers(this);
+		Long[] ids = saveNewRandomUsers(this);
 
 		long id1 = ids[0];
 		long id2 = ids[1];
@@ -103,21 +96,6 @@ public class ReportAndBlackListEntityTest extends BlinckIntegrationTest {
 	}
 
 
-
-	private static Long[]
-	saveNewUsers(ReportAndBlackListEntityTest context) {
-
-		User user1 = MockFacebookUser.getInstance().createRandom().getUser();
-		context.userDataService.addNewFacebookUser(user1);
-
-		User user2 = MockFacebookUser.getInstance().createRandom().getUser();
-		context.userDataService.addNewFacebookUser(user2);
-
-		return new Long[]{
-				Long.decode(user1.getId()),
-				Long.decode(user2.getId())
-		};
-	}
 
 	private static Long
 	addRandomReport(ReportAndBlackListEntityTest context, Long id1, Long id2) {
