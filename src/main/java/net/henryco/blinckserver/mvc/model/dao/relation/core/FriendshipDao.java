@@ -11,5 +11,6 @@ import java.util.List;
 public interface FriendshipDao extends BlinckDaoTemplate<Friendship, Long> {
 
 	List<Friendship> getAllByUserIdOrderByDateDesc(Long userId);
-
+	void deleteAllByUserId(Long userId);
+	void deleteAllWithUsers(Long user1, Long user2);
 }

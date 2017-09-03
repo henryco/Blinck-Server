@@ -11,7 +11,7 @@ public abstract class BlinckDaoTemplateProvider<ENTITY, ID_TYPE>
 		implements BlinckDaoTemplate<ENTITY, ID_TYPE> {
 
 
-	protected abstract BlinckDaoTemplate<ENTITY, ID_TYPE> provideDao();
+	protected abstract <T extends BlinckDaoTemplate<ENTITY, ID_TYPE>> T provideDao();
 
 
 	@Override @Transactional

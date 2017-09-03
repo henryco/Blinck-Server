@@ -12,9 +12,10 @@ public abstract class BlinckDaoProvider<ENTITY, ID_TYPE>
 		this.daoTemplate = daoTemplate;
 	}
 
-	@Override
-	protected BlinckDaoTemplate<ENTITY, ID_TYPE> provideDao() {
-		return daoTemplate;
+
+	@Override @SuppressWarnings("unchecked")
+	protected <T extends BlinckDaoTemplate<ENTITY, ID_TYPE>> T provideDao() {
+		return (T) daoTemplate;
 	}
 
 

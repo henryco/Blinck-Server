@@ -85,7 +85,7 @@ public class FriendShipEntityTest extends UserEntityIntegrationTest {
 
 
 	@Test @Transactional
-	public void deleteRelationTest() {
+	public void deleteRelationsTestOne() {
 
 		Long[] users = saveNewRandomUsers(this, 3);
 		saveFriendship(this, users[0], users[1]);
@@ -96,14 +96,44 @@ public class FriendShipEntityTest extends UserEntityIntegrationTest {
 				friendshipDao.deleteById(friendship.getId())
 		);
 
-		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[1]).size() == 0;
-		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 1;
-		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[2]).size() == 1;
-
-		assert coreProfileDao.isExists(users[0]);
-		assert coreProfileDao.isExists(users[1]);
-		assert coreProfileDao.isExists(users[2]);
+		assertionDelete(this, users);
 	}
+
+
+
+	@Test @Transactional
+	public void deleteRelationsTestTwo() {
+
+		Long[] users = saveNewRandomUsers(this, 3);
+		saveFriendship(this, users[0], users[1]);
+		saveFriendship(this, users[0], users[2]);
+		saveFriendship(this, users[2], users[1]);
+
+		friendshipDao.deleteAllByUserId(users[1]);
+
+		assertionDelete(this, users);
+	}
+
+
+
+	@Test @Transactional
+	public void deleteSingleRelationTest() {
+
+		Long[] users = saveNewRandomUsers(this, 2);
+
+		saveFriendship(this, users[0], users[1]);
+		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 1;
+
+		friendshipDao.deleteAllWithUsers(users[1], users[0]);
+		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 0;
+
+		saveFriendship(this, users[1], users[0]);
+		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 1;
+
+		friendshipDao.deleteAllWithUsers(users[1], users[0]);
+		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 0;
+	}
+
 
 
 
@@ -115,6 +145,18 @@ public class FriendShipEntityTest extends UserEntityIntegrationTest {
 		friendship.setUser1(id1);
 		friendship.setUser2(id2);
 		return context.friendshipDao.save(friendship).getId();
+	}
+
+	private static void
+	assertionDelete(FriendShipEntityTest context, Long[] users) {
+
+		assert context.friendshipDao.getAllByUserIdOrderByDateDesc(users[1]).size() == 0;
+		assert context.friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 1;
+		assert context.friendshipDao.getAllByUserIdOrderByDateDesc(users[2]).size() == 1;
+
+		assert context.coreProfileDao.isExists(users[0]);
+		assert context.coreProfileDao.isExists(users[1]);
+		assert context.coreProfileDao.isExists(users[2]);
 	}
 
 }
