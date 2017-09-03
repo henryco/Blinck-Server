@@ -17,8 +17,8 @@ public class EndPointAuthorizedAsUserTest extends BlinckIntegrationAccessTest {
 
 		final String authorization = getForUserAuthToken();
 
-		assert FORBIDDEN != authorizedGetRequest(ROOT_ENDPOINT, authorization).getStatusCode();
-		assert FORBIDDEN != authorizedGetRequest(randomRootPath(), authorization).getStatusCode();
+		assert FORBIDDEN.value() != authorizedGetRequest(ROOT_ENDPOINT, authorization).getStatusCode().value();
+		assert FORBIDDEN.value() != authorizedGetRequest(randomRootPath(), authorization).getStatusCode().value();
 	}
 
 
@@ -28,8 +28,8 @@ public class EndPointAuthorizedAsUserTest extends BlinckIntegrationAccessTest {
 
 		final String authorization = getForUserAuthToken();
 
-		assert FORBIDDEN != authorizedGetRequest(PUBLIC_ENDPOINT, authorization).getStatusCode();
-		assert FORBIDDEN != authorizedGetRequest(randomPublicPath(), authorization).getStatusCode();
+		assert FORBIDDEN.value() != authorizedGetRequest(PUBLIC_ENDPOINT, authorization).getStatusCode().value();
+		assert FORBIDDEN.value() != authorizedGetRequest(randomPublicPath(), authorization).getStatusCode().value();
 	}
 
 
@@ -39,8 +39,8 @@ public class EndPointAuthorizedAsUserTest extends BlinckIntegrationAccessTest {
 
 		final String authorization = getForUserAuthToken();
 
-		assert FORBIDDEN != authorizedGetRequest(PROTECTED_ENDPOINT, authorization).getStatusCode();
-		assert FORBIDDEN != authorizedGetRequest(randomProtectedPath(), authorization).getStatusCode();
+		assert FORBIDDEN.value() != authorizedGetRequest(PROTECTED_ENDPOINT, authorization).getStatusCode().value();
+		assert FORBIDDEN.value() != authorizedGetRequest(randomProtectedPath(), authorization).getStatusCode().value();
 	}
 
 
@@ -50,8 +50,8 @@ public class EndPointAuthorizedAsUserTest extends BlinckIntegrationAccessTest {
 
 		final String authorization = getForUserAuthToken();
 
-		assert FORBIDDEN != authorizedGetRequest(USER_ENDPOINT, authorization).getStatusCode();
-		assert FORBIDDEN != authorizedGetRequest(randomUserPath(), authorization).getStatusCode();
+		assert FORBIDDEN.value() != authorizedGetRequest(USER_ENDPOINT, authorization).getStatusCode().value();
+		assert FORBIDDEN.value() != authorizedGetRequest(randomUserPath(), authorization).getStatusCode().value();
 	}
 
 
@@ -61,8 +61,8 @@ public class EndPointAuthorizedAsUserTest extends BlinckIntegrationAccessTest {
 
 		final String authorization = getForUserAuthToken();
 
-		assert FORBIDDEN == authorizedGetRequest(ADMIN_ENDPOINT, authorization).getStatusCode();
-		assert FORBIDDEN == authorizedGetRequest(randomAdminPath(), authorization).getStatusCode();
+		assert FORBIDDEN.value() == authorizedGetRequest(ADMIN_ENDPOINT, authorization).getStatusCode().value();
+		assert FORBIDDEN.value() == authorizedGetRequest(randomAdminPath(), authorization).getStatusCode().value();
 	}
 
 }

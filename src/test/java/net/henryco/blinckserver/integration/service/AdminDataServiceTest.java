@@ -4,7 +4,6 @@ import net.henryco.blinckserver.integration.BlinckIntegrationTest;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminAuthProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
 import net.henryco.blinckserver.mvc.service.data.AdminDataService;
-import net.henryco.blinckserver.util.test.BlinckTestUtil;
 import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +86,7 @@ public class AdminDataServiceTest extends BlinckIntegrationTest {
 
 		final Date t0 = new Date(System.currentTimeMillis());
 		final String name = saveProfile(adminDataService);
-		final Date t1 = new Date(System.currentTimeMillis());
+		final Date t1 = new Date(System.currentTimeMillis() + 1);
 
 		Consumer<AdminVerificationQueue> assertion = queue -> {
 			assert queue.getRegistrationTime().after(t0);

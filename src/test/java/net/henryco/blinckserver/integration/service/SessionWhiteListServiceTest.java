@@ -23,7 +23,6 @@ public class SessionWhiteListServiceTest extends BlinckIntegrationTest {
 		Long userId = Long.decode(TestUtils.randomGaussNumberString());
 		whiteListService.addUserToWhiteList(userId);
 
-
 		assert whiteListService.getAllSessions().stream()
 				.anyMatch(session -> session.getUserId() != null &&
 						session.getUserId().equals(userId));

@@ -15,8 +15,8 @@ public class EndPointUnAuthorizedTest extends BlinckIntegrationAccessTest {
 	@Test
 	public void testRootEndPointUnauthorized() {
 
-		Assert.assertNotEquals(FORBIDDEN, fastGetRequest(ROOT_ENDPOINT).getStatusCode());
-		Assert.assertEquals(FORBIDDEN, fastGetRequest(randomRootPath()).getStatusCode());
+		Assert.assertNotEquals(FORBIDDEN.value(), fastGetRequest(ROOT_ENDPOINT).getStatusCode().value());
+		Assert.assertEquals(FORBIDDEN.value(), fastGetRequest(randomRootPath()).getStatusCode().value());
 	}
 
 
@@ -24,8 +24,8 @@ public class EndPointUnAuthorizedTest extends BlinckIntegrationAccessTest {
 	@Test
 	public void testPublicEndPointUnauthorized() {
 
-		Assert.assertNotEquals(FORBIDDEN, fastGetRequest(PUBLIC_ENDPOINT).getStatusCode());
-		Assert.assertNotEquals(FORBIDDEN, fastGetRequest(randomPublicPath()).getStatusCode());
+		Assert.assertNotEquals(FORBIDDEN.value(), fastGetRequest(PUBLIC_ENDPOINT).getStatusCode().value());
+		Assert.assertNotEquals(FORBIDDEN.value(), fastGetRequest(randomPublicPath()).getStatusCode().value());
 	}
 
 
@@ -33,8 +33,8 @@ public class EndPointUnAuthorizedTest extends BlinckIntegrationAccessTest {
 	@Test
 	public void testProtectedEndPointUnauthorized() {
 
-		Assert.assertEquals(FORBIDDEN, fastGetRequest(PROTECTED_ENDPOINT).getStatusCode());
-		Assert.assertEquals(FORBIDDEN, fastGetRequest(randomProtectedPath()).getStatusCode());
+		Assert.assertEquals(FORBIDDEN.value(), fastGetRequest(PROTECTED_ENDPOINT).getStatusCode().value());
+		Assert.assertEquals(FORBIDDEN.value(), fastGetRequest(randomProtectedPath()).getStatusCode().value());
 	}
 
 
@@ -42,8 +42,8 @@ public class EndPointUnAuthorizedTest extends BlinckIntegrationAccessTest {
 	@Test
 	public void testUserEndPointUnauthorized() {
 
-		Assert.assertEquals(FORBIDDEN, fastGetRequest(USER_ENDPOINT).getStatusCode());
-		Assert.assertEquals(FORBIDDEN, fastGetRequest(randomUserPath()).getStatusCode());
+		Assert.assertEquals(FORBIDDEN.value(), fastGetRequest(USER_ENDPOINT).getStatusCode().value());
+		Assert.assertEquals(FORBIDDEN.value(), fastGetRequest(randomUserPath()).getStatusCode().value());
 	}
 
 
@@ -51,7 +51,7 @@ public class EndPointUnAuthorizedTest extends BlinckIntegrationAccessTest {
 	@Test
 	public void testAdminEndPointUnauthorized() {
 
-		Assert.assertEquals(FORBIDDEN, fastGetRequest(ADMIN_ENDPOINT).getStatusCode());
-		Assert.assertEquals(FORBIDDEN, fastGetRequest(randomAdminPath()).getStatusCode());
+		Assert.assertEquals(FORBIDDEN.value(), fastGetRequest(ADMIN_ENDPOINT).getStatusCode().value());
+		Assert.assertEquals(FORBIDDEN.value(), fastGetRequest(randomAdminPath()).getStatusCode().value());
 	}
 }

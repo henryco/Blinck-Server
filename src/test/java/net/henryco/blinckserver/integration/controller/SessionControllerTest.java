@@ -7,6 +7,8 @@ import org.springframework.social.facebook.api.User;
 
 import java.io.Serializable;
 
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+
 /**
  * @author Henry on 03/09/17.
  */
@@ -45,6 +47,7 @@ public class SessionControllerTest extends BlinckIntegrationAccessTest {
 
 		TestStatus status = authorizedGetRequest(SESSION_USER, token, TestStatus.class).getBody();
 		assertionStatus(status, user.getId(), true);
+		assert FORBIDDEN.value() != authorizedGetRequest(randomUserPath(), token).getStatusCode().value();
 	}
 
 
@@ -57,6 +60,7 @@ public class SessionControllerTest extends BlinckIntegrationAccessTest {
 
 		TestStatus status = authorizedGetRequest(SESSION_ADMIN, token, TestStatus.class).getBody();
 		assertionStatus(status, name, true);
+		assert FORBIDDEN.value() != authorizedGetRequest(randomAdminPath(), token).getStatusCode().value();
 	}
 
 
@@ -69,6 +73,7 @@ public class SessionControllerTest extends BlinckIntegrationAccessTest {
 
 		TestStatus status = authorizedGetRequest(SESSION_USER, token, TestStatus.class).getBody();
 		assertionStatus(status, DEFAULT_PRINCIPAL, false);
+		assert authorizedGetRequest(randomUserPath(), token).getStatusCode().is4xxClientError();
 	}
 
 
@@ -81,6 +86,7 @@ public class SessionControllerTest extends BlinckIntegrationAccessTest {
 
 		TestStatus status = authorizedGetRequest(SESSION_ADMIN, token, TestStatus.class).getBody();
 		assertionStatus(status, DEFAULT_PRINCIPAL, false);
+		assert authorizedGetRequest(randomAdminPath(), token).getStatusCode().is4xxClientError();
 	}
 
 
