@@ -76,7 +76,7 @@ public class SessionWhiteListService {
 
 	@Transactional
 	public Collection<SessionWhiteList> getSessions(int numb) {
-		return whiteListDao.getLast(numb);
+		return whiteListDao.getFirst(numb);
 	}
 
 }

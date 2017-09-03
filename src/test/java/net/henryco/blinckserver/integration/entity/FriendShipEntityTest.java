@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Henry on 03/09/17.
@@ -16,6 +17,7 @@ public class FriendShipEntityTest extends UserEntityIntegrationTest {
 
 
 	private @Autowired FriendshipDao friendshipDao;
+
 
 
 	@Test @Transactional
@@ -29,26 +31,90 @@ public class FriendShipEntityTest extends UserEntityIntegrationTest {
 		assert user1 != null;
 		assert user2 != null;
 
-		Friendship friendship = new Friendship();
-		friendship.setDate(new Date(System.currentTimeMillis()));
-		friendship.setUser1(user1.getId());
-		friendship.setUser2(user2.getId());
-
-		Long id = friendshipDao.save(friendship).getId();
-
+		Long id = saveFriendship(this, user1.getId(), user2.getId());
 		Friendship saved = friendshipDao.getById(id);
+
 		assert saved != null;
 		assert saved.getUser1().equals(users[0]);
 		assert saved.getUser2().equals(users[1]);
 	}
 
 
+
 	@Test @Transactional
 	public void findAllRelationsTest() {
 
+		Long[] users = saveNewRandomUsers(this, 5);
+		Long id1 = saveFriendship(this, users[0], users[1]);
+		Long id2 = saveFriendship(this, users[0], users[2]);
+		Long id3 = saveFriendship(this, users[3], users[0]);
+		Long id4 = saveFriendship(this, users[2], users[4]);
+		Long id5 = saveFriendship(this, users[2], users[1]);
 
+		List<Friendship> all = friendshipDao.getAllByUserIdOrderByDateDesc(users[0]);
+		assert all.size() == 3;
+		assert all.get(0).getId().equals(id3);
+		assert all.get(1).getId().equals(id2);
+		assert all.get(2).getId().equals(id1);
 
+		List<Friendship> rest = friendshipDao.getAllByUserIdOrderByDateDesc(users[2]);
+		assert rest.size() == 3;
+		assert rest.get(0).getId().equals(id5);
+		assert rest.get(1).getId().equals(id4);
+		assert rest.get(2).getId().equals(id2);
 	}
 
+
+
+	@Test @Transactional
+	public void findUserFromRelationTest() {
+
+		Long[] users = saveNewRandomUsers(this, 8);
+		saveFriendship(this, users[1], users[4]);
+		saveFriendship(this, users[3], users[5]);
+		saveFriendship(this, users[2], users[1]);
+		saveFriendship(this, users[7], users[6]);
+		saveFriendship(this, users[1], users[6]);
+
+		friendshipDao.getAllByUserIdOrderByDateDesc(users[1]).forEach(friendship -> {
+			assert coreProfileDao.isExists(friendship.getUser1());
+			assert coreProfileDao.isExists(friendship.getUser2());
+		});
+	}
+
+
+
+	@Test @Transactional
+	public void deleteRelationTest() {
+
+		Long[] users = saveNewRandomUsers(this, 3);
+		saveFriendship(this, users[0], users[1]);
+		saveFriendship(this, users[0], users[2]);
+		saveFriendship(this, users[2], users[1]);
+
+		friendshipDao.getAllByUserIdOrderByDateDesc(users[1]).forEach(friendship ->
+				friendshipDao.deleteById(friendship.getId())
+		);
+
+		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[1]).size() == 0;
+		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[0]).size() == 1;
+		assert friendshipDao.getAllByUserIdOrderByDateDesc(users[2]).size() == 1;
+
+		assert coreProfileDao.isExists(users[0]);
+		assert coreProfileDao.isExists(users[1]);
+		assert coreProfileDao.isExists(users[2]);
+	}
+
+
+
+	private static Long
+	saveFriendship(FriendShipEntityTest context, Long id1, Long id2) {
+
+		Friendship friendship = new Friendship();
+		friendship.setDate(new Date(System.currentTimeMillis()));
+		friendship.setUser1(id1);
+		friendship.setUser2(id2);
+		return context.friendshipDao.save(friendship).getId();
+	}
 
 }

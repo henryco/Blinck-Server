@@ -115,7 +115,7 @@ public class AdminDataService {
 
 	@Transactional
 	public Collection<AdminVerificationQueue> getVerificationQueue(int n) {
-		return verificationQueueDao.getLast(n);
+		return verificationQueueDao.getFirst(n);
 	}
 
 

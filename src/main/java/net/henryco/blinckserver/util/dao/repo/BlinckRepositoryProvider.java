@@ -2,7 +2,9 @@ package net.henryco.blinckserver.util.dao.repo;
 
 import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
 import net.henryco.blinckserver.util.entity.BlinckEntityRemovalForbiddenException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +57,7 @@ public abstract class BlinckRepositoryProvider<ENTITY, KEY extends Serializable>
 	}
 
 	@Override
-	public List<ENTITY> getLast(int n) {
+	public List<ENTITY> getFirst(int n) {
 		return provideRepository().findAll(new PageRequest(0, n)).getContent();
 	}
 

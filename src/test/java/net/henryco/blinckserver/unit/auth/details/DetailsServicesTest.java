@@ -72,7 +72,7 @@ public abstract class DetailsServicesTest extends BlinckUnitTest {
 		}
 
 		@Override
-		public List<TestEntity> getLast(int n) {
+		public List<TestEntity> getFirst(int n) {
 			return getAll();
 		}
 

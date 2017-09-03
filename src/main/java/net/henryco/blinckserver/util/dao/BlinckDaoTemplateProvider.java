@@ -35,8 +35,8 @@ public abstract class BlinckDaoTemplateProvider<ENTITY, ID_TYPE>
 	}
 
 	@Override
-	public List<ENTITY> getLast(int n) {
-		return provideDao().getLast(n);
+	public List<ENTITY> getFirst(int n) {
+		return provideDao().getFirst(n);
 	}
 
 	@Override @Transactional

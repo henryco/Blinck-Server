@@ -13,7 +13,7 @@ public interface BlinckDaoTemplate<ENTITY, ID_TYPE> {
 	@Transactional ENTITY save(ENTITY entity);
 	@Transactional boolean isExists(ID_TYPE id);
 	@Transactional void deleteById(ID_TYPE id);
-	@Transactional List<ENTITY> getLast(int n);
+	@Transactional List<ENTITY> getFirst(int n);
 	@Transactional List<ENTITY> getAll();
 	@Transactional long count();
 
