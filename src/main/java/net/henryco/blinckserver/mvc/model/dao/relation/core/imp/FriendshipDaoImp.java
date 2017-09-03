@@ -12,8 +12,8 @@ import java.util.List;
  * @author Henry on 29/08/17.
  */
 @Repository
-public class FriendshipDaoImp extends
-		BlinckRepositoryProvider<Friendship, Long>
+public class FriendshipDaoImp
+		extends BlinckRepositoryProvider<Friendship, Long>
 		implements FriendshipDao {
 
 

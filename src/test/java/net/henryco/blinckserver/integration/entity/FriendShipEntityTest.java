@@ -147,6 +147,7 @@ public class FriendShipEntityTest extends UserEntityIntegrationTest {
 		return context.friendshipDao.save(friendship).getId();
 	}
 
+
 	private static void
 	assertionDelete(FriendShipEntityTest context, Long[] users) {
 

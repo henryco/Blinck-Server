@@ -88,7 +88,7 @@ import static org.springframework.http.HttpMethod.POST;
 	private HttpSecurity authorizeRequests(HttpSecurity http) throws Exception {
 		return http.authorizeRequests()
 				.antMatchers("/").permitAll()
-				.antMatchers(GET, "/public/**").permitAll()
+				.antMatchers("/public/**").permitAll()
 				.antMatchers(GET, "/session/**").permitAll()
 				.antMatchers(POST,"/protected/admin/registration").permitAll()
 				.antMatchers("/login/**").permitAll()
