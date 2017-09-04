@@ -18,7 +18,7 @@ public class AdminProfileControllerTest extends BlinckIntegrationAccessTest {
 	protected static final String REGISTRATION = ADMIN_ENDPOINT + "/registration";
 	protected static final String LIST = ADMIN_ENDPOINT + "/list";
 	protected static final String VERIFICATION = ADMIN_ENDPOINT + "/verification?size=10000000";
-	protected static final String ACTIVATION = ADMIN_ENDPOINT + "/activate/admin";
+	protected static final String ACTIVATION = ADMIN_ENDPOINT + "/activate";
 	protected static final String PERMISSIONS = ADMIN_ENDPOINT + "/permissions";
 	protected static final String LOGOUT = ADMIN_ENDPOINT + "/session/close";
 	protected static final String ROLE_ADD = ADMIN_ENDPOINT + "/authority/add";

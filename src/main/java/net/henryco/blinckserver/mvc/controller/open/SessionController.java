@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.controller;
+package net.henryco.blinckserver.mvc.controller.open;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,8 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Henry on 03/09/17.
- */
-@RestController
+ */ @RestController
 @RequestMapping("/session")
 public class SessionController {
 
@@ -84,10 +83,11 @@ public class SessionController {
 	public @RequestMapping(
 			method = {GET, POST},
 			value = "/user/logout"
-	) void logoutUser(HttpServletRequest request) {
+	) String logoutUser(HttpServletRequest request) {
 		Authentication user = userTokenService.getAuthentication(request);
-		if (user == null) return;
+		if (user == null) return "";
 		whiteListService.removeUserFromWhiteList(Long.decode(user.getName()));
+		return "OK";
 	}
 
 
@@ -95,10 +95,11 @@ public class SessionController {
 	public @RequestMapping(
 			method = {GET, POST},
 			value = "/admin/logout"
-	) void logoutAdmin(HttpServletRequest request) {
+	) String logoutAdmin(HttpServletRequest request) {
 		Authentication admin = adminTokenService.getAuthentication(request);
-		if (admin == null) return;
+		if (admin == null) return "";
 		whiteListService.removeAdminFromWhiteList(admin.getName());
+		return "OK";
 	}
 
 

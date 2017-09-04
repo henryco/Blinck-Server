@@ -18,12 +18,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Henry on 24/08/17.
- */
-@RestController
+ */ @RestController
 @RequestMapping("/protected/admin")
-public class AdminProfileController implements BlinckProfileController {
+public class AdminProfileController
+		implements BlinckProfileController {
 
-	private static final String JSON = "application/json; charset=UTF-8";
 
 	private final AdminDataService adminDataService;
 	private final SessionWhiteListService whiteListService;
@@ -41,10 +40,8 @@ public class AdminProfileController implements BlinckProfileController {
 			method = POST,
 			value = "/registration"
 	) void registerAdmin(@RequestBody AdminCredentials credentials) {
-
 		String user_id = credentials.getUser_id();
 		String password = credentials.getPassword();
-
 		adminDataService.addNewProfile(user_id, password);
 	}
 
@@ -80,7 +77,7 @@ public class AdminProfileController implements BlinckProfileController {
 	public @RequestMapping(
 			method = POST,
 			consumes = JSON,
-			value = "/activate/admin"
+			value = "/activate"
 	) void activateAdminProfiles(@RequestBody String[] names,
 								 Authentication authentication) {
 		rolesRequired(authentication, ROLE_MODERATOR);

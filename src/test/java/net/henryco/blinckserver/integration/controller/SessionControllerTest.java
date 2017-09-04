@@ -82,7 +82,9 @@ public class SessionControllerTest extends BlinckIntegrationAccessTest {
 	public void sessionLogoutAdminTest() {
 
 		final String token = getForAdminAuthToken();
-		authorizedGetRequest(LOGOUT_ADMIN, token);
+		assert FORBIDDEN.value() != authorizedGetRequest(randomAdminPath(), token).getStatusCode().value();
+		String body = authorizedGetRequest(LOGOUT_ADMIN, token).getBody();
+		System.out.println("Logout body: "+body);
 
 		TestStatus status = authorizedGetRequest(SESSION_ADMIN, token, TestStatus.class).getBody();
 		assertionStatus(status, DEFAULT_PRINCIPAL, false);
