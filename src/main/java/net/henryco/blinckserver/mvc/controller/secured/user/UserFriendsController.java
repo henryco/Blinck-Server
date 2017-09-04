@@ -2,6 +2,7 @@ package net.henryco.blinckserver.mvc.controller.secured.user;
 
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
+import net.henryco.blinckserver.mvc.model.entity.relation.queue.FriendshipNotification;
 import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
 import net.henryco.blinckserver.mvc.service.relation.queue.FriendshipNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +122,7 @@ public class UserFriendsController implements BlinckController {
 
 
 
+
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/request/delete/{request_id}",
 			method = {GET, POST}
@@ -133,6 +135,37 @@ public class UserFriendsController implements BlinckController {
 
 		notificationService.deleteById(reqId);
 	}
+
+
+
+
+	public @RequestMapping(
+			value = "/request/to/{page}/{size}",
+			method = GET
+	) FriendshipNotification[] getOwnRequestList(Authentication authentication,
+												 @PathVariable("page") int page,
+												 @PathVariable("size") int size) {
+
+		return notificationService.getAllNotificationFromInitiator(
+				getID(authentication.getName()), page, size
+		).toArray(new FriendshipNotification[0]);
+	}
+
+
+
+
+	public @RequestMapping(
+			value = "/request/from/{page}/{size}",
+			method = GET
+	) FriendshipNotification[] getIncomeRequestList(Authentication authentication,
+												   @PathVariable("page") int page,
+												   @PathVariable("size") int size) {
+
+ 		return notificationService.getAllNotificationFromReceiver(
+				getID(authentication.getName()), page, size
+		).toArray(new FriendshipNotification[0]);
+	}
+
 
 
 

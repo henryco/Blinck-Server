@@ -105,5 +105,33 @@ public class FriendshipSuperServiceTest extends UserIntegrationTest {
 		assert friendshipService.isExistsBetweenUsers(users[0], users[1]);
 		assert friendshipService.isExistsBetweenUsers(users[1], users[0]);
 		assert friendshipService.isExistsById(relation);
+
+		Friendship byUsers = friendshipService.getByUsers(users[1], users[0]);
+		Friendship byId = friendshipService.getById(relation);
+		assert byId.equals(byUsers);
 	}
+
+
+	@Test @Transactional
+	public void pureNotificationTest() {
+
+		final Long[] users = saveNewRandomUsers(this, 2);
+		Long notification = notificationService.addNotification(users[0], users[1]);
+
+		assert notificationService.isExistsBetweenUsers(users[0], users[1]);
+		assert notificationService.isExistsBetweenUsers(users[1], users[0]);
+		assert notificationService.isExists(notification);
+
+		FriendshipNotification withUsers = notificationService.getWithUsers(users[1], users[0]);
+		FriendshipNotification byId = notificationService.getById(notification);
+
+		assert byId.equals(withUsers);
+
+		notificationService.deleteByUsers(users[1], users[0]);
+
+		assert !notificationService.isExistsBetweenUsers(users[0], users[1]);
+		assert !notificationService.isExistsBetweenUsers(users[1], users[0]);
+		assert !notificationService.isExists(notification);
+	}
+
 }
