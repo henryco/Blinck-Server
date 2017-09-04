@@ -15,6 +15,9 @@ public interface FriendshipNotificationRepository extends JpaRepository<Friendsh
 	List<FriendshipNotification> getAllByInitiatorIdOrderByDateDesc(Long initiatorId, Pageable pageable);
 	List<FriendshipNotification> getAllByReceiverIdOrderByDateDesc(Long receiverId, Pageable pageable);
 
+	FriendshipNotification getByReceiverIdAndInitiatorIdOrInitiatorIdAndReceiverId
+			(Long receiverId, Long initiatorId, Long initiatorId2, Long receiverId2);
+
 	boolean existsByReceiverIdAndInitiatorIdOrInitiatorIdAndReceiverId(Long receiverId, Long initiatorId, Long initiatorId2, Long receiverId2);
 
 	void removeAllByReceiverIdAndInitiatorIdOrInitiatorIdAndReceiverId(Long receiverId, Long initiatorId, Long initiatorId2, Long receiverId2);

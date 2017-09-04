@@ -36,10 +36,28 @@ public class FriendshipService {
 		return friendshipDao.save(friendship).getId();
 	}
 
+	/**
+	 * Create and save new friendship relation between users.
+	 * @return <b>ID</b> of saved relation id database.
+	 */ @Transactional
+	public Long addFriendshipRelation(Long initiator, Long receiver) {
+
+	 	FriendshipNotification notification = new FriendshipNotification();
+		notification.setInitiatorId(initiator);
+		notification.setReceiverId(receiver);
+		return addFriendshipRelation(notification);
+	}
+
 
 	@Transactional
 	public List<Friendship> getAllUserRelations(Long user) {
 		return friendshipDao.getAllByUserIdOrderByDateDesc(user);
+	}
+
+
+	@Transactional
+	public List<Friendship> getAllUserRelations(Long user, int page, int size) {
+	 	return friendshipDao.getAllByUserIdOrderByDateDesc(user, page, size);
 	}
 
 
@@ -63,6 +81,22 @@ public class FriendshipService {
 	@Transactional
 	public Friendship getById(Long id) {
 		return friendshipDao.getById(id);
+	}
+
+
+	/**
+	 *<b>Arguments order doesn't matter.</b>
+	 */ @Transactional
+	public Friendship getByUsers(Long user1, Long user2) {
+	 	return friendshipDao.getByUsers(user1, user2);
+	}
+
+
+	/**
+	 *<b>Arguments order doesn't matter.</b>
+	 */ @Transactional
+	public boolean isExistsBetweenUsers(Long user1, Long user2) {
+		return friendshipDao.isRelationBetweenUsersExists(user1, user2);
 	}
 
 

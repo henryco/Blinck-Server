@@ -75,4 +75,8 @@ public class FriendshipNotificationDaoImp
 		return getRepository().existsByReceiverIdAndInitiatorIdOrInitiatorIdAndReceiverId(receiverId, initiatorId, receiverId, initiatorId);
 	}
 
+	@Override
+	public FriendshipNotification getByReceiverAndInitiator(Long receiverId, Long initiatorId) {
+		return getRepository().getByReceiverIdAndInitiatorIdOrInitiatorIdAndReceiverId(receiverId, initiatorId, receiverId, initiatorId);
+	}
 }

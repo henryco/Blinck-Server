@@ -10,9 +10,14 @@ import java.util.List;
  */
 public interface FriendshipDao extends BlinckDaoTemplate<Friendship, Long> {
 
+	List<Friendship> getAllByUserIdOrderByDateDesc(Long userId, int page, int size);
 	List<Friendship> getAllByUserIdOrderByDateDesc(Long userId);
+
+	Friendship getByUsers(Long user1, Long user2);
+
+	boolean isRelationBetweenUsersExists(Long user1, Long user2);
+
 	void deleteAllByUserId(Long userId);
 	void deleteRelationBetweenUsers(Long user1, Long user2);
-	boolean isRelationBetweenUsersExists(Long user1, Long user2);
 
 }

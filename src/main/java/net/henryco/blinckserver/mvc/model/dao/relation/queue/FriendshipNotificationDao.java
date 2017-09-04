@@ -14,6 +14,8 @@ public interface FriendshipNotificationDao extends BlinckDaoTemplate<FriendshipN
 	List<FriendshipNotification> getAllByInitiatorId(Long initiatorId, int page, int size);
 	List<FriendshipNotification> getAllByUserId(Long id, int page, int size);
 
+	FriendshipNotification getByReceiverAndInitiator(Long receiverId, Long initiatorId);
+
 	boolean existsBetweenReceiverAndInitiator(Long receiverId, Long initiatorId);
 
 	void removeAllByReceiverAndInitiatorId(Long receiverId, Long initiatorId);

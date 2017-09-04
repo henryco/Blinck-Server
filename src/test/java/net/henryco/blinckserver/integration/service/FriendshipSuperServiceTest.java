@@ -88,9 +88,22 @@ public class FriendshipSuperServiceTest extends UserIntegrationTest {
 		assert all.get(5).getInitiatorId().equals(users[2]);
 		assert all.get(6).getInitiatorId().equals(users[1]);
 
+		notificationService.deleteByUsers(users[2], users[0]);
+		assert notificationService.getAllWithUser(users[0], 0, 100).size() == 6;
+
 		notificationService.deleteAllByUser(users[0]);
 		assert notificationService.getAllWithUser(users[0], 0, 100).size() == 0;
 	}
 
 
+	@Test @Transactional
+	public void pureFriendshipCreationTest() {
+
+		final Long[] users = saveNewRandomUsers(this, 2);
+		Long relation = friendshipService.addFriendshipRelation(users[0], users[1]);
+
+		assert friendshipService.isExistsBetweenUsers(users[0], users[1]);
+		assert friendshipService.isExistsBetweenUsers(users[1], users[0]);
+		assert friendshipService.isExistsById(relation);
+	}
 }

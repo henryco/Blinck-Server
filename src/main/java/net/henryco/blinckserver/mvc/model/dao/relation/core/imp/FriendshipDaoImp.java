@@ -4,6 +4,7 @@ import net.henryco.blinckserver.mvc.model.dao.relation.core.FriendshipDao;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 import net.henryco.blinckserver.mvc.model.repository.relation.core.FriendshipRepository;
 import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -31,6 +32,11 @@ public class FriendshipDaoImp
 	}
 
 	@Override
+	public List<Friendship> getAllByUserIdOrderByDateDesc(Long userId, int page, int size) {
+		return getRepository().getAllByUser1OrUser2OrderByDateDesc(userId, userId, new PageRequest(page, size));
+	}
+
+	@Override
 	public void deleteAllByUserId(Long userId) {
 		getRepository().removeAllByUser1OrUser2(userId, userId);
 	}
@@ -43,5 +49,10 @@ public class FriendshipDaoImp
 	@Override
 	public boolean isRelationBetweenUsersExists(Long user1, Long user2) {
 		return getRepository().existsByUser1AndUser2OrUser2AndUser1(user1, user2, user1, user2);
+	}
+
+	@Override
+	public Friendship getByUsers(Long user1, Long user2) {
+		return getRepository().getByUser1AndUser2OrUser2AndUser1(user1, user2, user1, user2);
 	}
 }

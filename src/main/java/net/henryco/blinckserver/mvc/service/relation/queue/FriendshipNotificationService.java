@@ -67,6 +67,28 @@ public class FriendshipNotificationService {
 	}
 
 
+	/**
+	 * <b>Order doesn't matter.</b>
+	 */ @Transactional
+	public FriendshipNotification getWithUsers(Long user1, Long user2) {
+	 	return friendshipNotificationDao.getByReceiverAndInitiator(user1, user2);
+	}
+
+
+	/**
+	 * <b>Order doesn't matter.</b>
+	 */ @Transactional
+	public boolean isExistsBetweenUsers(Long user1, Long user2) {
+		return friendshipNotificationDao.existsBetweenReceiverAndInitiator(user1, user2);
+	}
+
+
+	@Transactional
+	public boolean isExists(Long notificationId) {
+	 	return friendshipNotificationDao.isExists(notificationId);
+	}
+
+
 	@Transactional
 	public void deleteById(Long id) {
 		friendshipNotificationDao.deleteById(id);
