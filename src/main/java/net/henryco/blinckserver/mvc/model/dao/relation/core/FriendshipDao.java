@@ -15,6 +15,8 @@ public interface FriendshipDao extends BlinckDaoTemplate<Friendship, Long> {
 
 	Friendship getByUsers(Long user1, Long user2);
 
+	Long countByUserId(Long userId);
+
 	boolean isRelationBetweenUsersExists(Long user1, Long user2);
 
 	void deleteAllByUserId(Long userId);

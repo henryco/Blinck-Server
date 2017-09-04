@@ -111,4 +111,11 @@ public class FriendshipService {
 	 	friendshipDao.deleteById(id);
 	}
 
+
+	@Transactional
+	public Long getFriendsCount(Long id) {
+	 	return friendshipDao.countByUserId(id);
+	}
+
+
 }

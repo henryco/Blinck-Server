@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.model.entity.relation.queue;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,8 @@ public class FriendshipNotification {
 			unique = true
 	) @GeneratedValue(
 			strategy = AUTO
+	) @JsonProperty(
+			value = "notification_id"
 	) Long id;
 
 
@@ -30,6 +33,8 @@ public class FriendshipNotification {
 			name = "initiator",
 			nullable = false,
 			updatable = false
+	) @JsonProperty(
+			value = "from"
 	) Long initiatorId;
 
 
@@ -37,6 +42,8 @@ public class FriendshipNotification {
 			name = "receiver",
 			nullable = false,
 			updatable = false
+	) @JsonProperty(
+			value = "to"
 	) Long receiverId;
 
 
@@ -46,6 +53,8 @@ public class FriendshipNotification {
 			updatable = false
 	) @Temporal(
 			TIMESTAMP
+	) @JsonProperty(
+			value = "timestamp"
 	) Date date;
 
 

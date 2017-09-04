@@ -37,6 +37,14 @@ public class UserFriendsController implements BlinckController {
 	}
 
 
+	public @RequestMapping(
+			value = "/count",
+			method = GET
+	) Long getFriendsCount(Authentication authentication) {
+		return friendshipService.getFriendsCount(getID(authentication.getName()));
+	}
+
+
 
 	public @RequestMapping(
 			value = "/list/{page}/{size}",
@@ -140,13 +148,13 @@ public class UserFriendsController implements BlinckController {
 
 
 	public @RequestMapping(
-			value = "/request/to/{page}/{size}",
+			value = "/request/list/outcome/{page}/{size}",
 			method = GET
-	) FriendshipNotification[] getOwnRequestList(Authentication authentication,
-												 @PathVariable("page") int page,
-												 @PathVariable("size") int size) {
+	) FriendshipNotification[] getOutcomeRequestList(Authentication authentication,
+													 @PathVariable("page") int page,
+													 @PathVariable("size") int size) {
 
-		return notificationService.getAllNotificationFromInitiator(
+		return notificationService.getAllNotificationByInitiator(
 				getID(authentication.getName()), page, size
 		).toArray(new FriendshipNotification[0]);
 	}
@@ -155,13 +163,13 @@ public class UserFriendsController implements BlinckController {
 
 
 	public @RequestMapping(
-			value = "/request/from/{page}/{size}",
+			value = "/request/list/income/{page}/{size}",
 			method = GET
 	) FriendshipNotification[] getIncomeRequestList(Authentication authentication,
 												   @PathVariable("page") int page,
 												   @PathVariable("size") int size) {
 
- 		return notificationService.getAllNotificationFromReceiver(
+ 		return notificationService.getAllNotificationByReceiver(
 				getID(authentication.getName()), page, size
 		).toArray(new FriendshipNotification[0]);
 	}

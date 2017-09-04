@@ -55,4 +55,9 @@ public class FriendshipDaoImp
 	public Friendship getByUsers(Long user1, Long user2) {
 		return getRepository().getByUser1AndUser2OrUser2AndUser1(user1, user2, user1, user2);
 	}
+
+	@Override
+	public Long countByUserId(Long userId) {
+		return getRepository().countAllByUser1OrUser2(userId, userId);
+	}
 }

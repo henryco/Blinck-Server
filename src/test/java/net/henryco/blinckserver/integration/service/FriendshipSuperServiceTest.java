@@ -46,7 +46,7 @@ public class FriendshipSuperServiceTest extends BlinckUserIntegrationTest {
 		final Long[] users = saveNewRandomUsers(this, 2);
 		notificationService.addNotification(users[1], users[0]);
 
-		List<FriendshipNotification> all = notificationService.getAllNotificationFromReceiver(users[0], 0, 10);
+		List<FriendshipNotification> all = notificationService.getAllNotificationByReceiver(users[0], 0, 10);
 		assert all.size() == 1;
 
 		FriendshipNotification notification = all.get(0);
@@ -75,9 +75,9 @@ public class FriendshipSuperServiceTest extends BlinckUserIntegrationTest {
 			Thread.sleep(1);
 		}
 
-		assert notificationService.getAllNotificationFromInitiator(users[1], 0, 10).size() == 1;
+		assert notificationService.getAllNotificationByInitiator(users[1], 0, 10).size() == 1;
 
-		List<FriendshipNotification> all = notificationService.getAllNotificationFromReceiver(users[0], 0, 100);
+		List<FriendshipNotification> all = notificationService.getAllNotificationByReceiver(users[0], 0, 100);
 
 		assert all.size() == 7;
 		assert all.get(0).getInitiatorId().equals(users[7]);

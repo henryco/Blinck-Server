@@ -38,13 +38,13 @@ public class FriendshipNotificationService {
 
 
 	@Transactional
-	public List<FriendshipNotification> getAllNotificationFromInitiator(Long initiator, int page, int size) {
+	public List<FriendshipNotification> getAllNotificationByInitiator(Long initiator, int page, int size) {
 		return friendshipNotificationDao.getAllByInitiatorId(initiator, page, size);
 	}
 
 
 	@Transactional
-	public List<FriendshipNotification> getAllNotificationFromReceiver(Long receiver, int page, int size) {
+	public List<FriendshipNotification> getAllNotificationByReceiver(Long receiver, int page, int size) {
 		return friendshipNotificationDao.getAllByReceiverId(receiver, page, size);
 	}
 
