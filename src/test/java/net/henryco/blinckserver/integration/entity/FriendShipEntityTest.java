@@ -153,11 +153,13 @@ public class FriendShipEntityTest extends UserEntityIntegrationTest {
 	}
 
 
-	private static Long
+
+	private @SuppressWarnings("StatementWithEmptyBody") static Long
 	saveFriendship(FriendShipEntityTest context, Long id1, Long id2) {
 
 		Friendship friendship = new Friendship();
 		friendship.setDate(new Date(System.currentTimeMillis()));
+		for (int i = 0; i < 10000; i++) ;
 		friendship.setUser1(id1);
 		friendship.setUser2(id2);
 		return context.friendshipDao.save(friendship).getId();

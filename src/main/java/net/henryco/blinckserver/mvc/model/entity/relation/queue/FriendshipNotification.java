@@ -15,7 +15,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  */
 @Entity @Data
 @NoArgsConstructor
-public class FriendshipQueue {
+public class FriendshipNotification {
 
 
 	private @Id @Column(

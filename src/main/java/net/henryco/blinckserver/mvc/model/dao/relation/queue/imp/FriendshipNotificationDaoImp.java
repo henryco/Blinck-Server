@@ -1,8 +1,8 @@
 package net.henryco.blinckserver.mvc.model.dao.relation.queue.imp;
 
-import net.henryco.blinckserver.mvc.model.dao.relation.queue.FriendshipQueueDao;
-import net.henryco.blinckserver.mvc.model.entity.relation.queue.FriendshipQueue;
-import net.henryco.blinckserver.mvc.model.repository.relation.queue.FriendshipQueueRepository;
+import net.henryco.blinckserver.mvc.model.dao.relation.queue.FriendshipNotificationDao;
+import net.henryco.blinckserver.mvc.model.entity.relation.queue.FriendshipNotification;
+import net.henryco.blinckserver.mvc.model.repository.relation.queue.FriendshipNotificationRepository;
 import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -14,35 +14,35 @@ import java.util.List;
  * @author Henry on 04/09/17.
  */
 @Repository
-public class FriendshipQueueDaoImp
-		extends BlinckRepositoryProvider<FriendshipQueue, Long>
-		implements FriendshipQueueDao {
+public class FriendshipNotificationDaoImp
+		extends BlinckRepositoryProvider<FriendshipNotification, Long>
+		implements FriendshipNotificationDao {
 
 
 	@Autowired
-	public FriendshipQueueDaoImp(FriendshipQueueRepository repository) {
+	public FriendshipNotificationDaoImp(FriendshipNotificationRepository repository) {
 		super(repository);
 	}
 
-	private FriendshipQueueRepository getRepository() {
+	private FriendshipNotificationRepository getRepository() {
 		return provideRepository();
 	}
 
 
 	@Override
-	public List<FriendshipQueue> getAllByReceiverId(Long receiverId, int page, int size) {
+	public List<FriendshipNotification> getAllByReceiverId(Long receiverId, int page, int size) {
 		return getRepository().getAllByReceiverIdOrderByDateDesc(receiverId, new PageRequest(page, size));
 	}
 
 
 	@Override
-	public List<FriendshipQueue> getAllByInitiatorId(Long initiatorId, int page, int size) {
+	public List<FriendshipNotification> getAllByInitiatorId(Long initiatorId, int page, int size) {
 		return getRepository().getAllByInitiatorIdOrderByDateDesc(initiatorId, new PageRequest(page, size));
 	}
 
 
 	@Override
-	public List<FriendshipQueue> getAllByUserId(Long id, int page, int size) {
+	public List<FriendshipNotification> getAllByUserId(Long id, int page, int size) {
 		return getRepository().getAllByInitiatorIdOrReceiverIdOrderByDateDesc(id, id, new PageRequest(page, size));
 	}
 
