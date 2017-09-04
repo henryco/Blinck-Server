@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.integration.entity;
 
+import net.henryco.blinckserver.integration.UserIntegrationTest;
 import net.henryco.blinckserver.mvc.model.dao.infrastructure.BlackListDao;
 import net.henryco.blinckserver.mvc.model.dao.infrastructure.ReportListDao;
 import net.henryco.blinckserver.mvc.model.entity.infrastructure.BlackList;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * @author Henry on 02/09/17.
  */
-public class ReportAndBlackListEntityTest extends UserEntityIntegrationTest {
+public class ReportAndBlackListEntityTest extends UserIntegrationTest {
 
 
 	private @Autowired ReportListDao reportListDao;

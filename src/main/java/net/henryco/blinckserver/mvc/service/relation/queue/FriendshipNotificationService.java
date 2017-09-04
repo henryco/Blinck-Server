@@ -24,11 +24,12 @@ public class FriendshipNotificationService {
 
 
 	/**
-	 * @return Notification ID
+	 * @return <b>Notification ID</b> or <b>NULL</b> if initiator and receiver is the same person.
 	 */ @Transactional
 	public Long addNotification(Long initiator, Long receiver) {
 
-		FriendshipNotification notification = new FriendshipNotification();
+		if (initiator.equals(receiver)) return null;
+	 	FriendshipNotification notification = new FriendshipNotification();
 		notification.setInitiatorId(initiator);
 		notification.setReceiverId(receiver);
 		notification.setDate(new Date(System.currentTimeMillis()));
@@ -51,6 +52,12 @@ public class FriendshipNotificationService {
 	@Transactional
 	public List<FriendshipNotification> getAllWithUser(Long user, int page, int size) {
 		return friendshipNotificationDao.getAllByUserId(user, page, size);
+	}
+
+
+	@Transactional
+	public List<FriendshipNotification> getAll() {
+	 	return friendshipNotificationDao.getAll();
 	}
 
 

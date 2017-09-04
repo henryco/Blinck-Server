@@ -27,7 +27,7 @@ public class FriendshipService {
 	 * Create and save new friendship relation between users.
 	 * @return <b>ID</b> of saved relation id database.
 	 */ @Transactional
-	public Long saveFriendshipRelation(FriendshipNotification notification) {
+	public Long addFriendshipRelation(FriendshipNotification notification) {
 
 		Friendship friendship = new Friendship();
 		friendship.setUser1(notification.getInitiatorId());
