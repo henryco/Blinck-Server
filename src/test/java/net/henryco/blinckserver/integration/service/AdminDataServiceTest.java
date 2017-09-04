@@ -84,7 +84,7 @@ public class AdminDataServiceTest extends BlinckIntegrationTest {
 	@Test @Transactional
 	public void verificationQueueDateCreationTest() throws Exception {
 
-		final Date t0 = new Date(System.currentTimeMillis());
+		final Date t0 = new Date(System.currentTimeMillis() - 1);
 		final String name = saveProfile(adminDataService);
 		final Date t1 = new Date(System.currentTimeMillis() + 1);
 

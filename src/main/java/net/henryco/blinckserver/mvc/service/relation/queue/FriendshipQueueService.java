@@ -17,6 +17,7 @@ public class FriendshipQueueService {
 		this.friendshipQueueDao = friendshipQueueDao;
 	}
 
+	// TODO: 04/09/17
 
 
 

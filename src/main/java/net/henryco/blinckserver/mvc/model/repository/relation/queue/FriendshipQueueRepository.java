@@ -15,6 +15,8 @@ public interface FriendshipQueueRepository extends JpaRepository<FriendshipQueue
 	List<FriendshipQueue> getAllByInitiatorIdOrderByDateDesc(Long initiatorId, Pageable pageable);
 	List<FriendshipQueue> getAllByReceiverIdOrderByDateDesc(Long receiverId, Pageable pageable);
 
+	boolean existsByReceiverIdAndInitiatorIdOrInitiatorIdAndReceiverId(Long receiverId, Long initiatorId, Long initiatorId2, Long receiverId2);
+
 	void removeAllByReceiverIdAndInitiatorIdOrInitiatorIdAndReceiverId(Long receiverId, Long initiatorId, Long initiatorId2, Long receiverId2);
 	void removeAllByInitiatorIdOrReceiverId(Long initiatorId, Long receiverId);
 	void removeAllByInitiatorId(Long initiatorId);
