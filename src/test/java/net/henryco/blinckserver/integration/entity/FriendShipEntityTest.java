@@ -1,6 +1,6 @@
 package net.henryco.blinckserver.integration.entity;
 
-import net.henryco.blinckserver.integration.UserIntegrationTest;
+import net.henryco.blinckserver.integration.BlinckUserIntegrationTest;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.FriendshipDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author Henry on 03/09/17.
  */
-public class FriendShipEntityTest extends UserIntegrationTest {
+public class FriendShipEntityTest extends BlinckUserIntegrationTest {
 
 
 	private @Autowired FriendshipDao friendshipDao;

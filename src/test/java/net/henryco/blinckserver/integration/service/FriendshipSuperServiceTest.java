@@ -1,6 +1,6 @@
 package net.henryco.blinckserver.integration.service;
 
-import net.henryco.blinckserver.integration.UserIntegrationTest;
+import net.henryco.blinckserver.integration.BlinckUserIntegrationTest;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 import net.henryco.blinckserver.mvc.model.entity.relation.queue.FriendshipNotification;
 import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author Henry on 04/09/17.
  */
-public class FriendshipSuperServiceTest extends UserIntegrationTest {
+public class FriendshipSuperServiceTest extends BlinckUserIntegrationTest {
 
 
 	private @Autowired FriendshipService friendshipService;

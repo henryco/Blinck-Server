@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.social.facebook.api.User;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
 
@@ -37,9 +36,9 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 	protected static final String USER_ENDPOINT = "/protected/user";
 
 
-	private @Autowired UserDataService userDataService;
-	private @Autowired UserTokenAuthService userTokenAuthService;
-	private @Autowired SessionWhiteListService whiteListService;
+	protected @Autowired UserDataService userDataService;
+	protected @Autowired UserTokenAuthService userTokenAuthService;
+	protected @Autowired SessionWhiteListService whiteListService;
 
 
 	@Before
