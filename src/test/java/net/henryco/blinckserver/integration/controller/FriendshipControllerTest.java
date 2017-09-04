@@ -8,7 +8,6 @@ import org.springframework.social.facebook.api.User;
 
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Date;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -20,6 +19,10 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 
 	private static final String FRIENDSHIP_ENDPOINT = "/protected/user/friends";
 	private static final String FRIENDS_COUNT = FRIENDSHIP_ENDPOINT + "/count";
+	private static final String FRIEND_ADD = FRIENDSHIP_ENDPOINT + "/add/";
+
+	private static final String LIST_INCOME = FRIENDSHIP_ENDPOINT + "/request/list/income/0/100";
+	private static final String LIST_OUTCOME = FRIENDSHIP_ENDPOINT + "/request/list/outcome/0/100";
 
 
 	private static final class TestNotification
@@ -42,8 +45,6 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	}
 
 
-
-
 	private static
 	User[] createNewRandomUsers(UserDataService dataService, int numb) {
 
@@ -54,7 +55,6 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		}
 		return users;
 	}
-
 
 
 
@@ -74,22 +74,28 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	}
 
 
+	@Test
+	public void addFriendTest() throws Exception {
+
+		User[] users = createNewRandomUsers(userDataService, 2);
+		String token1 = getForUserAuthToken(users[0]);
+
+		assert authorizedGetRequest(FRIEND_ADD + users[1].getId(), token1).getStatusCode().is2xxSuccessful();
+	}
+
 
 	@Test
-	public void addFriendNotificationTest() throws Exception {
+	public void incomeFriendNotificationTest() throws Exception {
 
 		User[] users = createNewRandomUsers(userDataService, 4);
 		String token1 = getForUserAuthToken(users[0]);
 		String token2 = getForUserAuthToken(users[2]);
 		String token3 = getForUserAuthToken(users[3]);
 
-		String addRequest = FRIENDSHIP_ENDPOINT + "/add/";
+		assert authorizedGetRequest(FRIEND_ADD + users[0].getId(), token2).getStatusCode().is2xxSuccessful();
+		assert authorizedGetRequest(FRIEND_ADD + users[0].getId(), token3).getStatusCode().is2xxSuccessful();
 
-		assert authorizedGetRequest(addRequest + users[0].getId(), token2).getStatusCode().is2xxSuccessful();
-		assert authorizedGetRequest(addRequest + users[0].getId(), token3).getStatusCode().is2xxSuccessful();
-
-		String listRequest = FRIENDSHIP_ENDPOINT + "/request/list/income/0/100";
-		TestNotification[] body = authorizedGetRequest(listRequest, token1, TestNotification[].class).getBody();
+		TestNotification[] body = authorizedGetRequest(LIST_INCOME, token1, TestNotification[].class).getBody();
 
 		assert body[0].timestamp.after(body[1].timestamp);
 		assert body[0].to.equals(Long.decode(users[0].getId()));
@@ -97,4 +103,51 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		assert body[0].from.equals(Long.decode(users[3].getId()));
 		assert body[1].from.equals(Long.decode(users[2].getId()));
 	}
+
+
+	@Test
+	public void outcomeFriendNotificationTest() throws Exception {
+
+		User[] users = createNewRandomUsers(userDataService, 4);
+		String token1 = getForUserAuthToken(users[1]);
+
+		assert authorizedGetRequest(FRIEND_ADD + users[2].getId(), token1).getStatusCode().is2xxSuccessful();
+		assert authorizedGetRequest(FRIEND_ADD + users[3].getId(), token1).getStatusCode().is2xxSuccessful();
+
+		TestNotification[] body = authorizedGetRequest(LIST_OUTCOME, token1, TestNotification[].class).getBody();
+
+		assert body[0].timestamp.after(body[1].timestamp);
+		assert body[0].to.equals(Long.decode(users[3].getId()));
+		assert body[1].to.equals(Long.decode(users[2].getId()));
+		assert body[0].from.equals(Long.decode(users[1].getId()));
+		assert body[1].from.equals(Long.decode(users[1].getId()));
+	}
+
+
+	@Test
+	public void incomeListPageSizeTest() throws Exception{
+
+		final String CUSTOM_REQUEST = FRIENDSHIP_ENDPOINT + "/request/list/income/1/3";
+
+		User[] users = createNewRandomUsers(userDataService, 10);
+		for (User user: users) {
+			authorizedGetRequest(FRIEND_ADD + users[0].getId(), getForUserAuthToken(user));
+		}
+
+		TestNotification[] body = authorizedGetRequest(
+				LIST_INCOME, getForUserAuthToken(users[0]), TestNotification[].class
+		).getBody();
+
+		TestNotification[] body2 = authorizedGetRequest(
+				CUSTOM_REQUEST, getForUserAuthToken(users[0]), TestNotification[].class
+		).getBody();
+
+		assert body.length == 9;
+		assert body2.length == 3;
+
+		assert body2[0].notification_id.equals(body[3].notification_id);
+		assert body2[1].notification_id.equals(body[4].notification_id);
+		assert body2[2].notification_id.equals(body[5].notification_id);
+	}
+
 }
