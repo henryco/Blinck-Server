@@ -118,4 +118,15 @@ public class FriendshipService {
 	}
 
 
+	@Transactional
+	public boolean existsRelationWithUser(Long friendshipId, Long userId) {
+
+		if (friendshipDao.isExists(friendshipId)) {
+			Friendship friendship = friendshipDao.getById(friendshipId);
+			return friendship.getUser1().equals(userId) ||
+					friendship.getUser2().equals(userId);
+		}
+	 	return false;
+	}
+
 }

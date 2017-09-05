@@ -134,4 +134,23 @@ public class FriendshipSuperServiceTest extends BlinckUserIntegrationTest {
 		assert !notificationService.isExists(notification);
 	}
 
+
+	@Test @Transactional
+	public void relationWithUserExistsTest() {
+
+		final Long[] users = saveNewRandomUsers(this, 3);
+
+		Long relation1 = friendshipService.addFriendshipRelation(users[0], users[1]);
+		Long relation2 = friendshipService.addFriendshipRelation(users[1], users[2]);
+
+		assert friendshipService.existsRelationWithUser(relation1, users[0]);
+		assert friendshipService.existsRelationWithUser(relation1, users[1]);
+
+		assert friendshipService.existsRelationWithUser(relation2, users[1]);
+		assert friendshipService.existsRelationWithUser(relation2, users[2]);
+
+		assert !friendshipService.existsRelationWithUser(relation1, users[2]);
+		assert !friendshipService.existsRelationWithUser(relation2, users[0]);
+	}
+
 }
