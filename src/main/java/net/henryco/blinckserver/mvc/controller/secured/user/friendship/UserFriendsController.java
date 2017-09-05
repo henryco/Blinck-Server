@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.function.BiFunction;
 
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -149,7 +150,7 @@ public class UserFriendsController implements BlinckController {
 
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/remove",
-			method = {GET, POST}
+			method = {GET, POST, DELETE}
 	) void removeFriend(Authentication authentication,
 						@RequestParam("user_id") Long target) {
 
@@ -197,7 +198,7 @@ public class UserFriendsController implements BlinckController {
 
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/request/direct/delete",
-			method = {GET, POST}
+			method = {GET, POST, DELETE}
 	) void deleteFriendRequest(Authentication authentication,
 							   @RequestParam("id") Long reqId) {
 

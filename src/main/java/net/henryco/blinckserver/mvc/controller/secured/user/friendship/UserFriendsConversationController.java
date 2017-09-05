@@ -7,12 +7,15 @@ import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Henry on 05/09/17.
@@ -34,6 +37,7 @@ public class UserFriendsConversationController implements BlinckController {
 
 
 
+
 	public @RequestMapping(
 			value = "/messages/count",
 			method = GET
@@ -43,6 +47,7 @@ public class UserFriendsConversationController implements BlinckController {
 		accessCheck(friendshipService, friendshipId, getID(authentication.getName()));
 		return conversationService.countByFriendshipId(friendshipId);
 	}
+
 
 
 
@@ -61,7 +66,7 @@ public class UserFriendsConversationController implements BlinckController {
 	 *	@see FriendshipConversation
 	 */
 	public @RequestMapping(
-			value = "/messages",
+			value = "/messages/list",
 			method = GET,
 			produces = JSON
 	) FriendshipConversation[] getAllMessages(Authentication authentication,
@@ -75,6 +80,78 @@ public class UserFriendsConversationController implements BlinckController {
 	}
 
 
+
+
+	/**
+	 * <h1>Friendship conversation POST JSON:</h1>
+	 *	<h3>
+	 * 	{&nbsp;
+	 * 			"friendship":	LONG, &nbsp;
+	 * 			"message": 		CHAR[512]
+	 *	&nbsp;}</h3>
+	 *	@see FriendshipConversation
+	 */
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/messages/send",
+			method = POST,
+			consumes = JSON
+	) void sendMessage(Authentication authentication,
+					   @RequestBody FriendshipConversation post) {
+
+		final Long id = getID(authentication.getName());
+		accessCheck(friendshipService, post.getFriendship(), id);
+
+		FriendshipConversation message = new FriendshipConversation();
+		message.setDate(new Date(System.currentTimeMillis()));
+		message.setFriendship(post.getFriendship());
+		message.setMessage(post.getMessage());
+		message.setAuthor(id);
+
+		conversationService.save(message);
+	}
+
+
+
+
+	/**
+	 * <h1>Friendship conversation response JSON:</h1>
+	 *	<h3>
+	 * 	&nbsp;{
+	 * 			"id": 			LONG, &nbsp;
+	 * 			"message": 		CHAR[512], &nbsp;
+	 * 			"timestamp": 	DATE/LONG, &nbsp;
+	 * 			"author": 		LONG, &nbsp;
+	 * 			"friendship":	LONG
+	 *	&nbsp;}
+	 *	</h3>
+	 *	@see FriendshipConversation
+	 */
+	public @RequestMapping(
+			value = "/messages/last",
+			method = GET,
+			produces = JSON
+	) FriendshipConversation getLastMessage(Authentication authentication,
+											@RequestParam("id") Long friendshipId) {
+
+		accessCheck(friendshipService, friendshipId, getID(authentication.getName()));
+
+		List<FriendshipConversation> list =
+				conversationService.getByFriendshipId(friendshipId, 0, 1);
+		return list.isEmpty() ? null : list.get(0);
+	}
+
+
+
+
+	public @ResponseStatus(OK) @RequestMapping(
+			value = {"/remove", "/"},
+			method = {DELETE}
+	) void removeAllMessages(Authentication authentication,
+							 @RequestParam("id") Long friendshipId) {
+
+		accessCheck(friendshipService, friendshipId, getID(authentication.getName()));
+		conversationService.deleteAllByFriendshipId(friendshipId);
+	}
 
 
 

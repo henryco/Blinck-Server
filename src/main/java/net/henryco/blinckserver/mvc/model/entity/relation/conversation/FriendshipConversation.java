@@ -25,7 +25,8 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  *	@author Henry on 28/08/17.
  */ @Entity
 @Data @NoArgsConstructor
-public class FriendshipConversation {
+public class FriendshipConversation
+		implements Cloneable {
 
 
 	private @Id @Column(
@@ -74,5 +75,15 @@ public class FriendshipConversation {
 			"friendship"
 	) Long friendship;
 
+
+	@Override
+	public FriendshipConversation clone() {
+		try {
+			return (FriendshipConversation) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }
