@@ -160,7 +160,13 @@ public class FriendShipEntityTest extends BlinckUserIntegrationTest {
 
 		Friendship friendship = new Friendship();
 		friendship.setDate(new Date(System.currentTimeMillis()));
-		for (int i = 0; i < 10000; i++) ;
+
+		try {
+			Thread.sleep(5);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		friendship.setUser1(id1);
 		friendship.setUser2(id2);
 		return context.friendshipDao.save(friendship).getId();

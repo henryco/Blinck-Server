@@ -12,10 +12,19 @@ import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
- * @author Henry on 04/09/17.
- */
-@Entity @Data
-@NoArgsConstructor
+ * <h1>Friendship notification response JSON:</h1>
+ *	<h2>
+ * 	[&nbsp;
+ * 		{
+ * 			"notification_id": 	LONG, &nbsp;
+ * 			"from": 			LONG, &nbsp;
+ * 			"to": 				LONG, &nbsp;
+ * 			"timestamp": 		DATE/LONG
+ *		}
+ *	&nbsp;]</h2>
+ *	@author Henry on 04/09/17.
+ */ @Entity
+@Data @NoArgsConstructor
 public class FriendshipNotification {
 
 

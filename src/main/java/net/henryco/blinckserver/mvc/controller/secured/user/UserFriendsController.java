@@ -25,7 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class UserFriendsController implements BlinckController {
 
 
- 	private final FriendshipNotificationService notificationService;
+	private final FriendshipNotificationService notificationService;
 	private final FriendshipService friendshipService;
 
 
@@ -146,7 +146,20 @@ public class UserFriendsController implements BlinckController {
 
 
 
-
+	/**
+	 * <h1>Friendship notification response JSON:</h1>
+	 *	<h2>
+	 * 	[&nbsp;
+	 * 		{
+	 * 			"notification_id": 	LONG, &nbsp;
+	 * 			"from": 			LONG, &nbsp;
+	 * 			"to": 				LONG, &nbsp;
+	 * 			"timestamp": 		DATE/LONG
+	 *		}
+	 *	&nbsp;]</h2>
+	 *	@see FriendshipNotification
+	 *
+	 */
 	public @RequestMapping(
 			value = "/request/list/outcome/{page}/{size}",
 			method = GET
@@ -160,8 +173,20 @@ public class UserFriendsController implements BlinckController {
 	}
 
 
-
-
+	/**
+	 * <h1>Friendship notification response JSON:</h1>
+	 *	<h2>
+	 * 	[&nbsp;
+	 * 		{
+	 * 			"notification_id": 	LONG, &nbsp;
+	 * 			"from": 			LONG, &nbsp;
+	 * 			"to": 				LONG, &nbsp;
+	 * 			"timestamp": 		DATE/LONG
+	 *		}
+	 *	&nbsp;]</h2>
+	 *	@see FriendshipNotification
+	 *
+	 */
 	public @RequestMapping(
 			value = "/request/list/income/{page}/{size}",
 			method = GET
