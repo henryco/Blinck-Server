@@ -16,7 +16,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  *	<h2>
  * 	[&nbsp;
  * 		{
- * 			"notification_id": 	LONG, &nbsp;
+ * 			"notification": 	LONG, &nbsp;
  * 			"from": 			LONG, &nbsp;
  * 			"to": 				LONG, &nbsp;
  * 			"timestamp": 		DATE/LONG
@@ -34,7 +34,7 @@ public class FriendshipNotification {
 	) @GeneratedValue(
 			strategy = AUTO
 	) @JsonProperty(
-			value = "notification_id"
+			value = "notification"
 	) Long id;
 
 

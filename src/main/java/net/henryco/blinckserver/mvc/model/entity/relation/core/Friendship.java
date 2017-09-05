@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.model.entity.relation.core;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,10 +11,20 @@ import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
- * @author Henry on 28/08/17.
- */
-@Entity @Data
-@NoArgsConstructor
+ * <h1>Friendship response JSON:</h1>
+ *	<h2>
+ * 	[&nbsp;
+ * 		{
+ * 			"friendship": 	LONG, &nbsp;
+ * 			"timestamp": 	DATE/LONG, &nbsp;
+ * 			"user_1": 		LONG, &nbsp;
+ * 			"user_2": 		LONG
+ *		}
+ *	&nbsp;]</h2>
+ *	@author Henry on 28/08/17.
+ *
+ */ @Entity
+@Data @NoArgsConstructor
 public class Friendship {
 
 
@@ -22,6 +33,8 @@ public class Friendship {
 			unique = true
 	) @GeneratedValue(
 			strategy = AUTO
+	) @JsonProperty(
+			value = "friendship"
 	) Long id;
 
 
@@ -31,6 +44,8 @@ public class Friendship {
 			nullable = false
 	) @Temporal(
 			TIMESTAMP
+	) @JsonProperty(
+			value = "timestamp"
 	) Date date;
 
 
@@ -38,6 +53,8 @@ public class Friendship {
 			name = "user_id_1",
 			updatable = false,
 			nullable = false
+	) @JsonProperty(
+			value = "user_1"
 	) Long user1;
 
 
@@ -45,6 +62,8 @@ public class Friendship {
 			name = "user_id_2",
 			updatable = false,
 			nullable = false
+	) @JsonProperty(
+			value = "user_2"
 	) Long user2;
 
 

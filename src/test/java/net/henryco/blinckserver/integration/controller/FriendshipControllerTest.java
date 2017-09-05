@@ -24,19 +24,21 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	private static final String FRIEND_REMOVE = FRIENDSHIP_ENDPOINT + "/remove/";
 
 	private static final String LIST_ALL = FRIENDSHIP_ENDPOINT + "/list/0/100";
+	private static final String LIST_DETAILED = FRIENDSHIP_ENDPOINT + "/detailed/list/0/100";
 	private static final String LIST_INCOME = FRIENDSHIP_ENDPOINT + "/request/list/income/0/100";
 	private static final String LIST_OUTCOME = FRIENDSHIP_ENDPOINT + "/request/list/outcome/0/100";
 
+	private static final String DELETE = FRIENDSHIP_ENDPOINT + "/request/delete/";
 	private static final String REQUEST = FRIENDSHIP_ENDPOINT + "/request/";
 	private static final String ACCEPT  = "/accept";
 	private static final String DECLINE = "/decline";
 
-	private static final String DELETE = FRIENDSHIP_ENDPOINT + "/request/delete/";
+
 
 	private static final class TestNotification
 			implements Serializable {
 
-		public Long notification_id;
+		public Long notification;
 		public Date timestamp;
 		public Long from;
 		public Long to;
@@ -44,13 +46,30 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		@Override
 		public String toString() {
 			return "{" +
-					"notification_id=" + notification_id +
+					"notification=" + notification +
 					", timestamp=" + timestamp +
 					", from=" + from +
 					", to=" + to +
 			'}';
 		}
 	}
+
+
+	private static final class TestDetailFriendship
+			implements Serializable {
+
+		public Long id;
+		public Long friend;
+
+		@Override
+		public String toString() {
+			return "{" +
+					"id=" + id +
+					", friend=" + friend +
+			'}';
+		}
+	}
+
 
 
 	private static
@@ -157,9 +176,9 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		assert body.length == 9;
 		assert body2.length == 3;
 
-		assert body2[0].notification_id.equals(body[3].notification_id);
-		assert body2[1].notification_id.equals(body[4].notification_id);
-		assert body2[2].notification_id.equals(body[5].notification_id);
+		assert body2[0].notification.equals(body[3].notification);
+		assert body2[1].notification.equals(body[4].notification);
+		assert body2[2].notification.equals(body[5].notification);
 	}
 
 
@@ -218,17 +237,17 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		TestNotification[] body = authorizedGetRequest(LIST_OUTCOME, token1, TestNotification[].class).getBody();
 		assert body.length == 2;
 
-		authorizedGetRequest(DELETE + body[0].notification_id, token1);
+		authorizedGetRequest(DELETE + body[0].notification, token1);
 
 		TestNotification[] body2 = authorizedGetRequest(LIST_OUTCOME, token1, TestNotification[].class).getBody();
 		assert body2.length == 1;
-		assert !body2[0].notification_id.equals(body[0].notification_id);
+		assert !body2[0].notification.equals(body[0].notification);
 
-		authorizedGetRequest(DELETE + body2[0].notification_id, getForUserAuthToken(users[1]));
+		authorizedGetRequest(DELETE + body2[0].notification, getForUserAuthToken(users[1]));
 
 		TestNotification[] body3 = authorizedGetRequest(LIST_OUTCOME, token1, TestNotification[].class).getBody();
 		assert body3.length == 1; // ONLY AUTHOR OF NOTIFICATION CAN DIRECTLY DELETE IT
-		assert body3[0].notification_id.equals(body2[0].notification_id);
+		assert body3[0].notification.equals(body2[0].notification);
 	}
 
 
@@ -303,5 +322,26 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	}
 
 
+
+	@Test
+	public void detailedFriendListTest() throws Exception {
+
+		User[] users = createNewRandomUsers(userDataService, 8);
+		for (User user: users) {
+			authorizedGetRequest(FRIEND_ADD + users[0].getId(), getForUserAuthToken(user));
+		}
+
+		String token = getForUserAuthToken(users[0]);
+
+		for (TestNotification n: authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody()) {
+			authorizedGetRequest(REQUEST + n.from + ACCEPT, token);
+		}
+
+		TestDetailFriendship[] body = authorizedGetRequest(LIST_DETAILED, token, TestDetailFriendship[].class).getBody();
+		for (TestDetailFriendship d: body) {
+			System.out.println(d);
+		}
+
+	}
 
 }

@@ -1,17 +1,22 @@
 package net.henryco.blinckserver.mvc.controller.secured.user;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 import net.henryco.blinckserver.mvc.model.entity.relation.queue.FriendshipNotification;
 import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
 import net.henryco.blinckserver.mvc.service.relation.queue.FriendshipNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
 import java.util.function.BiFunction;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -35,6 +40,16 @@ public class UserFriendsController implements BlinckController {
 		this.notificationService = notificationService;
 		this.friendshipService = friendshipService;
 	}
+
+
+	@Data @NoArgsConstructor @AllArgsConstructor
+	private static final class DetailedFriendship
+			implements Serializable {
+		private Long id;
+		private Long friend;
+	}
+
+
 
 
 	public @RequestMapping(
@@ -61,6 +76,58 @@ public class UserFriendsController implements BlinckController {
 				.getAllUserRelations(id, page, size)
 				.stream().map(f -> chooser.apply(f.getUser1(), f.getUser2()))
 		.toArray(Long[]::new);
+	}
+
+
+
+	public @RequestMapping(
+			value = "/detailed/list/{page}/{size}",
+			method = GET,
+			produces = JSON
+	) DetailedFriendship[] getDetailedFriendList(Authentication authentication,
+												 @PathVariable("page") int page,
+												 @PathVariable("size") int size) {
+
+ 		final Long id = getID(authentication.getName());
+		BiFunction<Long, Long, Long> chooser = (a, b) -> a.equals(id) ? b : a;
+
+		return friendshipService
+				.getAllUserRelations(id, page, size)
+				.stream().map(f -> new DetailedFriendship(f.getId(), chooser.apply(f.getUser1(), f.getUser2())))
+		.toArray(DetailedFriendship[]::new);
+	}
+
+
+
+
+	/**
+	 * <h1>Friendship response JSON:</h1>
+	 *	<h2>
+	 * 	[&nbsp;
+	 * 		{
+	 * 			"friendship": 	LONG, &nbsp;
+	 * 			"timestamp": 	DATE/LONG, &nbsp;
+	 * 			"user_1": 		LONG, &nbsp;
+	 * 			"user_2": 		LONG
+	 *		}
+	 *	&nbsp;]</h2>
+	 *	@see Friendship
+	 *
+	 */
+	public @RequestMapping(
+			value = "/detailed/{friendship}",
+			method = GET,
+			produces = JSON
+	) Friendship getDetailedFriendship(Authentication authentication,
+									   @PathVariable("friendship") Long relation) {
+
+ 		final Long id = getID(authentication.getName());
+ 		if (friendshipService.isExistsById(relation)) {
+			Friendship friendship = friendshipService.getById(relation);
+			if (friendship.getUser2().equals(id) || friendship.getUser1().equals(id))
+				return friendship;
+		}
+		throw new AccessDeniedException("Wrong friendship id");
 	}
 
 
@@ -151,7 +218,7 @@ public class UserFriendsController implements BlinckController {
 	 *	<h2>
 	 * 	[&nbsp;
 	 * 		{
-	 * 			"notification_id": 	LONG, &nbsp;
+	 * 			"notification": 	LONG, &nbsp;
 	 * 			"from": 			LONG, &nbsp;
 	 * 			"to": 				LONG, &nbsp;
 	 * 			"timestamp": 		DATE/LONG
@@ -178,7 +245,7 @@ public class UserFriendsController implements BlinckController {
 	 *	<h2>
 	 * 	[&nbsp;
 	 * 		{
-	 * 			"notification_id": 	LONG, &nbsp;
+	 * 			"notification": 	LONG, &nbsp;
 	 * 			"from": 			LONG, &nbsp;
 	 * 			"to": 				LONG, &nbsp;
 	 * 			"timestamp": 		DATE/LONG
