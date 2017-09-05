@@ -8,6 +8,7 @@ import org.springframework.social.facebook.api.User;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -20,6 +21,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	private static final String FRIENDSHIP_ENDPOINT = "/protected/user/friends";
 	private static final String FRIENDS_COUNT = FRIENDSHIP_ENDPOINT + "/count";
 	private static final String FRIEND_ADD = FRIENDSHIP_ENDPOINT + "/add/";
+	private static final String FRIEND_REMOVE = FRIENDSHIP_ENDPOINT + "/remove/";
 
 	private static final String LIST_ALL = FRIENDSHIP_ENDPOINT + "/list/0/100";
 	private static final String LIST_INCOME = FRIENDSHIP_ENDPOINT + "/request/list/income/0/100";
@@ -228,6 +230,78 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		assert body3.length == 1; // ONLY AUTHOR OF NOTIFICATION CAN DIRECTLY DELETE IT
 		assert body3[0].notification_id.equals(body2[0].notification_id);
 	}
+
+
+
+	@Test
+	public void friendListAndCountTest() throws Exception {
+
+		User[] users = createNewRandomUsers(userDataService, 17);
+		Long userId = Long.decode(users[0].getId());
+		for (User user: users) {
+			authorizedGetRequest(FRIEND_ADD + users[0].getId(), getForUserAuthToken(user));
+		}
+
+		String token = getForUserAuthToken(users[0]);
+		assert authorizedGetRequest(LIST_ALL, token, Long[].class).getBody().length == 0;
+
+		for (TestNotification n: authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody()) {
+			authorizedGetRequest(REQUEST + n.from + ACCEPT, token);
+		}
+
+		assert authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody().length == 0;
+
+		Long[] friends = authorizedGetRequest(LIST_ALL, token, Long[].class).getBody();
+
+		assert friends.length == 16;
+		assert Arrays.stream(friends).noneMatch(userId::equals);
+
+		Long count = authorizedGetRequest(FRIENDS_COUNT, token, Long.class).getBody();
+		assert count.equals((long) friends.length);
+	}
+
+
+
+	@Test
+	public void removeFriendTest() throws Exception {
+
+		User[] users = createNewRandomUsers(userDataService, 5);
+		for (User user: users) {
+			authorizedGetRequest(FRIEND_ADD + users[0].getId(), getForUserAuthToken(user));
+		}
+
+		String token = getForUserAuthToken(users[0]);
+		String secondToken = getForUserAuthToken(users[1]);
+
+		for (TestNotification n: authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody()) {
+			authorizedGetRequest(REQUEST + n.from + ACCEPT, token);
+		}
+
+
+		Long[] friendsBefore = authorizedGetRequest(LIST_ALL, token, Long[].class).getBody();
+		assert Arrays.stream(friendsBefore).anyMatch(f -> f.equals(Long.decode(users[1].getId())));
+
+
+		Long[] secondListBefore = authorizedGetRequest(LIST_ALL, secondToken, Long[].class).getBody();
+		assert Arrays.stream(secondListBefore).anyMatch(f -> f.equals(Long.decode(users[0].getId())));
+
+
+		authorizedGetRequest(FRIEND_REMOVE + users[3].getId(), token);
+		authorizedGetRequest(FRIEND_REMOVE + users[1].getId(), token);
+
+
+		Long[] friendsAfter = authorizedGetRequest(LIST_ALL, token, Long[].class).getBody();
+		assert friendsAfter.length == 2;
+		assert Arrays.stream(friendsAfter).noneMatch(f -> f.equals(Long.decode(users[1].getId())));
+		assert Arrays.stream(friendsAfter).noneMatch(f -> f.equals(Long.decode(users[3].getId())));
+		assert Arrays.stream(friendsAfter).anyMatch(f -> f.equals(Long.decode(users[2].getId())));
+		assert Arrays.stream(friendsAfter).anyMatch(f -> f.equals(Long.decode(users[4].getId())));
+
+
+		Long[] secondListAfter = authorizedGetRequest(LIST_ALL, secondToken, Long[].class).getBody();
+		assert Arrays.stream(secondListAfter).noneMatch(f -> f.equals(Long.decode(users[0].getId())));
+	}
+
 
 
 }
