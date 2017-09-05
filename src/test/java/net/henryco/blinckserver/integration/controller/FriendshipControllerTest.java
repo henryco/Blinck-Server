@@ -20,20 +20,20 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 
 	private static final String FRIENDSHIP_ENDPOINT = "/protected/user/friends";
 	private static final String FRIENDS_COUNT = FRIENDSHIP_ENDPOINT + "/count";
-	private static final String FRIEND_ADD = FRIENDSHIP_ENDPOINT + "/add/";
-	private static final String FRIEND_REMOVE = FRIENDSHIP_ENDPOINT + "/remove/";
-	private static final String FRIEND_DETAILED = FRIENDSHIP_ENDPOINT + "/detailed/";
+	private static final String FRIEND_ADD = FRIENDSHIP_ENDPOINT + "/add?user_id=";
+	private static final String FRIEND_REMOVE = FRIENDSHIP_ENDPOINT + "/remove?user_id=";
+	private static final String FRIEND_DETAILED = FRIENDSHIP_ENDPOINT + "/detailed?id=";
 
-	private static final String LIST_ALL = FRIENDSHIP_ENDPOINT + "/list/0/100";
-	private static final String LIST_DETAILED = FRIENDSHIP_ENDPOINT + "/detailed/list/0/100";
-	private static final String LIST_INCOME = FRIENDSHIP_ENDPOINT + "/request/list/income/0/100";
-	private static final String LIST_OUTCOME = FRIENDSHIP_ENDPOINT + "/request/list/outcome/0/100";
+	private static final String LIST_ALL = FRIENDSHIP_ENDPOINT + "/list?page=0&size=100";
+	private static final String LIST_DETAILED = FRIENDSHIP_ENDPOINT + "/detailed/list?page=0&size=100";
 
-	private static final String DELETE = FRIENDSHIP_ENDPOINT + "/request/delete/";
-	private static final String REQUEST = FRIENDSHIP_ENDPOINT + "/request/";
-	private static final String ACCEPT  = "/accept";
-	private static final String DECLINE = "/decline";
+	private static final String REQUEST = FRIENDSHIP_ENDPOINT + "/request";
+	private static final String DELETE = REQUEST + "/direct/delete?id=";
+	private static final String ACCEPT  = REQUEST + "/accept?user_id=";
+	private static final String DECLINE = REQUEST + "/decline?user_id=";
 
+	private static final String LIST_INCOME = REQUEST + "/list/income?page=0&size=100";
+	private static final String LIST_OUTCOME = REQUEST + "/list/outcome?page=0&size=100";
 
 
 	private static final class TestNotification
@@ -102,6 +102,9 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		}
 		return users;
 	}
+
+
+
 
 
 
@@ -178,7 +181,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	@Test
 	public void incomeListPageSizeTest() throws Exception{
 
-		final String CUSTOM_REQUEST = FRIENDSHIP_ENDPOINT + "/request/list/income/1/3";
+		final String CUSTOM_REQUEST = FRIENDSHIP_ENDPOINT + "/request/list/income?page=1&size=3";
 
 		User[] users = createNewRandomUsers(userDataService, 10);
 		for (User user: users) {
@@ -215,7 +218,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		TestNotification[] body = authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody();
 
 		for (TestNotification n: body) {
-			String request = REQUEST + n.from + ACCEPT;
+			String request = ACCEPT + n.from;
 			assert authorizedGetRequest(request, token).getStatusCode().is2xxSuccessful();
 		}
 
@@ -236,7 +239,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		String token = getForUserAuthToken(users[0]);
 
 		for (TestNotification n: authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody()) {
-			String request = REQUEST + n.from + DECLINE;
+			String request = DECLINE + n.from;
 			assert authorizedGetRequest(request, token).getStatusCode().is2xxSuccessful();
 		}
 
@@ -285,7 +288,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		assert authorizedGetRequest(LIST_ALL, token, Long[].class).getBody().length == 0;
 
 		for (TestNotification n: authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody()) {
-			authorizedGetRequest(REQUEST + n.from + ACCEPT, token);
+			authorizedGetRequest(ACCEPT + n.from, token);
 		}
 
 		assert authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody().length == 0;
@@ -313,7 +316,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		String secondToken = getForUserAuthToken(users[1]);
 
 		for (TestNotification n: authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody()) {
-			authorizedGetRequest(REQUEST + n.from + ACCEPT, token);
+			authorizedGetRequest(ACCEPT + n.from, token);
 		}
 
 
@@ -354,12 +357,15 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		String token = getForUserAuthToken(users[0]);
 
 		for (TestNotification n: authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody()) {
-			authorizedGetRequest(REQUEST + n.from + ACCEPT, token);
+			authorizedGetRequest(ACCEPT + n.from, token);
 		}
 
 		TestDetailFriendship[] body = authorizedGetRequest(LIST_DETAILED, token, TestDetailFriendship[].class).getBody();
-		for (TestDetailFriendship d: body) {
-			System.out.println(d);
+
+		int i = 1; // 1 because user 0 cannot be in relation in his self
+		for (TestDetailFriendship df: body) {
+			assert df.friend.equals(Long.decode(users[i].getId()));
+			i++;
 		}
 
 	}
@@ -376,7 +382,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 
 
 		for (TestNotification n: authorizedGetRequest(LIST_INCOME, token1, TestNotification[].class).getBody()) {
-			authorizedGetRequest(REQUEST + n.from + ACCEPT, token1);
+			authorizedGetRequest(ACCEPT + n.from, token1);
 		}
 
 		TestDetailFriendship[] body = authorizedGetRequest(LIST_DETAILED, token1, TestDetailFriendship[].class).getBody();
@@ -390,7 +396,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		String token2 = getForUserAuthToken(other[1]);
 
 		authorizedGetRequest(FRIEND_ADD + other[0].getId(), token2);
-		authorizedGetRequest(REQUEST + other[1].getId() + ACCEPT, getForUserAuthToken(other[0]));
+		authorizedGetRequest(ACCEPT + other[1].getId(), getForUserAuthToken(other[0]));
 
 
 		TestDetailFriendship[] body3 = authorizedGetRequest(LIST_DETAILED, token2, TestDetailFriendship[].class).getBody();

@@ -1,23 +1,30 @@
 package net.henryco.blinckserver.mvc.model.entity.relation.conversation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
-import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 
 import javax.persistence.*;
-
 import java.util.Date;
 
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
- * @author Henry on 28/08/17.
- */
-@Entity @Data
-@NoArgsConstructor
+ * <h1>Friendship conversation response JSON:</h1>
+ *	<h3>
+ * 	[&nbsp;
+ * 		{
+ * 			"id": 			LONG, &nbsp;
+ * 			"message": 		CHAR[512], &nbsp;
+ * 			"timestamp": 	DATE/LONG, &nbsp;
+ * 			"author": 		LONG, &nbsp;
+ * 			"friendship":	LONG
+ *		}
+ *	&nbsp;]</h3>
+ *	@author Henry on 28/08/17.
+ */ @Entity
+@Data @NoArgsConstructor
 public class FriendshipConversation {
 
 
@@ -26,12 +33,16 @@ public class FriendshipConversation {
 			unique = true
 	) @GeneratedValue(
 			strategy = AUTO
+	) @JsonProperty(
+			"id"
 	) Long id;
 
 
 	private @Column(
 			name = "message",
 			length = 512
+	) @JsonProperty(
+			"message"
 	) String message;
 
 
@@ -41,25 +52,27 @@ public class FriendshipConversation {
 			nullable = false
 	) @Temporal(
 			TIMESTAMP
+	) @JsonProperty(
+			"timestamp"
 	) Date date;
 
 
-	private @ManyToOne(
-			cascade = ALL,
-			optional = false
-	) @JoinColumn(
+	private @Column(
 			name = "author_id",
-			updatable = false
-	) UserCoreProfile author;
+			updatable = false,
+			nullable = false
+	) @JsonProperty(
+			"author"
+	) Long author;
 
 
-	private @ManyToOne(
-			cascade = ALL,
-			optional = false
-	) @JoinColumn(
+	private @Column(
 			name = "friendship_id",
-			updatable = false
-	) Friendship friendship;
+			updatable = false,
+			nullable = false
+	) @JsonProperty(
+			"friendship"
+	) Long friendship;
 
-	// TODO: 02/09/17 TESTS, maybe remove hard reference
+
 }

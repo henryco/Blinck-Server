@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.controller.secured.user;
+package net.henryco.blinckserver.mvc.controller.secured.user.friendship;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,10 +11,7 @@ import net.henryco.blinckserver.mvc.service.relation.queue.FriendshipNotificatio
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.function.BiFunction;
@@ -62,12 +59,12 @@ public class UserFriendsController implements BlinckController {
 
 
 	public @RequestMapping(
-			value = "/list/{page}/{size}",
+			value = "/list",
 			method = GET,
 			produces = JSON
 	) Long[] getFriendList(Authentication authentication,
-						   @PathVariable("page") int page,
-						   @PathVariable("size") int size) {
+						   @RequestParam("page") int page,
+						   @RequestParam("size") int size) {
 
 		final Long id = getID(authentication.getName());
 		BiFunction<Long, Long, Long> chooser = (a, b) -> a.equals(id) ? b : a;
@@ -81,12 +78,12 @@ public class UserFriendsController implements BlinckController {
 
 
 	public @RequestMapping(
-			value = "/detailed/list/{page}/{size}",
+			value = "/detailed/list",
 			method = GET,
 			produces = JSON
 	) DetailedFriendship[] getDetailedFriendList(Authentication authentication,
-												 @PathVariable("page") int page,
-												 @PathVariable("size") int size) {
+												 @RequestParam("page") int page,
+												 @RequestParam("size") int size) {
 
  		final Long id = getID(authentication.getName());
 		BiFunction<Long, Long, Long> chooser = (a, b) -> a.equals(id) ? b : a;
@@ -115,11 +112,11 @@ public class UserFriendsController implements BlinckController {
 	 *
 	 */
 	public @RequestMapping(
-			value = "/detailed/{friendship}",
+			value = "/detailed",
 			method = GET,
 			produces = JSON
 	) Friendship getDetailedFriendship(Authentication authentication,
-									   @PathVariable("friendship") Long relation) {
+									   @RequestParam("id") Long relation) {
 
  		final Long id = getID(authentication.getName());
  		if (friendshipService.isExistsById(relation)) {
@@ -134,10 +131,10 @@ public class UserFriendsController implements BlinckController {
 
 
 	public @ResponseStatus(OK) @RequestMapping(
-			value = "/add/{user_id}",
+			value = "/add",
 			method = {GET, POST}
 	) void addFriend(Authentication authentication,
-					 @PathVariable("user_id") Long target) {
+					 @RequestParam("user_id") Long target) {
 
  		final Long id = getID(authentication.getName());
 
@@ -151,10 +148,10 @@ public class UserFriendsController implements BlinckController {
 
 
 	public @ResponseStatus(OK) @RequestMapping(
-			value = "/remove/{user_id}",
+			value = "/remove",
 			method = {GET, POST}
 	) void removeFriend(Authentication authentication,
-						@PathVariable("user_id") Long target) {
+						@RequestParam("user_id") Long target) {
 
  		final Long id = getID(authentication.getName());
 		if (!friendshipService.isExistsBetweenUsers(id, target)) return;
@@ -168,10 +165,10 @@ public class UserFriendsController implements BlinckController {
 
 
 	public @ResponseStatus(OK) @RequestMapping(
-			value = "/request/{user_id}/accept",
+			value = "/request/accept",
 			method = {GET, POST}
 	) void acceptFriendRequest(Authentication authentication,
-							   @PathVariable("user_id") Long target) {
+							   @RequestParam("user_id") Long target) {
 
  		final Long id = getID(authentication.getName());
 		if (!checkNotificationRequest(id, target)) return;
@@ -184,10 +181,10 @@ public class UserFriendsController implements BlinckController {
 
 
 	public @ResponseStatus(OK) @RequestMapping(
-			value = "/request/{user_id}/decline",
+			value = "/request/decline",
 			method = {GET, POST}
 	) void declineFriendRequest(Authentication authentication,
-								@PathVariable("user_id") Long target) {
+								@RequestParam("user_id") Long target) {
 
  		final Long id = getID(authentication.getName());
  		if (!checkNotificationRequest(id, target)) return;
@@ -199,10 +196,10 @@ public class UserFriendsController implements BlinckController {
 
 
 	public @ResponseStatus(OK) @RequestMapping(
-			value = "/request/delete/{request_id}",
+			value = "/request/direct/delete",
 			method = {GET, POST}
 	) void deleteFriendRequest(Authentication authentication,
-							   @PathVariable("request_id") Long reqId) {
+							   @RequestParam("id") Long reqId) {
 
 		final Long id = getID(authentication.getName());
 		if (!notificationService.isExists(reqId)) return;
@@ -228,11 +225,11 @@ public class UserFriendsController implements BlinckController {
 	 *
 	 */
 	public @RequestMapping(
-			value = "/request/list/outcome/{page}/{size}",
+			value = "/request/list/outcome",
 			method = GET
 	) FriendshipNotification[] getOutcomeRequestList(Authentication authentication,
-													 @PathVariable("page") int page,
-													 @PathVariable("size") int size) {
+													 @RequestParam("page") int page,
+													 @RequestParam("size") int size) {
 
 		return notificationService.getAllNotificationByInitiator(
 				getID(authentication.getName()), page, size
@@ -255,11 +252,11 @@ public class UserFriendsController implements BlinckController {
 	 *
 	 */
 	public @RequestMapping(
-			value = "/request/list/income/{page}/{size}",
+			value = "/request/list/income",
 			method = GET
 	) FriendshipNotification[] getIncomeRequestList(Authentication authentication,
-												   @PathVariable("page") int page,
-												   @PathVariable("size") int size) {
+												   @RequestParam("page") int page,
+												   @RequestParam("size") int size) {
 
  		return notificationService.getAllNotificationByReceiver(
 				getID(authentication.getName()), page, size
