@@ -124,8 +124,14 @@ public class UserFriendsController implements BlinckController {
  		final Long id = getID(authentication.getName());
  		if (friendshipService.isExistsById(relation)) {
 			Friendship friendship = friendshipService.getById(relation);
-			if (friendship.getUser2().equals(id) || friendship.getUser1().equals(id))
-				return friendship;
+			if (friendship.getUser2().equals(id) || friendship.getUser1().equals(id)) {
+				Friendship copy = new Friendship();
+				copy.setId(friendship.getId());
+				copy.setUser1(friendship.getUser1());
+				copy.setUser2(friendship.getUser2());
+				copy.setDate(friendship.getDate());
+				return copy;
+			}
 		}
 		throw new AccessDeniedException("Wrong friendship id");
 	}

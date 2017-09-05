@@ -22,6 +22,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	private static final String FRIENDS_COUNT = FRIENDSHIP_ENDPOINT + "/count";
 	private static final String FRIEND_ADD = FRIENDSHIP_ENDPOINT + "/add/";
 	private static final String FRIEND_REMOVE = FRIENDSHIP_ENDPOINT + "/remove/";
+	private static final String FRIEND_DETAILED = FRIENDSHIP_ENDPOINT + "/detailed/";
 
 	private static final String LIST_ALL = FRIENDSHIP_ENDPOINT + "/list/0/100";
 	private static final String LIST_DETAILED = FRIENDSHIP_ENDPOINT + "/detailed/list/0/100";
@@ -67,6 +68,25 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 					"id=" + id +
 					", friend=" + friend +
 			'}';
+		}
+	}
+
+
+	private static final class TestFullDetailFriendship
+			implements Serializable {
+		public Long friendship;
+		public Date timestamp;
+		public Long user_1;
+		public Long user_2;
+
+		@Override
+		public String toString() {
+			return "{" +
+					"friendship=" + friendship +
+					", timestamp=" + timestamp +
+					", user_1=" + user_1 +
+					", user_2=" + user_2 +
+					'}';
 		}
 	}
 
@@ -344,4 +364,43 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 
 	}
 
+
+
+	@Test
+	public void fullDetailFriendshipTest() throws Exception {
+
+		User[] users = createNewRandomUsers(userDataService, 5);
+		for (User user: users)
+			authorizedGetRequest(FRIEND_ADD + users[0].getId(), getForUserAuthToken(user));
+		String token1 = getForUserAuthToken(users[0]);
+
+
+		for (TestNotification n: authorizedGetRequest(LIST_INCOME, token1, TestNotification[].class).getBody()) {
+			authorizedGetRequest(REQUEST + n.from + ACCEPT, token1);
+		}
+
+		TestDetailFriendship[] body = authorizedGetRequest(LIST_DETAILED, token1, TestDetailFriendship[].class).getBody();
+
+		String request1 = FRIEND_DETAILED + body[3].id;
+		TestFullDetailFriendship body1 = authorizedGetRequest(request1, token1, TestFullDetailFriendship.class).getBody();
+		assert body1.friendship != null; // NOT NULL BECAUSE 2 way relation btw users and token holder one of them
+
+
+		User[] other = createNewRandomUsers(userDataService, 2);
+		String token2 = getForUserAuthToken(other[1]);
+
+		authorizedGetRequest(FRIEND_ADD + other[0].getId(), token2);
+		authorizedGetRequest(REQUEST + other[1].getId() + ACCEPT, getForUserAuthToken(other[0]));
+
+
+		TestDetailFriendship[] body3 = authorizedGetRequest(LIST_DETAILED, token2, TestDetailFriendship[].class).getBody();
+
+		String request2 = FRIEND_DETAILED + body3[0].id;
+		TestFullDetailFriendship body4 = authorizedGetRequest(request2, token2, TestFullDetailFriendship.class).getBody();
+		assert body4.friendship != null; // NOT NULL BECAUSE 2 way relation btw users and token holder one of them
+
+
+		TestFullDetailFriendship body5 = authorizedGetRequest(request2, token1, TestFullDetailFriendship.class).getBody();
+		assert body5.friendship == null; // NULL BECAUSE TOKEN HOLDER ISN'T IN RELATIONS WHICH ARE CHECKING
+	}
 }
