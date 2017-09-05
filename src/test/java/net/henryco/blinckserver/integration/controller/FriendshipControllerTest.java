@@ -21,9 +21,15 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	private static final String FRIENDS_COUNT = FRIENDSHIP_ENDPOINT + "/count";
 	private static final String FRIEND_ADD = FRIENDSHIP_ENDPOINT + "/add/";
 
+	private static final String LIST_ALL = FRIENDSHIP_ENDPOINT + "/list/0/100";
 	private static final String LIST_INCOME = FRIENDSHIP_ENDPOINT + "/request/list/income/0/100";
 	private static final String LIST_OUTCOME = FRIENDSHIP_ENDPOINT + "/request/list/outcome/0/100";
 
+	private static final String REQUEST = FRIENDSHIP_ENDPOINT + "/request/";
+	private static final String ACCEPT  = "/accept";
+	private static final String DECLINE = "/decline";
+
+	private static final String DELETE = FRIENDSHIP_ENDPOINT + "/request/delete/";
 
 	private static final class TestNotification
 			implements Serializable {
@@ -74,6 +80,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	}
 
 
+
 	@Test
 	public void addFriendTest() throws Exception {
 
@@ -82,6 +89,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 
 		assert authorizedGetRequest(FRIEND_ADD + users[1].getId(), token1).getStatusCode().is2xxSuccessful();
 	}
+
 
 
 	@Test
@@ -105,6 +113,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	}
 
 
+
 	@Test
 	public void outcomeFriendNotificationTest() throws Exception {
 
@@ -122,6 +131,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		assert body[0].from.equals(Long.decode(users[1].getId()));
 		assert body[1].from.equals(Long.decode(users[1].getId()));
 	}
+
 
 
 	@Test
@@ -149,5 +159,75 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 		assert body2[1].notification_id.equals(body[4].notification_id);
 		assert body2[2].notification_id.equals(body[5].notification_id);
 	}
+
+
+
+	@Test
+	public void acceptFriendRequestTest() throws Exception {
+
+		User[] users = createNewRandomUsers(userDataService, 4);
+		for (User user: users) {
+			authorizedGetRequest(FRIEND_ADD + users[0].getId(), getForUserAuthToken(user));
+		}
+
+		String token = getForUserAuthToken(users[0]);
+		TestNotification[] body = authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody();
+
+		for (TestNotification n: body) {
+			String request = REQUEST + n.from + ACCEPT;
+			assert authorizedGetRequest(request, token).getStatusCode().is2xxSuccessful();
+		}
+
+		assert authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody().length == 0;
+		assert authorizedGetRequest(LIST_ALL, token, Long[].class).getBody().length == 3;
+	}
+
+
+
+	@Test
+	public void declineFriendRequestTest() throws Exception {
+
+		User[] users = createNewRandomUsers(userDataService, 4);
+		for (User user: users) {
+			authorizedGetRequest(FRIEND_ADD + users[0].getId(), getForUserAuthToken(user));
+		}
+
+		String token = getForUserAuthToken(users[0]);
+
+		for (TestNotification n: authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody()) {
+			String request = REQUEST + n.from + DECLINE;
+			assert authorizedGetRequest(request, token).getStatusCode().is2xxSuccessful();
+		}
+
+		assert authorizedGetRequest(LIST_INCOME, token, TestNotification[].class).getBody().length == 0;
+		assert authorizedGetRequest(LIST_ALL, token, Long[].class).getBody().length == 0;
+	}
+
+
+
+	@Test
+	public void deleteRequestTest() throws Exception {
+
+		User[] users = createNewRandomUsers(userDataService, 3);
+		String token1 = getForUserAuthToken(users[0]);
+
+		for (User user: users) authorizedGetRequest(FRIEND_ADD + user.getId(), token1);
+
+		TestNotification[] body = authorizedGetRequest(LIST_OUTCOME, token1, TestNotification[].class).getBody();
+		assert body.length == 2;
+
+		authorizedGetRequest(DELETE + body[0].notification_id, token1);
+
+		TestNotification[] body2 = authorizedGetRequest(LIST_OUTCOME, token1, TestNotification[].class).getBody();
+		assert body2.length == 1;
+		assert !body2[0].notification_id.equals(body[0].notification_id);
+
+		authorizedGetRequest(DELETE + body2[0].notification_id, getForUserAuthToken(users[1]));
+
+		TestNotification[] body3 = authorizedGetRequest(LIST_OUTCOME, token1, TestNotification[].class).getBody();
+		assert body3.length == 1; // ONLY AUTHOR OF NOTIFICATION CAN DIRECTLY DELETE IT
+		assert body3[0].notification_id.equals(body2[0].notification_id);
+	}
+
 
 }
