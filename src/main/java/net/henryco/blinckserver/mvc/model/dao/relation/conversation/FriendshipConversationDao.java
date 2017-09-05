@@ -16,4 +16,5 @@ public interface FriendshipConversationDao extends BlinckDaoTemplate<FriendshipC
 
 	void deleteByFriendshipId(Long id);
 
+	long countByFriendshipId(Long id);
 }

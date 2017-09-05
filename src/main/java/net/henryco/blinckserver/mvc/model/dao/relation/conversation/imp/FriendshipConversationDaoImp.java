@@ -42,4 +42,8 @@ public class FriendshipConversationDaoImp
 		return getRepository().getAllByFriendshipOrderByDateDesc(id, new PageRequest(page, size));
 	}
 
+	@Override
+	public long countByFriendshipId(Long id) {
+		return getRepository().countAllByFriendship(id);
+	}
 }

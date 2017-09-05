@@ -47,4 +47,9 @@ public class FriendshipConversationService
 	}
 
 
+	@Transactional
+	public long countByFriendshipId(Long id) {
+		return getDao().countByFriendshipId(id);
+	}
+
 }

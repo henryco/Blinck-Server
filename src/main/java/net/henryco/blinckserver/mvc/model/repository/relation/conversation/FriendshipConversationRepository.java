@@ -17,4 +17,5 @@ public interface FriendshipConversationRepository extends JpaRepository<Friendsh
 
 	void removeAllByFriendship(Long friendship);
 
+	long countAllByFriendship(Long friendship);
 }
