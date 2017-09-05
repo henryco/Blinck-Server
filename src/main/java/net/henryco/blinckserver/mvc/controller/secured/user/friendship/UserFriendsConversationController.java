@@ -34,6 +34,18 @@ public class UserFriendsConversationController implements BlinckController {
 
 
 
+	public @RequestMapping(
+			value = "/messages/count",
+			method = GET
+	) Long getAllMessagesCount(Authentication authentication,
+							   @RequestParam("id") Long friendshipId) {
+
+		accessCheck(friendshipService, friendshipId, getID(authentication.getName()));
+		return conversationService.countByFriendshipId(friendshipId);
+	}
+
+
+
 	/**
 	 * <h1>Friendship conversation response JSON:</h1>
 	 *	<h3>
@@ -57,9 +69,7 @@ public class UserFriendsConversationController implements BlinckController {
 											  @RequestParam("size") int size,
 											  @RequestParam("id") Long friendshipId) {
 
-		if (!friendshipService.existsRelationWithUser(friendshipId, getID(authentication.getName())))
-			throw new AccessDeniedException("Wrong user or conversation ID");
-
+		accessCheck(friendshipService, friendshipId, getID(authentication.getName()));
  		return conversationService.getByFriendshipId(friendshipId, page, size)
 				.toArray(new FriendshipConversation[0]);
 	}
@@ -68,7 +78,17 @@ public class UserFriendsConversationController implements BlinckController {
 
 
 
-	private static Long getID(String name) {
+
+
+	private static
+	Long getID(String name) {
 		return Long.decode(name);
 	}
+
+	private static
+	void accessCheck(FriendshipService friendshipService, Long friendshipId, Long userId) {
+		if (!friendshipService.existsRelationWithUser(friendshipId, userId))
+			throw new AccessDeniedException("Wrong user or conversation ID");
+	}
+
 }
