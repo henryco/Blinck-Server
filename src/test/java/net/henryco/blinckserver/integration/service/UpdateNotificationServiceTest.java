@@ -100,4 +100,23 @@ public class UpdateNotificationServiceTest extends BlinckUserIntegrationTest {
 		assert notificationService.getAllUserNotifications(someId).size() == 0;
 	}
 
+
+	@Test @Transactional
+	public void popAllNotificationsTest() throws Exception {
+
+		Long someId = Long.decode(TestUtils.randomGaussNumberString());
+		int numb = Math.max(new Random().nextInt(20), 10);
+
+		for (int i = 0; i < numb; i++)
+			notificationService.addNotification(createRandomNotification(someId));
+		assert notificationService.countAllUserNotifications(someId) == numb;
+		assert notificationService.getAllUserNotifications(someId).size() == numb;
+
+		List<UpdateNotification> all = notificationService.popAllNotifications(someId);
+		assert all.size() == numb;
+		assert notificationService.countAllUserNotifications(someId) == 0;
+
+		assert notificationService.popAllNotifications(someId).size() == 0; // check again by the way
+	}
+
 }

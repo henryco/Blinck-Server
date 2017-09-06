@@ -82,6 +82,13 @@ public class UpdateNotificationService
 	}
 
 
+	@Transactional // Tested
+	public List<UpdateNotification>  popAllNotifications(Long userId) {
+		List<UpdateNotification> all = getAllUserNotifications(userId);
+		removeAllUserNotifications(userId);
+		return all;
+	}
+
 
 
 	private static UpdateNotification.Details
