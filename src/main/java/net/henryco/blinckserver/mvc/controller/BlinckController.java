@@ -20,4 +20,7 @@ public interface BlinckController {
 				throw new AccessDeniedException(auth+" required");
 	}
 
+	default Long longID(Authentication authentication) {
+		return Long.decode(authentication.getName());
+	}
 }

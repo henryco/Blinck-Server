@@ -52,7 +52,7 @@ public class UserFriendsConversationController implements BlinckController {
 
 
 	/**
-	 * <h1>Friendship conversation response JSON:</h1>
+	 * <h1>Friendship conversation response ARRAY JSON:</h1>
 	 *	<h3>
 	 * 	[&nbsp;
 	 * 		{
