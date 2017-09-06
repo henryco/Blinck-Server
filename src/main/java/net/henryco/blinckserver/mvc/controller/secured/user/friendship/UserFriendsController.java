@@ -49,7 +49,6 @@ public class UserFriendsController implements BlinckController {
 
 
 
-
 	public @RequestMapping(
 			value = "/count",
 			method = GET
@@ -97,7 +96,6 @@ public class UserFriendsController implements BlinckController {
 
 
 
-
 	/**
 	 * <h1>Friendship response JSON:</h1>
 	 *	<h2>
@@ -130,7 +128,6 @@ public class UserFriendsController implements BlinckController {
 
 
 
-
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/add",
 			method = {GET, POST}
@@ -144,7 +141,6 @@ public class UserFriendsController implements BlinckController {
 
 		notificationService.addNotification(id, target);
 	}
-
 
 
 
@@ -164,7 +160,6 @@ public class UserFriendsController implements BlinckController {
 
 
 
-
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/request/accept",
 			method = {GET, POST}
@@ -180,7 +175,6 @@ public class UserFriendsController implements BlinckController {
 
 
 
-
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/request/decline",
 			method = {GET, POST}
@@ -192,7 +186,6 @@ public class UserFriendsController implements BlinckController {
 
  		notificationService.deleteByUsers(id, target);
 	}
-
 
 
 
@@ -238,6 +231,7 @@ public class UserFriendsController implements BlinckController {
 	}
 
 
+
 	/**
 	 * <h1>Friendship notification response JSON:</h1>
 	 *	<h2>
@@ -263,8 +257,6 @@ public class UserFriendsController implements BlinckController {
 				getID(authentication.getName()), page, size
 		).toArray(new FriendshipNotification[0]);
 	}
-
-
 
 
 
