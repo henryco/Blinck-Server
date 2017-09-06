@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.stream.Stream;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -66,6 +67,13 @@ public class UserNotificationsController implements BlinckController {
 	}
 
 
+	private static NotificationForm[]
+	streamToArray(Stream<UpdateNotification> stream) {
+		return stream.map(NotificationForm::new).toArray(NotificationForm[]::new);
+	}
+
+
+
 
 	public @RequestMapping(
 			value = "/count",
@@ -97,9 +105,9 @@ public class UserNotificationsController implements BlinckController {
 	) NotificationForm[] getAllNotifications(Authentication authentication,
 											 @RequestParam("page") int page,
 											 @RequestParam("size") int size) {
- 		return service.getAllUserNotifications(longID(authentication), page, size)
-				.stream().map(NotificationForm::new)
-		.toArray(NotificationForm[]::new);
+
+		final Long id = longID(authentication);
+		return streamToArray(service.getAllUserNotifications(id, page, size).stream());
 	}
 
 
@@ -123,9 +131,35 @@ public class UserNotificationsController implements BlinckController {
 			method = GET,
 			produces = JSON
 	) NotificationForm[] getAllNotifications(Authentication authentication) {
- 		return service.getAllUserNotifications(longID(authentication))
-				.stream().map(NotificationForm::new)
-		.toArray(NotificationForm[]::new);
+
+		final Long id = longID(authentication);
+		return streamToArray(service.getAllUserNotifications(id).stream());
+	}
+
+
+
+	/**
+	 * <h1>NotificationForm ARRAY JSON</h1>
+	 * <h2>
+	 * 	[&nbsp;
+	 * 		{
+	 *     		"id":			LONG, &nbsp;
+	 *     		"type":			CHAR[255], &nbsp;
+	 *     		"info":			CHAR[255], &nbsp;
+	 *     		"timestamp":	DATE/LONG
+	 *     	}
+	 * 	&nbsp;]
+	 * </h2>
+	 * @see NotificationForm
+	 */
+	public @RequestMapping(
+			value = "/list/all/pop",
+			method = GET,
+			produces = JSON
+	) NotificationForm[] popAllNotifications(Authentication authentication) {
+
+		final Long id = longID(authentication);
+		return streamToArray(service.popAllNotifications(id).stream());
 	}
 
 
