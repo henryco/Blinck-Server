@@ -25,8 +25,8 @@ public class UpdateNotificationService
 	public static final class SimpleNotification {
 
 		private Long targetUserId;
-		private String notification;
 		private String type;
+		private String notification;
 	}
 
 
@@ -40,33 +40,43 @@ public class UpdateNotificationService
 	}
 
 
-	@Transactional
-	public void addNotification(SimpleNotification simpleNotification) {
-		getDao().save(createNotification(simpleNotification));
+	/**
+	 * @return <b>notification ID</b>
+	 */
+	@Transactional // Tested
+	public Long addNotification(SimpleNotification simpleNotification) {
+		return getDao().save(createNotification(simpleNotification)).getId();
 	}
 
-	@Transactional
-	public void addNotification(Long targetUserId, String type, String notification) {
-		addNotification(new SimpleNotification(targetUserId, type, notification));
+
+	/**
+	 * @return <b>notification ID</b>
+	 */
+	@Transactional // Tested
+	public Long addNotification(Long targetUserId, String type, String notification) {
+		return addNotification(new SimpleNotification(targetUserId, type, notification));
 	}
 
 
-	@Transactional
+	@Transactional // Tested
 	public List<UpdateNotification> getAllUserNotifications(Long userId, int page, int size) {
 		return getDao().getAllNotificationsByUserIdOrderDesc(userId, page, size);
 	}
 
-	@Transactional
+
+	@Transactional // Tested
 	public List<UpdateNotification> getAllUserNotifications(Long userId) {
 		return getDao().getAllNotificationsByUserIdOrderDesc(userId);
 	}
 
-	@Transactional
+
+	@Transactional // Tested
 	public long countAllUserNotifications(Long userId) {
 		return getDao().countUserNotifications(userId);
 	}
 
-	@Transactional
+
+	@Transactional // Tested
 	public void removeAllUserNotifications(Long userId) {
 		getDao().removeUserNotifications(userId);
 	}

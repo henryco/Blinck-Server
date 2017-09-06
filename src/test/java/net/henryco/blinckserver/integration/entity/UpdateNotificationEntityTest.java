@@ -101,8 +101,8 @@ public class UpdateNotificationEntityTest extends BlinckUserIntegrationTest {
 		final Long userId1 = Long.decode(TestUtils.randomGaussNumberString());
 		final Long userId2 = Long.decode(TestUtils.randomGaussNumberString());
 
-		final UpdateNotification[] saved1 = new UpdateNotification[new Random().nextInt(15)];
-		final UpdateNotification[] saved2 = new UpdateNotification[new Random().nextInt(15)];
+		final UpdateNotification[] saved1 = new UpdateNotification[Math.max(new Random().nextInt(15), 2)];
+		final UpdateNotification[] saved2 = new UpdateNotification[Math.max(new Random().nextInt(15), 2)];
 
 		for (int i = 0; i < saved1.length; i++) {
 			saved1[i] = notificationDao.save(createRandomNotification(userId1));
