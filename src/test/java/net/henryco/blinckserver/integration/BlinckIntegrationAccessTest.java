@@ -51,9 +51,12 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 		return authorizedGetRequest(endPoint, token, String.class);
 	}
 
-
 	protected ResponseEntity<String> authorizedPostRequest(String endPoint, String token, Object post) {
 		return authorizedPostRequest(endPoint, token, post, String.class);
+	}
+
+	protected ResponseEntity<String> authorizedDeleteRequest(String endPoint, String authToken) {
+		return authorizedDeleteRequest(endPoint, authToken, String.class);
 	}
 
 
@@ -84,6 +87,20 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 	}
 
 
+	protected <T> ResponseEntity<T> authorizedDeleteRequest(String endPoint,
+															String authToken,
+															Class<T> responseType) {
+		return restTemplate.exchange(
+				RequestEntity.delete(TestUtils.newURI(endPoint, port))
+						.header(HEADER_ACCESS_TOKEN_NAME, authToken)
+						.accept(MediaType.APPLICATION_JSON)
+						.build(),
+				responseType
+		);
+	}
+
+
+
 	protected String getForAdminAuthToken() {
 
 		return fastPostRequest(
@@ -101,14 +118,17 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 	}
 
 	protected String getForUserAuthToken(User user) throws Exception {
+		return getForUserAuthToken(Long.decode(user.getId()));
+	}
+
+	protected String getForUserAuthToken(Long user) throws Exception {
 
 		final String tokenCreatorMethod = "createAuthenticationToken";
 		final Method method = BlinckTestUtil.getMethod(TokenAuthenticationService.class, tokenCreatorMethod);
 
-		whiteListService.addUserToWhiteList(Long.decode(user.getId()));
-		return method.invoke(userTokenAuthService, user.getId(), USER_ROLES).toString();
+		whiteListService.addUserToWhiteList(user);
+		return method.invoke(userTokenAuthService, user.toString(), USER_ROLES).toString();
 	}
-
 
 	protected static String randomUserPath() {
 		return USER_ENDPOINT + "/" + TestUtils.randomGaussNumberString();

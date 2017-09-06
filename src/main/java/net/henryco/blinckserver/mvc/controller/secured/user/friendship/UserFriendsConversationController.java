@@ -37,7 +37,7 @@ public class UserFriendsConversationController implements BlinckController {
 
 
 
-
+	// TESTED
 	public @RequestMapping(
 			value = "/messages/count",
 			method = GET
@@ -64,7 +64,7 @@ public class UserFriendsConversationController implements BlinckController {
 	 *		}
 	 *	&nbsp;]</h3>
 	 *	@see FriendshipConversation
-	 */
+	 */ // TESTED
 	public @RequestMapping(
 			value = "/messages/list",
 			method = GET,
@@ -90,7 +90,7 @@ public class UserFriendsConversationController implements BlinckController {
 	 * 			"message": 		CHAR[512]
 	 *	&nbsp;}</h3>
 	 *	@see FriendshipConversation
-	 */
+	 */ // TESTED
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/messages/send",
 			method = POST,
@@ -125,7 +125,7 @@ public class UserFriendsConversationController implements BlinckController {
 	 *	&nbsp;}
 	 *	</h3>
 	 *	@see FriendshipConversation
-	 */
+	 */ // TESTED
 	public @RequestMapping(
 			value = "/messages/last",
 			method = GET,
@@ -142,10 +142,10 @@ public class UserFriendsConversationController implements BlinckController {
 
 
 
-
+	// TESTED
 	public @ResponseStatus(OK) @RequestMapping(
-			value = {"/remove", "/"},
-			method = {DELETE}
+			value = "/remove",
+			method = DELETE
 	) void removeAllMessages(Authentication authentication,
 							 @RequestParam("id") Long friendshipId) {
 
