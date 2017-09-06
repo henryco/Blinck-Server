@@ -40,12 +40,11 @@ public class UserNotificationsController implements BlinckController {
 
 		private NotificationForm(
 				UpdateNotification notification) {
-
-			setId(notification.getId());
-			setUser(notification.getTargetUserId());
-			setType(notification.getDetails().getType());
-			setInfo(notification.getDetails().getNotification());
-			setTimestamp(notification.getDate());
+			this.id = notification.getId();
+			this.user = notification.getTargetUserId();
+			this.type = notification.getDetails().getType();
+			this.info = notification.getDetails().getNotification();
+			this.timestamp = notification.getDate();
 		}
 
 	}
