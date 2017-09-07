@@ -49,7 +49,7 @@ public class UserNotificationsController implements BlinckController {
 	 */
 	@Data @NoArgsConstructor
 	private static final class NotificationForm
-			implements Serializable{
+			implements Serializable {
 
  		private Long id;
  		private String type;
@@ -77,10 +77,10 @@ public class UserNotificationsController implements BlinckController {
 
 	public @RequestMapping(
 			value = "/count",
-			method = GET
+			method = GET //		Tested
 	) Long countAllNotifications(Authentication authentication) {
  		return service.countAllUserNotifications(longID(authentication));
-	} // Tested
+	}
 
 
 
@@ -101,11 +101,10 @@ public class UserNotificationsController implements BlinckController {
 	public @RequestMapping(
 			value = "/list",
 			method = GET,
-			produces = JSON
+			produces = JSON //	Tested
 	) NotificationForm[] getAllNotifications(Authentication authentication,
 											 @RequestParam("page") int page,
 											 @RequestParam("size") int size) {
-
 		final Long id = longID(authentication);
 		return streamToArray(service.getAllUserNotifications(id, page, size).stream());
 	}
@@ -129,7 +128,7 @@ public class UserNotificationsController implements BlinckController {
 	public @RequestMapping(
 			value = "/list/all",
 			method = GET,
-			produces = JSON
+			produces = JSON //	Tested
 	) NotificationForm[] getAllNotifications(Authentication authentication) {
 
 		final Long id = longID(authentication);
@@ -155,7 +154,7 @@ public class UserNotificationsController implements BlinckController {
 	public @RequestMapping(
 			value = "/list/all/pop",
 			method = GET,
-			produces = JSON
+			produces = JSON //	Tested
 	) NotificationForm[] popAllNotifications(Authentication authentication) {
 
 		final Long id = longID(authentication);
@@ -179,9 +178,10 @@ public class UserNotificationsController implements BlinckController {
 	public @RequestMapping(
 			value = "/last",
 			method = GET,
-			produces = JSON
+			produces = JSON //	Tested
 	) NotificationForm getLastNotification(Authentication authentication) {
- 		NotificationForm[] last = getAllNotifications(authentication, 0, 1);
+
+		NotificationForm[] last = getAllNotifications(authentication, 0, 1);
 		return last.length == 0 ? null : last[0];
 	}
 
@@ -189,7 +189,7 @@ public class UserNotificationsController implements BlinckController {
 
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/remove",
-			method = {DELETE, POST, GET}
+			method = {DELETE, POST, GET} //	Tested
 	) void removeNotification(Authentication authentication,
 							  @RequestParam("id") Long notificationId) {
 
@@ -207,7 +207,7 @@ public class UserNotificationsController implements BlinckController {
 
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/remove/all",
-			method = {DELETE, POST, GET}
+			method = {DELETE, POST, GET} //	Tested
 	) void removeAllNotifications(Authentication authentication) {
  		service.removeAllUserNotifications(longID(authentication));
 	}
