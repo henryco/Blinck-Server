@@ -80,7 +80,7 @@ public class UserNotificationsController implements BlinckController {
 			method = GET
 	) Long countAllNotifications(Authentication authentication) {
  		return service.countAllUserNotifications(longID(authentication));
-	}
+	} // Tested
 
 
 
