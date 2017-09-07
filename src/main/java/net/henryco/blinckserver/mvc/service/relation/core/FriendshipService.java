@@ -129,4 +129,14 @@ public class FriendshipService {
 	 	return false;
 	}
 
+
+	@Transactional
+	public Long getSecondUser(Long friendshipId, Long userId) {
+
+	 	Friendship friendship = friendshipDao.getById(friendshipId);
+		return friendship.getUser1().equals(userId)
+				? friendship.getUser2()
+				: friendship.getUser1();
+	}
+
 }

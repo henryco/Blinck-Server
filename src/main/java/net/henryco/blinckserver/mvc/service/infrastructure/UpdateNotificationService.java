@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.dao.infrastructure.UpdateNotificationDao;
 import net.henryco.blinckserver.mvc.model.entity.infrastructure.UpdateNotification;
+import net.henryco.blinckserver.util.NotificationType;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,8 @@ import java.util.List;
  */
 @Service
 public class UpdateNotificationService
-		extends BlinckDaoProvider<UpdateNotification, Long> {
+		extends BlinckDaoProvider<UpdateNotification, Long>
+		implements NotificationType {
 
 
 	@Data @NoArgsConstructor @AllArgsConstructor

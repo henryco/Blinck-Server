@@ -2,8 +2,10 @@ package net.henryco.blinckserver.mvc.controller.secured.user.friendship;
 
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.conversation.FriendshipConversation;
+import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.conversation.FriendshipConversationService;
 import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
+import net.henryco.blinckserver.util.NotificationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
+import static net.henryco.blinckserver.util.NotificationType.TYPE_FRIEND_MESSAGE;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -24,17 +27,19 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class UserFriendsConversationController implements BlinckController {
 
 
+ 	private final UpdateNotificationService notificationService;
  	private final FriendshipConversationService conversationService;
 	private final FriendshipService friendshipService;
 
 
 	@Autowired
-	public UserFriendsConversationController(FriendshipConversationService conversationService,
+	public UserFriendsConversationController(UpdateNotificationService notificationService,
+											 FriendshipConversationService conversationService,
 											 FriendshipService friendshipService) {
+		this.notificationService = notificationService;
 		this.conversationService = conversationService;
 		this.friendshipService = friendshipService;
 	}
-
 
 
 	// TESTED
@@ -108,6 +113,12 @@ public class UserFriendsConversationController implements BlinckController {
 		message.setAuthor(id);
 
 		conversationService.save(message);
+
+		notificationService.addNotification(
+				friendshipService.getSecondUser(post.getFriendship(), id),
+				TYPE_FRIEND_MESSAGE,
+				post.getFriendship().toString()
+		);
 	}
 
 
