@@ -8,7 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.security.token.TokenAuthenticationProcessor;
+import net.henryco.blinckserver.security.token.processor.TokenAuthenticationProcessor;
 import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

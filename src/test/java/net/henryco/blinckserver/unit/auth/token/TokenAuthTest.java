@@ -1,6 +1,6 @@
 package net.henryco.blinckserver.unit.auth.token;
 
-import net.henryco.blinckserver.security.token.TokenAuthenticationProcessor;
+import net.henryco.blinckserver.security.token.processor.TokenAuthenticationProcessor;
 import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 import net.henryco.blinckserver.unit.BlinckUnitTest;
 import net.henryco.blinckserver.utils.TestUtils;

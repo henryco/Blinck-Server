@@ -89,7 +89,7 @@ import static org.springframework.http.HttpMethod.POST;
 				.antMatchers("/").permitAll()
 				.antMatchers("/public/**").permitAll()
 				.antMatchers(GET, "/session/**").permitAll()
-				.antMatchers("/stomp/chat").permitAll()
+				.antMatchers("/stomp/chat/**").permitAll() // FIXME REMOVE
 				.antMatchers(POST,"/protected/admin/registration").permitAll()
 				.antMatchers("/login/**").permitAll()
 				.anyRequest().authenticated()

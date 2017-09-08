@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security.token;
+package net.henryco.blinckserver.security.token.processor;
 
 import org.springframework.security.core.Authentication;
 

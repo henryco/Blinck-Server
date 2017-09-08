@@ -9,5 +9,7 @@ import org.springframework.context.annotation.Import;
 @Configuration @Import({
 		WebSecurityConfiguration.class,
 		WebMvcConfiguration.class,
+//		WebSocketConfiguration.class,
+//		WSTAuthenticationConfiguration.class,
 		BeansConfiguration.class
 }) public abstract class MainConfiguration { }

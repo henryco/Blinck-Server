@@ -32,6 +32,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-websocket')
     compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.security:spring-security-messaging') // <-- DON'T FUCKIN TOUCH THIS, SRSLY, NEVER
 
     compile 'joda-time:joda-time:2.9.9'
 

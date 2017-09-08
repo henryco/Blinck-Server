@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security.token;
+package net.henryco.blinckserver.security.token.processor;
 
 import net.henryco.blinckserver.configuration.BeansConfiguration;
 import net.henryco.blinckserver.security.token.service.SessionWhiteListService;

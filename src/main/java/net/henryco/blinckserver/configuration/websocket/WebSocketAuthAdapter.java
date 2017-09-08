@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security.token;
+package net.henryco.blinckserver.configuration.websocket;
 
 import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 import org.springframework.messaging.Message;
