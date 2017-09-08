@@ -1,9 +1,9 @@
 package net.henryco.blinckserver.integration;
 
 import net.henryco.blinckserver.mvc.service.data.UserDataService;
-import net.henryco.blinckserver.mvc.service.security.SessionWhiteListService;
-import net.henryco.blinckserver.mvc.service.security.UserTokenAuthService;
-import net.henryco.blinckserver.security.token.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.service.SessionWhiteListService;
+import net.henryco.blinckserver.security.token.service.imp.UserTokenAuthService;
+import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 import net.henryco.blinckserver.util.test.BlinckTestUtil;
 import net.henryco.blinckserver.utils.JsonForm;
 import net.henryco.blinckserver.utils.MockFacebookUser;

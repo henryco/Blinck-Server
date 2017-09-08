@@ -1,7 +1,7 @@
 package net.henryco.blinckserver.security.filter.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.henryco.blinckserver.security.token.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 import net.henryco.blinckserver.security.credentials.JWTLoginCredentials;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

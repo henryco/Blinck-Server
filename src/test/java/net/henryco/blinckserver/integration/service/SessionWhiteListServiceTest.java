@@ -1,7 +1,7 @@
 package net.henryco.blinckserver.integration.service;
 
 import net.henryco.blinckserver.integration.BlinckIntegrationTest;
-import net.henryco.blinckserver.mvc.service.security.SessionWhiteListService;
+import net.henryco.blinckserver.security.token.service.SessionWhiteListService;
 import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

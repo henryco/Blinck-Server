@@ -2,7 +2,7 @@ package net.henryco.blinckserver.unit.auth.token;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
-import net.henryco.blinckserver.security.token.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 import net.henryco.blinckserver.util.test.BlinckTestUtil;
 import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Test;

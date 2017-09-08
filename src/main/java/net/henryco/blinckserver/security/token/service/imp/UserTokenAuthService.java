@@ -1,7 +1,7 @@
-package net.henryco.blinckserver.mvc.service.security;
+package net.henryco.blinckserver.security.token.service.imp;
 
 import net.henryco.blinckserver.security.token.TokenAuthenticationProcessor;
-import net.henryco.blinckserver.security.token.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;

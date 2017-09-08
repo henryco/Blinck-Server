@@ -6,14 +6,13 @@ import net.henryco.blinckserver.security.credentials.FacebookCredentials;
 import net.henryco.blinckserver.security.filter.jwt.JWTAuthFilter;
 import net.henryco.blinckserver.security.filter.jwt.JWTLoginFilter;
 import net.henryco.blinckserver.security.filter.ResetFilter;
-import net.henryco.blinckserver.security.token.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -90,6 +89,7 @@ import static org.springframework.http.HttpMethod.POST;
 				.antMatchers("/").permitAll()
 				.antMatchers("/public/**").permitAll()
 				.antMatchers(GET, "/session/**").permitAll()
+				.antMatchers("/stomp/chat").permitAll()
 				.antMatchers(POST,"/protected/admin/registration").permitAll()
 				.antMatchers("/login/**").permitAll()
 				.anyRequest().authenticated()

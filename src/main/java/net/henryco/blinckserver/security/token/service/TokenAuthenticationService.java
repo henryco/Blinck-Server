@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.security.token;
+package net.henryco.blinckserver.security.token.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.security.token.TokenAuthenticationProcessor;
 import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,10 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,11 +70,17 @@ public abstract class TokenAuthenticationService {
 	}
 
 
-	@SuppressWarnings("ConstantConditions")
+
 	public final Authentication getAuthentication(HttpServletRequest request) {
+		return getAuthentication(request.getHeader(getTokenHeader()));
+	}
+
+
+	@SuppressWarnings("ConstantConditions")
+	public final Authentication getAuthentication(String jsonWebToken) {
 
 		try {
-			TokenPayload payload = readAuthenticationToken(request.getHeader(getTokenHeader()));
+			TokenPayload payload = readAuthenticationToken(jsonWebToken);
 
 			UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
 					payload.username,
@@ -91,7 +95,6 @@ public abstract class TokenAuthenticationService {
 			return null;
 		}
 	}
-
 
 
 

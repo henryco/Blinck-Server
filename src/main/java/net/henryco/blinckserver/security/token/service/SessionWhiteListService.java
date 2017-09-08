@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.service.security;
+package net.henryco.blinckserver.security.token.service;
 
 import net.henryco.blinckserver.mvc.model.dao.security.SessionWhiteListDao;
 import net.henryco.blinckserver.mvc.model.entity.security.SessionWhiteList;

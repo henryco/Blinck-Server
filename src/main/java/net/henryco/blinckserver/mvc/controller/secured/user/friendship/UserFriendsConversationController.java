@@ -5,7 +5,6 @@ import net.henryco.blinckserver.mvc.model.entity.relation.conversation.Friendshi
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.conversation.FriendshipConversationService;
 import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
-import net.henryco.blinckserver.util.NotificationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;

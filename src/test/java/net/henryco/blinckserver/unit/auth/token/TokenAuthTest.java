@@ -1,7 +1,7 @@
 package net.henryco.blinckserver.unit.auth.token;
 
 import net.henryco.blinckserver.security.token.TokenAuthenticationProcessor;
-import net.henryco.blinckserver.security.token.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 import net.henryco.blinckserver.unit.BlinckUnitTest;
 import net.henryco.blinckserver.utils.TestUtils;
 
@@ -76,7 +76,7 @@ public abstract class TokenAuthTest extends BlinckUnitTest {
 
 
 
-	// TODO: 28/08/17       REPLACE WITH BUILDER !!!   vvv
+	// FIXME: 28/08/17       REPLACE WITH BUILDER !!!   vvv
 
 	protected static TokenAuthenticationService createJwtService(Long expTime) {
 		return new RandomSecretTokenService(

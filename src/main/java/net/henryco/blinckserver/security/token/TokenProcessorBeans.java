@@ -1,7 +1,7 @@
 package net.henryco.blinckserver.security.token;
 
 import net.henryco.blinckserver.configuration.BeansConfiguration;
-import net.henryco.blinckserver.mvc.service.security.SessionWhiteListService;
+import net.henryco.blinckserver.security.token.service.SessionWhiteListService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;

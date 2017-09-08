@@ -61,6 +61,6 @@ public class PartyConversation {
 			updatable = false
 	) Party party;
 
-	// TODO: 02/09/17 TESTS, maybe remove hard reference
+	// TODO: 02/09/17 TESTS, remove hard reference
 
 }

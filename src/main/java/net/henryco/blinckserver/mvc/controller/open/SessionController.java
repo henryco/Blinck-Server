@@ -3,13 +3,12 @@ package net.henryco.blinckserver.mvc.controller.open;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.mvc.service.security.SessionWhiteListService;
-import net.henryco.blinckserver.security.token.TokenAuthenticationService;
+import net.henryco.blinckserver.security.token.service.SessionWhiteListService;
+import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
