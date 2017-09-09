@@ -53,17 +53,13 @@ public class FacebookAuthManager implements AuthenticationManager {
 		Object facebook_token = authentication.getCredentials();
 
 		Facebook facebook = new FacebookTemplate(facebook_token.toString(), app_namespace, app_id);
-		if (!facebook.isAuthorized())
-			throw new SessionAuthenticationException("FACEBOOK UNAUTHORIZED");
+		checkFacebook(facebook);
 
 		User userProfile = facebook.userOperations().getUserProfile(facebook_uid.toString());
-
-		if (!userProfile.getId().equals(facebook_uid.toString()))
-			throw new BadCredentialsException("Invalid user id or token");
+		checkProfile(userProfile, facebook_uid);
 
 		UserDetails userDetails = loadDetails(userProfile);
-		if (!primaryCheck(userDetails))
-			throw new InsufficientAuthenticationException("Account is disabled");
+		checkDetails(userDetails);
 
 		return new UsernamePasswordAuthenticationToken(
 				userDetails.getUsername(), null,
@@ -82,12 +78,40 @@ public class FacebookAuthManager implements AuthenticationManager {
 		}
 	}
 
-	private boolean primaryCheck(UserDetails userDetails) {
+
+
+	private static
+	boolean primaryCheck(UserDetails userDetails) {
 
 		return userDetails.isEnabled()
 				&& userDetails.isAccountNonExpired()
 				&& userDetails.isAccountNonLocked()
 		&& userDetails.isCredentialsNonExpired();
 	}
+
+
+	private static
+	void checkDetails(UserDetails userDetails)
+			throws InsufficientAuthenticationException {
+		if (!primaryCheck(userDetails))
+			throw new InsufficientAuthenticationException("Account is disabled");
+	}
+
+
+	private static
+	void checkProfile(User userProfile, Object facebook_uid)
+			throws BadCredentialsException {
+		if (!userProfile.getId().equals(facebook_uid.toString()))
+			throw new BadCredentialsException("Invalid user id or token");
+	}
+
+
+	private static
+	void checkFacebook(Facebook facebook)
+			throws SessionAuthenticationException {
+		if (!facebook.isAuthorized())
+			throw new SessionAuthenticationException("FACEBOOK UNAUTHORIZED");
+	}
+
 
 }

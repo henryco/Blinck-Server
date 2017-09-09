@@ -3,13 +3,14 @@ package net.henryco.blinckserver.configuration.websocket;
 import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptorAdapter;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+
+import static org.springframework.messaging.simp.stomp.StompCommand.CONNECT;
 
 /**
  * @author Henry on 08/09/17.
@@ -34,7 +35,7 @@ public class WebSocketAuthAdapter extends ChannelInterceptorAdapter {
 		final StompHeaderAccessor accessor =
 				MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-		if (StompCommand.CONNECT == accessor.getCommand()) {
+		if (CONNECT == accessor.getCommand()) {
 
 			final String username = checkUsername(accessor.getFirstNativeHeader(USERNAME_HEADER));
 			final String jsonWebToken = checkToken(accessor.getFirstNativeHeader(TOKEN_HEADER));
