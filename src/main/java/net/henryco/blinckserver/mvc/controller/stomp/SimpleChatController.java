@@ -1,6 +1,9 @@
 package net.henryco.blinckserver.mvc.controller.stomp;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
+
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -10,8 +13,11 @@ import org.springframework.stereotype.Controller;
 public class SimpleChatController {
 
 	@MessageMapping("/test")
-	public void stompTest(String income) {
+//	@SendTo("/topic/test")
+	public String stompTest(String income, Authentication authentication) {
 		System.out.println("STOMP TEST " + income);
+		System.out.println("Auth: "+authentication);
+		return "RESULT: " + income;
 	}
 
 }

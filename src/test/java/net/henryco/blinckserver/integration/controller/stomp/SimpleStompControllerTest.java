@@ -15,6 +15,9 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 /**
@@ -65,6 +68,11 @@ public class SimpleStompControllerTest extends BlinckUserIntegrationTest {
 			public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
 				super.afterConnected(session, connectedHeaders);
 			}
+
+			@Override
+			public void handleFrame(StompHeaders headers, Object payload) {
+				System.out.println("FRAME: "+payload);
+			}
 		};
 
 		StompSession session = stompClient.connect(
@@ -72,27 +80,31 @@ public class SimpleStompControllerTest extends BlinckUserIntegrationTest {
 				headers,
 				stompHeaders,
 				handler
-		).get();
+		).get(5, SECONDS);
 
-		session.subscribe(TOPIC, new DefaultStompFrameHandler());
+		session.subscribe("/topic/test", new DefaultStompFrameHandler());
 		session.send(APP + "/test", "SOME RANDOM TEXT".getBytes());
 
+//		session.subscribe("/topic", new DefaultStompFrameHandler());
+//		session.send("/topic", "SOME RANDOM TEXT".getBytes());
 
+
+		System.out.println(blockingQueue.poll(5, SECONDS));
 	}
 
 
 
 	class DefaultStompFrameHandler implements StompFrameHandler {
 
+
 		@Override
 		public Type getPayloadType(StompHeaders stompHeaders) {
-			return String.class;
+			return byte[].class;
 		}
 
 		@Override
 		public void handleFrame(StompHeaders stompHeaders, Object o) {
-			blockingQueue.offer(new String((byte[]) o));
-			System.out.println("WORK");
+			blockingQueue.offer(new String(((byte[]) o)));
 		}
 
 	}
