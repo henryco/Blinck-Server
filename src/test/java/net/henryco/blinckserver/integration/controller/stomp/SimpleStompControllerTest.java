@@ -13,9 +13,9 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -39,15 +39,14 @@ public class SimpleStompControllerTest extends BlinckUserIntegrationTest {
 		return "ws://localhost:" + port + ENDPOINT;
 	}
 
-	private BlockingQueue<String> blockingQueue;
+
 	private WebSocketStompClient stompClient;
 
 
 	@Before
 	public void setup() {
-		blockingQueue = new LinkedBlockingDeque<>();
 		stompClient = new WebSocketStompClient(new SockJsClient(
-				Arrays.asList(new WebSocketTransport(new StandardWebSocketClient()))
+				Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()))
 		));
 	}
 
@@ -55,47 +54,48 @@ public class SimpleStompControllerTest extends BlinckUserIntegrationTest {
 	@Test
 	public void justReceiveMessageTest() throws Exception {
 
-		Long[] users = saveNewRandomUsers(this, 1);
-		String token = getForUserAuthToken(users[0]);
+		final StompSessionHandler handler = new StompSessionHandlerAdapter() {};
 
-		WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
-		StompHeaders stompHeaders = new StompHeaders();
-		stompHeaders.add(USERNAME_HEADER, users[0].toString());
-		stompHeaders.add(TOKEN_HEADER, token);
+		Long[] users = saveNewRandomUsers(this, 2);
+		String token1 = getForUserAuthToken(users[0]);
+		String token2 = getForUserAuthToken(users[1]);
 
-		StompSessionHandler handler = new StompSessionHandlerAdapter() {
-			@Override
-			public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-				super.afterConnected(session, connectedHeaders);
-			}
+		DefaultStompFrameHandler resultHandler1 = new DefaultStompFrameHandler();
+		DefaultStompFrameHandler resultHandler2 = new DefaultStompFrameHandler();
 
-			@Override
-			public void handleFrame(StompHeaders headers, Object payload) {
-				System.out.println("FRAME: "+payload);
-			}
-		};
+		StompSession session1 = createSession(createAuthHeaders(users[0], token1), handler);
+		StompSession session2 = createSession(createAuthHeaders(users[1], token2), handler);
 
-		StompSession session = stompClient.connect(
-				new URI(endpoint()),
-				headers,
-				stompHeaders,
-				handler
-		).get(5, SECONDS);
+		session1.subscribe("/user/queue/test", resultHandler1);
+		session2.subscribe("/user/queue/test", resultHandler2);
 
-		session.subscribe("/topic/test", new DefaultStompFrameHandler());
-		session.send(APP + "/test", "SOME RANDOM TEXT".getBytes());
+		session1.send(APP + "/test", "SOME RANDOM TEXT".getBytes());
+		session2.send(APP + "/test", "OTHER TEXT".getBytes());
 
-//		session.subscribe("/topic", new DefaultStompFrameHandler());
-//		session.send("/topic", "SOME RANDOM TEXT".getBytes());
-
-
-		System.out.println(blockingQueue.poll(5, SECONDS));
+		System.out.println("user1: "+resultHandler1.get().poll(5, SECONDS));
+		System.out.println("user2: "+resultHandler2.get().poll(5, SECONDS));
 	}
 
 
 
-	class DefaultStompFrameHandler implements StompFrameHandler {
 
+	private StompSession createSession(StompHeaders stompHeaders,
+									   StompSessionHandler handler) throws Exception {
+		return stompClient.connect(
+				new URI(endpoint()),
+				new WebSocketHttpHeaders(),
+				stompHeaders,
+				handler
+		).get(5, SECONDS);
+	}
+
+
+	private static final class
+	DefaultStompFrameHandler
+			implements StompFrameHandler {
+
+		private BlockingQueue<String> blockingQueue
+				= new LinkedBlockingDeque<>();
 
 		@Override
 		public Type getPayloadType(StompHeaders stompHeaders) {
@@ -107,5 +107,18 @@ public class SimpleStompControllerTest extends BlinckUserIntegrationTest {
 			blockingQueue.offer(new String(((byte[]) o)));
 		}
 
+		public BlockingQueue<String> get() {
+			return blockingQueue;
+		}
 	}
+
+
+	private static
+	StompHeaders createAuthHeaders(Long user, String token) {
+		StompHeaders stompHeaders = new StompHeaders();
+		stompHeaders.add(USERNAME_HEADER, user.toString());
+		stompHeaders.add(TOKEN_HEADER, token);
+		return stompHeaders;
+	}
+
 }
