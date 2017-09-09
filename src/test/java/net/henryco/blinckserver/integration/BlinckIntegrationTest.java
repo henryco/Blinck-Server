@@ -23,7 +23,7 @@ import static org.springframework.http.HttpMethod.GET;
 @RunWith(SpringRunner.class)
 @PropertySource("classpath:/static/props/base.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public abstract class BlinckIntegrationTest {
+public abstract class BlinckIntegrationTest implements TestUtils {
 
 	protected @LocalServerPort int port;
 	protected @Autowired Environment environment;
