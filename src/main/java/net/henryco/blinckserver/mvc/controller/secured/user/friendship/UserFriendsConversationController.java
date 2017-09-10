@@ -175,7 +175,8 @@ public class UserFriendsConversationController
 	}
 
 	private static
-	void accessCheck(FriendshipService friendshipService, Long friendshipId, Long userId) {
+	void accessCheck(FriendshipService friendshipService, Long friendshipId, Long userId)
+			throws AccessDeniedException {
 		if (!friendshipService.existsRelationWithUser(friendshipId, userId))
 			throw new AccessDeniedException("Wrong user or conversation ID");
 	}
