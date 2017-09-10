@@ -3,9 +3,11 @@ package net.henryco.blinckserver.mvc.controller.secured.user.friendship;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 import net.henryco.blinckserver.mvc.model.entity.relation.queue.FriendshipNotification;
+import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
 import net.henryco.blinckserver.mvc.service.relation.queue.FriendshipNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,27 +27,34 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Henry on 04/09/17.
  */ @RestController
 @RequestMapping("/protected/user/friends")
-public class UserFriendsController implements BlinckController {
+public class UserFriendsController implements BlinckController, BlinckNotification.TYPE {
 
 
-	private final FriendshipNotificationService notificationService;
+	private final FriendshipNotificationService friendNotificationService;
+	private final UpdateNotificationService updateNotificationService;
 	private final FriendshipService friendshipService;
 
 
- 	@Autowired
-	public UserFriendsController(FriendshipService friendshipService,
-								 FriendshipNotificationService notificationService) {
-		this.notificationService = notificationService;
+	@Autowired
+	public UserFriendsController(FriendshipNotificationService friendNotificationService,
+								 UpdateNotificationService updateNotificationService,
+								 FriendshipService friendshipService) {
+
+		this.friendNotificationService = friendNotificationService;
+		this.updateNotificationService = updateNotificationService;
 		this.friendshipService = friendshipService;
 	}
+
+
 
 
 	@Data @NoArgsConstructor @AllArgsConstructor
 	private static final class DetailedFriendship
 			implements Serializable {
-		private Long id;
+		private Long friendship;
 		private Long friend;
 	}
+
 
 
 
@@ -137,9 +146,10 @@ public class UserFriendsController implements BlinckController {
  		final Long id = getID(authentication.getName());
 
  		if (friendshipService.isExistsBetweenUsers(id, target)) return;
-		if (notificationService.isExistsBetweenUsers(id, target)) return;
+		if (friendNotificationService.isExistsBetweenUsers(id, target)) return;
 
-		notificationService.addNotification(id, target);
+		friendNotificationService.addNotification(id, target);
+		updateNotificationService.addNotification(target, FRIEND_REQUEST, id);
 	}
 
 
@@ -154,8 +164,10 @@ public class UserFriendsController implements BlinckController {
 		if (!friendshipService.isExistsBetweenUsers(id, target)) return;
 
 		Friendship friendship = friendshipService.getByUsers(id, target);
-		if (friendship.getUser1().equals(id) || friendship.getUser2().equals(id))
+		if (friendship.getUser1().equals(id) || friendship.getUser2().equals(id)) {
 			friendshipService.deleteRelationBetweenUsers(id, target);
+			updateNotificationService.addNotification(target, FRIEND_DELETED, id);
+		}
 	}
 
 
@@ -170,7 +182,8 @@ public class UserFriendsController implements BlinckController {
 		if (!checkNotificationRequest(id, target)) return;
 
 		friendshipService.addFriendshipRelation(target, id);
-		notificationService.deleteByUsers(id, target);
+		friendNotificationService.deleteByUsers(id, target);
+		updateNotificationService.addNotification(target, FRIEND_ACCEPTED, id);
 	}
 
 
@@ -184,7 +197,8 @@ public class UserFriendsController implements BlinckController {
  		final Long id = getID(authentication.getName());
  		if (!checkNotificationRequest(id, target)) return;
 
- 		notificationService.deleteByUsers(id, target);
+ 		friendNotificationService.deleteByUsers(id, target);
+		updateNotificationService.addNotification(target, FRIEND_DECLINED, id);
 	}
 
 
@@ -193,13 +207,13 @@ public class UserFriendsController implements BlinckController {
 			value = "/request/direct/delete",
 			method = {GET, POST, DELETE}
 	) void deleteFriendRequest(Authentication authentication,
-							   @RequestParam("id") Long reqId) {
+							   @RequestParam("id") Long requestId) {
 
 		final Long id = getID(authentication.getName());
-		if (!notificationService.isExists(reqId)) return;
-		if (!notificationService.getById(reqId).getInitiatorId().equals(id)) return;
+		if (!friendNotificationService.isExists(requestId)) return;
+		if (!friendNotificationService.getById(requestId).getInitiatorId().equals(id)) return;
 
-		notificationService.deleteById(reqId);
+		friendNotificationService.deleteById(requestId);
 	}
 
 
@@ -225,7 +239,7 @@ public class UserFriendsController implements BlinckController {
 													 @RequestParam("page") int page,
 													 @RequestParam("size") int size) {
 
-		return notificationService.getAllNotificationByInitiator(
+		return friendNotificationService.getAllNotificationByInitiator(
 				getID(authentication.getName()), page, size
 		).toArray(new FriendshipNotification[0]);
 	}
@@ -253,7 +267,7 @@ public class UserFriendsController implements BlinckController {
 												   @RequestParam("page") int page,
 												   @RequestParam("size") int size) {
 
- 		return notificationService.getAllNotificationByReceiver(
+ 		return friendNotificationService.getAllNotificationByReceiver(
 				getID(authentication.getName()), page, size
 		).toArray(new FriendshipNotification[0]);
 	}
@@ -268,8 +282,8 @@ public class UserFriendsController implements BlinckController {
 
 	private boolean checkNotificationRequest(Long id, Long target) {
 		boolean pre = !friendshipService.isExistsBetweenUsers(id, target)
-				&& notificationService.isExistsBetweenUsers(id, target);
-		return pre && notificationService.getWithUsers(id, target).getReceiverId().equals(id);
+				&& friendNotificationService.isExistsBetweenUsers(id, target);
+		return pre && friendNotificationService.getWithUsers(id, target).getReceiverId().equals(id);
 	}
 
 }

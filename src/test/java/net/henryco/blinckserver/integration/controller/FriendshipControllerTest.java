@@ -59,13 +59,13 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 	private static final class TestDetailFriendship
 			implements Serializable {
 
-		public Long id;
+		public Long friendship;
 		public Long friend;
 
 		@Override
 		public String toString() {
 			return "{" +
-					"id=" + id +
+					"friendship=" + friendship +
 					", friend=" + friend +
 			'}';
 		}
@@ -387,7 +387,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 
 		TestDetailFriendship[] body = authorizedGetRequest(LIST_DETAILED, token1, TestDetailFriendship[].class).getBody();
 
-		String request1 = FRIEND_DETAILED + body[3].id;
+		String request1 = FRIEND_DETAILED + body[3].friendship;
 		TestFullDetailFriendship body1 = authorizedGetRequest(request1, token1, TestFullDetailFriendship.class).getBody();
 		assert body1.friendship != null; // NOT NULL BECAUSE 2 way relation btw users and token holder one of them
 
@@ -401,7 +401,7 @@ public class FriendshipControllerTest extends BlinckIntegrationAccessTest {
 
 		TestDetailFriendship[] body3 = authorizedGetRequest(LIST_DETAILED, token2, TestDetailFriendship[].class).getBody();
 
-		String request2 = FRIEND_DETAILED + body3[0].id;
+		String request2 = FRIEND_DETAILED + body3[0].friendship;
 		TestFullDetailFriendship body4 = authorizedGetRequest(request2, token2, TestFullDetailFriendship.class).getBody();
 		assert body4.friendship != null; // NOT NULL BECAUSE 2 way relation btw users and token holder one of them
 

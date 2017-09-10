@@ -13,6 +13,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import java.util.List;
 @Service
 public class UpdateNotificationService
 		extends BlinckDaoProvider<UpdateNotification, Long>
-		implements WebSocketConstants.Service, BlinckNotification {
+		implements WebSocketConstants.Service, BlinckNotification, BlinckNotification.TYPE {
 
 
 	@Data @NoArgsConstructor @AllArgsConstructor
@@ -66,8 +67,8 @@ public class UpdateNotificationService
 	 * @return <b>notification ID</b>
 	 */
 	@Transactional // Tested
-	public Long addNotification(Long targetUserId, String type, String notification) {
-		return addNotification(new SimpleNotification(targetUserId, type, notification));
+	public Long addNotification(Long targetUserId, String type, Serializable notification) {
+		return addNotification(new SimpleNotification(targetUserId, type, notification.toString()));
 	}
 
 
