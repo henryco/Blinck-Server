@@ -3,6 +3,7 @@ package net.henryco.blinckserver.mvc.service.relation.core;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.FriendshipDao;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 import net.henryco.blinckserver.mvc.model.entity.relation.queue.FriendshipNotification;
+import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,14 +14,20 @@ import java.util.List;
 /**
  * @author Henry on 03/09/17.
  */ @Service
-public class FriendshipService {
+public class FriendshipService
+		extends BlinckDaoProvider<Friendship, Long> {
 
-	private final FriendshipDao friendshipDao;
+
 
 	@Autowired
 	public FriendshipService(FriendshipDao friendshipDao) {
-		this.friendshipDao = friendshipDao;
+		super(friendshipDao);
 	}
+
+	private FriendshipDao getDao() {
+		return provideDao();
+	}
+
 
 
 	/**
@@ -33,8 +40,9 @@ public class FriendshipService {
 		friendship.setUser1(notification.getInitiatorId());
 		friendship.setUser2(notification.getReceiverId());
 		friendship.setDate(new Date(System.currentTimeMillis()));
-		return friendshipDao.save(friendship).getId();
+		return getDao().save(friendship).getId();
 	}
+
 
 	/**
 	 * Create and save new friendship relation between users.
@@ -49,24 +57,28 @@ public class FriendshipService {
 	}
 
 
+
 	@Transactional
 	public List<Friendship> getAllUserRelations(Long user) {
-		return friendshipDao.getAllByUserIdOrderByDateDesc(user);
+		return getDao().getAllByUserIdOrderByDateDesc(user);
 	}
+
 
 
 	@Transactional
 	public List<Friendship> getAllUserRelations(Long user, int page, int size) {
-	 	return friendshipDao.getAllByUserIdOrderByDateDesc(user, page, size);
+	 	return getDao().getAllByUserIdOrderByDateDesc(user, page, size);
 	}
+
 
 
 	/**
 	 * Delete <b>ALL</b> friendship relations with user.
 	 */ @Transactional
 	public void deleteAllUserRelations(Long user) {
-		friendshipDao.deleteAllByUserId(user);
+		getDao().deleteAllByUserId(user);
 	}
+
 
 
 	/**
@@ -74,55 +86,41 @@ public class FriendshipService {
 	 * <b>Arguments order doesn't matter.</b>
 	 */ @Transactional
 	public void deleteRelationBetweenUsers(Long user1, Long user2) {
-		friendshipDao.deleteRelationBetweenUsers(user1, user2);
+		getDao().deleteRelationBetweenUsers(user1, user2);
 	}
 
-
-	@Transactional
-	public Friendship getById(Long id) {
-		return friendshipDao.getById(id);
-	}
 
 
 	/**
 	 *<b>Arguments order doesn't matter.</b>
 	 */ @Transactional
 	public Friendship getByUsers(Long user1, Long user2) {
-	 	return friendshipDao.getByUsers(user1, user2);
+	 	return getDao().getByUsers(user1, user2);
 	}
+
 
 
 	/**
 	 *<b>Arguments order doesn't matter.</b>
 	 */ @Transactional
 	public boolean isExistsBetweenUsers(Long user1, Long user2) {
-		return friendshipDao.isRelationBetweenUsersExists(user1, user2);
+		return getDao().isRelationBetweenUsersExists(user1, user2);
 	}
 
-
-	@Transactional
-	public boolean isExistsById(Long id) {
-	 	return friendshipDao.isExists(id);
-	}
-
-
-	@Transactional
-	public void deleteById(Long id) {
-	 	friendshipDao.deleteById(id);
-	}
 
 
 	@Transactional
 	public Long getFriendsCount(Long id) {
-	 	return friendshipDao.countByUserId(id);
+	 	return getDao().countByUserId(id);
 	}
+
 
 
 	@Transactional
 	public boolean existsRelationWithUser(Long friendshipId, Long userId) {
 
-		if (friendshipDao.isExists(friendshipId)) {
-			Friendship friendship = friendshipDao.getById(friendshipId);
+		if (getDao().isExists(friendshipId)) {
+			Friendship friendship = getDao().getById(friendshipId);
 			return friendship.getUser1().equals(userId) ||
 					friendship.getUser2().equals(userId);
 		}
@@ -133,7 +131,7 @@ public class FriendshipService {
 	@Transactional
 	public Long getSecondUser(Long friendshipId, Long userId) {
 
-	 	Friendship friendship = friendshipDao.getById(friendshipId);
+	 	Friendship friendship = getDao().getById(friendshipId);
 		return friendship.getUser1().equals(userId)
 				? friendship.getUser2()
 				: friendship.getUser1();

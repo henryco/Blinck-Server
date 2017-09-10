@@ -118,7 +118,7 @@ public class UserFriendsController implements BlinckController {
 									   @RequestParam("id") Long relation) {
 
  		final Long id = getID(authentication.getName());
- 		if (friendshipService.isExistsById(relation)) {
+ 		if (friendshipService.isExists(relation)) {
 			Friendship friendship = friendshipService.getById(relation);
 			if (friendship.getUser2().equals(id) || friendship.getUser1().equals(id))
 				return friendship.clone();

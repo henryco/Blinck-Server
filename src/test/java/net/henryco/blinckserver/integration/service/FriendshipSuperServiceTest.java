@@ -104,7 +104,7 @@ public class FriendshipSuperServiceTest extends BlinckUserIntegrationTest {
 
 		assert friendshipService.isExistsBetweenUsers(users[0], users[1]);
 		assert friendshipService.isExistsBetweenUsers(users[1], users[0]);
-		assert friendshipService.isExistsById(relation);
+		assert friendshipService.isExists(relation);
 
 		Friendship byUsers = friendshipService.getByUsers(users[1], users[0]);
 		Friendship byId = friendshipService.getById(relation);
