@@ -3,6 +3,7 @@ package net.henryco.blinckserver.integration.controller.stomp;
 import net.henryco.blinckserver.integration.BlinckUserIntegrationTest;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -12,7 +13,6 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.lang.reflect.Type;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -27,9 +27,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class SimpleStompControllerTest extends BlinckUserIntegrationTest {
 
 	private static final String USERNAME_HEADER = "User";
-	private static final String TOKEN_HEADER = "Authorization";
+	private static final String TOKEN_HEADER = HttpHeaders.AUTHORIZATION;
 
-	private static final String ENDPOINT = "/stomp/chat";
+	private static final String ENDPOINT = "/stomp";
 	private static final String APP = "/app";
 	private static final String TOPIC = "/topic";
 	private static final String QUEUE = "/queue";
@@ -62,31 +62,67 @@ public class SimpleStompControllerTest extends BlinckUserIntegrationTest {
 
 		DefaultStompFrameHandler resultHandler1 = new DefaultStompFrameHandler();
 		DefaultStompFrameHandler resultHandler2 = new DefaultStompFrameHandler();
+		DefaultStompFrameHandler resultHandler3 = new DefaultStompFrameHandler();
 
-		StompSession session1 = createSession(createAuthHeaders(users[0], token1), handler);
-		StompSession session2 = createSession(createAuthHeaders(users[1], token2), handler);
+		StompSession session1 = createSession(users[0], token1, handler, 5);
+		StompSession session2 = createSession(users[1], token2, handler, 5);
 
 		session1.subscribe("/user/queue/test", resultHandler1);
 		session2.subscribe("/user/queue/test", resultHandler2);
+		session2.subscribe("/message/wow", resultHandler3);
 
-		session1.send(APP + "/test", "SOME RANDOM TEXT".getBytes());
-		session2.send(APP + "/test", "OTHER TEXT".getBytes());
+		new Thread(() -> {
+			session1.send(APP + "/test", "SOME RANDOM TEXT".getBytes());
+			session2.send(APP + "/test", "OTHER TEXT".getBytes());
+		}).start();
 
-		System.out.println("user1: "+resultHandler1.get().poll(5, SECONDS));
-		System.out.println("user2: "+resultHandler2.get().poll(5, SECONDS));
+
+		new Thread(() -> {
+			try {
+				System.out.println("\nuser22: " + resultHandler3.get().poll(5, SECONDS));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}).start();
+
+
+		new Thread(() -> {
+			try {
+				System.out.println("user1: "+resultHandler1.get().poll(5, SECONDS));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}).start();
+
+
+
+		new Thread(() -> {
+			try {
+				System.out.println("user2: "+resultHandler2.get().poll(5, SECONDS));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}).start();
+
+
+
+
+		Thread.sleep(6000);
 	}
 
 
 
 
-	private StompSession createSession(StompHeaders stompHeaders,
-									   StompSessionHandler handler) throws Exception {
+	private StompSession createSession(Long user,
+									   String accessToken,
+									   StompSessionHandler handler,
+									   int time) throws Exception {
 		return stompClient.connect(
 				new URI(endpoint()),
-				new WebSocketHttpHeaders(),
-				stompHeaders,
+				createHttpAuthHeaders(accessToken),
+				createAuthHeaders(user, accessToken),
 				handler
-		).get(5, SECONDS);
+		).get(time, SECONDS);
 	}
 
 
@@ -104,7 +140,8 @@ public class SimpleStompControllerTest extends BlinckUserIntegrationTest {
 
 		@Override
 		public void handleFrame(StompHeaders stompHeaders, Object o) {
-			blockingQueue.offer(new String(((byte[]) o)));
+			String income = new String(((byte[]) o));
+			blockingQueue.offer(income);
 		}
 
 		public BlockingQueue<String> get() {
@@ -119,6 +156,13 @@ public class SimpleStompControllerTest extends BlinckUserIntegrationTest {
 		stompHeaders.add(USERNAME_HEADER, user.toString());
 		stompHeaders.add(TOKEN_HEADER, token);
 		return stompHeaders;
+	}
+
+	private static
+	WebSocketHttpHeaders createHttpAuthHeaders(String token) {
+		WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
+		headers.add(TOKEN_HEADER, token);
+		return headers;
 	}
 
 }

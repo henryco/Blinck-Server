@@ -86,12 +86,9 @@ import static org.springframework.http.HttpMethod.POST;
 
 	private HttpSecurity authorizeRequests(HttpSecurity http) throws Exception {
 		return http.authorizeRequests()
-				.antMatchers("/").permitAll()
-				.antMatchers("/public/**").permitAll()
+				.antMatchers("/", "/public/**", "/login/**").permitAll()
 				.antMatchers(GET, "/session/**").permitAll()
-				.antMatchers("/stomp/chat/**").permitAll() // FIXME REMOVE
 				.antMatchers(POST,"/protected/admin/registration").permitAll()
-				.antMatchers("/login/**").permitAll()
 				.anyRequest().authenticated()
 		.and();
 	}

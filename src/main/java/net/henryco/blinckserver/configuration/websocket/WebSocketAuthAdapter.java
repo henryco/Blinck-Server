@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.configuration.websocket;
 
 import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -18,7 +19,7 @@ import static org.springframework.messaging.simp.stomp.StompCommand.CONNECT;
 public class WebSocketAuthAdapter extends ChannelInterceptorAdapter {
 
 	private static final String USERNAME_HEADER = "User";
-	private static final String TOKEN_HEADER = "Authorization";
+	private static final String TOKEN_HEADER = HttpHeaders.AUTHORIZATION;
 
 
 	private final TokenAuthenticationService tokenAuthService;

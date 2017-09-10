@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.security.token.processor.TokenAuthenticationProcessor;
 import net.henryco.blinckserver.util.test.BlinckTestName;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,7 +39,7 @@ public abstract class TokenAuthenticationService {
 	}
 
 	protected String getTokenHeader() {
-		return "Authorization";
+		return HttpHeaders.AUTHORIZATION;
 	}
 
 	protected String getTokenPrefix() {

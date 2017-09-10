@@ -20,8 +20,7 @@ public class WebSocketAuthConfiguration extends AbstractSecurityWebSocketMessage
 
 	@Override
 	protected boolean sameOriginDisabled() {
-		// Disable CSRF for endpoints.
-		return true;
+		return true; // Disable CSRF for endpoints.
 	}
 
 }

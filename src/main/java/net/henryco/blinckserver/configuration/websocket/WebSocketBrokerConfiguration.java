@@ -40,12 +40,12 @@ public class WebSocketBrokerConfiguration
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/stomp/chat").withSockJS();
+		registry.addEndpoint("/stomp").withSockJS();
 	}
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		registry.enableSimpleBroker("/queue", "/topic");
+		registry.enableSimpleBroker("/queue", "/topic", "/message");
 		registry.setApplicationDestinationPrefixes("/app");
 	}
 
