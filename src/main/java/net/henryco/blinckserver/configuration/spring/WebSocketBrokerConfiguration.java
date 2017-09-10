@@ -1,5 +1,7 @@
-package net.henryco.blinckserver.configuration.websocket;
+package net.henryco.blinckserver.configuration.spring;
 
+import net.henryco.blinckserver.configuration.project.websocket.WebSocketAuthAdapter;
+import net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants;
 import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +22,8 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 @EnableWebSocketMessageBroker
 @Order(HIGHEST_PRECEDENCE + 99)
 public class WebSocketBrokerConfiguration
-		extends AbstractWebSocketMessageBrokerConfigurer {
+		extends AbstractWebSocketMessageBrokerConfigurer
+		implements WebSocketConstants.Destination {
 
 
 	private final TokenAuthenticationService authenticationService;
@@ -40,13 +43,13 @@ public class WebSocketBrokerConfiguration
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/stomp").withSockJS();
+		registry.addEndpoint(ENDPOINT).withSockJS();
 	}
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		registry.enableSimpleBroker("/queue", "/topic", "/message");
-		registry.setApplicationDestinationPrefixes("/app");
+		registry.enableSimpleBroker(Broker.QUEUE, Broker.TOPIC, Broker.MESSAGE);
+		registry.setApplicationDestinationPrefixes(Application.APP);
 	}
 
 }

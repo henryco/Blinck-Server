@@ -1,7 +1,6 @@
 package net.henryco.blinckserver.mvc.controller.secured.user.notifications;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.infrastructure.UpdateNotification;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
@@ -12,20 +11,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.Serializable;
-import java.util.Date;
 import java.util.stream.Stream;
 
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  *  @author Henry on 06/09/17.
  */ @RestController
 @RequestMapping("/protected/user/notifications")
-public class UserNotificationsController implements BlinckController {
+public class UserNotificationsController
+		implements BlinckController, BlinckNotification {
 
  	private final UpdateNotificationService service;
 
@@ -36,40 +32,11 @@ public class UserNotificationsController implements BlinckController {
 	}
 
 
-	/**
-	 * <h1>NotificationForm JSON</h1>
-	 * <h2>
-	 *     {&nbsp;
-	 *     		"id":			LONG, &nbsp;
-	 *     		"type":			CHAR[255], &nbsp;
-	 *     		"info":			CHAR[255], &nbsp;
-	 *     		"timestamp":	DATE/LONG
-	 *     &nbsp;}
-	 * </h2>
-	 */
-	@Data @NoArgsConstructor
-	private static final class NotificationForm
-			implements Serializable {
-
- 		private Long id;
- 		private String type;
- 		private String info;
- 		private Date timestamp;
-
-		private NotificationForm(
-				UpdateNotification notification) {
-			this.id = notification.getId();
-			this.type = notification.getDetails().getType();
-			this.info = notification.getDetails().getNotification();
-			this.timestamp = notification.getDate();
-		}
-
-	}
 
 
-	private static NotificationForm[]
+	private static JsonForm[]
 	streamToArray(Stream<UpdateNotification> stream) {
-		return stream.map(NotificationForm::new).toArray(NotificationForm[]::new);
+		return stream.map(JsonForm::new).toArray(JsonForm[]::new);
 	}
 
 
@@ -96,13 +63,13 @@ public class UserNotificationsController implements BlinckController {
 	 *     	}
 	 * 	&nbsp;]
 	 * </h2>
-	 * @see NotificationForm
+	 * @see BlinckNotification.JsonForm
 	 */
 	public @RequestMapping(
 			value = "/list",
 			method = GET,
 			produces = JSON //	Tested
-	) NotificationForm[] getAllNotifications(Authentication authentication,
+	) JsonForm[] getAllNotifications(Authentication authentication,
 											 @RequestParam("page") int page,
 											 @RequestParam("size") int size) {
 		final Long id = longID(authentication);
@@ -123,13 +90,13 @@ public class UserNotificationsController implements BlinckController {
 	 *     	}
 	 * 	&nbsp;]
 	 * </h2>
-	 * @see NotificationForm
+	 * @see BlinckNotification.JsonForm
 	 */
 	public @RequestMapping(
 			value = "/list/all",
 			method = GET,
 			produces = JSON //	Tested
-	) NotificationForm[] getAllNotifications(Authentication authentication) {
+	) JsonForm[] getAllNotifications(Authentication authentication) {
 
 		final Long id = longID(authentication);
 		return streamToArray(service.getAllUserNotifications(id).stream());
@@ -149,13 +116,13 @@ public class UserNotificationsController implements BlinckController {
 	 *     	}
 	 * 	&nbsp;]
 	 * </h2>
-	 * @see NotificationForm
+	 * @see BlinckNotification.JsonForm
 	 */
 	public @RequestMapping(
 			value = "/list/all/pop",
 			method = GET,
 			produces = JSON //	Tested
-	) NotificationForm[] popAllNotifications(Authentication authentication) {
+	) JsonForm[] popAllNotifications(Authentication authentication) {
 
 		final Long id = longID(authentication);
 		return streamToArray(service.popAllNotifications(id).stream());
@@ -173,15 +140,15 @@ public class UserNotificationsController implements BlinckController {
 	 *     		"timestamp":	DATE/LONG
 	 *     &nbsp;}
 	 * </h2>
-	 * @see NotificationForm
+	 * @see BlinckNotification.JsonForm
 	 */
 	public @RequestMapping(
 			value = "/last",
 			method = GET,
 			produces = JSON //	Tested
-	) NotificationForm getLastNotification(Authentication authentication) {
+	) JsonForm getLastNotification(Authentication authentication) {
 
-		NotificationForm[] last = getAllNotifications(authentication, 0, 1);
+		JsonForm[] last = getAllNotifications(authentication, 0, 1);
 		return last.length == 0 ? null : last[0];
 	}
 

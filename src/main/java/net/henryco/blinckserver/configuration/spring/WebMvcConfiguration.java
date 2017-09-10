@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.configuration;
+package net.henryco.blinckserver.configuration.spring;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

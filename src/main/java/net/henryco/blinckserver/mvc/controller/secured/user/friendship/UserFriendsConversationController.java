@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.controller.secured.user.friendship;
 
+import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.conversation.FriendshipConversation;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-import static net.henryco.blinckserver.util.NotificationType.TYPE_FRIEND_MESSAGE;
+
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -23,7 +24,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Henry on 05/09/17.
  */ @RestController
 @RequestMapping("/protected/user/friends/conversation")
-public class UserFriendsConversationController implements BlinckController {
+public class UserFriendsConversationController
+		implements BlinckController, BlinckNotification {
 
 
  	private final UpdateNotificationService notificationService;
@@ -115,7 +117,7 @@ public class UserFriendsConversationController implements BlinckController {
 
 		notificationService.addNotification(
 				friendshipService.getSecondUser(post.getFriendship(), id),
-				TYPE_FRIEND_MESSAGE,
+				TYPE.FRIEND_MESSAGE,
 				post.getFriendship().toString()
 		);
 	}

@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.configuration.websocket;
+package net.henryco.blinckserver.configuration.spring;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

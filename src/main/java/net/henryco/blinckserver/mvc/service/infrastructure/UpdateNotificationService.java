@@ -3,11 +3,13 @@ package net.henryco.blinckserver.mvc.service.infrastructure;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
+import net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants;
 import net.henryco.blinckserver.mvc.model.dao.infrastructure.UpdateNotificationDao;
 import net.henryco.blinckserver.mvc.model.entity.infrastructure.UpdateNotification;
-import net.henryco.blinckserver.util.NotificationType;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +22,7 @@ import java.util.List;
 @Service
 public class UpdateNotificationService
 		extends BlinckDaoProvider<UpdateNotification, Long>
-		implements NotificationType {
+		implements WebSocketConstants.Service, BlinckNotification {
 
 
 	@Data @NoArgsConstructor @AllArgsConstructor
@@ -31,10 +33,15 @@ public class UpdateNotificationService
 		private String notification;
 	}
 
+	private final SimpMessagingTemplate webSocketMessageTemplate;
+
+
 
 	@Autowired
-	public UpdateNotificationService(UpdateNotificationDao notificationDao) {
+	public UpdateNotificationService(UpdateNotificationDao notificationDao,
+									 SimpMessagingTemplate webSocketMessageTemplate) {
 		super(notificationDao);
+		this.webSocketMessageTemplate = webSocketMessageTemplate;
 	}
 
 	private UpdateNotificationDao getDao() {
@@ -42,12 +49,16 @@ public class UpdateNotificationService
 	}
 
 
+
 	/**
 	 * @return <b>notification ID</b>
 	 */
 	@Transactional // Tested
 	public Long addNotification(SimpleNotification simpleNotification) {
-		return getDao().save(createNotification(simpleNotification)).getId();
+
+		UpdateNotification saved = getDao().save(createNotification(simpleNotification));
+		sendNotification(webSocketMessageTemplate, saved);
+		return saved.getId();
 	}
 
 
@@ -113,5 +124,14 @@ public class UpdateNotificationService
 		return notification;
 	}
 
+
+	private static void
+	sendNotification(SimpMessagingTemplate webSocketMessageTemplate,
+					 UpdateNotification updateNotification) {
+
+		final JsonForm form = new JsonForm(updateNotification);
+		final String user = updateNotification.getTargetUserId().toString();
+		webSocketMessageTemplate.convertAndSendToUser(user, NOTIFICATION, form);
+	}
 
 }

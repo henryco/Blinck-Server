@@ -1,7 +1,6 @@
-package net.henryco.blinckserver.configuration.websocket;
+package net.henryco.blinckserver.configuration.project.websocket;
 
 import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -16,10 +15,8 @@ import static org.springframework.messaging.simp.stomp.StompCommand.CONNECT;
 /**
  * @author Henry on 08/09/17.
  */
-public class WebSocketAuthAdapter extends ChannelInterceptorAdapter {
-
-	private static final String USERNAME_HEADER = "User";
-	private static final String TOKEN_HEADER = HttpHeaders.AUTHORIZATION;
+public class WebSocketAuthAdapter extends ChannelInterceptorAdapter
+		implements WebSocketConstants.Header {
 
 
 	private final TokenAuthenticationService tokenAuthService;
@@ -38,8 +35,8 @@ public class WebSocketAuthAdapter extends ChannelInterceptorAdapter {
 
 		if (CONNECT == accessor.getCommand()) {
 
-			final String username = checkUsername(accessor.getFirstNativeHeader(USERNAME_HEADER));
-			final String jsonWebToken = checkToken(accessor.getFirstNativeHeader(TOKEN_HEADER));
+			final String username = checkUsername(accessor.getFirstNativeHeader(USERNAME));
+			final String jsonWebToken = checkToken(accessor.getFirstNativeHeader(ACCESS_TOKEN));
 
 			final Authentication authentication = tokenAuthService.getAuthentication(jsonWebToken);
 			accessor.setUser(checkAuthentication(authentication, username));

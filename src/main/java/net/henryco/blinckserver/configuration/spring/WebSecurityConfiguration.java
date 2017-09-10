@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.configuration;
+package net.henryco.blinckserver.configuration.spring;
 
 import net.henryco.blinckserver.security.auth.FacebookAuthManager;
 import net.henryco.blinckserver.security.credentials.AdminCredentials;
