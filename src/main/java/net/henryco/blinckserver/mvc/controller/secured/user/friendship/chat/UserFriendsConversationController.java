@@ -1,31 +1,24 @@
-package net.henryco.blinckserver.mvc.controller.secured.user.friendship;
+package net.henryco.blinckserver.mvc.controller.secured.user.friendship.chat;
 
-import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
-import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.conversation.FriendshipConversation;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.conversation.FriendshipConversationService;
 import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
-
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * @author Henry on 05/09/17.
  */ @RestController
 @RequestMapping("/protected/user/friends/conversation")
 public class UserFriendsConversationController
-		implements BlinckController, BlinckNotification {
+		extends FriendshipMessageController {
 
 
  	private final UpdateNotificationService notificationService;
@@ -43,6 +36,7 @@ public class UserFriendsConversationController
 	}
 
 
+
 	// TESTED
 	public @RequestMapping(
 			value = "/messages/count",
@@ -50,10 +44,9 @@ public class UserFriendsConversationController
 	) Long getAllMessagesCount(Authentication authentication,
 							   @RequestParam("id") Long friendshipId) {
 
-		accessCheck(friendshipService, friendshipId, getID(authentication.getName()));
+		accessCheck(friendshipService, friendshipId, longID(authentication));
 		return conversationService.countByFriendshipId(friendshipId);
 	}
-
 
 
 
@@ -80,11 +73,10 @@ public class UserFriendsConversationController
 											  @RequestParam("size") int size,
 											  @RequestParam("id") Long friendshipId) {
 
-		accessCheck(friendshipService, friendshipId, getID(authentication.getName()));
+		accessCheck(friendshipService, friendshipId, longID(authentication));
  		return conversationService.getByFriendshipId(friendshipId, page, size)
 				.toArray(new FriendshipConversation[0]);
 	}
-
 
 
 
@@ -104,24 +96,12 @@ public class UserFriendsConversationController
 	) void sendMessage(Authentication authentication,
 					   @RequestBody FriendshipConversation post) {
 
-		final Long id = getID(authentication.getName());
+		final Long id = longID(authentication);
 		accessCheck(friendshipService, post.getFriendship(), id);
 
-		FriendshipConversation message = new FriendshipConversation();
-		message.setDate(new Date(System.currentTimeMillis()));
-		message.setFriendship(post.getFriendship());
-		message.setMessage(post.getMessage());
-		message.setAuthor(id);
-
-		conversationService.save(message);
-
-		notificationService.addNotification(
-				friendshipService.getSecondUser(post.getFriendship(), id),
-				TYPE.FRIEND_MESSAGE,
-				post.getFriendship().toString()
-		);
+		conversationService.save(createMessage(id, post));
+		sendMessageNotification(post.getFriendship(), id);
 	}
-
 
 
 
@@ -145,11 +125,11 @@ public class UserFriendsConversationController
 	) FriendshipConversation getLastMessage(Authentication authentication,
 											@RequestParam("id") Long friendshipId) {
 
-		accessCheck(friendshipService, friendshipId, getID(authentication.getName()));
+		accessCheck(friendshipService, friendshipId, longID(authentication));
 
 		List<FriendshipConversation> list =
 				conversationService.getByFriendshipId(friendshipId, 0, 1);
-		return list.isEmpty() ? null : list.get(0);
+		return list.isEmpty() ? null : list.get(0).clone();
 	}
 
 
@@ -161,24 +141,20 @@ public class UserFriendsConversationController
 	) void removeAllMessages(Authentication authentication,
 							 @RequestParam("id") Long friendshipId) {
 
-		accessCheck(friendshipService, friendshipId, getID(authentication.getName()));
+		accessCheck(friendshipService, friendshipId, longID(authentication));
 		conversationService.deleteAllByFriendshipId(friendshipId);
 	}
 
 
 
 
+	private void sendMessageNotification(Long friendship, Long id) {
 
-	private static
-	Long getID(String name) {
-		return Long.decode(name);
-	}
-
-	private static
-	void accessCheck(FriendshipService friendshipService, Long friendshipId, Long userId)
-			throws AccessDeniedException {
-		if (!friendshipService.existsRelationWithUser(friendshipId, userId))
-			throw new AccessDeniedException("Wrong user or conversation ID");
+		notificationService.addNotification(
+				friendshipService.getSecondUser(friendship, id),
+				TYPE.FRIEND_MESSAGE,
+				friendship.toString()
+		);
 	}
 
 }

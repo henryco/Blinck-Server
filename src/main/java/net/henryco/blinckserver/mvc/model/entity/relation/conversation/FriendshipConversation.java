@@ -11,7 +11,7 @@ import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
- * <h1>Friendship conversation response JSON:</h1>
+ * <h1>Friendship conversation JSON:</h1>
  *	<h3>
  * 	[&nbsp;
  * 		{

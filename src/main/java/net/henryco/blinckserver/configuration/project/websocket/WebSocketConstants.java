@@ -1,8 +1,12 @@
 package net.henryco.blinckserver.configuration.project.websocket;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpHeaders;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author Henry on 10/09/17.
@@ -32,6 +36,7 @@ public interface WebSocketConstants {
 			String FRIENDSHIP = "/friendship";
 			String SUBGROUP = "/subgroup";
 			String GROUP = "/group";
+			String STAT = "/stat";
 		}
 	}
 
@@ -61,6 +66,26 @@ public interface WebSocketConstants {
 		static String getGroup(Serializable id) {
 			return GROUP + "/" + id;
 		}
+	}
+
+
+	/**
+	 * <h1>Status JSON</h1>
+	 * <h2>
+	 *     {&nbsp;
+	 *     		"destination":	CHAR[255], &nbsp;
+	 *     		"timestamp":	DATE/LONG, &nbsp;
+	 *     		"status":		BOOLEAN
+	 *     &nbsp;}
+	 * </h2>
+	 */ @Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	final class WebSocketStatusJson
+			implements Serializable {
+		private String destination;
+		private Date timestamp;
+		private boolean status;
 	}
 
 }
