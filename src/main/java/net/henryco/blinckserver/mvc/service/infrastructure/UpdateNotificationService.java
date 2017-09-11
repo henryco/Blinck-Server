@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.service.infrastructure;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,15 +24,24 @@ import java.util.List;
 @Service
 public class UpdateNotificationService
 		extends BlinckDaoProvider<UpdateNotification, Long>
-		implements WebSocketConstants.Service, BlinckNotification, BlinckNotification.TYPE {
+		implements WebSocketConstants.ExternalAPI, BlinckNotification, BlinckNotification.TYPE {
 
 
-	@Data @NoArgsConstructor @AllArgsConstructor
+	/**
+	 * <h1>Simple notification JSON</h1><br>
+	 *     <h2>
+	 *         {&nbsp;
+	 *             "receiver_id":	LONG, &nbsp;
+	 *             "type":			CHAR[255], &nbsp;
+	 *             "notification":	CHAR[255]
+	 *         &nbsp;}
+	 *     </h2>
+	 */ @Data @NoArgsConstructor @AllArgsConstructor
 	public static final class SimpleNotification {
 
-		private Long targetUserId;
-		private String type;
-		private String notification;
+		private @JsonProperty("receiver_id") Long targetUserId;
+		private @JsonProperty String type;
+		private @JsonProperty String notification;
 	}
 
 	private final SimpMessagingTemplate webSocketMessageTemplate;

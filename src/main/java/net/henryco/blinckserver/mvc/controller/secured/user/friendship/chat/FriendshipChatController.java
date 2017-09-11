@@ -1,6 +1,5 @@
 package net.henryco.blinckserver.mvc.controller.secured.user.friendship.chat;
 
-
 import net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants;
 import net.henryco.blinckserver.mvc.model.entity.relation.conversation.FriendshipConversation;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
@@ -13,9 +12,8 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
-import static net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants.Destination.Postfix.STAT;
-import static net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants.Service.FRIENDSHIP;
-
+import static net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants.DestinationAPI.Postfix.STAT;
+import static net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants.ExternalAPI.FRIENDSHIP;
 
 /**
  * @author Henry on 10/09/17.
@@ -87,7 +85,7 @@ public class FriendshipChatController
 
 		final Long friendship = post.getFriendship();
 		final Long secondUser = friendshipService.getSecondUser(friendship, id);
-		final String destination = Service.getFriendship(friendship);
+		final String destination = ExternalAPI.getFriendship(friendship);
 
 		messagingTemplate.convertAndSendToUser(secondUser.toString(), destination, message.clone());
 		notificationService.addNotification(secondUser, TYPE.FRIEND_MESSAGE, friendship.toString());

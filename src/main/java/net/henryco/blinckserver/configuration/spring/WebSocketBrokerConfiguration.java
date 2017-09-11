@@ -23,7 +23,7 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 @Order(HIGHEST_PRECEDENCE + 99)
 public class WebSocketBrokerConfiguration
 		extends AbstractWebSocketMessageBrokerConfigurer
-		implements WebSocketConstants.Destination {
+		implements WebSocketConstants.DestinationAPI {
 
 
 	private final TokenAuthenticationService authenticationService;
@@ -43,7 +43,7 @@ public class WebSocketBrokerConfiguration
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint(ENDPOINT).withSockJS();
+		registry.addEndpoint(CONNECTION_ENDPOINT).withSockJS();
 	}
 
 	@Override

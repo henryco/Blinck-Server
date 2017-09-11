@@ -17,7 +17,8 @@ import java.util.Random;
 public class UpdateNotificationServiceTest extends BlinckUserIntegrationTest {
 
 
-	private @Autowired UpdateNotificationService notificationService;
+	private @Autowired
+	UpdateNotificationService notificationService;
 
 
 

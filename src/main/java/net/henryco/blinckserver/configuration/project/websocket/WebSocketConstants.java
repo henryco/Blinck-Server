@@ -14,9 +14,9 @@ import java.util.Date;
 public interface WebSocketConstants {
 
 
-	interface Destination {
+	interface DestinationAPI {
 
-		String ENDPOINT = "/stomp";
+		String CONNECTION_ENDPOINT = "/stomp";
 
 		interface Application {
 
@@ -48,12 +48,20 @@ public interface WebSocketConstants {
 	}
 
 
-	interface Service {
+	/**
+	 * 	<h1>EXTERNAL API</h1>
+	 *
+	 * 	<h2>
+	 * 	USE THIS PATHS FOR CONNECTION, SUBSCRIBING AND SENDING <br>
+	 * 	DON'T FORGET TO USER PREFIX {/user} before! <br>
+	 * 	</h2>
+	 */
+	interface ExternalAPI {
 
-		String NOTIFICATION = Destination.Broker.QUEUE + Destination.Postfix.NOTIFICATION;
-		String FRIENDSHIP = Destination.Broker.MESSAGE + Destination.Postfix.FRIENDSHIP;
-		String SUBGROUP = Destination.Broker.MESSAGE + Destination.Postfix.SUBGROUP;
-		String GROUP = Destination.Broker.MESSAGE + Destination.Postfix.GROUP;
+		String NOTIFICATION = DestinationAPI.Broker.QUEUE + DestinationAPI.Postfix.NOTIFICATION;
+		String FRIENDSHIP = DestinationAPI.Broker.MESSAGE + DestinationAPI.Postfix.FRIENDSHIP;
+		String SUBGROUP = DestinationAPI.Broker.MESSAGE + DestinationAPI.Postfix.SUBGROUP;
+		String GROUP = DestinationAPI.Broker.MESSAGE + DestinationAPI.Postfix.GROUP;
 
 		static String getFriendship(Serializable id) {
 			return FRIENDSHIP + "/" + id;

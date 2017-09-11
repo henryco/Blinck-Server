@@ -4,15 +4,15 @@ import net.henryco.blinckserver.mvc.controller.secured.BlinckProfileController;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminAuthProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
 import net.henryco.blinckserver.mvc.service.data.AdminDataService;
+import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
+import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService.SimpleNotification;
 import net.henryco.blinckserver.security.token.service.SessionWhiteListService;
 import net.henryco.blinckserver.security.credentials.AdminCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -26,12 +26,15 @@ public class AdminProfileController
 
 	private final AdminDataService adminDataService;
 	private final SessionWhiteListService whiteListService;
+	private final UpdateNotificationService notificationService;
 
 	@Autowired
 	public AdminProfileController(AdminDataService adminDataService,
-								  SessionWhiteListService whiteListService) {
+								  SessionWhiteListService whiteListService,
+								  UpdateNotificationService notificationService) {
 		this.adminDataService = adminDataService;
 		this.whiteListService = whiteListService;
+		this.notificationService = notificationService;
 	}
 
 
@@ -134,6 +137,18 @@ public class AdminProfileController
 		whiteListService.removeUserFromWhiteList(target);
 	}
 
+
+
+	/**
+	 * <br>
+	 * <h2>For JSON FORM, SEE: {@link SimpleNotification} </h2>
+	 */
+	public @ResponseStatus(OK) @RequestMapping(
+			method = POST,
+			value = "/notification/user"
+	) void sendNotificationToUser(@RequestBody SimpleNotification notification) {
+		notificationService.addNotification(notification);
+	}
 
 
 }

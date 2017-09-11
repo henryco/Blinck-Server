@@ -18,7 +18,8 @@ import java.util.function.BiConsumer;
 public class UserNotificationControllerTest extends BlinckUserIntegrationTest {
 
 
-	private @Autowired UpdateNotificationService notificationService;
+	private @Autowired
+	UpdateNotificationService notificationService;
 
 
 	private static final String NOTIFICATIONS = "/protected/user/notifications";
