@@ -34,9 +34,9 @@ public class UserNotificationsController
 
 
 
-	private static JsonForm[]
+	private static JsonNotificationForm[]
 	streamToArray(Stream<UpdateNotification> stream) {
-		return stream.map(JsonForm::new).toArray(JsonForm[]::new);
+		return stream.map(JsonNotificationForm::new).toArray(JsonNotificationForm[]::new);
 	}
 
 
@@ -63,15 +63,15 @@ public class UserNotificationsController
 	 *     	}
 	 * 	&nbsp;]
 	 * </h2>
-	 * @see BlinckNotification.JsonForm
+	 * @see JsonNotificationForm
 	 */
 	public @RequestMapping(
 			value = "/list",
 			method = GET,
 			produces = JSON //	Tested
-	) JsonForm[] getAllNotifications(Authentication authentication,
-											 @RequestParam("page") int page,
-											 @RequestParam("size") int size) {
+	) JsonNotificationForm[] getAllNotifications(Authentication authentication,
+												 @RequestParam("page") int page,
+												 @RequestParam("size") int size) {
 		final Long id = longID(authentication);
 		return streamToArray(service.getAllUserNotifications(id, page, size).stream());
 	}
@@ -90,13 +90,13 @@ public class UserNotificationsController
 	 *     	}
 	 * 	&nbsp;]
 	 * </h2>
-	 * @see BlinckNotification.JsonForm
+	 * @see JsonNotificationForm
 	 */
 	public @RequestMapping(
 			value = "/list/all",
 			method = GET,
 			produces = JSON //	Tested
-	) JsonForm[] getAllNotifications(Authentication authentication) {
+	) JsonNotificationForm[] getAllNotifications(Authentication authentication) {
 
 		final Long id = longID(authentication);
 		return streamToArray(service.getAllUserNotifications(id).stream());
@@ -116,13 +116,13 @@ public class UserNotificationsController
 	 *     	}
 	 * 	&nbsp;]
 	 * </h2>
-	 * @see BlinckNotification.JsonForm
+	 * @see JsonNotificationForm
 	 */
 	public @RequestMapping(
 			value = "/list/all/pop",
 			method = GET,
 			produces = JSON //	Tested
-	) JsonForm[] popAllNotifications(Authentication authentication) {
+	) JsonNotificationForm[] popAllNotifications(Authentication authentication) {
 
 		final Long id = longID(authentication);
 		return streamToArray(service.popAllNotifications(id).stream());
@@ -140,15 +140,16 @@ public class UserNotificationsController
 	 *     		"timestamp":	DATE/LONG
 	 *     &nbsp;}
 	 * </h2>
-	 * @see BlinckNotification.JsonForm
+	 * @see JsonNotificationForm
 	 */
 	public @RequestMapping(
 			value = "/last",
 			method = GET,
 			produces = JSON //	Tested
-	) JsonForm getLastNotification(Authentication authentication) {
+	)
+	JsonNotificationForm getLastNotification(Authentication authentication) {
 
-		JsonForm[] last = getAllNotifications(authentication, 0, 1);
+		JsonNotificationForm[] last = getAllNotifications(authentication, 0, 1);
 		return last.length == 0 ? null : last[0];
 	}
 

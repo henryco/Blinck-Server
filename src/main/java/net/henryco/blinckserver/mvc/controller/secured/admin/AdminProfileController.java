@@ -1,11 +1,11 @@
 package net.henryco.blinckserver.mvc.controller.secured.admin;
 
+import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.secured.BlinckProfileController;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminAuthProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
 import net.henryco.blinckserver.mvc.service.data.AdminDataService;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
-import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService.SimpleNotification;
 import net.henryco.blinckserver.security.token.service.SessionWhiteListService;
 import net.henryco.blinckserver.security.credentials.AdminCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */ @RestController
 @RequestMapping("/protected/admin")
 public class AdminProfileController
-		implements BlinckProfileController {
+		implements BlinckProfileController, BlinckNotification {
 
 
 	private final AdminDataService adminDataService;

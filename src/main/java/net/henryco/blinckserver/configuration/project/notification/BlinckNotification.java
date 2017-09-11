@@ -1,7 +1,10 @@
 package net.henryco.blinckserver.configuration.project.notification;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants;
 import net.henryco.blinckserver.mvc.model.entity.infrastructure.UpdateNotification;
 
 import java.io.Serializable;
@@ -12,6 +15,7 @@ import java.util.Date;
  */
 public interface BlinckNotification {
 
+	String WEB_SOCKET_ENDPOINT = WebSocketConstants.ExternalAPI.NOTIFICATION;
 
 	interface TYPE {
 
@@ -35,7 +39,7 @@ public interface BlinckNotification {
 	 * </h2>
 	 */ @Data
 	@NoArgsConstructor
-	final class JsonForm
+	final class JsonNotificationForm
 			implements Serializable {
 
 		private Long id;
@@ -43,7 +47,7 @@ public interface BlinckNotification {
 		private String info;
 		private Date timestamp;
 
-		public JsonForm(UpdateNotification notification) {
+		public JsonNotificationForm(UpdateNotification notification) {
 			this.id = notification.getId();
 			this.type = notification.getDetails().getType();
 			this.info = notification.getDetails().getNotification();
@@ -53,4 +57,21 @@ public interface BlinckNotification {
 	}
 
 
+	/**
+	 * <h1>Simple notification JSON</h1><br>
+	 *     <h2>
+	 *         {&nbsp;
+	 *             "receiver_id":	LONG, &nbsp;
+	 *             "type":			CHAR[255], &nbsp;
+	 *             "notification":	CHAR[255]
+	 *         &nbsp;}
+	 *     </h2>
+	 */ @Data @NoArgsConstructor @AllArgsConstructor
+	final class SimpleNotification
+			implements Serializable{
+
+		private @JsonProperty("receiver_id") Long targetUserId;
+		private @JsonProperty String type;
+		private @JsonProperty String notification;
+	}
 }

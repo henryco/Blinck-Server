@@ -49,6 +49,30 @@ public class FriendshipChatController
 	 *		SUBSCRIBE:	/user/message/friendship/stat				<-- GET MESSAGE STATUS
 	 *
 	 *		SEND:		/app/message/friendship						<-- SEND JSON MESSAGE
+	 *
+	 *
+	 *	SEND message JSON:
+	 *
+	 *		"friendship":	LONG,
+	 *		"message":		CHAR[512],
+	 *		"timestamp":	DATE/LONG
+	 *
+	 *
+	 *	GET message JSON:
+	 *
+	 *		"id": 			LONG,
+ 	 * 		"message": 		CHAR[512],
+ 	 * 		"timestamp": 	DATE/LONG,
+ 	 * 		"author": 		LONG,
+ 	 * 		"friendship":	LONG
+	 *
+	 *
+	 *	RESPONSE JSON:
+	 *
+	 * 		"destination":	CHAR[255],
+	 * 		"timestamp":	DATE/LONG,
+	 * 		"status":		BOOLEAN
+	 *
 	 */
 
 
@@ -65,7 +89,7 @@ public class FriendshipChatController
 	@MessageMapping({FRIENDSHIP})
 	@SendToUser(FRIENDSHIP + STAT)
 	public WebSocketStatusJson sendMessage(Authentication authentication,
-							  FriendshipConversation post) {
+										   FriendshipConversation post) {
 
 	 	final Long id = longID(authentication);
 

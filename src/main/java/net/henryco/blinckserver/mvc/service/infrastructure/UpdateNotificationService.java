@@ -1,11 +1,6 @@
 package net.henryco.blinckserver.mvc.service.infrastructure;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
-import net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants;
 import net.henryco.blinckserver.mvc.model.dao.infrastructure.UpdateNotificationDao;
 import net.henryco.blinckserver.mvc.model.entity.infrastructure.UpdateNotification;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
@@ -24,28 +19,10 @@ import java.util.List;
 @Service
 public class UpdateNotificationService
 		extends BlinckDaoProvider<UpdateNotification, Long>
-		implements WebSocketConstants.ExternalAPI, BlinckNotification, BlinckNotification.TYPE {
+		implements BlinckNotification {
 
-
-	/**
-	 * <h1>Simple notification JSON</h1><br>
-	 *     <h2>
-	 *         {&nbsp;
-	 *             "receiver_id":	LONG, &nbsp;
-	 *             "type":			CHAR[255], &nbsp;
-	 *             "notification":	CHAR[255]
-	 *         &nbsp;}
-	 *     </h2>
-	 */ @Data @NoArgsConstructor @AllArgsConstructor
-	public static final class SimpleNotification {
-
-		private @JsonProperty("receiver_id") Long targetUserId;
-		private @JsonProperty String type;
-		private @JsonProperty String notification;
-	}
 
 	private final SimpMessagingTemplate webSocketMessageTemplate;
-
 
 
 	@Autowired
@@ -140,9 +117,9 @@ public class UpdateNotificationService
 	sendNotification(SimpMessagingTemplate webSocketMessageTemplate,
 					 UpdateNotification updateNotification) {
 
-		final JsonForm form = new JsonForm(updateNotification);
+		final JsonNotificationForm form = new JsonNotificationForm(updateNotification);
 		final String user = updateNotification.getTargetUserId().toString();
-		webSocketMessageTemplate.convertAndSendToUser(user, NOTIFICATION, form);
+		webSocketMessageTemplate.convertAndSendToUser(user, WEB_SOCKET_ENDPOINT, form);
 	}
 
 }
