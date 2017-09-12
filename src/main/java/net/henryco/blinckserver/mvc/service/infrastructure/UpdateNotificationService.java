@@ -119,7 +119,7 @@ public class UpdateNotificationService
 
 		final JsonNotificationForm form = new JsonNotificationForm(updateNotification);
 		final String user = updateNotification.getTargetUserId().toString();
-		webSocketMessageTemplate.convertAndSendToUser(user, WEB_SOCKET_ENDPOINT, form);
+		webSocketMessageTemplate.convertAndSendToUser(user, WEB_SOCKET_NOTIFICATION_ENDPOINT, form);
 	}
 
 }

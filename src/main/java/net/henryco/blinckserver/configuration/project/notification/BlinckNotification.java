@@ -15,7 +15,7 @@ import java.util.Date;
  */
 public interface BlinckNotification {
 
-	String WEB_SOCKET_ENDPOINT = WebSocketConstants.ExternalAPI.NOTIFICATION;
+	String WEB_SOCKET_NOTIFICATION_ENDPOINT = WebSocketConstants.ExternalAPI.NOTIFICATION;
 
 	interface TYPE {
 

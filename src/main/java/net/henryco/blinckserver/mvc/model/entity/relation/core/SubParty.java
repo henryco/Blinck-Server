@@ -2,9 +2,9 @@ package net.henryco.blinckserver.mvc.model.entity.relation.core;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
 
 import javax.persistence.*;
+import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
@@ -14,7 +14,7 @@ import static javax.persistence.GenerationType.AUTO;
  */
 @Entity @Data
 @NoArgsConstructor
-public class SubParty {
+public final class SubParty {
 
 
 	private @Id @Column(
@@ -25,31 +25,59 @@ public class SubParty {
 	) Long id;
 
 
-	private @Column(
-			name = "sub_party_id",
-			nullable = false,
-			updatable = false
-	) Long subPartyId;
-
-
 	private @ManyToOne(
-			cascade = ALL,
-			optional = false
+			cascade = ALL
 	) @JoinColumn(
-			name = "party_id",
-			updatable = false
+			name = "party_id"
 	) Party party;
 
 
-	private @ManyToOne(
+	private @OneToOne(
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			name = "user_id",
 			updatable = false,
-			unique = true
-	) UserCoreProfile user;
+			nullable = false,
+			unique = true,
+			name = "typo"
+	) Type type;
 
-	// TODO: 02/09/17 TESTS, maybe remove hard reference
+
+	private @ElementCollection(
+			targetClass = Long.class
+	) @Column(
+			name = "users",
+			nullable = false
+	) List<Long> users;
+
+
+
+	@Entity @Data
+	@NoArgsConstructor
+	public static final class Type {
+
+		private @Id @Column(
+				name = "id",
+				unique = true
+		) @GeneratedValue(
+				strategy = AUTO
+		) Long id;
+
+
+		private @Column(
+				name = "ident",
+				nullable = false,
+				updatable = false
+		) String ident;
+
+
+		private @Column(
+				name = "wanted",
+				nullable = false,
+				updatable = false
+		) String wanted;
+
+	}
+
 
 }

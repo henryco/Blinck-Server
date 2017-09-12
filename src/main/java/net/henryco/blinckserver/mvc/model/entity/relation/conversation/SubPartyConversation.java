@@ -57,8 +57,7 @@ public class SubPartyConversation {
 			optional = false
 	) @JoinColumn(
 			updatable = false,
-			name = "sub_party_id",
-			referencedColumnName = "sub_party_id"
+			name = "sub_party_id"
 	) SubParty subParty;
 
 	// TODO: 02/09/17 TESTS, remove hard reference
