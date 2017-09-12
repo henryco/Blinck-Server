@@ -26,6 +26,9 @@ public class SessionController {
 
 	private static final String DEFAULT_PRINCIPAL = "unknown";
 
+	private static final String LOGOUT_OK = "OK";
+	private static final String LOGOUT_FAIL = "FAIL";
+
 	private final TokenAuthenticationService userTokenService;
 	private final TokenAuthenticationService adminTokenService;
 	private final SessionWhiteListService whiteListService;
@@ -40,7 +43,15 @@ public class SessionController {
 	}
 
 
-	@Data @NoArgsConstructor @AllArgsConstructor
+	/**
+	 * 	<h1>Status Response JSON:</h1>
+	 * 	<h2>
+	 * 	    {&nbsp;
+	 * 	        "principal":	CHAR[255], &nbsp;
+	 * 	        "active":		BOOLEAN
+	 * 	    &nbsp;}
+	 * 	</h2>
+	 */ @Data @NoArgsConstructor @AllArgsConstructor
 	private static final class StatusResponse
 			implements Serializable {
 		private String principal = DEFAULT_PRINCIPAL;
@@ -85,9 +96,9 @@ public class SessionController {
 			value = "/user/logout"
 	) String logoutUser(HttpServletRequest request) {
 		Authentication user = userTokenService.getAuthentication(request);
-		if (user == null) return "";
+		if (user == null) return LOGOUT_FAIL;
 		whiteListService.removeUserFromWhiteList(Long.decode(user.getName()));
-		return "OK";
+		return LOGOUT_OK;
 	}
 
 
@@ -97,9 +108,9 @@ public class SessionController {
 			value = "/admin/logout"
 	) String logoutAdmin(HttpServletRequest request) {
 		Authentication admin = adminTokenService.getAuthentication(request);
-		if (admin == null) return "";
+		if (admin == null) return LOGOUT_FAIL;
 		whiteListService.removeAdminFromWhiteList(admin.getName());
-		return "OK";
+		return LOGOUT_OK;
 	}
 
 

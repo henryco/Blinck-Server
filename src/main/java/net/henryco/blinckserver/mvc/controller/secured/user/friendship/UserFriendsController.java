@@ -47,7 +47,6 @@ public class UserFriendsController implements BlinckController, BlinckNotificati
 
 
 
-
 	@Data @NoArgsConstructor @AllArgsConstructor
 	private static final class DetailedFriendship
 			implements Serializable {
@@ -55,6 +54,122 @@ public class UserFriendsController implements BlinckController, BlinckNotificati
 		private Long friend;
 	}
 
+
+	/*
+	 *	Friends controller API
+	 *
+	 *		ENDPOINT: 		/protected/user/friends
+	 *
+	 *
+	 *		DetailedFriendship:
+	 *
+	 *			"friendship": 	LONG,
+	 *			"friend": 		LONG,
+	 *
+	 *
+	 * 		Friendship:
+	 *
+	 * 			"friendship": 	LONG,
+	 * 			"timestamp": 	DATE/LONG,
+	 * 			"user_1": 		LONG,
+	 * 			"user_2": 		LONG
+	 *
+	 *
+	 *		FriendshipNotification:
+	 *
+	 *			"notification": LONG,
+	 *			"from": 		LONG,
+	 *			"to": 			LONG,
+	 *			"timestamp": 	DATE/LONG
+	 *
+	 *
+	 *		COUNT:
+	 *
+	 *			ENDPOINT:	/count
+	 *			METHOD:		GET
+	 *			RETURN:		Long
+	 *
+	 *
+	 *		LIST:
+	 *
+	 *			ENDPOINT:	/list
+	 *			ARGS:		Int: page, Int: size
+	 *			METHOD:		GET
+	 *			RETURN:		Long[]
+	 *
+	 *
+	 * 		DETAILED_LIST:
+	 *
+	 * 			ENDPOINT:	/detailed/list
+	 * 			ARGS:		Int: page, Int: size
+	 * 			METHOD:		GET
+	 * 			RETURN:		DetailedFriendship[]
+	 *
+	 *
+	 *		DETAILS:
+	 *
+	 *			ENDPOINT:	/Friendship
+	 *			ARGS:		Int: id
+	 *			METHOD:		GET
+	 *			RETURN:		Friendship
+	 *
+	 *
+	 *		ADD:
+	 *
+	 *			ENDPOINT:	/add
+	 *			ARGS:		Long: user_id
+	 *			METHOD:		POST, GET
+	 *			RETURN:		VOID
+	 *
+	 *
+	 *		REMOVE:
+	 *
+	 *			ENDPOINT:	/remove
+	 *			ARGS:		Long: user_id
+	 *			METHOD:		DELETE, POST, GET
+	 *			RETURN:		VOID
+	 *
+	 *
+	 *		ACCEPT:
+	 *
+	 *			ENDPOINT:	/request/accept
+	 *			ARGS:		Long: user_id
+	 *			METHOD:		POST, GET
+	 *			RETURN: 	VOID
+	 *
+	 *
+	 *		DECLINE:
+	 *
+	 *			ENDPOINT:	/request/decline
+	 *			ARGS:		Long: user_id
+	 *			METHOD:		POST, GET
+	 *			RETURN:		VOID
+	 *
+	 *
+	 *		DIRECT_REMOVE:
+	 *
+	 *			ENDPOINT:	/request/direct/delete
+	 *			ARGS:		Long: id
+	 *			METHOD:		DELETE, POST, GET
+	 *			RETURN:		VOID
+	 *
+	 *
+	 * 		INCOME:
+	 *
+	 * 			ENDPOINT:	/request/list/income
+	 * 			ARGS:		Int: page, Int: size
+	 * 			METHOD:		GET
+	 * 			RETURN:		FriendshipNotification[]
+	 *
+	 *
+	 * 		OUTCOME:
+	 *
+	 * 			ENDPOINT:	/request/list/outcome
+	 * 			ARGS:		Int: page, Int: size
+	 * 			METHOD:		GET
+	 * 			RETURN:		FriendshipNotification[]
+	 *
+	 */
 
 
 

@@ -32,14 +32,77 @@ public class UserNotificationsController
 	}
 
 
-
-
 	private static JsonNotificationForm[]
 	streamToArray(Stream<UpdateNotification> stream) {
 		return stream.map(JsonNotificationForm::new).toArray(JsonNotificationForm[]::new);
 	}
 
 
+	/*
+	 *	Update notification API
+	 *
+	 *		ENDPOINT: 		/protected/user/notifications
+	 *
+	 *
+	 *		JsonNotificationForm:
+	 *
+	 *			"id": 			LONG,
+	 *			"type": 		CHAR[255],
+	 *			"info": 		CHAR[255],
+	 *			"timestamp": 	DATE/LONG
+	 *
+	 *
+	 *		COUNT:
+	 *
+	 *			ENDPOINT:	/count
+	 *			METHOD:		GET
+	 *			RETURN:		Long
+	 *
+	 *
+	 *		LIST:
+	 *
+	 *			ENDPOINT:	/list
+	 *			ARGS:		Int: page, Int: size
+	 *			METHOD:		GET
+	 *			RETURN:		JsonNotificationForm[]
+	 *
+	 *
+	 * 		ALL:
+	 *
+	 * 			ENDPOINT:	/list/all
+	 * 			METHOD:		GET
+	 * 			RETURN:		JsonNotificationForm[]
+	 *
+	 *
+	 *		POP_ALL:
+	 *
+	 *			ENDPOINT:	/list/all/pop
+	 *			METHOD:		GET
+	 *			RETURN:		JsonNotificationForm[]
+	 *
+	 *
+	 *		LAST:
+	 *
+	 *			ENDPOINT:	/last
+	 *			METHOD:		GET
+	 *			RETURN:		JsonNotificationForm
+	 *
+	 *
+	 *		REMOVE:
+	 *
+	 *			ENDPOINT:	/remove
+	 *			ARGS:		Long: id
+	 *			METHOD:		DELETE, POST, GET
+	 *			RETURN:		VOID
+	 *
+	 *
+	 *		REMOVE_ALL:
+	 *
+	 *			ENDPOINT:	/remove/all
+	 *			METHOD:		DELETE, POST, GET
+	 *			RETURN:		VOID
+	 *
+	 */
 
 
 	public @RequestMapping(

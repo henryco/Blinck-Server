@@ -89,7 +89,7 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 
 
 
-	@Test // FIXME: 12/09/17 sync rework (race hazard)
+	@Test
 	public void sendByRestGetByStompTest() throws Exception {
 
 		final StompSessionHandler handler = new StompSessionHandlerAdapter() {};
@@ -125,7 +125,7 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 
 
 
-	@Test
+	@Test // FIXME: 12/09/17 sync rework (race hazard)
 	public void sendAndGetByStomp() throws Exception {
 
 		final StompSessionHandler handler1 = new StompSessionHandlerAdapter() {};
