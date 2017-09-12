@@ -172,18 +172,19 @@ public class UserFriendsController implements BlinckController, BlinckNotificati
 
 
 
-	public @ResponseStatus(OK) @RequestMapping(
+	public @RequestMapping(
 			value = "/request/accept",
 			method = {GET, POST}
-	) void acceptFriendRequest(Authentication authentication,
+	) Long acceptFriendRequest(Authentication authentication,
 							   @RequestParam("user_id") Long target) {
 
  		final Long id = getID(authentication.getName());
-		if (!checkNotificationRequest(id, target)) return;
+		if (!checkNotificationRequest(id, target)) return -1L;
 
-		friendshipService.addFriendshipRelation(target, id);
+		Long relation = friendshipService.addFriendshipRelation(target, id);
 		friendNotificationService.deleteByUsers(id, target);
 		updateNotificationService.addNotification(target, FRIEND_ACCEPTED, id);
+		return relation;
 	}
 
 

@@ -2,16 +2,16 @@ package net.henryco.blinckserver.integration.controller.stomp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.henryco.blinckserver.integration.BlinckStompIntegrationTest;
-import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
 import net.henryco.blinckserver.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.*;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -65,25 +65,31 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 	}
 
 
-	private @Autowired FriendshipService friendshipService;
-
 	private Long[] users;
 	private Long relation;
 	private String[] tokens;
 
+
 	@Before
 	public void beforeRelation() throws Exception {
+
+		final String endpoint = "/protected/user/friends";
+		final String add = endpoint + "/add?user_id=";
+		final String accept = endpoint + "/request/accept?user_id=";
+
 		users = saveNewRandomUsers(this, 2);
-		relation = friendshipService.addFriendshipRelation(users[0], users[1]);
 		tokens = new String[]{
 				getForUserAuthToken(users[0]),
 				getForUserAuthToken(users[1])
 		};
+
+		authorizedGetRequest(add + users[1], tokens[0]);
+		relation = authorizedGetRequest(accept + users[0], tokens[1], Long.class).getBody();
 	}
 
 
 
-	@Test
+	@Test // FIXME: 12/09/17 sync rework (race hazard)
 	public void sendByRestGetByStompTest() throws Exception {
 
 		final StompSessionHandler handler = new StompSessionHandlerAdapter() {};
@@ -119,7 +125,7 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 
 
 
-//	@Test
+	@Test
 	public void sendAndGetByStomp() throws Exception {
 
 		final StompSessionHandler handler1 = new StompSessionHandlerAdapter() {};
@@ -155,26 +161,17 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 		};
 
 
+		Thread.sleep(100);
 		session1.send(STOMP_POST, new ObjectMapper().writeValueAsString(createPost(messages1[0], relation)).getBytes());
-		Thread.sleep(50);
+		Thread.sleep(100);
 		session2.send(STOMP_POST, new ObjectMapper().writeValueAsString(createPost(messages2[0], relation)).getBytes());
-		Thread.sleep(50);
+		Thread.sleep(100);
 		session2.send(STOMP_POST, new ObjectMapper().writeValueAsString(createPost(messages2[1], relation)).getBytes());
-		Thread.sleep(50);
+		Thread.sleep(100);
 		session1.send(STOMP_POST, new ObjectMapper().writeValueAsString(createPost(messages1[1], relation)).getBytes());
-		Thread.sleep(50);
+		Thread.sleep(100);
 		session1.send(STOMP_POST, new ObjectMapper().writeValueAsString(createPost(messages1[2], relation)).getBytes());
-
-
-		while (getHandler1.get().size() != messages2.length || getHandler2.get().size() != messages1.length)
-			Thread.sleep(100);
-
-		while (statHandler1.get().size() != messages1.length || statHandler2.get().size() != messages2.length)
-			Thread.sleep(100);
-
-		while (notifHandler1.get().size() != messages2.length || notifHandler2.get().size() != messages1.length)
-			Thread.sleep(100);
-
+		Thread.sleep(100);
 
 		for (int i = 0; i < messages1.length; i++) {
 
