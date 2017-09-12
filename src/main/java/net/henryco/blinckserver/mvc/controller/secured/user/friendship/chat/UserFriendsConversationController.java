@@ -39,6 +39,64 @@ public class UserFriendsConversationController
 
 
 
+	/*
+	 *	Friendship conversation API
+	 *
+	 *		ENDPOINT: 		/protected/user/friends/conversation
+	 *
+	 *
+	 *	FriendshipConversation:
+	 *
+	 *		"id":			LONG,
+	 *		"message":		CHAR[512],
+	 *		"timestamp":	DATE/LONG,
+	 *		"author":		LONG,
+	 *		"friendship":	LONG
+	 *
+	 *
+	 *		COUNT:
+	 *
+	 *			ENDPOINT:	/messages/count
+	 *			ARGS:		Long: id
+	 *			METHOD:		GET
+	 *			RETURN:		Long
+	 *
+	 *
+	 *		LIST:
+	 *
+	 *			ENDPOINT:	/messages/list
+	 *			ARGS:		Int: page, Int: size, Long: id
+	 *			METHOD:		GET
+	 *			RETURN:		FriendshipConversation[]
+	 *
+	 *
+	 * 		LAST:
+	 *
+	 * 			ENDPOINT:	/messages/last
+	 * 			ARGS:		Long: id
+	 * 			METHOD:		POST
+	 * 			RETURN:		FriendshipConversation
+	 *
+	 *
+	 * 		SEND:
+	 *
+	 * 			ENDPOINT:	/messages/send
+	 * 			BODY:		FriendshipConversation
+	 * 			METHOD:		POST
+	 * 			RETURN:		VOID
+	 *
+	 *
+	 * 		REMOVE:
+	 *
+	 * 			ENDPOINT:	/remove
+	 * 			ARGS:		Long: id
+	 * 			METHOD:		DELETE
+	 * 			RETURN:		VOID
+	 *
+	 */
+
+
+
 	// TESTED
 	public @RequestMapping(
 			value = "/messages/count",

@@ -44,12 +44,12 @@ public class UserNotificationsController
 	 *		ENDPOINT: 		/protected/user/notifications
 	 *
 	 *
-	 *		JsonNotificationForm:
+	 *	JsonNotificationForm:
 	 *
-	 *			"id": 			LONG,
-	 *			"type": 		CHAR[255],
-	 *			"info": 		CHAR[255],
-	 *			"timestamp": 	DATE/LONG
+	 *		"id": 			LONG,
+	 *		"type": 		CHAR[255],
+	 *		"info": 		CHAR[255],
+	 *		"timestamp": 	DATE/LONG
 	 *
 	 *
 	 *		COUNT:

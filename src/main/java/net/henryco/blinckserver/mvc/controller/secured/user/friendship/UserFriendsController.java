@@ -61,26 +61,26 @@ public class UserFriendsController implements BlinckController, BlinckNotificati
 	 *		ENDPOINT: 		/protected/user/friends
 	 *
 	 *
-	 *		DetailedFriendship:
+	 *	DetailedFriendship:
 	 *
-	 *			"friendship": 	LONG,
-	 *			"friend": 		LONG,
-	 *
-	 *
-	 * 		Friendship:
-	 *
-	 * 			"friendship": 	LONG,
-	 * 			"timestamp": 	DATE/LONG,
-	 * 			"user_1": 		LONG,
-	 * 			"user_2": 		LONG
+	 *		"friendship": 	LONG,
+	 *		"friend": 		LONG,
 	 *
 	 *
-	 *		FriendshipNotification:
+	 * 	Friendship:
 	 *
-	 *			"notification": LONG,
-	 *			"from": 		LONG,
-	 *			"to": 			LONG,
-	 *			"timestamp": 	DATE/LONG
+	 * 		"friendship": 	LONG,
+	 * 		"timestamp": 	DATE/LONG,
+	 * 		"user_1": 		LONG,
+	 * 		"user_2": 		LONG
+	 *
+	 *
+	 *	FriendshipNotification:
+	 *
+	 *		"notification": LONG,
+	 *		"from": 		LONG,
+	 *		"to": 			LONG,
+	 *		"timestamp": 	DATE/LONG
 	 *
 	 *
 	 *		COUNT:
