@@ -19,7 +19,8 @@ public interface BlinckNotification {
 
 	interface TYPE {
 
-		String FRIEND_MESSAGE = "friendship_message";
+		String FRIEND_MESSAGE_STOMP = "friendship_message_stomp";
+		String FRIEND_MESSAGE_REST = "friendship_message_rest";
 		String FRIEND_REQUEST = "friendship_request";
 		String FRIEND_ACCEPTED = "friendship_accepted";
 		String FRIEND_DECLINED = "friendship_declined";

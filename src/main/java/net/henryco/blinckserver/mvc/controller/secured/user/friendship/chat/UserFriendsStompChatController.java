@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.controller.secured.user.friendship.chat;
 
+import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants;
 import net.henryco.blinckserver.mvc.model.entity.relation.conversation.FriendshipConversation;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
@@ -19,9 +20,9 @@ import static net.henryco.blinckserver.configuration.project.websocket.WebSocket
  * @author Henry on 10/09/17.
  */
 @Controller
-public class FriendshipChatController
+public class UserFriendsStompChatController
 		extends FriendshipMessageController
-		implements WebSocketConstants {
+		implements WebSocketConstants, BlinckNotification {
 
 
 	private final UpdateNotificationService notificationService;
@@ -31,10 +32,10 @@ public class FriendshipChatController
 
 
 	@Autowired
-	public FriendshipChatController(UpdateNotificationService notificationService,
-									FriendshipConversationService conversationService,
-									FriendshipService friendshipService,
-									SimpMessagingTemplate messagingTemplate) {
+	public UserFriendsStompChatController(UpdateNotificationService notificationService,
+										  FriendshipConversationService conversationService,
+										  FriendshipService friendshipService,
+										  SimpMessagingTemplate messagingTemplate) {
 		this.notificationService = notificationService;
 		this.conversationService = conversationService;
 		this.friendshipService = friendshipService;
@@ -112,7 +113,7 @@ public class FriendshipChatController
 		final String destination = ExternalAPI.getFriendship(friendship);
 
 		messagingTemplate.convertAndSendToUser(secondUser.toString(), destination, message.clone());
-		notificationService.addNotification(secondUser, TYPE.FRIEND_MESSAGE, friendship.toString());
+		notificationService.addNotification(secondUser, TYPE.FRIEND_MESSAGE_STOMP, friendship.toString());
 	}
 
 

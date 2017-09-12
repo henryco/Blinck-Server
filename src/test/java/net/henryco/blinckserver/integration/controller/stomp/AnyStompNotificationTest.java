@@ -81,7 +81,7 @@ public class AnyStompNotificationTest extends BlinckStompIntegrationTest {
 		final String[] result = new String[1];
 		new Thread((TestRunnable) () -> {
 
-			result[0] = resultHandler.get().poll(2, SECONDS);
+			result[0] = resultHandler.getBlocked().poll(2, SECONDS);
 			flag.set(true);
 		}).start();
 

@@ -15,6 +15,8 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -81,7 +83,7 @@ public abstract class BlinckStompIntegrationTest extends BlinckUserIntegrationTe
 	DefaultStompFrameHandler
 			implements StompFrameHandler {
 
-		private BlockingQueue<String> blockingQueue
+		private final BlockingQueue<String> blockingQueue
 				= new LinkedBlockingDeque<>();
 
 		@Override
@@ -95,7 +97,7 @@ public abstract class BlinckStompIntegrationTest extends BlinckUserIntegrationTe
 			blockingQueue.offer(income);
 		}
 
-		public BlockingQueue<String> get() {
+		public BlockingQueue<String> getBlocked() {
 			return blockingQueue;
 		}
 	}

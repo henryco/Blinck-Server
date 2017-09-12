@@ -145,7 +145,8 @@ public class AdminProfileController
 	 */
 	public @ResponseStatus(OK) @RequestMapping(
 			method = POST,
-			value = "/notification/user"
+			value = "/notification/user",
+			consumes = JSON
 	) void sendNotificationToUser(@RequestBody SimpleNotification notification) {
 		notificationService.addNotification(notification);
 	}
