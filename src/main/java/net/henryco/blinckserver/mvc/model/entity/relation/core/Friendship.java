@@ -25,7 +25,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  *
  */ @Entity
 @Data @NoArgsConstructor
-public class Friendship
+public final class Friendship
 		implements Cloneable {
 
 

@@ -6,14 +6,17 @@ import net.henryco.blinckserver.mvc.model.repository.relation.core.SubPartyRepos
 import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Henry on 29/08/17.
  */
 @Repository
+@Transactional
 public class SubPartyDaoImp
 		extends BlinckRepositoryProvider<SubParty, Long>
 		implements SubPartyDao {
@@ -26,14 +29,15 @@ public class SubPartyDaoImp
 		return provideRepository();
 	}
 
+
 	@Override
-	public List<SubParty> getAllWithUser(Long user) {
-		return getRepository().getAllByUsersIsContaining(user);
+	public List<SubParty> getAllWithUserInParty(Long user) {
+		return getRepository().getAllByUsersIsContainingAndPartyNotNull(user);
 	}
 
 	@Override
-	public List<SubParty> getAllWithUser(Long user, int page, int size) {
-		return getRepository().getAllByUsersIsContaining(user, new PageRequest(page, size));
+	public List<SubParty> getAllWithUserInQueue(Long user) {
+		return getRepository().getAllByUsersIsContainingAndDetails_InQueueIsTrue(user);
 	}
 
 	@Override
@@ -51,14 +55,16 @@ public class SubPartyDaoImp
 	}
 
 	@Override
-	public SubParty getFirstInQueue(String typeWanted, String typeIdent, Integer dimension) {
+	public SubParty getRandomFirstInQueue(String typeWanted, String typeIdent, Integer dimension) {
 		try {
-			return getRepository().getTopByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
-					typeWanted, typeIdent, dimension, true
+
+			List<SubParty> last =
+					getRepository().getFirst100ByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
+							typeWanted, typeIdent, dimension, true
 			);
+			return last.get(new Random().nextInt(last.size()));
 		} catch (EntityNotFoundException e) {
 			return null;
 		}
 	}
-
 }

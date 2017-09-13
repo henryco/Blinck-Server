@@ -11,11 +11,11 @@ import java.util.List;
  */
 public interface SubPartyDao extends BlinckDaoTemplate<SubParty, Long> {
 
-	List<SubParty> getAllWithUser(Long user);
-	List<SubParty> getAllWithUser(Long user, int page, int size);
+	List<SubParty> getAllWithUserInParty(Long user);
+	List<SubParty> getAllWithUserInQueue(Long user);
 
 	List<SubParty> getAllInQueue(String typeWanted, String typeIdent, Integer dimension);
 	List<SubParty> getAllInQueue(String typeWanted, String typeIdent, Integer dimension, int page, int size);
 
-	SubParty getFirstInQueue(String typeWanted, String typeIdent, Integer dimension);
+	SubParty getRandomFirstInQueue(String typeWanted, String typeIdent, Integer dimension);
 }

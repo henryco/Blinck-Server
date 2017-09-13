@@ -81,11 +81,11 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 		subPartyRepository.saveAndFlush(subParty4);
 		subPartyRepository.saveAndFlush(subParty5);
 
-		List<SubParty> all1 = subPartyRepository.getAllByUsersIsContaining(user1);
-		List<SubParty> all2 = subPartyRepository.getAllByUsersIsContaining(user2);
-		List<SubParty> all3 = subPartyRepository.getAllByUsersIsContaining(user3);
-		List<SubParty> all4 = subPartyRepository.getAllByUsersIsContaining(user4);
-		List<SubParty> all5 = subPartyRepository.getAllByUsersIsContaining(user5);
+		List<SubParty> all1 = subPartyRepository.getAllByUsersIsContainingAndDetails_InQueueIsTrue(user1);
+		List<SubParty> all2 = subPartyRepository.getAllByUsersIsContainingAndDetails_InQueueIsTrue(user2);
+		List<SubParty> all3 = subPartyRepository.getAllByUsersIsContainingAndDetails_InQueueIsTrue(user3);
+		List<SubParty> all4 = subPartyRepository.getAllByUsersIsContainingAndDetails_InQueueIsTrue(user4);
+		List<SubParty> all5 = subPartyRepository.getAllByUsersIsContainingAndDetails_InQueueIsTrue(user5);
 
 		assert all1.contains(subParty1);
 		assert all1.contains(subParty2);

@@ -28,11 +28,10 @@ public class MatcherService {
 	 * <h2>TODO: 13/09/17 REWORK TO ASYNC FORM </h2>
 	 * @return SubParty which user joined or was created.
 	 * @see SubParty
-	 */
-	@Transactional
+	 */ @Transactional
 	public synchronized SubParty jointToExistingOrCreateSubParty(Long userId, SubParty.Type type) {
 
-		SubParty subParty = subPartyDao.getFirstInQueue(type.getWanted(), type.getIdent(), type.getDimension());
+		SubParty subParty = subPartyDao.getRandomFirstInQueue(type.getWanted(), type.getIdent(), type.getDimension());
 		if (subParty == null) {
 			subParty = createNewOne(type);
 		}
@@ -50,8 +49,7 @@ public class MatcherService {
 	 * <h2>TODO: 13/09/17 REWORK TO ASYNC FORM </h2>
 	 * @return Party which user joined or was created.
 	 * @see Party
-	 */
-	@Transactional
+	 */ @Transactional
 	public synchronized Party joinToExistingOrCreateParty(SubParty subParty) {
 
 

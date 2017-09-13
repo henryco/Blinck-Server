@@ -11,10 +11,9 @@ import java.util.List;
  */
 public interface SubPartyRepository extends JpaRepository<SubParty, Long> {
 
-//	SubParty getFirstBy
 
-	List<SubParty> getAllByUsersIsContaining(Long user);
-	List<SubParty> getAllByUsersIsContaining(Long user, Pageable pageable);
+	List<SubParty> getAllByUsersIsContainingAndDetails_InQueueIsTrue(Long user);
+	List<SubParty> getAllByUsersIsContainingAndPartyNotNull(Long user);
 
 	List<SubParty> getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
 			String details_type_wanted,
@@ -31,10 +30,10 @@ public interface SubPartyRepository extends JpaRepository<SubParty, Long> {
 			Pageable pageable
 	);
 
-	SubParty getTopByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
+	List<SubParty> getFirst100ByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
 			String details_type_wanted,
 			String details_type_ident,
-			Integer details_dimension,
+			Integer details_type_dimension,
 			Boolean details_inQueue
 	);
 

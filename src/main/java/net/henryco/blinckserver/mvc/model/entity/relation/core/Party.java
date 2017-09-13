@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
@@ -29,7 +30,6 @@ public final class Party {
 
 	private @Column(
 			name = "activation_time",
-			updatable = false,
 			nullable = false
 	) @Temporal(
 			TIMESTAMP
@@ -41,22 +41,15 @@ public final class Party {
 			optional = false,
 			targetEntity = SubParty.class
 	) @JoinColumn(
-			name = "sub_party_1",
-			unique = true,
-			updatable = false
-	) SubParty subParty1;
+			name = "sub_parties",
+			unique = true
+	) List<SubParty> subParties;
 
 
-	private @OneToOne(
-			cascade = ALL,
-			optional = false,
-			targetEntity = SubParty.class
-	) @JoinColumn(
-			name = "sub_party_2",
-			unique = true,
-			updatable = false
-	) SubParty subParty2;
+	private @Column(
+			name = "in_queue",
+			nullable = false
+	) Boolean inQueue;
 
-	// TODO: 02/09/17 TESTS
 
 }
