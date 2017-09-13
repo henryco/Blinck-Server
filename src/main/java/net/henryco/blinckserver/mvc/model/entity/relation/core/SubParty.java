@@ -56,6 +56,11 @@ public final class SubParty {
 	@NoArgsConstructor
 	public static final class Type {
 
+		public static final String MALE = "male";
+		public static final String FEMALE = "female";
+		public static final String BOTH = "both";
+
+
 		private @Id @Column(
 				name = "id",
 				unique = true
@@ -76,6 +81,43 @@ public final class SubParty {
 				nullable = false,
 				updatable = false
 		) String wanted;
+
+
+
+		public static Type newMaleFem() {
+			Type type = new Type();
+			type.setIdent(MALE);
+			type.setWanted(FEMALE);
+			return type;
+		}
+
+		public static Type newFemMale() {
+			Type type = new Type();
+			type.setIdent(FEMALE);
+			type.setWanted(MALE);
+			return type;
+		}
+
+		public static Type newMaleMale() {
+			Type type = new Type();
+			type.setIdent(MALE);
+			type.setWanted(MALE);
+			return type;
+		}
+
+		public static Type newFemFem() {
+			Type type = new Type();
+			type.setIdent(FEMALE);
+			type.setWanted(FEMALE);
+			return type;
+		}
+
+		public static Type newBoth() {
+			Type type = new Type();
+			type.setIdent(BOTH);
+			type.setWanted(BOTH);
+			return type;
+		}
 
 	}
 
