@@ -41,23 +41,43 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 		List<Long> users5 = new ArrayList<>(asList(user1, user3, user6));
 
 		SubParty subParty1 = new SubParty();
-		subParty1.setType(SubParty.Type.newFemFem());
+		SubParty.Details details1 = new SubParty.Details();
+		details1.setType(SubParty.Type.newFemFem());
+		details1.setDimension(3);
+		details1.setInQueue(true);
+		subParty1.setDetails(details1);
 		subParty1.setUsers(users1);
 
 		SubParty subParty2 = new SubParty();
-		subParty2.setType(SubParty.Type.newFemFem());
+		SubParty.Details details2 = new SubParty.Details();
+		details2.setType(SubParty.Type.newFemFem());
+		details2.setDimension(3);
+		details2.setInQueue(true);
+		subParty2.setDetails(details2);
 		subParty2.setUsers(users2);
 
 		SubParty subParty3 = new SubParty();
-		subParty3.setType(SubParty.Type.newFemFem());
+		SubParty.Details details3 = new SubParty.Details();
+		details3.setType(SubParty.Type.newMaleFem());
+		details3.setDimension(3);
+		details3.setInQueue(true);
+		subParty3.setDetails(details3);
 		subParty3.setUsers(users3);
 
 		SubParty subParty4 = new SubParty();
-		subParty4.setType(SubParty.Type.newFemFem());
+		SubParty.Details details4 = new SubParty.Details();
+		details4.setType(SubParty.Type.newFemMale());
+		details4.setDimension(3);
+		details4.setInQueue(true);
+		subParty4.setDetails(details4);
 		subParty4.setUsers(users4);
 
 		SubParty subParty5 = new SubParty();
-		subParty5.setType(SubParty.Type.newFemFem());
+		SubParty.Details details5 = new SubParty.Details();
+		details5.setType(SubParty.Type.newFemMale());
+		details5.setDimension(3);
+		details5.setInQueue(true);
+		subParty5.setDetails(details5);
 		subParty5.setUsers(users5);
 
 		subPartyRepository.saveAndFlush(subParty1);
@@ -104,19 +124,35 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 		List<Long> users4 = new LinkedList<>(asList(3333L, 1261L));
 
 		SubParty subParty1 = new SubParty();
-		subParty1.setType(SubParty.Type.newFemFem());
+		SubParty.Details details1 = new SubParty.Details();
+		details1.setType(SubParty.Type.newFemFem());
+		details1.setDimension(3);
+		details1.setInQueue(true);
+		subParty1.setDetails(details1);
 		subParty1.setUsers(users1);
 
 		SubParty subParty2 = new SubParty();
-		subParty2.setType(SubParty.Type.newFemFem());
+		SubParty.Details details2 = new SubParty.Details();
+		details2.setType(SubParty.Type.newFemFem());
+		details2.setDimension(3);
+		details2.setInQueue(true);
+		subParty2.setDetails(details2);
 		subParty2.setUsers(users2);
 
 		SubParty subParty3 = new SubParty();
-		subParty3.setType(SubParty.Type.newMaleFem());
+		SubParty.Details details3 = new SubParty.Details();
+		details3.setType(SubParty.Type.newMaleFem());
+		details3.setDimension(3);
+		details3.setInQueue(true);
+		subParty3.setDetails(details3);
 		subParty3.setUsers(users3);
 
 		SubParty subParty4 = new SubParty();
-		subParty4.setType(SubParty.Type.newFemMale());
+		SubParty.Details details4 = new SubParty.Details();
+		details4.setType(SubParty.Type.newFemMale());
+		details4.setDimension(3);
+		details4.setInQueue(true);
+		subParty4.setDetails(details4);
 		subParty4.setUsers(users4);
 
 		subPartyRepository.saveAndFlush(subParty1);
@@ -124,26 +160,33 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 		subPartyRepository.saveAndFlush(subParty3);
 		subPartyRepository.saveAndFlush(subParty4);
 
-		List<SubParty> all1 = subPartyRepository.getAllByType_WantedAndType_Ident(
+		List<SubParty> all1 = subPartyRepository.getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_DimensionAndDetails_InQueue(
 				SubParty.Type.newFemFem().getWanted(),
-				SubParty.Type.newFemFem().getIdent()
+				SubParty.Type.newFemFem().getIdent(),
+				3,
+				true
 		);
 
-		List<SubParty> all2 = subPartyRepository.getAllByType_WantedAndType_Ident(
+		List<SubParty> all2 = subPartyRepository.getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_DimensionAndDetails_InQueue(
 				SubParty.Type.newFemMale().getWanted(),
-				SubParty.Type.newFemMale().getIdent()
+				SubParty.Type.newFemMale().getIdent(),
+				3,
+				true
 		);
 
 		assert all1.size() == 2;
 		all1.forEach(subParty -> {
-			assert subParty.getType().getIdent().equals(FEMALE);
-			assert subParty.getType().getWanted().equals(FEMALE);
+			assert subParty.getDetails().getType().getIdent().equals(FEMALE);
+			assert subParty.getDetails().getType().getWanted().equals(FEMALE);
+			assert subParty.getDetails().getDimension().equals(3);
+			assert subParty.getDetails().getInQueue();
 		});
 
 		assert all2.size() == 1;
 		all2.forEach(subParty -> {
-			assert subParty.getType().getIdent().equals(FEMALE);
-			assert subParty.getType().getWanted().equals(MALE);
+			assert subParty.getDetails().getType().getIdent().equals(FEMALE);
+			assert subParty.getDetails().getType().getWanted().equals(MALE);
+			assert subParty.getDetails().getInQueue();
 		});
 	}
 

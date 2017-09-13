@@ -36,11 +36,10 @@ public final class SubParty {
 			cascade = ALL,
 			optional = false
 	) @JoinColumn(
-			updatable = false,
 			nullable = false,
 			unique = true,
-			name = "typo"
-	) Type type;
+			name = "details"
+	) Details details;
 
 
 	private @ElementCollection(
@@ -49,6 +48,49 @@ public final class SubParty {
 			name = "users",
 			nullable = false
 	) List<Long> users;
+
+
+	@Entity @Data
+	@NoArgsConstructor
+	public static final class Details {
+
+		public static final Integer DIMENSION_1x1 = 1;
+		public static final Integer DIMENSION_2x2 = 2;
+		public static final Integer DIMENSION_3x3 = 3;
+		public static final Integer DIMENSION_5x5 = 5;
+		public static final Integer DIMENSION_10x10 = 10;
+
+		private @Id @Column(
+				name = "id",
+				unique = true
+		) @GeneratedValue(
+				strategy = AUTO
+		) Long id;
+
+
+		private @OneToOne(
+				cascade = ALL,
+				optional = false
+		) @JoinColumn(
+				updatable = false,
+				nullable = false,
+				name = "typo"
+		) Type type;
+
+
+		private @Column(
+				name = "in_queue",
+				nullable = false
+		) Boolean inQueue;
+
+
+		private @Column(
+				name = "dimension",
+				updatable = false,
+				nullable = false
+		) Integer dimension;
+
+	}
 
 
 	/**

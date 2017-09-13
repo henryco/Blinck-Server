@@ -15,7 +15,7 @@ public class SubPartyDaoImp
 		implements SubPartyDao {
 
 	public SubPartyDaoImp(SubPartyRepository repository) {
-		super(repository, false);
+		super(repository);
 	}
 
 }

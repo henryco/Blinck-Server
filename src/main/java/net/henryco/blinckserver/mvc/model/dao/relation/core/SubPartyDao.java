@@ -7,4 +7,5 @@ import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
  * @author Henry on 29/08/17.
  */
 public interface SubPartyDao extends BlinckDaoTemplate<SubParty, Long> {
+
 }

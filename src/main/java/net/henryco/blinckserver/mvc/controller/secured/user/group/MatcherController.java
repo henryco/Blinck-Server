@@ -4,12 +4,15 @@ import net.henryco.blinckserver.configuration.project.notification.BlinckNotific
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
 import net.henryco.blinckserver.mvc.service.infrastructure.MatcherService;
+import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -22,12 +25,15 @@ public class MatcherController
 
 
 	private final MatcherService matcherService;
+	private final UpdateNotificationService notificationService;
+
 
 	@Autowired
-	public MatcherController(MatcherService matcherService) {
+	public MatcherController(MatcherService matcherService,
+							 UpdateNotificationService notificationService) {
 		this.matcherService = matcherService;
+		this.notificationService = notificationService;
 	}
-
 
 
 
@@ -42,15 +48,17 @@ public class MatcherController
 	 *
 	 * @see SubParty.Type
 	 */
-	public @RequestMapping(
-			value = "/queue/blind",
-			method = POST
-	) void blindQueue(Authentication authentication,
-					  @RequestBody SubParty.Type type) {
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/queue/solo",
+			method = POST,
+			consumes = JSON
+	) void soloQueue(Authentication authentication,
+					 @RequestBody SubParty.Type type) {
 
 		final Long id = longID(authentication);
 		final SubParty.Type adapted = SubParty.Type.typeAdapter(type);
 
+		// TODO: 13/09/17
 
 	}
 
