@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.mvc.service.infrastructure;
 
 import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import java.util.LinkedList;
  */
 @Service
 public class MatcherService {
-
 
 	private final SubPartyDao subPartyDao;
 
@@ -32,7 +32,7 @@ public class MatcherService {
 	@Transactional
 	public synchronized SubParty jointToExistingOrCreateSubParty(Long userId, SubParty.Type type) {
 
-		SubParty subParty = subPartyDao.getFirstInQueue(type.getIdent(), type.getWanted(), type.getDimension());
+		SubParty subParty = subPartyDao.getFirstInQueue(type.getWanted(), type.getIdent(), type.getDimension());
 		if (subParty == null) {
 			subParty = createNewOne(type);
 		}
@@ -45,8 +45,24 @@ public class MatcherService {
 	}
 
 
+	/**
+	 * <h1>Synchronized method.</h1>
+	 * <h2>TODO: 13/09/17 REWORK TO ASYNC FORM </h2>
+	 * @return Party which user joined or was created.
+	 * @see Party
+	 */
+	@Transactional
+	public synchronized Party joinToExistingOrCreateParty(SubParty subParty) {
 
-	private static SubParty createNewOne(SubParty.Type type) {
+
+		return null;
+	}
+
+
+
+
+	private static
+	SubParty createNewOne(SubParty.Type type) {
 
 		SubParty.Details details = new SubParty.Details();
 		details.setInQueue(true);

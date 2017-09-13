@@ -2,6 +2,7 @@ package net.henryco.blinckserver.mvc.controller.secured.user.group;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
 import net.henryco.blinckserver.mvc.service.infrastructure.MatcherService;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
@@ -62,15 +63,16 @@ public class MatcherController
 		new Thread(() -> {
 
 			SubParty subParty = matcherService.jointToExistingOrCreateSubParty(id, adapted);
-			if (!subParty.getDetails().getInQueue()) findGroup(subParty);
+			if (!subParty.getDetails().getInQueue()) findParty(subParty);
 
 		}).start();
 	}
 
 
 
-	private void findGroup(SubParty subParty) {
+	private void findParty(SubParty subParty) {
 
+		Party party = matcherService.joinToExistingOrCreateParty(subParty);
 	}
 
 }

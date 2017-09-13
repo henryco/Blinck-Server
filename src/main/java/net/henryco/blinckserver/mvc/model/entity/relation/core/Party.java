@@ -16,7 +16,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  */
 @Entity @Data
 @NoArgsConstructor
-public class Party {
+public final class Party {
 
 
 	private @Id @Column(
