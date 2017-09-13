@@ -42,40 +42,35 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 
 		SubParty subParty1 = new SubParty();
 		SubParty.Details details1 = new SubParty.Details();
-		details1.setType(SubParty.Type.newFemFem());
-		details1.setDimension(3);
+		details1.setType(SubParty.Type.newFemFem(3));
 		details1.setInQueue(true);
 		subParty1.setDetails(details1);
 		subParty1.setUsers(users1);
 
 		SubParty subParty2 = new SubParty();
 		SubParty.Details details2 = new SubParty.Details();
-		details2.setType(SubParty.Type.newFemFem());
-		details2.setDimension(3);
+		details2.setType(SubParty.Type.newFemFem(3));
 		details2.setInQueue(true);
 		subParty2.setDetails(details2);
 		subParty2.setUsers(users2);
 
 		SubParty subParty3 = new SubParty();
 		SubParty.Details details3 = new SubParty.Details();
-		details3.setType(SubParty.Type.newMaleFem());
-		details3.setDimension(3);
+		details3.setType(SubParty.Type.newMaleFem(3));
 		details3.setInQueue(true);
 		subParty3.setDetails(details3);
 		subParty3.setUsers(users3);
 
 		SubParty subParty4 = new SubParty();
 		SubParty.Details details4 = new SubParty.Details();
-		details4.setType(SubParty.Type.newFemMale());
-		details4.setDimension(3);
+		details4.setType(SubParty.Type.newFemMale(3));
 		details4.setInQueue(true);
 		subParty4.setDetails(details4);
 		subParty4.setUsers(users4);
 
 		SubParty subParty5 = new SubParty();
 		SubParty.Details details5 = new SubParty.Details();
-		details5.setType(SubParty.Type.newFemMale());
-		details5.setDimension(3);
+		details5.setType(SubParty.Type.newFemMale(3));
 		details5.setInQueue(true);
 		subParty5.setDetails(details5);
 		subParty5.setUsers(users5);
@@ -125,32 +120,28 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 
 		SubParty subParty1 = new SubParty();
 		SubParty.Details details1 = new SubParty.Details();
-		details1.setType(SubParty.Type.newFemFem());
-		details1.setDimension(3);
+		details1.setType(SubParty.Type.newFemFem(3));
 		details1.setInQueue(true);
 		subParty1.setDetails(details1);
 		subParty1.setUsers(users1);
 
 		SubParty subParty2 = new SubParty();
 		SubParty.Details details2 = new SubParty.Details();
-		details2.setType(SubParty.Type.newFemFem());
-		details2.setDimension(3);
+		details2.setType(SubParty.Type.newFemFem(3));
 		details2.setInQueue(true);
 		subParty2.setDetails(details2);
 		subParty2.setUsers(users2);
 
 		SubParty subParty3 = new SubParty();
 		SubParty.Details details3 = new SubParty.Details();
-		details3.setType(SubParty.Type.newMaleFem());
-		details3.setDimension(3);
+		details3.setType(SubParty.Type.newMaleFem(3));
 		details3.setInQueue(true);
 		subParty3.setDetails(details3);
 		subParty3.setUsers(users3);
 
 		SubParty subParty4 = new SubParty();
 		SubParty.Details details4 = new SubParty.Details();
-		details4.setType(SubParty.Type.newFemMale());
-		details4.setDimension(3);
+		details4.setType(SubParty.Type.newFemMale(3));
 		details4.setInQueue(true);
 		subParty4.setDetails(details4);
 		subParty4.setUsers(users4);
@@ -160,16 +151,16 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 		subPartyRepository.saveAndFlush(subParty3);
 		subPartyRepository.saveAndFlush(subParty4);
 
-		List<SubParty> all1 = subPartyRepository.getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_DimensionAndDetails_InQueue(
-				SubParty.Type.newFemFem().getWanted(),
-				SubParty.Type.newFemFem().getIdent(),
+		List<SubParty> all1 = subPartyRepository.getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
+				SubParty.Type.newFemFem(3).getWanted(),
+				SubParty.Type.newFemFem(3).getIdent(),
 				3,
 				true
 		);
 
-		List<SubParty> all2 = subPartyRepository.getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_DimensionAndDetails_InQueue(
-				SubParty.Type.newFemMale().getWanted(),
-				SubParty.Type.newFemMale().getIdent(),
+		List<SubParty> all2 = subPartyRepository.getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
+				SubParty.Type.newFemMale(3).getWanted(),
+				SubParty.Type.newFemMale(3).getIdent(),
 				3,
 				true
 		);
@@ -178,7 +169,7 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 		all1.forEach(subParty -> {
 			assert subParty.getDetails().getType().getIdent().equals(FEMALE);
 			assert subParty.getDetails().getType().getWanted().equals(FEMALE);
-			assert subParty.getDetails().getDimension().equals(3);
+			assert subParty.getDetails().getType().getDimension().equals(3);
 			assert subParty.getDetails().getInQueue();
 		});
 
@@ -189,6 +180,13 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 			assert subParty.getDetails().getInQueue();
 		});
 	}
+
+
+	@Test
+	public void asyncTest() throws Exception {
+
+	}
+
 
 
 }

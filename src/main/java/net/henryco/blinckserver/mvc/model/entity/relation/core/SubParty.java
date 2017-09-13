@@ -54,12 +54,6 @@ public final class SubParty {
 	@NoArgsConstructor
 	public static final class Details {
 
-		public static final Integer DIMENSION_1x1 = 1;
-		public static final Integer DIMENSION_2x2 = 2;
-		public static final Integer DIMENSION_3x3 = 3;
-		public static final Integer DIMENSION_5x5 = 5;
-		public static final Integer DIMENSION_10x10 = 10;
-
 		private @Id @Column(
 				name = "id",
 				unique = true
@@ -83,13 +77,6 @@ public final class SubParty {
 				nullable = false
 		) Boolean inQueue;
 
-
-		private @Column(
-				name = "dimension",
-				updatable = false,
-				nullable = false
-		) Integer dimension;
-
 	}
 
 
@@ -99,7 +86,8 @@ public final class SubParty {
 	 *     {&nbsp;
 	 *         "id":		LONG, 			&nbsp;
 	 *         "ident":		CHAR[255], 		&nbsp;
-	 *         "wanted":	CHAR[255]
+	 *         "wanted":	CHAR[255], 		&nbsp;
+	 *         "dimension":	INTEGER
 	 *     &nbsp;}
 	 * </h2>
 	 * <h3>Types: <br><br>
@@ -117,6 +105,11 @@ public final class SubParty {
 		public static final String FEMALE = "female";
 		public static final String BOTH = "both";
 
+		public static final Integer DIMENSION_1x1 = 1;
+		public static final Integer DIMENSION_2x2 = 2;
+		public static final Integer DIMENSION_3x3 = 3;
+		public static final Integer DIMENSION_5x5 = 5;
+		public static final Integer DIMENSION_10x10 = 10;
 
 		private @Id @Column(
 				name = "id",
@@ -140,61 +133,61 @@ public final class SubParty {
 		) String wanted;
 
 
+		private @Column(
+				name = "dimension",
+				updatable = false,
+				nullable = false
+		) Integer dimension;
+
+
 
 		public static Type typeAdapter(Type type) {
 
 			if (type.getWanted().equals(BOTH) || type.getIdent().equals(BOTH))
-				return newBoth();
+				return newBoth(type.getDimension());
 
 			if (type.getWanted().equals(MALE)) {
 				if (type.getIdent().equals(FEMALE))
-					return newFemMale();
-				return newMaleMale();
+					return newFemMale(type.getDimension());
+				return newMaleMale(type.getDimension());
 			}
 
 			if (type.getWanted().equals(FEMALE)) {
 				if (type.getIdent().equals(MALE))
-					return newMaleMale();
-				return newFemFem();
+					return newMaleMale(type.getDimension());
+				return newFemFem(type.getDimension());
 			}
 
-			return newBoth();
+			return newBoth(type.getDimension());
 		}
 
 
-		public static Type newMaleFem() {
+		public static Type newOne(String ident, String wanted, Integer dim) {
 			Type type = new Type();
-			type.setIdent(MALE);
-			type.setWanted(FEMALE);
+			type.setIdent(ident);
+			type.setWanted(wanted);
+			type.setDimension(dim);
 			return type;
 		}
 
-		public static Type newFemMale() {
-			Type type = new Type();
-			type.setIdent(FEMALE);
-			type.setWanted(MALE);
-			return type;
+		public static Type newMaleFem(Integer dimension) {
+			return newOne(MALE, FEMALE, dimension);
 		}
 
-		public static Type newMaleMale() {
-			Type type = new Type();
-			type.setIdent(MALE);
-			type.setWanted(MALE);
-			return type;
+		public static Type newFemMale(Integer dimension) {
+			return newOne(FEMALE, MALE, dimension);
 		}
 
-		public static Type newFemFem() {
-			Type type = new Type();
-			type.setIdent(FEMALE);
-			type.setWanted(FEMALE);
-			return type;
+		public static Type newMaleMale(Integer dimension) {
+			return newOne(MALE, MALE, dimension);
 		}
 
-		public static Type newBoth() {
-			Type type = new Type();
-			type.setIdent(BOTH);
-			type.setWanted(BOTH);
-			return type;
+		public static Type newFemFem(Integer dimension) {
+			return newOne(FEMALE, FEMALE, dimension);
+		}
+
+		public static Type newBoth(Integer dimension) {
+			return newOne(BOTH, BOTH, dimension);
 		}
 
 	}

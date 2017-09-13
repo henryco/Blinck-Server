@@ -41,8 +41,9 @@ public class MatcherController
 	 * <h1>Income Match Type JSON:</h1>
 	 * <h2>
 	 *     {&nbsp;
-	 *         "ident":		CHAR[255], &nbsp;
-	 *         "wanted:		CHAR[255]
+	 *         "ident":			CHAR[255], &nbsp;
+	 *         "wanted":		CHAR[255], &nbsp;
+	 *         "dimension":		INTEGER
 	 *     &nbsp;}
 	 * </h2>
 	 *
@@ -58,9 +59,18 @@ public class MatcherController
 		final Long id = longID(authentication);
 		final SubParty.Type adapted = SubParty.Type.typeAdapter(type);
 
-		// TODO: 13/09/17
+		new Thread(() -> {
 
+			SubParty subParty = matcherService.jointToExistingOrCreateSubParty(id, adapted);
+			if (!subParty.getDetails().getInQueue()) findGroup(subParty);
+
+		}).start();
 	}
 
+
+
+	private void findGroup(SubParty subParty) {
+
+	}
 
 }

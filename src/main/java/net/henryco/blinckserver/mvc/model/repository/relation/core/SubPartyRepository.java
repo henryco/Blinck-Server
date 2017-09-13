@@ -16,14 +16,14 @@ public interface SubPartyRepository extends JpaRepository<SubParty, Long> {
 	List<SubParty> getAllByUsersIsContaining(Long user);
 	List<SubParty> getAllByUsersIsContaining(Long user, Pageable pageable);
 
-	List<SubParty> getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_DimensionAndDetails_InQueue (
+	List<SubParty> getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
 			String details_type_wanted,
 			String details_type_ident,
 			Integer details_dimension,
 			Boolean details_inQueue
 	);
 
-	List<SubParty> getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_DimensionAndDetails_InQueue (
+	List<SubParty> getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
 			String details_type_wanted,
 			String details_type_ident,
 			Integer details_dimension,
@@ -31,5 +31,11 @@ public interface SubPartyRepository extends JpaRepository<SubParty, Long> {
 			Pageable pageable
 	);
 
+	SubParty getTopByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
+			String details_type_wanted,
+			String details_type_ident,
+			Integer details_dimension,
+			Boolean details_inQueue
+	);
 
 }
