@@ -51,7 +51,22 @@ public final class SubParty {
 	) List<Long> users;
 
 
-
+	/**
+	 * <h1>Match Type JSON:</h1>
+	 * <h2>
+	 *     {&nbsp;
+	 *         "id":		LONG, 			&nbsp;
+	 *         "ident":		CHAR[255], 		&nbsp;
+	 *         "wanted":	CHAR[255]
+	 *     &nbsp;}
+	 * </h2>
+	 * <h3>Types: <br><br>
+	 *     &nbsp;MALE:		&nbsp;"male" 	<br>
+	 *     &nbsp;FEMALE:	&nbsp;"female"	<br>
+	 *     &nbsp;BOTH:		&nbsp;"both"
+	 * </h3>
+	 *
+	 */
 	@Entity @Data
 	@NoArgsConstructor
 	public static final class Type {
@@ -82,6 +97,27 @@ public final class SubParty {
 				updatable = false
 		) String wanted;
 
+
+
+		public static Type typeAdapter(Type type) {
+
+			if (type.getWanted().equals(BOTH) || type.getIdent().equals(BOTH))
+				return newBoth();
+
+			if (type.getWanted().equals(MALE)) {
+				if (type.getIdent().equals(FEMALE))
+					return newFemMale();
+				return newMaleMale();
+			}
+
+			if (type.getWanted().equals(FEMALE)) {
+				if (type.getIdent().equals(MALE))
+					return newMaleMale();
+				return newFemFem();
+			}
+
+			return newBoth();
+		}
 
 
 		public static Type newMaleFem() {
