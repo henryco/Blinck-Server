@@ -29,8 +29,7 @@ public class Party {
 
 
 	private @Column(
-			name = "activation_time",
-			nullable = false
+			name = "activation_time"
 	) @Temporal(
 			TIMESTAMP
 	) Date activationTime;

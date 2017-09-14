@@ -25,6 +25,9 @@ public interface BlinckNotification {
 		String FRIEND_ACCEPTED = "friendship_accepted";
 		String FRIEND_DECLINED = "friendship_declined";
 		String FRIEND_DELETED = "friendship_deleted";
+
+		String PARTY_FOUND = "party_found";
+		String SUB_PARTY_FOUND = "sub_party_found";
 	}
 
 

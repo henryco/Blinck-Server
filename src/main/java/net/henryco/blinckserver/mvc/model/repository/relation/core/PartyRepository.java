@@ -11,5 +11,15 @@ import java.util.List;
 public interface PartyRepository extends JpaRepository<Party, Long> {
 
 
+	List<Party> getAllByDetails_InQueueIsTrueAndDetails_Type_DimensionAndDetails_TypeIdentAndDetails_Type_Wanted(
+			Integer details_type_dimension,
+			String details_type_ident,
+			String details_type_wanted
+	);
 
+	List<Party> getFirst100ByDetails_InQueueIsTrueAndDetails_Type_DimensionAndDetails_TypeIdentAndDetails_Type_Wanted(
+			Integer details_type_dimension,
+			String details_type_ident,
+			String details_type_wanted
+	);
 }

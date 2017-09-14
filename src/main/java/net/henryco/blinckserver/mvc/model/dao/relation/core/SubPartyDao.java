@@ -14,7 +14,6 @@ public interface SubPartyDao extends BlinckDaoTemplate<SubParty, Long> {
 	List<SubParty> getAllWithUserInParty(Long user);
 	List<SubParty> getAllWithUserInQueue(Long user);
 
-	List<SubParty> getAllInQueue(String typeWanted, String typeIdent, Integer dimension);
 	List<SubParty> getAllInQueue(String typeWanted, String typeIdent, Integer dimension, int page, int size);
 
 	SubParty getRandomFirstInQueue(String typeWanted, String typeIdent, Integer dimension);

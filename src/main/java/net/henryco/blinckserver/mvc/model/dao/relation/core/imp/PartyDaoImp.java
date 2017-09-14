@@ -6,6 +6,10 @@ import net.henryco.blinckserver.mvc.model.repository.relation.core.PartyReposito
 import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Random;
+
 /**
  * @author Henry on 29/08/17.
  */
@@ -22,6 +26,16 @@ public class PartyDaoImp
 		return provideRepository();
 	}
 
+	@Override
+	public Party getRandomFirstInQueue(String typeWanted, String typeIdent, Integer dimension) {
 
-
+		try {
+			List<Party> all = getRepository()
+					.getFirst100ByDetails_InQueueIsTrueAndDetails_Type_DimensionAndDetails_TypeIdentAndDetails_Type_Wanted(
+							dimension, typeIdent, typeWanted);
+			return all.get(new Random().nextInt(all.size()));
+		} catch (EntityNotFoundException e) {
+			return null;
+		}
+	}
 }

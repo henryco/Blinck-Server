@@ -14,13 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Henry on 13/09/17.
  */
-@RestController
+@RestController // TODO: 15/09/17 TESTS
 @RequestMapping("/protected/user/match")
 public class MatcherController
 		implements BlinckController, BlinckNotification {
@@ -29,12 +32,21 @@ public class MatcherController
 	private final MatcherService matcherService;
 	private final UpdateNotificationService notificationService;
 
+	private final ExecutorService notificationTaskQueue;
+	private final ExecutorService subPartyTaskQueue;
+	private final ExecutorService partyTaskQueue;
+
 
 	@Autowired
 	public MatcherController(MatcherService matcherService,
 							 UpdateNotificationService notificationService) {
+
 		this.matcherService = matcherService;
 		this.notificationService = notificationService;
+
+		this.notificationTaskQueue = Executors.newFixedThreadPool(10);
+		this.subPartyTaskQueue = Executors.newSingleThreadExecutor();
+		this.partyTaskQueue = Executors.newSingleThreadExecutor();
 	}
 
 
@@ -61,12 +73,12 @@ public class MatcherController
 		final Long id = longID(authentication);
 		final Details.Type adapted = Details.Type.typeAdapter(type);
 
-		new Thread(() -> {
-
+		subPartyTaskQueue.submit(() -> {
 			SubParty subParty = matcherService.jointToExistingOrCreateSubParty(id, adapted);
-			if (!subParty.getDetails().getInQueue()) findParty(subParty);
+			if (!subParty.getDetails().getInQueue())
+				partyTaskQueue.submit(() -> findParty(subParty));
+		});
 
-		}).start();
 	}
 
 
@@ -74,6 +86,19 @@ public class MatcherController
 	private void findParty(SubParty subParty) {
 
 		Party party = matcherService.joinToExistingOrCreateParty(subParty);
+		if (!party.getDetails().getInQueue())
+			notificationTaskQueue.submit(() -> createPartyNotification(party));
+	}
+
+	private void createPartyNotification(Party party) {
+
+		for (SubParty sub: party.getSubParties()) {
+			for (Long userId : sub.getUsers()) {
+
+				notificationService.addNotification(userId, TYPE.PARTY_FOUND, party.getId());
+				notificationService.addNotification(userId, TYPE.SUB_PARTY_FOUND, sub.getId());
+			}
+		}
 	}
 
 }

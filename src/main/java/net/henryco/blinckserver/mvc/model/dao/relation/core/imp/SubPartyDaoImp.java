@@ -41,13 +41,6 @@ public class SubPartyDaoImp
 	}
 
 	@Override
-	public List<SubParty> getAllInQueue(String typeWanted, String typeIdent, Integer dimension) {
-		return getRepository().getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
-				typeWanted, typeIdent, dimension, true
-		);
-	}
-
-	@Override
 	public List<SubParty> getAllInQueue(String typeWanted, String typeIdent, Integer dimension, int page, int size) {
 		return getRepository().getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
 				typeWanted, typeIdent, dimension, true, new PageRequest(page, size)

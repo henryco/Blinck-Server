@@ -82,6 +82,9 @@ public class Details {
 		) Integer dimension;
 
 
+		public Type invertedCopy() {
+			return new Type(wanted, ident, dimension);
+		}
 
 		public static
 		Type typeAdapter(Type type) {
