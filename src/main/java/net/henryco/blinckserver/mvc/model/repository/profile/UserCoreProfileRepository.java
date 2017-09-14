@@ -1,6 +1,6 @@
-package net.henryco.blinckserver.mvc.model.repository.profile.core;
+package net.henryco.blinckserver.mvc.model.repository.profile;
 
-import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.UserCoreProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

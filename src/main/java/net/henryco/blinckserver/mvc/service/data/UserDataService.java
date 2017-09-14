@@ -1,10 +1,10 @@
 package net.henryco.blinckserver.mvc.service.data;
 
-import net.henryco.blinckserver.mvc.model.dao.profile.core.UserCoreProfileDao;
-import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
-import net.henryco.blinckserver.mvc.model.entity.profile.priv.UserPrivateProfile;
-import net.henryco.blinckserver.mvc.model.entity.profile.pub.UserNameEntity;
-import net.henryco.blinckserver.mvc.model.entity.profile.pub.UserPublicProfile;
+import net.henryco.blinckserver.mvc.model.dao.profile.UserCoreProfileDao;
+import net.henryco.blinckserver.mvc.model.entity.profile.UserCoreProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.PrivateProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.UserNameEntity;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.PublicProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,19 +80,17 @@ public class UserDataService {
 
 		UserCoreProfile userCoreProfile = new UserCoreProfile();
 		userCoreProfile.setId(id);
-		userCoreProfile.setPrivateProfile(createUserPrivateProfile(id, user));
-		userCoreProfile.setPublicProfile(createUserPublicProfile(id, user));
+		userCoreProfile.setPrivateProfile(createUserPrivateProfile(user));
+		userCoreProfile.setPublicProfile(createUserPublicProfile(user));
 		userCoreProfile.setAuthProfile(createUserAuthProfile(id, authorities));
 
 		return userCoreProfile;
 	}
 
 
-	private static
-	UserPrivateProfile createUserPrivateProfile(Long id, User user) {
+	private static PrivateProfile createUserPrivateProfile(User user) {
 
-		UserPrivateProfile userPrivateProfile = new UserPrivateProfile();
-		userPrivateProfile.setId(id);
+		PrivateProfile userPrivateProfile = new PrivateProfile();
 		userPrivateProfile.setEmail(user.getEmail());
 		return userPrivateProfile;
 	}
@@ -110,27 +108,24 @@ public class UserDataService {
 
 
 	private static
-	UserNameEntity createUserNameEntity(Long id, User user) {
+	UserNameEntity createUserNameEntity(User user) {
 
 		UserNameEntity userNameEntity = new UserNameEntity();
 		userNameEntity.setFirstName(user.getFirstName());
 		userNameEntity.setSecondName(user.getMiddleName());
 		userNameEntity.setLastName(user.getLastName());
-		userNameEntity.setId(id);
 		return userNameEntity;
 	}
 
 
-	private static
-	UserPublicProfile createUserPublicProfile(Long id, User user) {
+	private static PublicProfile createUserPublicProfile(User user) {
 
-		UserPublicProfile userPublicProfile = new UserPublicProfile();
-		userPublicProfile.setId(id);
-		userPublicProfile.setGender(user.getGender());
-		userPublicProfile.setAbout(user.getAbout());
-		userPublicProfile.setBirthday(parseFacebookDate(user.getBirthday()));
-		userPublicProfile.setUserName(createUserNameEntity(id, user));
-		return userPublicProfile;
+		PublicProfile publicProfile = new PublicProfile();
+		publicProfile.setGender(user.getGender());
+		publicProfile.setAbout(user.getAbout());
+		publicProfile.setBirthday(parseFacebookDate(user.getBirthday()));
+		publicProfile.setUserName(createUserNameEntity(user));
+		return publicProfile;
 	}
 
 

@@ -46,10 +46,7 @@ public class Party {
 	) List<SubParty> subParties;
 
 
-	private @OneToOne(
-			cascade = ALL,
-			optional = false
-	) @JoinColumn(
+	private @Embedded @JoinColumn(
 			nullable = false,
 			unique = true,
 			name = "details"

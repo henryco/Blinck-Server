@@ -1,6 +1,6 @@
-package net.henryco.blinckserver.mvc.model.dao.profile.core;
+package net.henryco.blinckserver.mvc.model.dao.profile;
 
-import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.UserCoreProfile;
 import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
 
 /**

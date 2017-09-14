@@ -2,7 +2,7 @@ package net.henryco.blinckserver.integration.entity;
 
 import net.henryco.blinckserver.integration.BlinckUserIntegrationTest;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.FriendshipDao;
-import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.UserCoreProfile;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Friendship;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

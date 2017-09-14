@@ -6,22 +6,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.AUTO;
-
 /**
  * @author Henry on 14/09/17.
  */
-@Entity @Data
+@Embeddable @Data
 @NoArgsConstructor
 public class Details {
-
-
-	private @Id @Column(
-			name = "id",
-			unique = true
-	) @GeneratedValue(
-			strategy = AUTO
-	) Long id;
 
 
 	private @Embedded @JoinColumn(
@@ -58,7 +48,7 @@ public class Details {
 	@Embeddable @Data
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static final class Type {
+	public static class Type {
 
 		public static final String MALE = "male";
 		public static final String FEMALE = "female";

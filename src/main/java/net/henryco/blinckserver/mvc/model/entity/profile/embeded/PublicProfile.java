@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.model.entity.profile.pub;
+package net.henryco.blinckserver.mvc.model.entity.profile.embeded;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,15 +11,12 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 /**
  * @author Henry on 30/08/17.
  */
-@Entity @Data
+@Embeddable @Data
 @NoArgsConstructor
-public class UserPublicProfile {
+public class PublicProfile {
 
-
-	private @Id @Column(
-			name = "id",
-			unique = true
-	) long id;
+	public static final String GENDER_MALE = "male";
+	public static final String GENDER_FEMALE = "female";
 
 
 	private @Column(
@@ -40,12 +37,8 @@ public class UserPublicProfile {
 	) Date birthday;
 
 
-	private @OneToOne(
-			cascade = CascadeType.ALL,
-			optional = false
-	) @JoinColumn(
-			name = "name_id",
-			unique = true
+	private @Embedded @JoinColumn(
+			name = "name_id"
 	) UserNameEntity userName;
 
 

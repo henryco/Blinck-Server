@@ -2,7 +2,6 @@ package net.henryco.blinckserver.mvc.model.entity.infrastructure;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
 
 import javax.persistence.*;
 

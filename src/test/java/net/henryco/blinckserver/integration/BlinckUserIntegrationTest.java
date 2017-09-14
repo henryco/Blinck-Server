@@ -1,6 +1,6 @@
 package net.henryco.blinckserver.integration;
 
-import net.henryco.blinckserver.mvc.model.dao.profile.core.UserCoreProfileDao;
+import net.henryco.blinckserver.mvc.model.dao.profile.UserCoreProfileDao;
 import net.henryco.blinckserver.utils.MockFacebookUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.User;

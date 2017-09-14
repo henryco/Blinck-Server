@@ -1,8 +1,8 @@
-package net.henryco.blinckserver.mvc.model.dao.profile.core.imp;
+package net.henryco.blinckserver.mvc.model.dao.profile.imp;
 
-import net.henryco.blinckserver.mvc.model.dao.profile.core.UserCoreProfileDao;
-import net.henryco.blinckserver.mvc.model.entity.profile.core.UserCoreProfile;
-import net.henryco.blinckserver.mvc.model.repository.profile.core.UserCoreProfileRepository;
+import net.henryco.blinckserver.mvc.model.dao.profile.UserCoreProfileDao;
+import net.henryco.blinckserver.mvc.model.entity.profile.UserCoreProfile;
+import net.henryco.blinckserver.mvc.model.repository.profile.UserCoreProfileRepository;
 import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
