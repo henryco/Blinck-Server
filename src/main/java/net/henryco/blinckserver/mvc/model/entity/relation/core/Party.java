@@ -17,7 +17,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  */
 @Entity @Data
 @NoArgsConstructor
-public final class Party {
+public class Party {
 
 
 	private @Id @Column(
@@ -46,10 +46,14 @@ public final class Party {
 	) List<SubParty> subParties;
 
 
-	private @Column(
-			name = "in_queue",
-			nullable = false
-	) Boolean inQueue;
+	private @OneToOne(
+			cascade = ALL,
+			optional = false
+	) @JoinColumn(
+			nullable = false,
+			unique = true,
+			name = "details"
+	) Details details;
 
 
 }

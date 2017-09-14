@@ -2,6 +2,7 @@ package net.henryco.blinckserver.mvc.controller.secured.user.group;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.Details;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
 import net.henryco.blinckserver.mvc.service.infrastructure.MatcherService;
@@ -48,17 +49,17 @@ public class MatcherController
 	 *     &nbsp;}
 	 * </h2>
 	 *
-	 * @see SubParty.Type
+	 * @see Details.Type
 	 */
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/queue/solo",
 			method = POST,
 			consumes = JSON
 	) void soloQueue(Authentication authentication,
-					 @RequestBody SubParty.Type type) {
+					 @RequestBody Details.Type type) {
 
 		final Long id = longID(authentication);
-		final SubParty.Type adapted = SubParty.Type.typeAdapter(type);
+		final Details.Type adapted = Details.Type.typeAdapter(type);
 
 		new Thread(() -> {
 

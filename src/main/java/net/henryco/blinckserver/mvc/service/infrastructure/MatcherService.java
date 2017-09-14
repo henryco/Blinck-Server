@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.mvc.service.infrastructure;
 
 import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.Details;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class MatcherService {
 	 * @return SubParty which user joined or was created.
 	 * @see SubParty
 	 */ @Transactional
-	public synchronized SubParty jointToExistingOrCreateSubParty(Long userId, SubParty.Type type) {
+	public synchronized SubParty jointToExistingOrCreateSubParty(Long userId, Details.Type type) {
 
 		SubParty subParty = subPartyDao.getRandomFirstInQueue(type.getWanted(), type.getIdent(), type.getDimension());
 		if (subParty == null) {
@@ -60,9 +61,9 @@ public class MatcherService {
 
 
 	private static
-	SubParty createNewOne(SubParty.Type type) {
+	SubParty createNewOne(Details.Type type) {
 
-		SubParty.Details details = new SubParty.Details();
+		Details details = new Details();
 		details.setInQueue(true);
 		details.setType(type);
 

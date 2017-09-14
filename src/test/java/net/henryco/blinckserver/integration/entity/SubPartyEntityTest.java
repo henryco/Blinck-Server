@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.integration.entity;
 
 import net.henryco.blinckserver.integration.BlinckUserIntegrationTest;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.Details;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
 import net.henryco.blinckserver.mvc.model.repository.relation.core.SubPartyRepository;
 import org.junit.Test;
@@ -12,8 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty.Type.FEMALE;
-import static net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty.Type.MALE;
+import static net.henryco.blinckserver.mvc.model.entity.relation.core.Details.Type.FEMALE;
+import static net.henryco.blinckserver.mvc.model.entity.relation.core.Details.Type.MALE;
+
 
 /**
  * @author Henry on 12/09/17.
@@ -41,36 +43,36 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 		List<Long> users5 = new ArrayList<>(asList(user1, user3, user6));
 
 		SubParty subParty1 = new SubParty();
-		SubParty.Details details1 = new SubParty.Details();
-		details1.setType(SubParty.Type.newFemFem(3));
+		Details details1 = new Details();
+		details1.setType(Details.Type.newFemFem(3));
 		details1.setInQueue(true);
 		subParty1.setDetails(details1);
 		subParty1.setUsers(users1);
 
 		SubParty subParty2 = new SubParty();
-		SubParty.Details details2 = new SubParty.Details();
-		details2.setType(SubParty.Type.newFemFem(3));
+		Details details2 = new Details();
+		details2.setType(Details.Type.newFemFem(3));
 		details2.setInQueue(true);
 		subParty2.setDetails(details2);
 		subParty2.setUsers(users2);
 
 		SubParty subParty3 = new SubParty();
-		SubParty.Details details3 = new SubParty.Details();
-		details3.setType(SubParty.Type.newMaleFem(3));
+		Details details3 = new Details();
+		details3.setType(Details.Type.newMaleFem(3));
 		details3.setInQueue(true);
 		subParty3.setDetails(details3);
 		subParty3.setUsers(users3);
 
 		SubParty subParty4 = new SubParty();
-		SubParty.Details details4 = new SubParty.Details();
-		details4.setType(SubParty.Type.newFemMale(3));
+		Details details4 = new Details();
+		details4.setType(Details.Type.newFemMale(3));
 		details4.setInQueue(true);
 		subParty4.setDetails(details4);
 		subParty4.setUsers(users4);
 
 		SubParty subParty5 = new SubParty();
-		SubParty.Details details5 = new SubParty.Details();
-		details5.setType(SubParty.Type.newFemMale(3));
+		Details details5 = new Details();
+		details5.setType(Details.Type.newFemMale(3));
 		details5.setInQueue(true);
 		subParty5.setDetails(details5);
 		subParty5.setUsers(users5);
@@ -119,29 +121,29 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 		List<Long> users4 = new LinkedList<>(asList(3333L, 1261L));
 
 		SubParty subParty1 = new SubParty();
-		SubParty.Details details1 = new SubParty.Details();
-		details1.setType(SubParty.Type.newFemFem(3));
+		Details details1 = new Details();
+		details1.setType(Details.Type.newFemFem(3));
 		details1.setInQueue(true);
 		subParty1.setDetails(details1);
 		subParty1.setUsers(users1);
 
 		SubParty subParty2 = new SubParty();
-		SubParty.Details details2 = new SubParty.Details();
-		details2.setType(SubParty.Type.newFemFem(3));
+		Details details2 = new Details();
+		details2.setType(Details.Type.newFemFem(3));
 		details2.setInQueue(true);
 		subParty2.setDetails(details2);
 		subParty2.setUsers(users2);
 
 		SubParty subParty3 = new SubParty();
-		SubParty.Details details3 = new SubParty.Details();
-		details3.setType(SubParty.Type.newMaleFem(3));
+		Details details3 = new Details();
+		details3.setType(Details.Type.newMaleFem(3));
 		details3.setInQueue(true);
 		subParty3.setDetails(details3);
 		subParty3.setUsers(users3);
 
 		SubParty subParty4 = new SubParty();
-		SubParty.Details details4 = new SubParty.Details();
-		details4.setType(SubParty.Type.newFemMale(3));
+		Details details4 = new Details();
+		details4.setType(Details.Type.newFemMale(3));
 		details4.setInQueue(true);
 		subParty4.setDetails(details4);
 		subParty4.setUsers(users4);
@@ -152,15 +154,15 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 		subPartyRepository.saveAndFlush(subParty4);
 
 		List<SubParty> all1 = subPartyRepository.getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
-				SubParty.Type.newFemFem(3).getWanted(),
-				SubParty.Type.newFemFem(3).getIdent(),
+				Details.Type.newFemFem(3).getWanted(),
+				Details.Type.newFemFem(3).getIdent(),
 				3,
 				true
 		);
 
 		List<SubParty> all2 = subPartyRepository.getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
-				SubParty.Type.newFemMale(3).getWanted(),
-				SubParty.Type.newFemMale(3).getIdent(),
+				Details.Type.newFemMale(3).getWanted(),
+				Details.Type.newFemMale(3).getIdent(),
 				3,
 				true
 		);
