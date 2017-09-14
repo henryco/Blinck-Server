@@ -13,7 +13,9 @@ public interface SubPartyRepository extends JpaRepository<SubParty, Long> {
 
 
 	List<SubParty> getAllByUsersIsContainingAndDetails_InQueueIsTrue(Long user);
+
 	List<SubParty> getAllByUsersIsContainingAndPartyNotNull(Long user);
+
 
 	List<SubParty> getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
 			String details_type_wanted,
@@ -22,6 +24,7 @@ public interface SubPartyRepository extends JpaRepository<SubParty, Long> {
 			Boolean details_inQueue
 	);
 
+
 	List<SubParty> getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
 			String details_type_wanted,
 			String details_type_ident,
@@ -29,6 +32,7 @@ public interface SubPartyRepository extends JpaRepository<SubParty, Long> {
 			Boolean details_inQueue,
 			Pageable pageable
 	);
+
 
 	List<SubParty> getFirst100ByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
 			String details_type_wanted,

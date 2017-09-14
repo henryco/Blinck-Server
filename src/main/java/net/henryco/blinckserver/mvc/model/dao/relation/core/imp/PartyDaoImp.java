@@ -18,4 +18,10 @@ public class PartyDaoImp
 		super(repository);
 	}
 
+	private PartyRepository getRepository() {
+		return provideRepository();
+	}
+
+
+
 }
