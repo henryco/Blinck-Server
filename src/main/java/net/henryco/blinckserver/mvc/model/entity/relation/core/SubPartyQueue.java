@@ -2,20 +2,20 @@ package net.henryco.blinckserver.mvc.model.entity.relation.core;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Details;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
 
 import javax.persistence.*;
+
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
 
 /**
- * @author Henry on 28/08/17.
+ * @author Henry on 15/09/17.
  */
 @Entity @Data
 @NoArgsConstructor
-public class SubParty {
+public class SubPartyQueue implements Cloneable {
 
 
 	private @Id @Column(
@@ -26,18 +26,11 @@ public class SubParty {
 	) Long id;
 
 
-	private @ManyToOne(
-			cascade = ALL
-	) @JoinColumn(
-			name = "party_id"
-	) Party party;
-
-
 	private @Embedded @JoinColumn(
+			updatable = false,
 			nullable = false,
-			unique = true,
-			name = "details"
-	) Details details;
+			name = "typo"
+	) Type type;
 
 
 	private @ElementCollection(
@@ -47,5 +40,15 @@ public class SubParty {
 			nullable = false
 	) List<Long> users;
 
+
+	@Override
+	public SubPartyQueue clone() {
+		try {
+			// Not deep copy, but enough for us
+			return (SubPartyQueue) super.clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
 
 }

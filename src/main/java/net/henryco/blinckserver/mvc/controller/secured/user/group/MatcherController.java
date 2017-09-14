@@ -2,9 +2,9 @@ package net.henryco.blinckserver.mvc.controller.secured.user.group;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
-import net.henryco.blinckserver.mvc.model.entity.relation.core.Details;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
 import net.henryco.blinckserver.mvc.service.infrastructure.MatcherService;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,23 +61,49 @@ public class MatcherController
 	 *     &nbsp;}
 	 * </h2>
 	 *
-	 * @see Details.Type
+	 * @see Type
 	 */
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/queue/solo",
 			method = POST,
 			consumes = JSON
 	) void soloQueue(Authentication authentication,
-					 @RequestBody Details.Type type) {
+					 @RequestBody Type type) {
 
 		final Long id = longID(authentication);
-		final Details.Type adapted = Details.Type.typeAdapter(type);
+		final Type adapted = Type.typeAdapter(type);
 
 		subPartyTaskQueue.submit(() -> {
 			SubParty subParty = matcherService.jointToExistingOrCreateSubParty(id, adapted);
 			if (!subParty.getDetails().getInQueue())
 				partyTaskQueue.submit(() -> findParty(subParty));
 		});
+	}
+
+
+	/**
+	 * <h1>Income Match Type JSON:</h1>
+	 * <h2>
+	 *     {&nbsp;
+	 *         "ident":			CHAR[255], &nbsp;
+	 *         "wanted":		CHAR[255], &nbsp;
+	 *         "dimension":		INTEGER
+	 *     &nbsp;}
+	 * </h2>
+	 *
+	 * @see Type
+	 */
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/queue/custom",
+			method = POST
+	) void customQueue(Authentication authentication,
+					   @RequestBody Type type) {
+
+		final Long id = longID(authentication);
+		final Type adapted = Type.typeAdapter(type);
+
+		// TODO: 15/09/17
+
 
 	}
 

@@ -2,6 +2,7 @@ package net.henryco.blinckserver.mvc.model.entity.relation.core;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Details;
 
 import javax.persistence.*;
 
@@ -49,7 +50,8 @@ public class Party {
 			nullable = false,
 			unique = true,
 			name = "details"
-	) Details details;
+	)
+	Details details;
 
 
 }

@@ -1,8 +1,9 @@
 package net.henryco.blinckserver.integration.entity;
 
 import net.henryco.blinckserver.integration.BlinckUserIntegrationTest;
-import net.henryco.blinckserver.mvc.model.entity.relation.core.Details;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Details;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
 import net.henryco.blinckserver.mvc.model.repository.relation.core.SubPartyRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static net.henryco.blinckserver.mvc.model.entity.relation.core.Details.Type.FEMALE;
-import static net.henryco.blinckserver.mvc.model.entity.relation.core.Details.Type.MALE;
+import static net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type.FEMALE;
+import static net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type.MALE;
 
 
 /**
@@ -44,35 +45,35 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 
 		SubParty subParty1 = new SubParty();
 		Details details1 = new Details();
-		details1.setType(Details.Type.newFemFem(3));
+		details1.setType(Type.newFemFem(3));
 		details1.setInQueue(true);
 		subParty1.setDetails(details1);
 		subParty1.setUsers(users1);
 
 		SubParty subParty2 = new SubParty();
 		Details details2 = new Details();
-		details2.setType(Details.Type.newFemFem(3));
+		details2.setType(Type.newFemFem(3));
 		details2.setInQueue(true);
 		subParty2.setDetails(details2);
 		subParty2.setUsers(users2);
 
 		SubParty subParty3 = new SubParty();
 		Details details3 = new Details();
-		details3.setType(Details.Type.newMaleFem(3));
+		details3.setType(Type.newMaleFem(3));
 		details3.setInQueue(true);
 		subParty3.setDetails(details3);
 		subParty3.setUsers(users3);
 
 		SubParty subParty4 = new SubParty();
 		Details details4 = new Details();
-		details4.setType(Details.Type.newFemMale(3));
+		details4.setType(Type.newFemMale(3));
 		details4.setInQueue(true);
 		subParty4.setDetails(details4);
 		subParty4.setUsers(users4);
 
 		SubParty subParty5 = new SubParty();
 		Details details5 = new Details();
-		details5.setType(Details.Type.newFemMale(3));
+		details5.setType(Type.newFemMale(3));
 		details5.setInQueue(true);
 		subParty5.setDetails(details5);
 		subParty5.setUsers(users5);
@@ -122,28 +123,28 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 
 		SubParty subParty1 = new SubParty();
 		Details details1 = new Details();
-		details1.setType(Details.Type.newFemFem(3));
+		details1.setType(Type.newFemFem(3));
 		details1.setInQueue(true);
 		subParty1.setDetails(details1);
 		subParty1.setUsers(users1);
 
 		SubParty subParty2 = new SubParty();
 		Details details2 = new Details();
-		details2.setType(Details.Type.newFemFem(3));
+		details2.setType(Type.newFemFem(3));
 		details2.setInQueue(true);
 		subParty2.setDetails(details2);
 		subParty2.setUsers(users2);
 
 		SubParty subParty3 = new SubParty();
 		Details details3 = new Details();
-		details3.setType(Details.Type.newMaleFem(3));
+		details3.setType(Type.newMaleFem(3));
 		details3.setInQueue(true);
 		subParty3.setDetails(details3);
 		subParty3.setUsers(users3);
 
 		SubParty subParty4 = new SubParty();
 		Details details4 = new Details();
-		details4.setType(Details.Type.newFemMale(3));
+		details4.setType(Type.newFemMale(3));
 		details4.setInQueue(true);
 		subParty4.setDetails(details4);
 		subParty4.setUsers(users4);
@@ -154,15 +155,15 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 		subPartyRepository.saveAndFlush(subParty4);
 
 		List<SubParty> all1 = subPartyRepository.getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
-				Details.Type.newFemFem(3).getWanted(),
-				Details.Type.newFemFem(3).getIdent(),
+				Type.newFemFem(3).getWanted(),
+				Type.newFemFem(3).getIdent(),
 				3,
 				true
 		);
 
 		List<SubParty> all2 = subPartyRepository.getAllByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
-				Details.Type.newFemMale(3).getWanted(),
-				Details.Type.newFemMale(3).getIdent(),
+				Type.newFemMale(3).getWanted(),
+				Type.newFemMale(3).getIdent(),
 				3,
 				true
 		);

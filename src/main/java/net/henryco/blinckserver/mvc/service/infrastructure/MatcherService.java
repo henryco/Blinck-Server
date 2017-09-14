@@ -2,9 +2,10 @@ package net.henryco.blinckserver.mvc.service.infrastructure;
 
 import net.henryco.blinckserver.mvc.model.dao.relation.core.PartyDao;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
-import net.henryco.blinckserver.mvc.model.entity.relation.core.Details;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Details;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,8 @@ public class MatcherService {
 	private final PartyDao partyDao;
 
 	@Autowired
-	public MatcherService(SubPartyDao subPartyDao, PartyDao partyDao) {
+	public MatcherService(SubPartyDao subPartyDao,
+						  PartyDao partyDao) {
 		this.subPartyDao = subPartyDao;
 		this.partyDao = partyDao;
 	}
@@ -34,7 +36,7 @@ public class MatcherService {
 	 * @return SubParty which user joined or was created.
 	 * @see SubParty
 	 */ @Transactional
-	public synchronized SubParty jointToExistingOrCreateSubParty(Long userId, Details.Type type) {
+	public synchronized SubParty jointToExistingOrCreateSubParty(Long userId, Type type) {
 
 		SubParty subParty = subPartyDao.getRandomFirstInQueue(type.getWanted(), type.getIdent(), type.getDimension());
 		if (subParty == null) {
@@ -57,7 +59,7 @@ public class MatcherService {
 	 */ @Transactional
 	public synchronized Party joinToExistingOrCreateParty(SubParty subParty) {
 
-	 	Details.Type type = subParty.getDetails().getType();
+	 	Type type = subParty.getDetails().getType();
 		Party party = partyDao.getRandomFirstInQueue(type.getWanted(), type.getIdent(), type.getDimension());
 		if (party == null) {
 			party = createNewParty(subParty);
@@ -74,7 +76,7 @@ public class MatcherService {
 
 
 	private static
-	SubParty createNewSubParty(Details.Type type) {
+	SubParty createNewSubParty(Type type) {
 
 		SubParty subParty = new SubParty();
 		subParty.setUsers(new ArrayList<>());
@@ -92,7 +94,7 @@ public class MatcherService {
 	}
 
 	private static
-	Details createNewDetails(Details.Type type) {
+	Details createNewDetails(Type type) {
 
 	 	Details details = new Details();
 		details.setInQueue(true);
