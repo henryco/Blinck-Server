@@ -66,7 +66,7 @@ public class Type {
 		return new Type(wanted, ident, dimension);
 	}
 
-	public static Type typeAdapter(Type type) {
+	public static Type typeChecker(Type type) {
 
 		if (type.getWanted().equals(BOTH) || type.getIdent().equals(BOTH))
 			return newBoth(type.getDimension());

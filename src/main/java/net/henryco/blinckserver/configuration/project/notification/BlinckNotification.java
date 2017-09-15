@@ -28,6 +28,10 @@ public interface BlinckNotification {
 
 		String PARTY_FOUND = "party_found";
 		String SUB_PARTY_FOUND = "sub_party_found";
+		String SUB_PARTY_IN_QUEUE = "sub_party_in_queue";
+		String CUSTOM_SUB_PARTY_REMOVED = "custom_sub_party_removed";
+		String CUSTOM_SUB_PARTY_JOINED = "custom_sub_party_joined";
+		String CUSTOM_SUB_PARTY_INVITE = "custom_sub_party_invite";
 	}
 
 

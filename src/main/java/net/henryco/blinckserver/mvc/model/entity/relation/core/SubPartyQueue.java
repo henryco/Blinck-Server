@@ -26,6 +26,13 @@ public class SubPartyQueue implements Cloneable {
 	) Long id;
 
 
+	private @Column(
+			name = "owner",
+			nullable = false,
+			updatable = false
+	) Long owner;
+
+
 	private @Embedded @JoinColumn(
 			updatable = false,
 			nullable = false,

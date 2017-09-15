@@ -4,20 +4,20 @@ import net.henryco.blinckserver.configuration.project.notification.BlinckNotific
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.SubPartyQueue;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
 import net.henryco.blinckserver.mvc.service.infrastructure.MatcherService;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -70,15 +70,18 @@ public class MatcherController
 	) void soloQueue(Authentication authentication,
 					 @RequestBody Type type) {
 
-		final Long id = longID(authentication);
-		final Type adapted = Type.typeAdapter(type);
-
 		subPartyTaskQueue.submit(() -> {
-			SubParty subParty = matcherService.jointToExistingOrCreateSubParty(id, adapted);
-			if (!subParty.getDetails().getInQueue())
+
+			Long id = longID(authentication);
+			SubParty subParty = matcherService.jointToExistingOrCreateSubParty(id, type);
+			if (!subParty.getDetails().getInQueue()) {
+
+				notificationService.addNotification(id, TYPE.SUB_PARTY_IN_QUEUE, subParty.getId());
 				partyTaskQueue.submit(() -> findParty(subParty));
+			}
 		});
 	}
+
 
 
 	/**
@@ -93,30 +96,71 @@ public class MatcherController
 	 *
 	 * @see Type
 	 */
-	public @ResponseStatus(OK) @RequestMapping(
+	public @RequestMapping(
 			value = "/queue/custom",
-			method = POST
-	) void customQueue(Authentication authentication,
+			method = POST,
+			consumes = JSON
+	) Long customQueue(Authentication authentication,
 					   @RequestBody Type type) {
 
 		final Long id = longID(authentication);
-		final Type adapted = Type.typeAdapter(type);
-
-		// TODO: 15/09/17
-
-
+		SubPartyQueue custom = matcherService.createCustomSubParty(id, type);
+		return custom.getId();
 	}
 
 
 
-	private void findParty(SubParty subParty) {
+	public @RequestMapping(
+			value = "/queue/custom/list",
+			method = GET
+	) Long[] getCustomQueueList(Authentication authentication) {
+		return matcherService.getCustomSubPartyList(longID(authentication));
+	}
+
+
+	public @RequestMapping(
+			value = "/queue/custom/join",
+			method = POST
+	) void joinToCustomQueue(Authentication authentication,
+							 @RequestParam("id") Long customQueueId) {
+
+		final Long id = longID(authentication);
+
+	}
+
+
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/queue/custom/start",
+			method = POST
+	) void startCustomQueue(Authentication authentication,
+							@RequestParam("id") Long customQueueId) {
+
+		final Long id = longID(authentication);
+		if (Arrays.stream(matcherService.getCustomSubPartyList(id)).anyMatch(customQueueId::equals)) {
+
+			SubParty subParty = matcherService.startCustomSubParty(customQueueId);
+			if (!subParty.getDetails().getInQueue()) {
+
+				notificationService.addNotification(id, TYPE.SUB_PARTY_IN_QUEUE, subParty.getId());
+				notificationService.addNotification(id, TYPE.CUSTOM_SUB_PARTY_REMOVED, customQueueId);
+
+				partyTaskQueue.submit(() -> findParty(subParty));
+			}
+		}
+	}
+
+
+
+	private void
+	findParty(SubParty subParty) {
 
 		Party party = matcherService.joinToExistingOrCreateParty(subParty);
 		if (!party.getDetails().getInQueue())
 			notificationTaskQueue.submit(() -> createPartyNotification(party));
 	}
 
-	private void createPartyNotification(Party party) {
+	private void
+	createPartyNotification(Party party) {
 
 		for (SubParty sub: party.getSubParties()) {
 			for (Long userId : sub.getUsers()) {
