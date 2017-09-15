@@ -26,16 +26,19 @@ public interface BlinckNotification {
 		String FRIEND_DECLINED = "friendship_declined";
 		String FRIEND_DELETED = "friendship_deleted";
 
-		String CUSTOM_SUB_PARTY_REMOVED = "custom_sub_party_removed";
-		String CUSTOM_SUB_PARTY_JOINED = "custom_sub_party_joined";
+		String CUSTOM_SUB_PARTY_REMOVE = "custom_sub_party_removed";
+		String CUSTOM_SUB_PARTY_JOIN = "custom_sub_party_joined";
 		String CUSTOM_SUB_PARTY_INVITE = "custom_sub_party_invite";
+		String CUSTOM_SUB_PARTY_LEAVE = "custom_sub_party_leave";
 
 		String SUB_PARTY_FOUND = "sub_party_found";
 		String SUB_PARTY_IN_QUEUE = "sub_party_in_queue";
-		String SUB_PARTY_REMOVED = "sub_party_removed";
+		String SUB_PARTY_REMOVE = "sub_party_removed";
+		String SUB_PARTY_LEAVE = "sub_party_leave";
 
 		String PARTY_FOUND = "party_found";
-		String PARTY_REMOVED = "party_removed";
+		String PARTY_REMOVE = "party_removed";
+		String PARTY_LEAVE = "party_leave";
 	}
 
 

@@ -173,7 +173,7 @@ public class MatcherController
 			boolean added = matcherService.addUserToCustomSubParty(id, customQueueId);
 			if (added) {
 				for (Long user : queue.getUsers())
-					notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_JOINED, id);
+					notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_JOIN, id);
 				return true;
 			}
 		}
@@ -225,7 +225,7 @@ public class MatcherController
 			if (!subParty.getDetails().getInQueue()) {
 
 				notificationService.addNotification(id, TYPE.SUB_PARTY_IN_QUEUE, subParty.getId());
-				notificationService.addNotification(id, TYPE.CUSTOM_SUB_PARTY_REMOVED, customQueueId);
+				notificationService.addNotification(id, TYPE.CUSTOM_SUB_PARTY_REMOVE, customQueueId);
 
 				executors.partyTaskQueue.submit(() -> findParty(subParty));
 			}
