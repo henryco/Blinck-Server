@@ -93,6 +93,27 @@ public class MatcherController
 	}
 
 
+	public @RequestMapping(
+			value = "/queue/list",
+			method = GET
+	) Long[] getQueueList(Authentication authentication) {
+
+		final Long id = longID(authentication);
+		// TODO: 15/09/17
+		return null;
+	}
+
+
+	public @RequestMapping(
+			value = "/queue/leave",
+			method = {POST, DELETE}
+	) boolean leaveQueue(Authentication authentication,
+							 @RequestParam("id") Long subPartyId) {
+		Long id = longID(authentication);
+		// TODO: 15/09/17
+		return false;
+	}
+
 
 	/**
 	 * <h1>Income Match Type JSON:</h1>
@@ -128,7 +149,7 @@ public class MatcherController
 	}
 
 
-	
+
 	public @RequestMapping(
 			value = "/queue/custom/list",
 			method = GET
@@ -179,6 +200,16 @@ public class MatcherController
 		}
 	}
 
+
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/queue/custom/leave",
+			method = {POST, DELETE}
+	) void leaveCustomQueue(Authentication authentication,
+							@RequestParam("id") Long customQueueId) {
+
+		final Long id = longID(authentication);
+		// TODO: 15/09/17
+	}
 
 
 	public @ResponseStatus(OK) @RequestMapping(
