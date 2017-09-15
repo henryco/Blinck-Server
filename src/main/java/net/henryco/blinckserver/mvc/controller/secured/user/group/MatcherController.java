@@ -147,7 +147,9 @@ public class MatcherController
 			method = DELETE
 	) void deleteCustomQueue(Authentication authentication,
 							 @RequestParam("id") Long customQueueId) {
-		matcherService.deleteCustomSubParty(longID(authentication), customQueueId);
+		final Long id = longID(authentication);
+		matcherService.deleteCustomSubParty(id, customQueueId);
+		notificationService.addNotification(id, TYPE.CUSTOM_SUB_PARTY_REMOVE, customQueueId);
 	}
 
 
