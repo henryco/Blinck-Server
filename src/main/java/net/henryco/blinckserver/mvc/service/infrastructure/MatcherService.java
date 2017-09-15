@@ -192,7 +192,16 @@ public class MatcherService {
 		if (subParties == null)
 			return false;
 
-		recreateSubParties(userId, subParties);
+		for (SubParty sub: subParties) {
+			sub.setParty(null);
+			if (sub.getUsers().contains(userId)) {
+				sub.getUsers().remove(userId);
+				sub.getDetails().setInQueue(true);
+				subPartyDao.save(sub);
+			}
+			else joinToExistingOrCreateParty(sub);
+		}
+
 		return true;
 	}
 
@@ -209,21 +218,6 @@ public class MatcherService {
 		}
 		return new ArrayList<SubParty>(){{add(subParty);}};
 	}
-
-
-	private void recreateSubParties(Long userId, List<SubParty> subParties) {
-
-	 	for (SubParty sub: subParties) {
-			sub.setParty(null);
-			if (sub.getUsers().contains(userId)) {
-				sub.getUsers().remove(userId);
-				sub.getDetails().setInQueue(true);
-				subPartyDao.save(sub);
-			}
-			else joinToExistingOrCreateParty(sub);
-		}
-	}
-
 
 
 	private static
