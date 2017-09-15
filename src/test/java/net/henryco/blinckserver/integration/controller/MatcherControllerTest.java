@@ -69,7 +69,7 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 
 		for (Thread t: threads) t.start();
 
-		Thread.sleep(10_000);
+		Thread.sleep(5_000);
 
 
 		String admin = getForAdminAuthToken();

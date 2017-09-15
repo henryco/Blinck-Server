@@ -45,13 +45,13 @@ public class MatcherService {
 	 * @see SubParty
 	 */ @Transactional
 	public synchronized SubParty jointToExistingOrCreateSubParty(final Long userId, final Type type) {
-		System.out.println("\nFIND SUB_PARTY: " + userId + " : " +type+"\n");
+
 		try {
 
 			final Type checked = Type.typeChecker(type);
 			SubParty subParty = subPartyDao.getRandomFirstInQueue(checked.getWanted(), checked.getIdent(), checked.getDimension());
 			if (subParty == null) {
-				subParty = createNewSubParty(checked);
+				subParty = Helper.createNewSubParty(checked);
 			}
 
 			subParty.getUsers().add(userId);
@@ -76,30 +76,21 @@ public class MatcherService {
 	 */ @Transactional
 	public synchronized Party joinToExistingOrCreateParty(final SubParty subParty) {
 
-	 	System.out.println("\nFIND PARTY: " + subParty.getId() + " : " +subParty.getUsers()+"\n");
 		try {
 
 			final Type type = Type.typeChecker(subParty.getDetails().getType());
 			Party party = partyDao.getRandomFirstInQueue(type.getWanted(), type.getIdent(), type.getDimension());
 			if (party == null) {
-				party = createNewParty(subParty);
+				party = Helper.createNewParty(subParty);
 			}
-
-			System.out.println("MARKED1: "+party);
 
 			party.getSubParties().add(subParty.getId());
 			if (party.getSubParties().size() == 2)
 				party.getDetails().setInQueue(false);
 
-			System.out.println("MARKED2: "+party);
-
 			Party saved = partyDao.save(party);
-
 			subParty.setParty(saved);
-			SubParty save = subPartyDao.save(subParty);
-
-			System.out.println("\nsub_saved: "+save);
-			System.out.println("saved: "+saved+"\n");
+			subPartyDao.save(subParty);
 
 			return saved;
 
@@ -115,7 +106,7 @@ public class MatcherService {
 	public SubPartyQueue createCustomSubParty(final Long userId, final Type type) {
 
 	 	subPartyQueueDao.deleteAllByOwnerId(userId);
-		SubPartyQueue queue = createNewSubPartyQueue(Type.typeChecker(type));
+		SubPartyQueue queue = Helper.createNewSubPartyQueue(Type.typeChecker(type));
 		queue.getUsers().add(userId);
 		queue.setOwner(userId);
 		return subPartyQueueDao.save(queue);
@@ -140,12 +131,18 @@ public class MatcherService {
 
 
 	@Transactional
+	public Long[] getSubPartyMembers(final Long subPartyId) {
+		return subPartyDao.getById(subPartyId).getUsers().toArray(new Long[0]);
+	}
+
+
+	@Transactional
 	public SubParty startCustomSubParty(final Long customSubPartyId) {
 
 	 	SubPartyQueue queue = subPartyQueueDao.getById(customSubPartyId);
 		subPartyQueueDao.deleteById(customSubPartyId);
 
-		SubParty newSubParty = createNewSubParty(queue.getType());
+		SubParty newSubParty = Helper.createNewSubParty(queue.getType());
 		newSubParty.getUsers().addAll(queue.getUsers());
 		if (newSubParty.getUsers().size() == queue.getType().getDimension())
 			newSubParty.getDetails().setInQueue(false);
@@ -238,43 +235,46 @@ public class MatcherService {
 	}
 
 
-	private static
-	SubParty createNewSubParty(Type type) {
 
-		SubParty subParty = new SubParty();
-		subParty.setUsers(new ArrayList<>());
-		subParty.setDetails(createNewDetails(type));
-		return subParty;
+
+	private static abstract class Helper {
+
+		private static
+		SubParty createNewSubParty(Type type) {
+
+			SubParty subParty = new SubParty();
+			subParty.setUsers(new ArrayList<>());
+			subParty.setDetails(createNewDetails(type));
+			return subParty;
+		}
+
+		private static
+		Party createNewParty(SubParty subParty) {
+
+			Party party = new Party();
+			party.setDetails(createNewDetails(subParty.getDetails().getType().invertedCopy()));
+			party.setSubParties(new ArrayList<>());
+			return party;
+		}
+
+		private static
+		SubPartyQueue createNewSubPartyQueue(Type type) {
+
+			SubPartyQueue queue = new SubPartyQueue();
+			queue.setType(type);
+			queue.setUsers(new ArrayList<>());
+			return queue;
+		}
+
+		private static
+		Details createNewDetails(Type type) {
+
+			Details details = new Details();
+			details.setInQueue(true);
+			details.setType(type);
+			return details;
+		}
 	}
 
-
-	private static
-	Party createNewParty(SubParty subParty) {
-
-	 	Party party = new Party();
-		party.setDetails(createNewDetails(subParty.getDetails().getType().invertedCopy()));
-		party.setSubParties(new ArrayList<>());
-	 	return party;
-	}
-
-
-	private static
-	SubPartyQueue createNewSubPartyQueue(Type type) {
-
-		SubPartyQueue queue = new SubPartyQueue();
-	 	queue.setType(type);
-	 	queue.setUsers(new ArrayList<>());
-	 	return queue;
-	}
-
-
-	private static
-	Details createNewDetails(Type type) {
-
-	 	Details details = new Details();
-		details.setInQueue(true);
-		details.setType(type);
-		return details;
-	}
 
 }
