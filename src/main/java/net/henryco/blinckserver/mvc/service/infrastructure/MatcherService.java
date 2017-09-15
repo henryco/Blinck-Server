@@ -115,7 +115,25 @@ public class MatcherService {
 	}
 
 
+	@Transactional
+	public SubPartyQueue getCustomSubParty(final Long customSubPartyId) {
+		return subPartyQueueDao.getById(customSubPartyId);
+	}
 
+
+	@Transactional
+	public boolean addUserToCustomSubParty(final Long user, final Long customSubPartyId) {
+
+	 	SubPartyQueue queue = subPartyQueueDao.getById(customSubPartyId);
+
+		if (queue.getUsers().contains(user)) return false;
+		if (queue.getUsers().size() == queue.getType().getDimension()) return false;
+
+		queue.getUsers().add(user);
+		subPartyQueueDao.save(queue);
+
+		return true;
+	}
 
 
 	private static

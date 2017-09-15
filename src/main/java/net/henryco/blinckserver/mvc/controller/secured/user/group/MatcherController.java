@@ -1,5 +1,4 @@
 package net.henryco.blinckserver.mvc.controller.secured.user.group;
-
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
@@ -8,6 +7,7 @@ import net.henryco.blinckserver.mvc.model.entity.relation.core.SubPartyQueue;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
 import net.henryco.blinckserver.mvc.service.infrastructure.MatcherService;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
+import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -20,33 +20,42 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-/**
- * @author Henry on 13/09/17.
- */
+final class TaskExecutors {
+
+	protected final ExecutorService notificationTaskQueue;
+	protected final ExecutorService subPartyTaskQueue;
+	protected final ExecutorService partyTaskQueue;
+
+	protected TaskExecutors() {
+
+		this.notificationTaskQueue = Executors.newFixedThreadPool(10);
+		this.subPartyTaskQueue = Executors.newSingleThreadExecutor();
+		this.partyTaskQueue = Executors.newSingleThreadExecutor();
+	}
+}
+
 @RestController // TODO: 15/09/17 TESTS
 @RequestMapping("/protected/user/match")
 public class MatcherController
 		implements BlinckController, BlinckNotification {
 
+	private final TaskExecutors executors;
 
 	private final MatcherService matcherService;
 	private final UpdateNotificationService notificationService;
-
-	private final ExecutorService notificationTaskQueue;
-	private final ExecutorService subPartyTaskQueue;
-	private final ExecutorService partyTaskQueue;
+	private final FriendshipService friendshipService;
 
 
 	@Autowired
 	public MatcherController(MatcherService matcherService,
-							 UpdateNotificationService notificationService) {
+							 UpdateNotificationService notificationService,
+							 FriendshipService friendshipService) {
 
 		this.matcherService = matcherService;
 		this.notificationService = notificationService;
+		this.friendshipService = friendshipService;
 
-		this.notificationTaskQueue = Executors.newFixedThreadPool(10);
-		this.subPartyTaskQueue = Executors.newSingleThreadExecutor();
-		this.partyTaskQueue = Executors.newSingleThreadExecutor();
+		this.executors = new TaskExecutors();
 	}
 
 
@@ -70,14 +79,14 @@ public class MatcherController
 	) void soloQueue(Authentication authentication,
 					 @RequestBody Type type) {
 
-		subPartyTaskQueue.submit(() -> {
+		executors.subPartyTaskQueue.submit(() -> {
 
 			Long id = longID(authentication);
 			SubParty subParty = matcherService.jointToExistingOrCreateSubParty(id, type);
 			if (!subParty.getDetails().getInQueue()) {
 
 				notificationService.addNotification(id, TYPE.SUB_PARTY_IN_QUEUE, subParty.getId());
-				partyTaskQueue.submit(() -> findParty(subParty));
+				executors.partyTaskQueue.submit(() -> findParty(subParty));
 			}
 		});
 	}
@@ -121,12 +130,44 @@ public class MatcherController
 	public @RequestMapping(
 			value = "/queue/custom/join",
 			method = POST
-	) void joinToCustomQueue(Authentication authentication,
+	) Boolean joinToCustomQueue(Authentication authentication,
 							 @RequestParam("id") Long customQueueId) {
 
 		final Long id = longID(authentication);
+		SubPartyQueue queue = matcherService.getCustomSubParty(customQueueId);
 
+		if (friendshipService.isExistsBetweenUsers(id, queue.getOwner())) {
+
+			boolean added = matcherService.addUserToCustomSubParty(id, customQueueId);
+			if (added) {
+				for (Long user : queue.getUsers())
+					notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_JOINED, id);
+				return true;
+			}
+		}
+		return false;
 	}
+
+
+
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/queue/custom/invite",
+			method = POST
+	) void inviteToCustomQueue(Authentication authentication,
+							   @RequestParam("id") Long customQueueId,
+							   @RequestBody Long[] users) {
+
+		final Long id = longID(authentication);
+
+		SubPartyQueue queue = matcherService.getCustomSubParty(customQueueId);
+		if (!queue.getOwner().equals(id)) return;
+
+		for (Long user: users) {
+			if (friendshipService.isExistsBetweenUsers(user, id))
+				notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_INVITE, "");
+		}
+	}
+
 
 
 	public @ResponseStatus(OK) @RequestMapping(
@@ -144,7 +185,7 @@ public class MatcherController
 				notificationService.addNotification(id, TYPE.SUB_PARTY_IN_QUEUE, subParty.getId());
 				notificationService.addNotification(id, TYPE.CUSTOM_SUB_PARTY_REMOVED, customQueueId);
 
-				partyTaskQueue.submit(() -> findParty(subParty));
+				executors.partyTaskQueue.submit(() -> findParty(subParty));
 			}
 		}
 	}
@@ -156,7 +197,7 @@ public class MatcherController
 
 		Party party = matcherService.joinToExistingOrCreateParty(subParty);
 		if (!party.getDetails().getInQueue())
-			notificationTaskQueue.submit(() -> createPartyNotification(party));
+			executors.notificationTaskQueue.submit(() -> createPartyNotification(party));
 	}
 
 	private void
