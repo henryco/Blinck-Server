@@ -186,10 +186,8 @@ public class MatcherService {
 		SubParty subParty = subPartyDao.getById(subPartyId);
 		if (!subParty.getUsers().contains(userId)) return false;
 
-		List<SubParty> subParties = new ArrayList<SubParty>(){{add(subParty);}};
-
 		Party party = subParty.getParty();
-		subParties = processPartyInQueue(party, subParties);
+		List<SubParty> subParties = processPartyInQueue(party, subParty);
 
 		if (subParties == null)
 			return false;
@@ -200,7 +198,7 @@ public class MatcherService {
 
 
 
-	private List<SubParty> processPartyInQueue(Party party, List<SubParty> subParties) {
+	private List<SubParty> processPartyInQueue(Party party, SubParty subParty) {
 
 	 	if (party != null) {
 			if (!party.getDetails().getInQueue())
@@ -209,7 +207,7 @@ public class MatcherService {
 			partyDao.deleteById(party.getId());
 			return party.getSubParties();
 		}
-		return subParties;
+		return new ArrayList<SubParty>(){{add(subParty);}};
 	}
 
 
