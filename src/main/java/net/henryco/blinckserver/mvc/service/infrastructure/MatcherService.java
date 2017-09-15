@@ -122,6 +122,15 @@ public class MatcherService {
 
 
 	@Transactional
+	public void deleteCustomSubParty(final Long userId, final Long customSubPartyId) {
+		SubPartyQueue byId = subPartyQueueDao.getById(customSubPartyId);
+		if (byId.getOwner().equals(userId)) {
+			subPartyQueueDao.deleteById(customSubPartyId);
+		}
+	}
+
+
+	@Transactional
 	public boolean addUserToCustomSubParty(final Long user, final Long customSubPartyId) {
 
 	 	SubPartyQueue queue = subPartyQueueDao.getById(customSubPartyId);

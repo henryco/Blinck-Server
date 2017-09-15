@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -118,13 +119,23 @@ public class MatcherController
 	}
 
 
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/queue/custom/delete",
+			method = DELETE
+	) void deleteCustomQueue(Authentication authentication,
+							 @RequestParam("id") Long customQueueId) {
+		matcherService.deleteCustomSubParty(longID(authentication), customQueueId);
+	}
 
+
+	
 	public @RequestMapping(
 			value = "/queue/custom/list",
 			method = GET
 	) Long[] getCustomQueueList(Authentication authentication) {
 		return matcherService.getCustomSubPartyList(longID(authentication));
 	}
+
 
 
 	public @RequestMapping(
@@ -164,7 +175,7 @@ public class MatcherController
 
 		for (Long user: users) {
 			if (friendshipService.isExistsBetweenUsers(user, id))
-				notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_INVITE, "");
+				notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_INVITE, queue.getId());
 		}
 	}
 
