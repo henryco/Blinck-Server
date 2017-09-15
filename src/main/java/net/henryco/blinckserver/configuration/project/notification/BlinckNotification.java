@@ -39,6 +39,8 @@ public interface BlinckNotification {
 		String PARTY_FOUND = "party_found";
 		String PARTY_REMOVE = "party_removed";
 		String PARTY_LEAVE = "party_leave";
+
+		String QUEUE_LEAVE = "queue_leave";
 	}
 
 

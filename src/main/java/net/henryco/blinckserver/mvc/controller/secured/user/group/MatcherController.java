@@ -26,12 +26,14 @@ final class TaskExecutors {
 	protected final ExecutorService notificationTaskQueue;
 	protected final ExecutorService subPartyTaskQueue;
 	protected final ExecutorService partyTaskQueue;
+	protected final ExecutorService leaveTaskQueue;
 
 	protected TaskExecutors() {
 
 		this.notificationTaskQueue = Executors.newFixedThreadPool(10);
 		this.subPartyTaskQueue = Executors.newSingleThreadExecutor();
 		this.partyTaskQueue = Executors.newSingleThreadExecutor();
+		this.leaveTaskQueue = Executors.newSingleThreadExecutor();
 	}
 }
 
@@ -97,21 +99,21 @@ public class MatcherController
 			value = "/queue/list",
 			method = GET
 	) Long[] getQueueList(Authentication authentication) {
-
-		final Long id = longID(authentication);
-		// TODO: 15/09/17
-		return null;
+		return matcherService.getSubPartyList(longID(authentication));
 	}
 
 
 	public @RequestMapping(
 			value = "/queue/leave",
 			method = {POST, DELETE}
-	) boolean leaveQueue(Authentication authentication,
-							 @RequestParam("id") Long subPartyId) {
+	) void leaveQueue(Authentication authentication,
+						 @RequestParam("id") Long subPartyId) {
 		Long id = longID(authentication);
-		// TODO: 15/09/17
-		return false;
+
+		executors.leaveTaskQueue.submit(() -> {
+			boolean leaved = matcherService.leaveSearchQueue(id, subPartyId);
+			if (leaved) notificationService.addNotification(id, TYPE.QUEUE_LEAVE, subPartyId);
+		});
 	}
 
 
@@ -208,7 +210,10 @@ public class MatcherController
 							@RequestParam("id") Long customQueueId) {
 
 		final Long id = longID(authentication);
-		// TODO: 15/09/17
+		SubPartyQueue queue = matcherService.leaveCustomSubParty(id, customQueueId);
+		for (Long user : queue.getUsers()) {
+			notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_LEAVE, id);
+		}
 	}
 
 

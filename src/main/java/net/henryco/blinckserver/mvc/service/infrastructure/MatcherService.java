@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.PersistenceException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Henry on 13/09/17.
@@ -44,17 +46,25 @@ public class MatcherService {
 	 */ @Transactional
 	public synchronized SubParty jointToExistingOrCreateSubParty(final Long userId, final Type type) {
 
-		final Type checked = Type.typeChecker(type);
-		SubParty subParty = subPartyDao.getRandomFirstInQueue(checked.getWanted(), checked.getIdent(), checked.getDimension());
-		if (subParty == null) {
-			subParty = createNewSubParty(checked);
+		try {
+
+			final Type checked = Type.typeChecker(type);
+			SubParty subParty = subPartyDao.getRandomFirstInQueue(checked.getWanted(), checked.getIdent(), checked.getDimension());
+			if (subParty == null) {
+				subParty = createNewSubParty(checked);
+			}
+
+			subParty.getUsers().add(userId);
+			if (subParty.getUsers().size() == checked.getDimension())
+				subParty.getDetails().setInQueue(false);
+
+			return subPartyDao.save(subParty);
+
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			jointToExistingOrCreateSubParty(userId, type);
 		}
-
-		subParty.getUsers().add(userId);
-		if (subParty.getUsers().size() == checked.getDimension())
-			subParty.getDetails().setInQueue(false);
-
-		return subPartyDao.save(subParty);
+		return null;
 	}
 
 
@@ -66,17 +76,25 @@ public class MatcherService {
 	 */ @Transactional
 	public synchronized Party joinToExistingOrCreateParty(final SubParty subParty) {
 
-	 	final Type type = Type.typeChecker(subParty.getDetails().getType());
-		Party party = partyDao.getRandomFirstInQueue(type.getWanted(), type.getIdent(), type.getDimension());
-		if (party == null) {
-			party = createNewParty(subParty);
+		try {
+
+			final Type type = Type.typeChecker(subParty.getDetails().getType());
+			Party party = partyDao.getRandomFirstInQueue(type.getWanted(), type.getIdent(), type.getDimension());
+			if (party == null) {
+				party = createNewParty(subParty);
+			}
+
+			party.getSubParties().add(subParty);
+			if (party.getSubParties().size() == 2)
+				party.getDetails().setInQueue(false);
+
+			return partyDao.save(party);
+
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			joinToExistingOrCreateParty(subParty);
 		}
-
-		party.getSubParties().add(subParty);
-		if (party.getSubParties().size() == 2)
-			party.getDetails().setInQueue(false);
-
-		return partyDao.save(party);
+		return null;
 	}
 
 
@@ -96,6 +114,14 @@ public class MatcherService {
 
 	 	return subPartyQueueDao.getAllWithUser(userId)
 				.stream().map(SubPartyQueue::getId)
+		.toArray(Long[]::new);
+	}
+
+
+	@Transactional
+	public Long[] getSubPartyList(final Long userId) {
+	 	return subPartyDao.getAllWithUserInQueue(userId)
+				.stream().map(SubParty::getId)
 		.toArray(Long[]::new);
 	}
 
@@ -131,6 +157,15 @@ public class MatcherService {
 
 
 	@Transactional
+	public SubPartyQueue leaveCustomSubParty(final Long userId, final Long customSubPartyId) {
+
+		SubPartyQueue byId = subPartyQueueDao.getById(customSubPartyId);
+		byId.getUsers().remove(userId);
+		return subPartyQueueDao.save(byId);
+	}
+
+
+	@Transactional
 	public boolean addUserToCustomSubParty(final Long user, final Long customSubPartyId) {
 
 	 	SubPartyQueue queue = subPartyQueueDao.getById(customSubPartyId);
@@ -141,6 +176,36 @@ public class MatcherService {
 		queue.getUsers().add(user);
 		subPartyQueueDao.save(queue);
 
+		return true;
+	}
+
+
+	@Transactional
+	public synchronized boolean leaveSearchQueue(final Long userId, final Long subPartyId) {
+
+		SubParty subParty = subPartyDao.getById(subPartyId);
+		if (!subParty.getUsers().contains(userId)) return false;
+
+		List<SubParty> subParties = new ArrayList<SubParty>(){{add(subParty);}};
+		Party party = subParty.getParty();
+
+		if (party != null) {
+			if (!party.getDetails().getInQueue())
+				return false;
+
+			partyDao.deleteById(party.getId());
+			subParties = party.getSubParties();
+		}
+
+		for (SubParty sub: subParties) {
+			sub.setParty(null);
+			if (sub.getUsers().contains(userId)) {
+				sub.getUsers().remove(userId);
+				sub.getDetails().setInQueue(true);
+				subPartyDao.save(sub);
+			}
+			else joinToExistingOrCreateParty(sub);
+		}
 		return true;
 	}
 
