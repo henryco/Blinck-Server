@@ -62,6 +62,99 @@ public class MatcherController
 	}
 
 
+	/*
+	 *	Party matcher API
+	 *
+	 *		ENDPOINT: 		/protected/user/match
+	 *
+	 *
+	 *	Type (queue) JSON:
+	 *
+	 * 		"ident": 		CHAR[255],
+	 * 		"wanted": 		CHAR[255],
+	 * 		"dimension": 	INTEGER
+	 *
+	 *
+	 *		SOLO:
+	 *
+	 *			ENDPOINT:	/queue/solo
+	 *			METHOD:		POST
+	 *			BODY:		Type
+	 *			RETURN:		VOID
+	 *
+	 *
+	 *		LIST:
+	 *
+	 *			ENDPOINT:	/queue/list
+	 *			METHOD:		GET
+	 *			RETURN:		Long[]
+	 *
+	 *
+	 * 		LEAVE:
+	 *
+	 * 			ENDPOINT:	/queue/leave
+	 * 			ARGS:		Long: id
+	 * 			METHOD:		POST, DELETE
+	 * 			RETURN:		VOID
+	 *
+	 *
+	 *		CUSTOM:
+	 *
+	 *			ENDPOINT:	/queue/custom
+	 *			METHOD:		POST
+	 *			BODY:		Type
+	 *			RETURN:		Long
+	 *
+	 *
+	 *		CUSTOM_DELETE:
+	 *
+	 *			ENDPOINT:	/queue/custom/delete
+	 *			ARGS:		Long: id
+	 *			METHOD:		DELETE
+	 *			RETURN:		VOID
+	 *
+	 *
+	 *		CUSTOM_LIST:
+	 *
+	 *			ENDPOINT:	/queue/custom/list
+	 *			METHOD:		GET
+	 *			RETURN:		Long[]
+	 *
+	 *
+	 *		CUSTOM_JOIN:
+	 *
+	 *			ENDPOINT:	/queue/custom/join
+	 *			ARGS:		Long: id
+	 *			METHOD:		POST
+	 *			RETURN:		BOOLEAN
+	 *
+	 *
+	 *		CUSTOM_INVITE:
+	 *
+	 *			ENDPOINT:	/queue/custom/invite
+	 *			ARGS:		Long: id
+	 *			METHOD:		POST
+	 *			BODY:		Long[]
+	 *			RETURN:		VOID
+	 *
+	 *
+	 *		CUSTOM_LEAVE:
+	 *
+	 *			ENDPOINT:	/queue/custom/leave
+	 *			ARGS:		Long: id
+	 *			METHOD:		POST, DELETE
+	 *			RETURN:		VOID
+	 *
+	 *
+	 *		CUSTOM_START:
+	 *
+	 *			ENDPOINT:	/queue/custom/start
+	 *			ARGS:		Long: id
+	 *			METHOD:		POST
+	 *			RETURN: 	VOID
+	 *
+	 */
+
 
 	/**
 	 * <h1>Income Match Type JSON:</h1>

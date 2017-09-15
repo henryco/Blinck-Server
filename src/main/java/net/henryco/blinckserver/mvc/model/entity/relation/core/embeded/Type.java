@@ -11,7 +11,6 @@ import javax.persistence.Embeddable;
  * <h1>Match Type JSON:</h1>
  * <h2>
  *     {&nbsp;
- *         "id":		LONG, 			&nbsp;
  *         "ident":		CHAR[255], 		&nbsp;
  *         "wanted":	CHAR[255], 		&nbsp;
  *         "dimension":	INTEGER
