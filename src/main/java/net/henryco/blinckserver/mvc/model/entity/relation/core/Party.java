@@ -36,14 +36,12 @@ public class Party {
 	) Date activationTime;
 
 
-	private @OneToOne(
-			cascade = ALL,
-			optional = false,
-			targetEntity = SubParty.class
-	) @JoinColumn(
+	private @ElementCollection(
+			targetClass = Long.class
+	) @Column(
 			name = "sub_parties",
-			unique = true
-	) List<SubParty> subParties;
+			nullable = false
+	) List<Long> subParties;
 
 
 	private @Embedded @JoinColumn(

@@ -85,19 +85,21 @@ public class MatcherService {
 				party = createNewParty(subParty);
 			}
 
-			System.out.println("MARKED: "+party);
+			System.out.println("MARKED1: "+party);
 
-			party.getSubParties().add(subParty);
+			party.getSubParties().add(subParty.getId());
 			if (party.getSubParties().size() == 2)
 				party.getDetails().setInQueue(false);
 
-			subParty.setParty(party);
+			System.out.println("MARKED2: "+party);
 
-			SubParty save = subPartyDao.save(subParty);
 			Party saved = partyDao.save(party);
 
+			subParty.setParty(saved);
+			SubParty save = subPartyDao.save(subParty);
+
 			System.out.println("\nsub_saved: "+save);
-			System.out.println("saved: "+save+"\n");
+			System.out.println("saved: "+saved+"\n");
 
 			return saved;
 
@@ -226,8 +228,11 @@ public class MatcherService {
 			if (!party.getDetails().getInQueue())
 				return null;
 
+			List<SubParty> list = new ArrayList<>();
+			for (Long sub : party.getSubParties())
+				list.add(subPartyDao.getById(sub));
 			partyDao.deleteById(party.getId());
-			return party.getSubParties();
+			return list;
 		}
 		return new ArrayList<SubParty>(){{add(subParty);}};
 	}

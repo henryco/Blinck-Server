@@ -55,7 +55,6 @@ public class SubPartyDaoImp
 					getRepository().getFirst100ByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
 							typeWanted, typeIdent, dimension, true
 			);
-			System.out.println(last);
 			return last.isEmpty() ? null : last.get(new Random().nextInt(last.size()));
 		} catch (EntityNotFoundException e) {
 			return null;

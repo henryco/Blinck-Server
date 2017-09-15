@@ -345,13 +345,13 @@ public class MatcherController
 	private void
 	createPartyNotification(Party party) {
 
-		for (SubParty sub: party.getSubParties()) {
-			for (Long userId : sub.getUsers()) {
-
-				notificationService.addNotification(userId, TYPE.PARTY_FOUND, party.getId());
-				notificationService.addNotification(userId, TYPE.SUB_PARTY_FOUND, sub.getId());
-			}
-		}
+//		for (SubParty sub: party.getSubParties()) {
+//			for (Long userId : sub.getUsers()) {
+//
+//				notificationService.addNotification(userId, TYPE.PARTY_FOUND, party.getId());
+//				notificationService.addNotification(userId, TYPE.SUB_PARTY_FOUND, sub.getId());
+//			}
+//		}
 	}
 
 }
