@@ -5,6 +5,7 @@ import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.repository.relation.core.PartyRepository;
 import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -22,18 +23,20 @@ public class PartyDaoImp
 		super(repository);
 	}
 
+
 	private PartyRepository getRepository() {
 		return provideRepository();
 	}
 
-	@Override
+
+	@Override @Transactional
 	public Party getRandomFirstInQueue(String typeWanted, String typeIdent, Integer dimension) {
 
 		try {
 			List<Party> all = getRepository()
 					.getFirst100ByDetails_InQueueIsTrueAndDetails_Type_DimensionAndDetails_TypeIdentAndDetails_Type_Wanted(
 							dimension, typeIdent, typeWanted);
-			return all.get(new Random().nextInt(all.size()));
+			return all.isEmpty() ? null : all.get(new Random().nextInt(all.size()));
 		} catch (EntityNotFoundException e) {
 			return null;
 		}

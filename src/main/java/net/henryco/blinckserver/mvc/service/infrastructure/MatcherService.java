@@ -45,7 +45,7 @@ public class MatcherService {
 	 * @see SubParty
 	 */ @Transactional
 	public synchronized SubParty jointToExistingOrCreateSubParty(final Long userId, final Type type) {
-
+		System.out.println("\nFIND SUB_PARTY: " + userId + " : " +type+"\n");
 		try {
 
 			final Type checked = Type.typeChecker(type);
@@ -76,6 +76,7 @@ public class MatcherService {
 	 */ @Transactional
 	public synchronized Party joinToExistingOrCreateParty(final SubParty subParty) {
 
+	 	System.out.println("\nFIND PARTY: " + subParty.getId() + " : " +subParty.getUsers()+"\n");
 		try {
 
 			final Type type = Type.typeChecker(subParty.getDetails().getType());
@@ -84,11 +85,21 @@ public class MatcherService {
 				party = createNewParty(subParty);
 			}
 
+			System.out.println("MARKED: "+party);
+
 			party.getSubParties().add(subParty);
 			if (party.getSubParties().size() == 2)
 				party.getDetails().setInQueue(false);
 
-			return partyDao.save(party);
+			subParty.setParty(party);
+
+			SubParty save = subPartyDao.save(subParty);
+			Party saved = partyDao.save(party);
+
+			System.out.println("\nsub_saved: "+save);
+			System.out.println("saved: "+save+"\n");
+
+			return saved;
 
 		} catch (PersistenceException e) {
 			e.printStackTrace();
@@ -196,8 +207,10 @@ public class MatcherService {
 			sub.setParty(null);
 			if (sub.getUsers().contains(userId)) {
 				sub.getUsers().remove(userId);
-				sub.getDetails().setInQueue(true);
-				subPartyDao.save(sub);
+				if (!sub.getUsers().isEmpty()) {
+					sub.getDetails().setInQueue(true);
+					subPartyDao.save(sub);
+				}
 			}
 			else joinToExistingOrCreateParty(sub);
 		}
@@ -206,8 +219,8 @@ public class MatcherService {
 	}
 
 
-
-	private List<SubParty> processPartyInQueue(Party party, SubParty subParty) {
+	@Transactional
+	protected List<SubParty> processPartyInQueue(Party party, SubParty subParty) {
 
 	 	if (party != null) {
 			if (!party.getDetails().getInQueue())

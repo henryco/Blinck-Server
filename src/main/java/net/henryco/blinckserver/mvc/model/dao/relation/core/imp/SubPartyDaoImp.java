@@ -47,7 +47,7 @@ public class SubPartyDaoImp
 		);
 	}
 
-	@Override
+	@Override @Transactional
 	public SubParty getRandomFirstInQueue(String typeWanted, String typeIdent, Integer dimension) {
 		try {
 
@@ -55,7 +55,8 @@ public class SubPartyDaoImp
 					getRepository().getFirst100ByDetails_Type_WantedAndDetails_Type_IdentAndDetails_Type_DimensionAndDetails_InQueue(
 							typeWanted, typeIdent, dimension, true
 			);
-			return last.get(new Random().nextInt(last.size()));
+			System.out.println(last);
+			return last.isEmpty() ? null : last.get(new Random().nextInt(last.size()));
 		} catch (EntityNotFoundException e) {
 			return null;
 		}

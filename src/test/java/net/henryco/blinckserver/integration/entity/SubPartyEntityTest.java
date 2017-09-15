@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.integration.entity;
 
 import net.henryco.blinckserver.integration.BlinckUserIntegrationTest;
+import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Details;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
@@ -25,7 +26,7 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 
 
 	private @Autowired SubPartyRepository subPartyRepository;
-
+	private @Autowired SubPartyDao subPartyDao;
 
 	@Test @Transactional
 	public void userListContainsTest() {
@@ -186,8 +187,13 @@ public class SubPartyEntityTest extends BlinckUserIntegrationTest {
 
 
 	@Test
-	public void asyncTest() throws Exception {
+	public void randomFirstInQueueTest() throws Exception {
 
+		for (int i = 0; i < 60; i++) {
+
+
+
+		}
 	}
 
 

@@ -50,8 +50,7 @@ public class Party {
 			nullable = false,
 			unique = true,
 			name = "details"
-	)
-	Details details;
+	) Details details;
 
 
 }

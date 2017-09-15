@@ -174,11 +174,11 @@ public class MatcherController
 			consumes = JSON
 	) void soloQueue(Authentication authentication,
 					 @RequestBody Type type) {
-
 		executors.subPartyTaskQueue.submit(() -> {
 
 			Long id = longID(authentication);
 			SubParty subParty = matcherService.jointToExistingOrCreateSubParty(id, type);
+
 			if (!subParty.getDetails().getInQueue()) {
 
 				notificationService.addNotification(id, TYPE.SUB_PARTY_IN_QUEUE, subParty.getId());
