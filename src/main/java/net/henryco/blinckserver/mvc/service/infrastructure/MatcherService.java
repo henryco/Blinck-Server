@@ -204,13 +204,17 @@ public class MatcherService {
 
 		for (SubParty sub: subParties) {
 			sub.setParty(null);
-			if (sub.getUsers().contains(userId)) {
-				sub.getUsers().remove(userId);
+
+			if (sub.getUsers().remove(userId)) {
+
 				if (!sub.getUsers().isEmpty()) {
 					sub.getDetails().setInQueue(true);
 					subPartyDao.save(sub);
 				}
+
+				else subPartyDao.getById(sub.getId());
 			}
+
 			else joinToExistingOrCreateParty(sub);
 		}
 
