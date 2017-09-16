@@ -32,12 +32,17 @@ public class SubPartyDaoImp
 
 	@Override
 	public List<SubParty> getAllWithUserInParty(Long user) {
-		return getRepository().getAllByUsersIsContainingAndPartyNotNull(user);
+		return getRepository().getAllByUsersIsContainingAndPartyNotNullAndParty_Details_InQueueIsFalse(user);
 	}
 
 	@Override
 	public List<SubParty> getAllWithUserInQueue(Long user) {
 		return getRepository().getAllByUsersIsContainingAndDetails_InQueueIsTrue(user);
+	}
+
+	@Override
+	public List<SubParty> getAllWithUser(Long user) {
+		return getRepository().getAllByUsersIsContaining(user);
 	}
 
 	@Override

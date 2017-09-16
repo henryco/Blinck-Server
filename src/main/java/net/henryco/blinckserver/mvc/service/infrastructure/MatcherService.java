@@ -123,10 +123,12 @@ public class MatcherService {
 
 
 	@Transactional
-	public Long[] getSubPartyList(final Long userId) {
-	 	return subPartyDao.getAllWithUserInQueue(userId)
-				.stream().map(SubParty::getId)
-		.toArray(Long[]::new);
+	public Long[] getSubPartyWaitList(final Long userId) {
+
+		return subPartyDao.getAllWithUser(userId).stream().filter(subParty ->
+				subParty.getDetails().getInQueue()
+						|| subParty.getParty() != null && subParty.getParty().getDetails().getInQueue()
+		).map(SubParty::getId).toArray(Long[]::new);
 	}
 
 

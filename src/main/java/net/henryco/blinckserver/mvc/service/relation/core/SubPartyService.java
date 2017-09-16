@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 /**
  * @author Henry on 13/09/17.
  */
@@ -24,4 +25,8 @@ public class SubPartyService {
 		return subPartyDao.getAll().toArray(new SubParty[0]);
 	}
 
+	@Transactional
+	public SubParty[] getAllSubPartiesWithUserInParty(Long userId) {
+		return subPartyDao.getAllWithUserInParty(userId).toArray(new SubParty[0]);
+	}
 }

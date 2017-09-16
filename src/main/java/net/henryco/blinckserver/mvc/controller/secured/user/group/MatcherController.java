@@ -174,11 +174,13 @@ public class MatcherController
 			consumes = JSON
 	) void soloQueue(Authentication authentication,
 					 @RequestBody Type type) {
+
+		if (getQueueList(authentication).length != 0) return;
+
 		executors.subPartyTaskQueue.submit(() -> {
 
 			Long id = longID(authentication);
 			SubParty subParty = matcherService.jointToExistingOrCreateSubParty(id, type);
-
 			if (!subParty.getDetails().getInQueue()) {
 
 				notificationService.addNotification(id, TYPE.SUB_PARTY_IN_QUEUE, subParty.getId());
@@ -192,7 +194,7 @@ public class MatcherController
 			value = "/queue/list",
 			method = GET
 	) Long[] getQueueList(Authentication authentication) {
-		return matcherService.getSubPartyList(longID(authentication));
+		return matcherService.getSubPartyWaitList(longID(authentication));
 	}
 
 
@@ -262,6 +264,8 @@ public class MatcherController
 	) Boolean joinToCustomQueue(Authentication authentication,
 							 @RequestParam("id") Long customQueueId) {
 
+		if (getQueueList(authentication).length != 0) return false;
+
 		final Long id = longID(authentication);
 		SubPartyQueue queue = matcherService.getCustomSubParty(customQueueId);
 
@@ -317,6 +321,8 @@ public class MatcherController
 			method = POST
 	) void startCustomQueue(Authentication authentication,
 							@RequestParam("id") Long customQueueId) {
+
+		if (getQueueList(authentication).length != 0) return;
 
 		final Long id = longID(authentication);
 		if (Arrays.stream(matcherService.getCustomSubPartyList(id)).anyMatch(customQueueId::equals)) {
