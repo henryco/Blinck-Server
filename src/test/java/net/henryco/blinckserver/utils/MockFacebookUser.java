@@ -15,6 +15,7 @@ import java.util.Random;
 @SuppressWarnings("UnusedReturnValue")
 public final class MockFacebookUser {
 
+	private static final String GENDER_FOR_TEST = "Gender fluid helicopter McDonnell Douglas AH-64 Apache";
 	private static MockFacebookUser instance;
 
 	public synchronized static MockFacebookUser getInstance(String appId,
@@ -71,7 +72,7 @@ public final class MockFacebookUser {
 				TestUtils.randomGaussNumberString(),
 				TestUtils.randomGaussNumberString(),
 				TestUtils.randomGaussNumberString(),
-				"Helicopter",
+				GENDER_FOR_TEST,
 				Locale.getDefault()
 		);
 

@@ -3,7 +3,9 @@ package net.henryco.blinckserver.integration.controller;
 import net.henryco.blinckserver.integration.BlinckStompIntegrationTest;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
+import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.AbstractMap;
@@ -29,7 +31,11 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 	private static final String LIST = QUEUE + "/list";
 	private static final String LEAVE = QUEUE + "/leave?id=";
 
+	private static final String JOIN = CUSTOM + "/join?id=";
+	private static final String CUSTOM_START = CUSTOM + "/start?id=";
 
+
+	private @Autowired FriendshipService friendshipService;
 
 	private static final class TestTypeForm
 			implements Serializable {
@@ -53,6 +59,25 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 		return typeForm;
 	}
 
+	private static
+	TestTypeForm newMaleForm(int dim) {
+
+		TestTypeForm typeForm = new TestTypeForm();
+		typeForm.dimension = dim;
+		typeForm.ident = TestTypeForm.TYPE_MALE;
+		typeForm.wanted = TestTypeForm.TYPE_FEMALE;
+		return typeForm;
+	}
+
+	private static
+	TestTypeForm newFemaleForm(int dim) { // FIXME: 16/09/17
+
+		TestTypeForm typeForm = new TestTypeForm();
+		typeForm.dimension = dim;
+		typeForm.ident = TestTypeForm.TYPE_FEMALE;
+		typeForm.wanted = TestTypeForm.TYPE_MALE;
+		return typeForm;
+	}
 
 	private static
 	void monitorQueue(MatcherControllerTest context, int partyNumb, int subPartyNumb, Long ... users)
@@ -171,13 +196,42 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 
 	@Test
 	public void customQueueStartTest() throws Exception {
-		// TODO: 16/09/17
+
+		Long[] users = saveNewRandomUsers(this, 6);
+		for (Long user: users) friendshipService.addFriendshipRelation(user, users[0]);
+		Entry<Long, String>[] userTokenEntries = createUserTokenEntries(this, users);
+
+		Long custom1 = authorizedPostRequest(CUSTOM, userTokenEntries[0].getValue(), newFemaleForm(3), Long.class).getBody();
+		Long custom2 = authorizedPostRequest(CUSTOM, userTokenEntries[3].getValue(), newMaleForm(3), Long.class).getBody();
+
+		for (int i = 0; i < 3; i++) {
+			Entry<Long, String> entry1 = userTokenEntries[i];
+			Entry<Long, String> entry2 = userTokenEntries[i + 3];
+
+			friendshipService.addFriendshipRelation(entry1.getKey(), users[0]);
+			friendshipService.addFriendshipRelation(entry2.getKey(), users[3]);
+
+			Boolean joined1 = authorizedPostRequest(JOIN + custom1, entry1.getValue(), null, Boolean.class).getBody();
+			assert joined1;
+
+			Boolean joined2 = authorizedPostRequest(JOIN + custom2, entry2.getValue(), null, Boolean.class).getBody();
+			assert joined2;
+		}
+
+		authorizedPostRequest(CUSTOM_START + custom1, userTokenEntries[0].getValue(), null);
+		authorizedPostRequest(CUSTOM_START + custom2, userTokenEntries[3].getValue(), null);
+
+		Thread.sleep(2_000);
+
+		monitorQueue(this, 1, 2, users);
 	}
+
 
 	@Test
 	public void customQueueInviteAndLeaveTest() throws Exception {
 		// TODO: 16/09/17
 	}
+
 
 	@Test
 	public void customQueueDeleteTest() throws Exception {

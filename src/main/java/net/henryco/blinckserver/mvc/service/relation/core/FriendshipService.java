@@ -36,6 +36,8 @@ public class FriendshipService
 	 */ @Transactional
 	public Long addFriendshipRelation(FriendshipNotification notification) {
 
+	 	if (!notificationFilter(notification)) return null;
+
 		Friendship friendship = new Friendship();
 		friendship.setUser1(notification.getInitiatorId());
 		friendship.setUser2(notification.getReceiverId());
@@ -135,6 +137,13 @@ public class FriendshipService
 		return friendship.getUser1().equals(userId)
 				? friendship.getUser2()
 				: friendship.getUser1();
+	}
+
+
+	@Transactional
+	protected boolean notificationFilter(FriendshipNotification notification) {
+		return !notification.getInitiatorId().equals(notification.getReceiverId())
+				&& !isExistsBetweenUsers(notification.getInitiatorId(), notification.getReceiverId());
 	}
 
 }
