@@ -316,6 +316,8 @@ public class MatcherController
 		SubPartyQueue queue = matcherService.leaveCustomSubParty(id, customQueueId);
 		for (Long user : queue.getUsers()) {
 			notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_LEAVE, id);
+			if (queue.getUsers().isEmpty())
+				deleteCustomQueue(authentication, customQueueId);
 		}
 	}
 

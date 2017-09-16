@@ -165,7 +165,23 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 
 		Thread.sleep(500);
 		monitorQueue(this, 0, 2, users);
+		monitorQueue(this, 0, 0, userTokenEntries[1].getKey());
 	}
 
+
+	@Test
+	public void customQueueStartTest() throws Exception {
+		// TODO: 16/09/17
+	}
+
+	@Test
+	public void customQueueInviteAndLeaveTest() throws Exception {
+		// TODO: 16/09/17
+	}
+
+	@Test
+	public void customQueueDeleteTest() throws Exception {
+		// TODO: 16/09/17
+	}
 
 }
