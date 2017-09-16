@@ -43,6 +43,22 @@ final class TaskExecutors {
 @Component
 final class MatcherServicePack {
 
+	/**
+	 * I sexually Identify as an Attack Helicopter.
+	 * Ever since I was a boy I dreamed of
+	 * soaring over the oilfields dropping hot sticky
+	 * loads on disgusting foreigners. People say to me
+	 * that a person being a helicopter is Impossible
+	 * and I’m fucking retarded but I don’t care, I’m beautiful.
+	 * I’m having a plastic surgeon install rotary blades,
+	 * 30 mm cannons and AMG-114 Hellfire missiles on my body.
+	 * From now on I want you guys to call me “Apache”
+	 * and respect my right to kill from above and kill needlessly.
+	 * If you can’t accept me you’re a heliphobe
+	 * and need to check your vehicle privilege.
+	 * Thank you for being so understanding.
+	 * FIXME: 17/09/17
+	 */
 	private static final String GENDER_FLUID_HELICOPTER
 			= "Gender fluid helicopter McDonnell Douglas AH-64 Apache";
 
@@ -66,8 +82,8 @@ final class MatcherServicePack {
 
 		final String gender = profileService.getGender(userId);
 		final Type typo = Type.typeChecker(type);
-		return typo.getIdent().equals(gender)
-				|| typo.getWanted().equals(Type.BOTH)
+		return typo.getIdent().equalsIgnoreCase(gender)
+				|| typo.getWanted().equalsIgnoreCase(Type.BOTH)
 				|| gender.equals(GENDER_FLUID_HELICOPTER);
 	}
 }
@@ -310,7 +326,7 @@ public class MatcherController
 			value = "/queue/custom/delete",
 			method = DELETE
 	) Boolean deleteCustomQueue(Authentication authentication,
-							 @RequestParam("id") Long customQueueId) {
+								@RequestParam("id") Long customQueueId) {
 		final Long id = longID(authentication);
 		List<Long> users = servicePack.matcherService.getCustomSubParty(customQueueId).getUsers();
 
