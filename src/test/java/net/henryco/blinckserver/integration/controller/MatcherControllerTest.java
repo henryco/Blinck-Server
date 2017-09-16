@@ -221,7 +221,7 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 		authorizedPostRequest(CUSTOM_START + custom1, userTokenEntries[0].getValue(), null);
 		authorizedPostRequest(CUSTOM_START + custom2, userTokenEntries[3].getValue(), null);
 
-		Thread.sleep(2_000);
+		Thread.sleep(2_500);
 
 		monitorQueue(this, 1, 2, users);
 	}

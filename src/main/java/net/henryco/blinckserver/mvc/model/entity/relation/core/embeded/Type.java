@@ -78,7 +78,7 @@ public class Type {
 
 		if (type.getWanted().equals(FEMALE)) {
 			if (type.getIdent().equals(MALE))
-				return newMaleMale(type.getDimension());
+				return newMaleFem(type.getDimension());
 			return newFemFem(type.getDimension());
 		}
 

@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
@@ -47,7 +46,7 @@ public class Party {
 	private @Embedded @JoinColumn(
 			nullable = false,
 			unique = true,
-			name = "details"
+			name = "search_details"
 	) Details details;
 
 
