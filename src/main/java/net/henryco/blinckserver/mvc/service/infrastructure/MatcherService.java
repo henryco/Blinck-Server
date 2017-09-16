@@ -114,21 +114,17 @@ public class MatcherService {
 
 
 	@Transactional
-	public Long[] getCustomSubPartyList(final Long userId) {
-
-	 	return subPartyQueueDao.getAllWithUser(userId)
-				.stream().map(SubPartyQueue::getId)
-		.toArray(Long[]::new);
+	public SubPartyQueue[] getCustomSubPartyList(final Long userId) {
+	 	return subPartyQueueDao.getAllWithUser(userId).toArray(new SubPartyQueue[0]);
 	}
 
 
 	@Transactional
-	public Long[] getSubPartyWaitList(final Long userId) {
-
+	public SubParty[] getSubPartyWaitList(final Long userId) {
 		return subPartyDao.getAllWithUser(userId).stream().filter(subParty ->
 				subParty.getDetails().getInQueue()
 						|| subParty.getParty() != null && subParty.getParty().getDetails().getInQueue()
-		).map(SubParty::getId).toArray(Long[]::new);
+		).toArray(SubParty[]::new);
 	}
 
 

@@ -194,7 +194,9 @@ public class MatcherController
 			value = "/queue/list",
 			method = GET
 	) Long[] getQueueList(Authentication authentication) {
-		return matcherService.getSubPartyWaitList(longID(authentication));
+		return Arrays.stream(matcherService.getSubPartyWaitList(longID(authentication)))
+				.map(SubParty::getId)
+		.toArray(Long[]::new);
 	}
 
 
@@ -253,7 +255,9 @@ public class MatcherController
 			value = "/queue/custom/list",
 			method = GET
 	) Long[] getCustomQueueList(Authentication authentication) {
-		return matcherService.getCustomSubPartyList(longID(authentication));
+		return Arrays.stream(matcherService.getCustomSubPartyList(longID(authentication)))
+				.map(SubPartyQueue::getId)
+		.toArray(Long[]::new);
 	}
 
 
@@ -325,7 +329,8 @@ public class MatcherController
 		if (getQueueList(authentication).length != 0) return;
 
 		final Long id = longID(authentication);
-		if (Arrays.stream(matcherService.getCustomSubPartyList(id)).anyMatch(customQueueId::equals)) {
+		if (Arrays.stream(matcherService.getCustomSubPartyList(id)).anyMatch(subPartyQueue
+				-> customQueueId.equals(subPartyQueue.getId()))) {
 
 			SubParty subParty = matcherService.startCustomSubParty(customQueueId);
 			if (!subParty.getDetails().getInQueue()) {
