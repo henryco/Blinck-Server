@@ -18,8 +18,6 @@ import java.util.Set;
  */
 public class MatcherControllerTest extends BlinckStompIntegrationTest {
 
-	private static final String LIVE_SUBPARTY_LIST = "/protected/user/subgroup/list/simple";
-
 	private static final String MONITOR_SUBPARTY = "/protected/admin/monitor/subparty/all";
 	private static final String MONITOR_PARTY = "/protected/admin/monitor/party/all";
 
@@ -72,8 +70,9 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 		return typeForm;
 	}
 
-	private static
-	TestTypeForm newFemaleForm(int dim) { // FIXME: 16/09/17
+
+	private static @SuppressWarnings("SameParameterValue")
+	TestTypeForm newFemaleForm(int dim) {
 
 		TestTypeForm typeForm = new TestTypeForm();
 		typeForm.dimension = dim;
