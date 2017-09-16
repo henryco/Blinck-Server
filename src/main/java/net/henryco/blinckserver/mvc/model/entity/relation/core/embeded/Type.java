@@ -65,19 +65,23 @@ public class Type {
 		return new Type(wanted, ident, dimension);
 	}
 
+	public Type copy() {
+		return new Type(ident, wanted, dimension);
+	}
+
 	public static Type typeChecker(Type type) {
 
-		if (type.getWanted().equals(BOTH) || type.getIdent().equals(BOTH))
+		if (type.getWanted().equalsIgnoreCase(BOTH) || type.getIdent().equalsIgnoreCase(BOTH))
 			return newBoth(type.getDimension());
 
-		if (type.getWanted().equals(MALE)) {
-			if (type.getIdent().equals(FEMALE))
+		if (type.getWanted().equalsIgnoreCase(MALE)) {
+			if (type.getIdent().equalsIgnoreCase(FEMALE))
 				return newFemMale(type.getDimension());
 			return newMaleMale(type.getDimension());
 		}
 
-		if (type.getWanted().equals(FEMALE)) {
-			if (type.getIdent().equals(MALE))
+		if (type.getWanted().equalsIgnoreCase(FEMALE)) {
+			if (type.getIdent().equalsIgnoreCase(MALE))
 				return newMaleFem(type.getDimension());
 			return newFemFem(type.getDimension());
 		}

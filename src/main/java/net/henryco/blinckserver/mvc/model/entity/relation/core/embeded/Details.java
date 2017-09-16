@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.model.entity.relation.core.embeded;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
  */
 @Embeddable @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Details {
 
 	private @Embedded @JoinColumn(

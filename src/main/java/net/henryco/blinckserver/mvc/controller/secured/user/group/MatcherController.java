@@ -15,13 +15,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 
 final class TaskExecutors {
@@ -74,19 +73,48 @@ final class MatcherServicePack {
 }
 
 
-@RestController // TODO: 15/09/17 TESTS
+@RestController
 @RequestMapping("/protected/user/match")
 public class MatcherController
 		implements BlinckController, BlinckNotification {
 
 	private final TaskExecutors executors;
 	private final MatcherServicePack servicePack;
+	private final Helper helper;
 
 	@Autowired
 	public MatcherController(MatcherServicePack servicePack) {
 
 		this.servicePack = servicePack;
 		this.executors = new TaskExecutors();
+		this.helper = new Helper();
+	}
+
+
+	private final class Helper {
+
+		private void
+		findParty(SubParty subParty) {
+
+			Party party = servicePack.matcherService.joinToExistingOrCreateParty(subParty);
+			if (!party.getDetails().getInQueue())
+				executors.notificationTaskQueue.submit(() -> createPartyNotification(party));
+		}
+
+		private void
+		createPartyNotification(Party party) {
+
+			for (Long subPartyId : party.getSubParties()) {
+
+				Long[] members = servicePack.matcherService.getSubPartyMembers(subPartyId);
+				for (Long userId : members) {
+
+					servicePack.notificationService.addNotification(userId, TYPE.PARTY_FOUND, party.getId());
+					servicePack.notificationService.addNotification(userId, TYPE.SUB_PARTY_FOUND, subPartyId);
+				}
+			}
+		}
+
 	}
 
 
@@ -139,7 +167,7 @@ public class MatcherController
 	 *			ENDPOINT:	/queue/custom/delete
 	 *			ARGS:		Long: id
 	 *			METHOD:		DELETE
-	 *			RETURN:		VOID
+	 *			RETURN:		BOOLEAN
 	 *
 	 *
 	 *		CUSTOM_LIST:
@@ -163,7 +191,7 @@ public class MatcherController
 	 *			ARGS:		Long: id
 	 *			METHOD:		POST
 	 *			BODY:		Long[]
-	 *			RETURN:		VOID
+	 *			RETURN:		BOOLEAN
 	 *
 	 *
 	 *		CUSTOM_LEAVE:
@@ -171,7 +199,7 @@ public class MatcherController
 	 *			ENDPOINT:	/queue/custom/leave
 	 *			ARGS:		Long: id
 	 *			METHOD:		POST, DELETE
-	 *			RETURN:		VOID
+	 *			RETURN:		BOOLEAN
 	 *
 	 *
 	 *		CUSTOM_START:
@@ -179,9 +207,10 @@ public class MatcherController
 	 *			ENDPOINT:	/queue/custom/start
 	 *			ARGS:		Long: id
 	 *			METHOD:		POST
-	 *			RETURN: 	VOID
+	 *			RETURN: 	BOOLEAN
 	 *
 	 */
+
 
 
 	/**
@@ -195,7 +224,7 @@ public class MatcherController
 	 * </h2>
 	 *
 	 * @see Type
-	 */
+	 */ // Tested
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/queue/solo",
 			method = POST,
@@ -214,12 +243,14 @@ public class MatcherController
 			if (!subParty.getDetails().getInQueue()) {
 
 				servicePack.notificationService.addNotification(id, TYPE.SUB_PARTY_IN_QUEUE, subParty.getId());
-				executors.partyTaskQueue.submit(() -> findParty(subParty));
+				executors.partyTaskQueue.submit(() -> helper.findParty(subParty));
 			}
 		});
 	}
 
 
+
+	// Tested
 	public @RequestMapping(
 			value = "/queue/list",
 			method = GET
@@ -230,7 +261,9 @@ public class MatcherController
 	}
 
 
-	public @RequestMapping(
+
+	// Tested
+	public @ResponseStatus(OK) @RequestMapping(
 			value = "/queue/leave",
 			method = {POST, DELETE}
 	) void leaveQueue(Authentication authentication,
@@ -244,6 +277,7 @@ public class MatcherController
 	}
 
 
+
 	/**
 	 * <h1>Income Match Type JSON:</h1>
 	 * <h2>
@@ -255,7 +289,7 @@ public class MatcherController
 	 * </h2>
 	 *
 	 * @see Type
-	 */
+	 */ // Tested
 	public @RequestMapping(
 			value = "/queue/custom",
 			method = POST,
@@ -270,18 +304,27 @@ public class MatcherController
 	}
 
 
-	public @ResponseStatus(OK) @RequestMapping(
+
+	// Tested
+	public @RequestMapping(
 			value = "/queue/custom/delete",
 			method = DELETE
-	) void deleteCustomQueue(Authentication authentication,
+	) Boolean deleteCustomQueue(Authentication authentication,
 							 @RequestParam("id") Long customQueueId) {
 		final Long id = longID(authentication);
-		servicePack.matcherService.deleteCustomSubParty(id, customQueueId);
-		servicePack.notificationService.addNotification(id, TYPE.CUSTOM_SUB_PARTY_REMOVE, customQueueId);
+		List<Long> users = servicePack.matcherService.getCustomSubParty(customQueueId).getUsers();
+
+		Boolean deleted = servicePack.matcherService.deleteCustomSubParty(id, customQueueId);
+		if (deleted) {
+			for (Long user : users)
+				servicePack.notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_REMOVE, customQueueId);
+		}
+		return deleted;
 	}
 
 
 
+	// Tested
 	public @RequestMapping(
 			value = "/queue/custom/list",
 			method = GET
@@ -293,6 +336,7 @@ public class MatcherController
 
 
 
+	// Tested
 	public @RequestMapping(
 			value = "/queue/custom/join",
 			method = POST
@@ -320,49 +364,57 @@ public class MatcherController
 
 
 
-	public @ResponseStatus(OK) @RequestMapping(
+	public @RequestMapping(
 			value = "/queue/custom/invite",
 			method = POST
-	) void inviteToCustomQueue(Authentication authentication,
+	) Boolean inviteToCustomQueue(Authentication authentication,
 							   @RequestParam("id") Long customQueueId,
 							   @RequestBody Long[] users) {
 
 		final Long id = longID(authentication);
 
 		SubPartyQueue queue = servicePack.matcherService.getCustomSubParty(customQueueId);
-		if (!queue.getOwner().equals(id)) return;
+		if (!queue.getOwner().equals(id)) return false;
 
 		for (Long user: users) {
 			if (servicePack.friendshipService.isExistsBetweenUsers(user, id)
 					&& servicePack.genderFilter(user, queue.getType()))
 				servicePack.notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_INVITE, queue.getId());
 		}
+		return true;
 	}
 
 
-	public @ResponseStatus(OK) @RequestMapping(
+
+	// Tested
+	public @RequestMapping(
 			value = "/queue/custom/leave",
 			method = {POST, DELETE}
-	) void leaveCustomQueue(Authentication authentication,
+	) Boolean leaveCustomQueue(Authentication authentication,
 							@RequestParam("id") Long customQueueId) {
 
 		final Long id = longID(authentication);
 		SubPartyQueue queue = servicePack.matcherService.leaveCustomSubParty(id, customQueueId);
+		if (queue.getOwner().equals(id)) return deleteCustomQueue(authentication, customQueueId);
+
 		for (Long user : queue.getUsers()) {
 			servicePack.notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_LEAVE, id);
 			if (queue.getUsers().isEmpty())
-				deleteCustomQueue(authentication, customQueueId);
+				return deleteCustomQueue(authentication, customQueueId);
 		}
+		return true;
 	}
 
 
-	public @ResponseStatus(OK) @RequestMapping(
+
+	// Tested
+	public @RequestMapping(
 			value = "/queue/custom/start",
 			method = POST
-	) void startCustomQueue(Authentication authentication,
+	) Boolean startCustomQueue(Authentication authentication,
 							@RequestParam("id") Long customQueueId) {
 
-		if (getQueueList(authentication).length != 0) return;
+		if (getQueueList(authentication).length != 0) return false;
 
 		final Long id = longID(authentication);
 		if (Arrays.stream(servicePack.matcherService.getCustomSubPartyList(id)).anyMatch(subPartyQueue
@@ -374,33 +426,11 @@ public class MatcherController
 				servicePack.notificationService.addNotification(id, TYPE.SUB_PARTY_IN_QUEUE, subParty.getId());
 				servicePack.notificationService.addNotification(id, TYPE.CUSTOM_SUB_PARTY_REMOVE, customQueueId);
 
-				executors.partyTaskQueue.submit(() -> findParty(subParty));
+				executors.partyTaskQueue.submit(() -> helper.findParty(subParty));
+				return true;
 			}
 		}
-	}
-
-
-
-	private void
-	findParty(SubParty subParty) {
-
-		Party party = servicePack.matcherService.joinToExistingOrCreateParty(subParty);
-		if (!party.getDetails().getInQueue())
-			executors.notificationTaskQueue.submit(() -> createPartyNotification(party));
-	}
-
-	private void
-	createPartyNotification(Party party) {
-
-		for (Long subPartyId : party.getSubParties()) {
-
-			Long[] members = servicePack.matcherService.getSubPartyMembers(subPartyId);
-			for (Long userId : members) {
-
-				servicePack.notificationService.addNotification(userId, TYPE.PARTY_FOUND, party.getId());
-				servicePack.notificationService.addNotification(userId, TYPE.SUB_PARTY_FOUND, subPartyId);
-			}
-		}
+		return false;
 	}
 
 }

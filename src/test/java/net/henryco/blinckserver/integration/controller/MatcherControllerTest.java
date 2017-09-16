@@ -33,6 +33,9 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 
 	private static final String JOIN = CUSTOM + "/join?id=";
 	private static final String CUSTOM_START = CUSTOM + "/start?id=";
+	private static final String CUSTOM_LEAVE = CUSTOM + "/leave?id=";
+	private static final String CUSTOM_LIST = CUSTOM + "/list";
+	private static final String CUSTOM_REMOVE = CUSTOM + "/delete?id=";
 
 
 	private @Autowired FriendshipService friendshipService;
@@ -198,7 +201,6 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 	public void customQueueStartTest() throws Exception {
 
 		Long[] users = saveNewRandomUsers(this, 6);
-		for (Long user: users) friendshipService.addFriendshipRelation(user, users[0]);
 		Entry<Long, String>[] userTokenEntries = createUserTokenEntries(this, users);
 
 		Long custom1 = authorizedPostRequest(CUSTOM, userTokenEntries[0].getValue(), newFemaleForm(3), Long.class).getBody();
@@ -218,10 +220,16 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 			assert joined2;
 		}
 
+		assert authorizedGetRequest(CUSTOM_LIST, userTokenEntries[0].getValue(), Long[].class).getBody().length == 1;
+		assert authorizedGetRequest(CUSTOM_LIST, userTokenEntries[3].getValue(), Long[].class).getBody().length == 1;
+
 		authorizedPostRequest(CUSTOM_START + custom1, userTokenEntries[0].getValue(), null);
 		authorizedPostRequest(CUSTOM_START + custom2, userTokenEntries[3].getValue(), null);
 
 		Thread.sleep(2_500);
+
+		assert authorizedGetRequest(CUSTOM_LIST, userTokenEntries[0].getValue(), Long[].class).getBody().length == 0;
+		assert authorizedGetRequest(CUSTOM_LIST, userTokenEntries[3].getValue(), Long[].class).getBody().length == 0;
 
 		monitorQueue(this, 1, 2, users);
 	}
@@ -229,13 +237,62 @@ public class MatcherControllerTest extends BlinckStompIntegrationTest {
 
 	@Test
 	public void customQueueInviteAndLeaveTest() throws Exception {
-		// TODO: 16/09/17
+
+		Long[] users = saveNewRandomUsers(this, 3);
+		for (Long user: users) friendshipService.addFriendshipRelation(user, users[0]);
+		Entry<Long, String>[] userTokenEntries = createUserTokenEntries(this, users);
+
+		Long custom1 = authorizedPostRequest(CUSTOM, userTokenEntries[0].getValue(), newMaleForm(3), Long.class).getBody();
+		for (Entry<Long, String> entry : userTokenEntries) {
+			Boolean joined1 = authorizedPostRequest(JOIN + custom1, entry.getValue(), null, Boolean.class).getBody();
+			assert joined1;
+		}
+
+		assert authorizedGetRequest(CUSTOM_LIST, userTokenEntries[1].getValue(), Long[].class).getBody().length == 1;
+		assert authorizedDeleteRequest(CUSTOM_LEAVE + custom1, userTokenEntries[1].getValue(), Boolean.class).getBody();
+		assert authorizedGetRequest(CUSTOM_LIST, userTokenEntries[1].getValue(), Long[].class).getBody().length == 0;
+
+		assert authorizedGetRequest(CUSTOM_LIST, userTokenEntries[0].getValue(), Long[].class).getBody().length == 1;
+		assert authorizedGetRequest(CUSTOM_LIST, userTokenEntries[2].getValue(), Long[].class).getBody().length == 1;
+
+		assert authorizedDeleteRequest(CUSTOM_LEAVE + custom1, userTokenEntries[0].getValue(), Boolean.class).getBody();
+		assert authorizedGetRequest(CUSTOM_LIST, userTokenEntries[0].getValue(), Long[].class).getBody().length == 0;
+		assert authorizedGetRequest(CUSTOM_LIST, userTokenEntries[2].getValue(), Long[].class).getBody().length == 0;
 	}
 
 
 	@Test
 	public void customQueueDeleteTest() throws Exception {
-		// TODO: 16/09/17
+
+		Long[] users = saveNewRandomUsers(this, 4);
+		for (Long user: users) friendshipService.addFriendshipRelation(user, users[0]);
+		Entry<Long, String>[] userTokenEntries = createUserTokenEntries(this, users);
+
+		Long custom1 = authorizedPostRequest(CUSTOM, userTokenEntries[0].getValue(), newMaleForm(4), Long.class).getBody();
+		for (Entry<Long, String> entry : userTokenEntries) {
+			Boolean joined1 = authorizedPostRequest(JOIN + custom1, entry.getValue(), null, Boolean.class).getBody();
+			assert joined1;
+		}
+
+		for (Entry<Long, String> entry : userTokenEntries) {
+			assert authorizedGetRequest(CUSTOM_LIST, entry.getValue(), Long[].class).getBody().length == 1;
+		}
+
+		// NOT CUSTOM QUEUE OWNER SO CANT DELETE
+		assert !authorizedDeleteRequest(CUSTOM_REMOVE + custom1, userTokenEntries[1].getValue(), Boolean.class).getBody();
+
+		// NOTHING CHANGED
+		for (Entry<Long, String> entry : userTokenEntries) {
+			assert authorizedGetRequest(CUSTOM_LIST, entry.getValue(), Long[].class).getBody().length == 1;
+		}
+
+		// QUEUE OWNER SO REMOVED
+		assert authorizedDeleteRequest(CUSTOM_REMOVE + custom1, userTokenEntries[0].getValue(), Boolean.class).getBody();
+
+		// NOW EMPTY
+		for (Entry<Long, String> entry : userTokenEntries) {
+			assert authorizedGetRequest(CUSTOM_LIST, entry.getValue(), Long[].class).getBody().length == 0;
+		}
 	}
 
 }

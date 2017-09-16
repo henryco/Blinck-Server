@@ -151,16 +151,18 @@ public class MatcherService {
 
 	@Transactional
 	public SubPartyQueue getCustomSubParty(final Long customSubPartyId) {
-		return subPartyQueueDao.getById(customSubPartyId);
+		return CopyWriter.copy(subPartyQueueDao.getById(customSubPartyId));
 	}
 
 
 	@Transactional
-	public void deleteCustomSubParty(final Long userId, final Long customSubPartyId) {
+	public Boolean deleteCustomSubParty(final Long userId, final Long customSubPartyId) {
 		SubPartyQueue byId = subPartyQueueDao.getById(customSubPartyId);
-		if (byId.getOwner().equals(userId)) {
+		if (byId.getOwner().equals(userId) || byId.getUsers().isEmpty()) {
 			subPartyQueueDao.deleteById(customSubPartyId);
+			return true;
 		}
+		return false;
 	}
 
 
@@ -276,7 +278,24 @@ public class MatcherService {
 			details.setType(type);
 			return details;
 		}
+
 	}
 
+
+	private static abstract class CopyWriter {
+
+		private static
+		SubPartyQueue copy(SubPartyQueue queue) {
+
+			SubPartyQueue subPartyQueue = new SubPartyQueue();
+			subPartyQueue.setId(queue.getId());
+			subPartyQueue.setType(queue.getType().copy());
+			subPartyQueue.setUsers(new ArrayList<>(queue.getUsers()));
+			subPartyQueue.setOwner(queue.getOwner());
+
+			return subPartyQueue;
+		}
+
+	}
 
 }
