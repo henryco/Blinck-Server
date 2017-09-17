@@ -47,10 +47,10 @@ public class UserFriendsConversationController
 	 *
 	 *	FriendshipConversation:
 	 *
-	 *		"id":			LONG,
+	 *		"id":			LONG,			(not required for POST)
 	 *		"message":		CHAR[512],
-	 *		"timestamp":	DATE/LONG,
-	 *		"author":		LONG,
+	 *		"timestamp":	DATE/LONG,		(not required for POST)
+	 *		"author":		LONG,			(not required for POST)
 	 *		"friendship":	LONG
 	 *
 	 *

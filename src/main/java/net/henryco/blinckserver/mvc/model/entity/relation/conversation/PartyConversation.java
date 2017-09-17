@@ -2,16 +2,11 @@ package net.henryco.blinckserver.mvc.model.entity.relation.conversation;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.mvc.model.entity.profile.UserCoreProfile;
-import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
+import net.henryco.blinckserver.mvc.model.entity.relation.conversation.embeded.MessagePart;
 
 import javax.persistence.*;
 
-import java.util.Date;
-
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.AUTO;
-import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
  * @author Henry on 28/08/17.
@@ -29,38 +24,18 @@ public class PartyConversation {
 	) Long id;
 
 
-	private @Column(
-			name = "message",
-			length = 512
-	) String message;
-
-
-	private @Column(
-			name = "time_stamp",
+	private @Embedded @JoinColumn(
 			updatable = false,
-			nullable = false
-	) @Temporal(
-			TIMESTAMP
-	) Date date;
+			nullable = false,
+			name = "message"
+	) MessagePart messagePart;
 
 
-	private @ManyToOne(
-			cascade = ALL,
-			optional = false
-	) @JoinColumn(
-			name = "author_id",
+	private @Column(
+			name = "party",
+			nullable = false,
 			updatable = false
-	) UserCoreProfile author;
+	) Long party;
 
-
-	private @ManyToOne(
-			cascade = ALL,
-			optional = false
-	) @JoinColumn(
-			name = "party_id",
-			updatable = false
-	) Party party;
-
-	// TODO: 02/09/17 TESTS, remove hard reference
 
 }
