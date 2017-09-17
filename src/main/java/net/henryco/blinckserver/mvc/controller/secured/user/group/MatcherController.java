@@ -9,19 +9,19 @@ import net.henryco.blinckserver.mvc.service.infrastructure.MatcherService;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.profile.UserBaseProfileService;
 import net.henryco.blinckserver.mvc.service.relation.core.FriendshipService;
+import net.henryco.blinckserver.mvc.service.relation.core.SubPartyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
-
+import static net.henryco.blinckserver.mvc.service.relation.core.SubPartyService.SubPartyInfo;
 
 final class TaskExecutors {
 
@@ -66,16 +66,19 @@ final class MatcherServicePack {
 	protected final UpdateNotificationService notificationService;
 	protected final FriendshipService friendshipService;
 	protected final UserBaseProfileService profileService;
+	protected final SubPartyService subPartyService;
 
 	@Autowired
 	MatcherServicePack(MatcherService matcherService,
 					   UpdateNotificationService notificationService,
 					   FriendshipService friendshipService,
-					   UserBaseProfileService profileService) {
+					   UserBaseProfileService profileService,
+					   SubPartyService subPartyService) {
 		this.matcherService = matcherService;
 		this.notificationService = notificationService;
 		this.friendshipService = friendshipService;
 		this.profileService = profileService;
+		this.subPartyService = subPartyService;
 	}
 
 	protected boolean genderFilter(Long userId, Type type) {
@@ -127,6 +130,16 @@ public class MatcherController
 
 					servicePack.notificationService.addNotification(userId, TYPE.PARTY_FOUND, party.getId());
 					servicePack.notificationService.addNotification(userId, TYPE.SUB_PARTY_FOUND, subPartyId);
+				}
+			}
+		}
+
+		private void
+		leavePartyNotification(SubPartyInfo[] subParties) {
+
+			for (SubPartyInfo info : subParties) {
+				for (Long user : info.getUsers()) {
+					servicePack.notificationService.addNotification(user, TYPE.QUEUE_LEAVE, info.getId());
 				}
 			}
 		}
@@ -283,12 +296,14 @@ public class MatcherController
 			value = "/queue/leave",
 			method = {POST, DELETE}
 	) void leaveQueue(Authentication authentication,
-						 @RequestParam("id") Long subPartyId) {
+					  @RequestParam("id") Long subPartyId) {
+
 		Long id = longID(authentication);
 
 		executors.leaveTaskQueue.submit(() -> {
+			SubPartyInfo[] subParties = servicePack.subPartyService.getRelatedSubParties(subPartyId);
 			boolean leaved = servicePack.matcherService.leaveSearchQueue(id, subPartyId);
-			if (leaved) servicePack.notificationService.addNotification(id, TYPE.QUEUE_LEAVE, subPartyId);
+			if (leaved) helper.leavePartyNotification(subParties);
 		});
 	}
 
@@ -407,7 +422,7 @@ public class MatcherController
 			value = "/queue/custom/leave",
 			method = {POST, DELETE}
 	) Boolean leaveCustomQueue(Authentication authentication,
-							@RequestParam("id") Long customQueueId) {
+							   @RequestParam("id") Long customQueueId) {
 
 		final Long id = longID(authentication);
 		SubPartyQueue queue = servicePack.matcherService.leaveCustomSubParty(id, customQueueId);

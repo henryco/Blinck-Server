@@ -3,6 +3,7 @@ package net.henryco.blinckserver.mvc.service.relation.core;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
@@ -34,7 +35,7 @@ public class SubPartyService
 		private SubPartyInfo(SubParty subParty) {
 
 			this.id = subParty.getId();
-			this.party = subParty.getParty().getId();
+			this.party = subParty.getParty() == null ? null : subParty.getParty().getId();
 			this.type = subParty.getDetails().getType();
 			this.users = new ArrayList<>(subParty.getUsers());
 		}
@@ -90,4 +91,22 @@ public class SubPartyService
 		.toArray(SubPartyInfo[]::new);
 	}
 
+
+	@Transactional
+	public SubPartyInfo[] getRelatedSubParties(Long subPartyId) {
+
+		SubParty subParty = getDao().getById(subPartyId);
+		Party party = subParty.getParty();
+
+		if (party == null || party.getSubParties() == null) {
+			System.out.println(subParty);
+			return new SubPartyInfo[]{new SubPartyInfo(subParty)};
+		}
+
+		List<SubPartyInfo> infoList = new ArrayList<>();
+		for (Long sub : party.getSubParties())
+			infoList.add(new SubPartyInfo(getDao().getById(sub)));
+
+		return infoList.toArray(new SubPartyInfo[0]);
+	}
 }

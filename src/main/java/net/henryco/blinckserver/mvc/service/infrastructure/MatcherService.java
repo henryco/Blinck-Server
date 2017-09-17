@@ -226,7 +226,7 @@ public class MatcherService {
 	protected List<SubParty> processPartyInQueue(Party party, SubParty subParty) {
 
 	 	if (party != null) {
-			if (!party.getDetails().getInQueue())
+			if (party.getActivationTime() != null)
 				return null;
 
 			List<SubParty> list = new ArrayList<>();

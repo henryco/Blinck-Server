@@ -28,7 +28,7 @@ final class GroupServicePack {
 }
 
 
-@RestController
+@RestController // TODO: 17/09/17 TESTS
 @RequestMapping(BlinckController.EndpointAPI.GROUP)
 public class GroupController implements BlinckController {
 
@@ -39,16 +39,6 @@ public class GroupController implements BlinckController {
 		this.servicePack = servicePack;
 	}
 
-
-
-	public @ResponseStatus(OK) @RequestMapping(
-			value = "/leave",
-			method = {POST, DELETE, GET}
-	) void leaveSubParty(Authentication authentication,
-						 @RequestParam("id") Long partyId) {
-		final Long id = longID(authentication);
-		// TODO: 17/09/17
-	}
 
 
 }

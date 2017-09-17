@@ -41,7 +41,7 @@ final class SubGroupServicePack {
 /**
  * @author Henry on 12/09/17.
  */
-@RestController
+@RestController // TODO: 17/09/17 TESTS
 @RequestMapping(BlinckController.EndpointAPI.SUB_GROUP)
 public class SubGroupController implements BlinckController {
 
@@ -116,12 +116,8 @@ public class SubGroupController implements BlinckController {
 			value = "/leave",
 			method = {POST, DELETE, GET}
 	) void leaveSubParty(HttpServletResponse servletResponse,
-						 Authentication authentication) throws IOException {
-
-		Long partyId = getPartyId(authentication, Long.decode(servletResponse.getHeader("id")));
-
-		servletResponse.setHeader("id", partyId.toString());
-		servletResponse.sendRedirect(EndpointAPI.GROUP + "/leave");
+						 @RequestParam("id") Long subPartyId) throws IOException {
+		servletResponse.sendRedirect(EndpointAPI.MATCHER + "/queue/leave?id="+subPartyId);
 	}
 
 }
