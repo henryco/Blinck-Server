@@ -115,7 +115,12 @@ public class SubGroupController implements BlinckController {
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/leave",
 			method = {POST, DELETE, GET}
-	) void leaveSubParty(HttpServletResponse servletResponse) throws IOException {
+	) void leaveSubParty(HttpServletResponse servletResponse,
+						 Authentication authentication) throws IOException {
+
+		Long partyId = getPartyId(authentication, Long.decode(servletResponse.getHeader("id")));
+
+		servletResponse.setHeader("id", partyId.toString());
 		servletResponse.sendRedirect(EndpointAPI.GROUP + "/leave");
 	}
 
