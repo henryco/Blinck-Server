@@ -28,8 +28,12 @@ public interface BlinckController {
 		String FRIENDSHIP_CONVERSATION = "/protected/user/friends/conversation";
 
 		String MATCHER = "/protected/user/match";
+
 		String GROUP = "/protected/user/group";
+		String GROUP_CONVERSATION = "/protected/user/group/conversation";
+
 		String SUB_GROUP = "/protected/user/subgroup";
+		String SUB_GROUP_CONVERSATION = "/protected/user/subgroup/conversation";
 	}
 
 

@@ -27,7 +27,6 @@ final class GroupServicePack {
 	}
 }
 
-
 @RestController // TODO: 17/09/17 TESTS
 @RequestMapping(BlinckController.EndpointAPI.GROUP)
 public class GroupController implements BlinckController {
