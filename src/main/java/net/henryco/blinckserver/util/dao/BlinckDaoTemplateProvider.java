@@ -34,7 +34,7 @@ public abstract class BlinckDaoTemplateProvider<ENTITY, ID_TYPE>
 		provideDao().deleteById(id);
 	}
 
-	@Override
+	@Override @Transactional
 	public List<ENTITY> getFirst(int n) {
 		return provideDao().getFirst(n);
 	}
