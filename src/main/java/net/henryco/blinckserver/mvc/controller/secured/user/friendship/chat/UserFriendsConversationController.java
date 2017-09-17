@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.mvc.controller.secured.user.friendship.chat;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
+import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.conversation.FriendshipConversation;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.conversation.FriendshipConversationService;
@@ -17,7 +18,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 /**
  * @author Henry on 05/09/17.
  */ @RestController
-@RequestMapping("/protected/user/friends/conversation")
+@RequestMapping(BlinckController.EndpointAPI.FRIENDSHIP_CONVERSATION)
 public class UserFriendsConversationController
 		extends FriendshipMessageController
 		implements BlinckNotification {

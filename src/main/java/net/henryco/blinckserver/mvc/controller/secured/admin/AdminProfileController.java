@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.mvc.controller.secured.admin;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
+import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.controller.secured.BlinckProfileController;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminAuthProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.AdminVerificationQueue;
@@ -19,7 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 /**
  * @author Henry on 24/08/17.
  */ @RestController
-@RequestMapping("/protected/admin")
+@RequestMapping(BlinckController.EndpointAPI.ADMIN)
 public class AdminProfileController
 		implements BlinckProfileController, BlinckNotification {
 

@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.controller.open;
 
+import net.henryco.blinckserver.mvc.controller.BlinckController;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +10,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * @author Henry on 22/08/17.
- */ @RestController @RequestMapping("/public")
+ */ @RestController @RequestMapping(BlinckController.EndpointAPI.PUBLIC)
 @PropertySource("classpath:/static/props/base.properties")
 public class PublicController {
 

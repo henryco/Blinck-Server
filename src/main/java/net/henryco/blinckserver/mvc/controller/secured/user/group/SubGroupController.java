@@ -9,8 +9,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static net.henryco.blinckserver.mvc.service.relation.core.SubPartyService.SubPartyInfo;
@@ -36,7 +42,7 @@ final class SubGroupServicePack {
  * @author Henry on 12/09/17.
  */
 @RestController
-@RequestMapping("/protected/user/subgroup")
+@RequestMapping(BlinckController.EndpointAPI.SUB_GROUP)
 public class SubGroupController implements BlinckController {
 
 
@@ -106,13 +112,11 @@ public class SubGroupController implements BlinckController {
 	}
 
 
-	public @RequestMapping(
+	public @ResponseStatus(OK) @RequestMapping(
 			value = "/leave",
 			method = {POST, DELETE, GET}
-	) void leaveSubParty(Authentication authentication,
-						 @RequestParam("id") Long subPartyId) {
-		final Long id = longID(authentication);
-		// TODO: 17/09/17
+	) void leaveSubParty(HttpServletResponse servletResponse) throws IOException {
+		servletResponse.sendRedirect(EndpointAPI.GROUP + "/leave");
 	}
 
 }

@@ -93,7 +93,7 @@ public class AnyStompNotificationTest extends BlinckStompIntegrationTest {
 		);
 
 		while (!flag.get())
-			Thread.sleep(100);
+			Thread.sleep(200);
 
 		TestNotificationJSON notification = new ObjectMapper().readValue(result[0], TestNotificationJSON.class);
 		assert notification.type.equals(randomType);

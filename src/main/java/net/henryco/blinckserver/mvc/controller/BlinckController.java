@@ -13,6 +13,26 @@ public interface BlinckController {
 	String ROLE_ADMIN = "ROLE_ADMIN";
 	String ROLE_USER = "ROLE_USER";
 
+	interface EndpointAPI {
+
+		String PUBLIC = "/public";
+		String SESSION = "/session";
+
+		String ADMIN = "/protected/admin";
+		String ADMIN_MONITOR = "/protected/admin/monitor";
+
+		String USER = "/protected/user";
+		String USER_NOTIFICATIONS = "/protected/user/notifications";
+
+		String FRIENDSHIP = "/protected/user/friends";
+		String FRIENDSHIP_CONVERSATION = "/protected/user/friends/conversation";
+
+		String MATCHER = "/protected/user/match";
+		String GROUP = "/protected/user/group";
+		String SUB_GROUP = "/protected/user/subgroup";
+	}
+
+
 	default void rolesRequired(Authentication authentication,
 							   String ... authorities) {
 		for (String auth: authorities)

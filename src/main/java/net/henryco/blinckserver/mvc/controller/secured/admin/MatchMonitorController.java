@@ -15,7 +15,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  * @author Henry on 15/09/17.
  */
 @RestController
-@RequestMapping("/protected/admin/monitor")
+@RequestMapping(BlinckController.EndpointAPI.ADMIN_MONITOR)
 public class MatchMonitorController implements BlinckController {
 
 

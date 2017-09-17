@@ -3,6 +3,7 @@ package net.henryco.blinckserver.mvc.controller.open;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.security.token.service.SessionWhiteListService;
 import net.henryco.blinckserver.security.token.service.TokenAuthenticationService;
 
@@ -21,7 +22,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 /**
  * @author Henry on 03/09/17.
  */ @RestController
-@RequestMapping("/session")
+@RequestMapping(BlinckController.EndpointAPI.SESSION)
 public class SessionController {
 
 	private static final String DEFAULT_PRINCIPAL = "unknown";

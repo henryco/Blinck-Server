@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Henry on 12/09/17.
  */
 @RestController
-@RequestMapping("/protected/user/group")
+@RequestMapping(BlinckController.EndpointAPI.GROUP)
 public class GroupController implements BlinckController {
 
 

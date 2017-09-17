@@ -90,7 +90,7 @@ final class MatcherServicePack {
 
 
 @RestController
-@RequestMapping("/protected/user/match")
+@RequestMapping(BlinckController.EndpointAPI.MATCHER)
 public class MatcherController
 		implements BlinckController, BlinckNotification {
 

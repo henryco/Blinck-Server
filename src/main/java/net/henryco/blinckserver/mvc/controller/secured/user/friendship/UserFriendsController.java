@@ -26,7 +26,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 /**
  * @author Henry on 04/09/17.
  */ @RestController
-@RequestMapping("/protected/user/friends")
+@RequestMapping(BlinckController.EndpointAPI.FRIENDSHIP)
 public class UserFriendsController implements BlinckController, BlinckNotification.TYPE {
 
 

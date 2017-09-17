@@ -19,7 +19,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 /**
  *  @author Henry on 06/09/17.
  */ @RestController
-@RequestMapping("/protected/user/notifications")
+@RequestMapping(BlinckController.EndpointAPI.USER_NOTIFICATIONS)
 public class UserNotificationsController
 		implements BlinckController, BlinckNotification {
 
