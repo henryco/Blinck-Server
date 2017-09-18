@@ -69,19 +69,19 @@ public class AnyStompNotificationTest extends BlinckStompIntegrationTest {
 		final String randomType = TestUtils.randomGaussNumberString();
 		final String randomMsg = TestUtils.randomGaussNumberString();
 
-		Long[] users = saveNewRandomUsers(this, 2);
+		Long[] users = saveNewRandomUsers(this, 3);
 		String token = getForUserAuthToken(users[0]);
 
 		final StompSessionHandler handler = new StompSessionHandlerAdapter() {};
 		final DefaultStompFrameHandler resultHandler = new DefaultStompFrameHandler();
 
-		StompSession session = createSession(users[0], token, handler, 2);
+		StompSession session = createSession(users[0], token, handler, 3);
 		session.subscribe(NOTIFICATION_DESTINATION, resultHandler);
 
 		final String[] result = new String[1];
 		new Thread((TestRunnable) () -> {
 
-			result[0] = resultHandler.getBlocked().poll(2, SECONDS);
+			result[0] = resultHandler.getBlocked().poll(3, SECONDS);
 			flag.set(true);
 		}).start();
 
@@ -93,7 +93,7 @@ public class AnyStompNotificationTest extends BlinckStompIntegrationTest {
 		);
 
 		while (!flag.get())
-			Thread.sleep(200);
+			Thread.sleep(500);
 
 		TestNotificationJSON notification = new ObjectMapper().readValue(result[0], TestNotificationJSON.class);
 		assert notification.type.equals(randomType);

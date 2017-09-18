@@ -3,14 +3,12 @@ package net.henryco.blinckserver.mvc.model.entity.relation.core;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Details;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Meeting;
 
 import javax.persistence.*;
-
-import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.GenerationType.AUTO;
-import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
  * @author Henry on 28/08/17.
@@ -28,11 +26,9 @@ public class Party {
 	) Long id;
 
 
-	private @Column(
-			name = "activation_time"
-	) @Temporal(
-			TIMESTAMP
-	) Date activationTime;
+	private @Embedded @JoinColumn(
+			name = "meeting"
+	) Meeting meeting;
 
 
 	private @ElementCollection(

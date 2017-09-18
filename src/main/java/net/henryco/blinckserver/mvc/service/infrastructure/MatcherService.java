@@ -226,7 +226,7 @@ public class MatcherService {
 	protected List<SubParty> processPartyInQueue(Party party, SubParty subParty) {
 
 	 	if (party != null) {
-			if (party.getActivationTime() != null)
+			if (party.getMeeting() != null)
 				return null;
 
 			List<SubParty> list = new ArrayList<>();
@@ -258,6 +258,7 @@ public class MatcherService {
 			Party party = new Party();
 			party.setDetails(createNewDetails(subParty.getDetails().getType().invertedCopy()));
 			party.setSubParties(new ArrayList<>());
+			party.setMeeting(null);
 			return party;
 		}
 

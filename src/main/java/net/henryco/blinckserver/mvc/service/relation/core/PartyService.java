@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.PartyDao;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Meeting;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static net.henryco.blinckserver.mvc.service.relation.core.PartyService.Helper.compareActivationTime;
 
 /**
  * @author Henry on 13/09/17.
@@ -27,16 +30,16 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 	public static final class PartyInfo
 			implements Serializable {
 
-		private @JsonProperty Long id;
-		private @JsonProperty("enable_since") Date date;
+		private @JsonProperty("id") Long id;
+		private @JsonProperty("meeting") Meeting meeting;
 		private @JsonProperty("sub_parties") List<Long> subParties;
 		private @JsonProperty("users") List<Long> users;
 
-		private PartyInfo(Party party, List<Long> users) {
+		private PartyInfo(Party party, List<Long> subParties, List<Long> users) {
 			this.id = party.getId();
-			this.date = party.getActivationTime();
-			this.subParties = new ArrayList<>(party.getSubParties());
-			this.users = new ArrayList<>(users);
+			this.meeting = party.getMeeting();
+			this.subParties = subParties;
+			this.users = users;
 		}
 	}
 
@@ -51,12 +54,33 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 	}
 
 
-	private PartyInfo createPartyInfo(Party party) {
+	protected static abstract class Helper {
 
+		protected static
+		boolean compareActivationTime(Party party) {
+			return party.getMeeting() != null &&
+					party.getMeeting().getActivationTime()
+							.before(new Date(System.currentTimeMillis()));
+		}
+	}
+
+
+
+	private PartyInfo createPartyInfo(Party party, Long userId) {
+
+		final List<Long> subParties = new ArrayList<>();
 		final List<Long> users = new ArrayList<>();
-		for (Long sub : party.getSubParties())
-			users.addAll(subPartyDao.getById(sub).getUsers());
-		return new PartyInfo(party, users);
+
+		for (Long sub : party.getSubParties()) {
+
+			List<Long> list = subPartyDao.getById(sub).getUsers();
+			if (list.contains(userId) || compareActivationTime(party)) {
+				subParties.add(sub);
+				users.addAll(list);
+			}
+		}
+
+		return new PartyInfo(party, subParties, users);
 	}
 
 
@@ -69,14 +93,14 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 	@Transactional
 	public PartyInfo[] getAllPartyInfoWithUser(Long userId) {
 		return subPartyDao.getAllWithUserInParty(userId)
-				.stream().map(s -> createPartyInfo(s.getParty()))
+				.stream().map(s -> createPartyInfo(s.getParty(), userId))
 		.toArray(PartyInfo[]::new);
 	}
 
 
 	@Transactional
-	public PartyInfo getPartyInfo(Long partyId) {
-		return createPartyInfo(getDao().getById(partyId));
+	public PartyInfo getPartyInfo(Long partyId, Long userId) {
+		return createPartyInfo(getDao().getById(partyId), userId);
 	}
 
 
