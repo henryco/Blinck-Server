@@ -30,12 +30,16 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 
 	@Autowired
 	public PartyService(PartyDao partyDao) {
-		super(((partyDao)));
+		super(partyDao);
 	}
 
 	private PartyDao getDao() {
 		return provideDao();
 	}
+
+
+
+
 
 	@Transactional
 	public Party[] getAllParties() {

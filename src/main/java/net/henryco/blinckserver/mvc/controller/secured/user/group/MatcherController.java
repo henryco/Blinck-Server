@@ -81,7 +81,7 @@ final class MatcherServicePack {
 		this.subPartyService = subPartyService;
 	}
 
-	protected boolean genderFilter(Long userId, Type type) {
+	protected boolean checkYourGenderPrivilege(Long userId, Type type) {
 
 		final String gender = profileService.getGender(userId);
 		final Type typo = Type.typeChecker(type);
@@ -263,7 +263,7 @@ public class MatcherController
 
 		final Long id = longID(authentication);
 
-		if (!servicePack.genderFilter(id, type)) return;
+		if (!servicePack.checkYourGenderPrivilege(id, type)) return;
 		if (getQueueList(authentication).length != 0) return;
 
 		executors.subPartyTaskQueue.submit(() -> {
@@ -329,7 +329,7 @@ public class MatcherController
 					   @RequestBody Type type) {
 
 		final Long id = longID(authentication);
-		if (!servicePack.genderFilter(id, type)) return null;
+		if (!servicePack.checkYourGenderPrivilege(id, type)) return null;
 		SubPartyQueue custom = servicePack.matcherService.createCustomSubParty(id, type);
 		return custom.getId();
 	}
@@ -379,7 +379,7 @@ public class MatcherController
 
 		if (queue.getOwner().equals(id)) return true;
 		if (getQueueList(authentication).length != 0) return false;
-		if (!servicePack.genderFilter(id, queue.getType())) return false;
+		if (!servicePack.checkYourGenderPrivilege(id, queue.getType())) return false;
 
 		if (servicePack.friendshipService.isExistsBetweenUsers(id, queue.getOwner())) {
 
@@ -409,7 +409,7 @@ public class MatcherController
 
 		for (Long user: users) {
 			if (servicePack.friendshipService.isExistsBetweenUsers(user, id)
-					&& servicePack.genderFilter(user, queue.getType()))
+					&& servicePack.checkYourGenderPrivilege(user, queue.getType()))
 				servicePack.notificationService.addNotification(user, TYPE.CUSTOM_SUB_PARTY_INVITE, queue.getId());
 		}
 		return true;
