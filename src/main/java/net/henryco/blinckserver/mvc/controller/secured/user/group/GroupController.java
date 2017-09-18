@@ -4,6 +4,7 @@ import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Meeting;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.core.PartyService;
+import net.henryco.blinckserver.mvc.service.relation.queue.PartyMeetingOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -21,12 +22,16 @@ final class GroupServicePack {
 
 	protected final PartyService partyService;
 	protected final UpdateNotificationService notificationService;
+	protected final PartyMeetingOfferService meetingOfferService;
 
 	@Autowired
 	public GroupServicePack(PartyService partyService,
-							UpdateNotificationService notificationService) {
+							UpdateNotificationService notificationService,
+							PartyMeetingOfferService meetingOfferService) {
+
 		this.partyService = partyService;
 		this.notificationService = notificationService;
+		this.meetingOfferService = meetingOfferService;
 	}
 }
 
@@ -173,6 +178,7 @@ public class GroupController implements BlinckController {
 							   @RequestParam("id") Long partyId) {
 		return getPartyDetails(authentication, partyId).getSubParties().toArray(new Long[0]);
 	}
+
 
 	public @RequestMapping(
 			value = "/details/active",
