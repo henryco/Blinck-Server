@@ -66,7 +66,7 @@ public class GroupController implements BlinckController {
 	 *			ARGS:		Long: id
 	 *			METHOD:		GET
 	 *			RETURN:		PartyInfo
-
+	 *
 	 *
 	 * 		MEETING:
 	 *
