@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.controller.secured.user.notifications;
+package net.henryco.blinckserver.mvc.controller.secured.user.infrastructure;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;

@@ -19,21 +19,21 @@ public class ReportList {
 			unique = true
 	) @GeneratedValue(
 			strategy = AUTO
-	) long id;
+	) Long id;
 
 
 	private @Column(
 			name = "reporter_id",
 			updatable = false,
 			nullable = false
-	) long reporterId;
+	) Long reporterId;
 
 
 	private @Column(
 			name = "reported_id",
 			updatable = false,
 			nullable = false
-	) long reportedId;
+	) Long reportedId;
 
 
 	private @Column(

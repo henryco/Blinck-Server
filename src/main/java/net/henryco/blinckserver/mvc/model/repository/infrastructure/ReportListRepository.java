@@ -8,4 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ReportListRepository extends JpaRepository<ReportList, Long> {
 
+	boolean existsByReportedIdAndReporterId(Long reportedId, Long reporterId);
+	long countAllByReportedId(Long reportedId);
+
 }

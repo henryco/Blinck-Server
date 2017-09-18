@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.controller.secured.user.group;
+package net.henryco.blinckserver.mvc.controller.secured.user.infrastructure;
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;

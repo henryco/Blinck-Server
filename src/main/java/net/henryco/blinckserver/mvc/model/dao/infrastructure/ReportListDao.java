@@ -8,4 +8,7 @@ import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
  */
 public interface ReportListDao extends BlinckDaoTemplate<ReportList, Long> {
 
+	boolean existsByReporterAndReported(Long reporter, Long reported);
+	long countByReported(Long reported);
+
 }

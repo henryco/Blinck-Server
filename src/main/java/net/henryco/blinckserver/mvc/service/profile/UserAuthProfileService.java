@@ -8,12 +8,14 @@ import net.henryco.blinckserver.util.dao.BlinckDaoTemplateProvider;
 import net.henryco.blinckserver.util.entity.BlinckEntityRemovalForbiddenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Henry on 23/08/17.
  */
-@Service
-public class UserAuthProfileService extends BlinckDaoProvider<UserAuthProfile, Long> {
+@Service @Transactional
+public class UserAuthProfileService
+		extends BlinckDaoProvider<UserAuthProfile, Long> {
 
 
 	@Autowired
@@ -21,9 +23,21 @@ public class UserAuthProfileService extends BlinckDaoProvider<UserAuthProfile, L
 		super(authProfileDao);
 	}
 
+	private UserAuthProfileDao getDao() {
+		return provideDao();
+	}
+
 	@Override
 	public void deleteById(Long id) {
 		throw new BlinckEntityRemovalForbiddenException(UserAuthProfile.class);
+	}
+
+	@Transactional
+	public void setUserLocked(Long userId, Boolean locked) {
+
+		UserAuthProfile authProfile = getDao().getById(userId);
+		authProfile.setLocked(locked);
+		getDao().save(authProfile);
 	}
 
 }

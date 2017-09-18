@@ -34,6 +34,8 @@ public interface BlinckController {
 
 		String SUB_GROUP = "/protected/user/subgroup";
 		String SUB_GROUP_CONVERSATION = "/protected/user/subgroup/conversation";
+
+		String REPORT = "/protected/user/report";
 	}
 
 
