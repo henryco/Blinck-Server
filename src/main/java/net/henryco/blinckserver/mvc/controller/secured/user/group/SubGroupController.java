@@ -80,9 +80,9 @@ public class SubGroupController implements BlinckController {
 	 *			RETURN:		SubPartyInfo
 	 *
 	 *
-	 * 		PARTY:
+	 * 		GROUP:
 	 *
-	 * 			ENDPOINT:	/details/party
+	 * 			ENDPOINT:	/details/group
 	 * 			ARGS:		Long: id
 	 * 			METHOD:		GET
 	 * 			RETURN:		Long
@@ -158,7 +158,7 @@ public class SubGroupController implements BlinckController {
 
 
 	public @RequestMapping(
-			value = "/details/party",
+			value = "/details/group",
 			method = GET
 	) Long getPartyId(Authentication authentication,
 					  @RequestParam("id") Long subPartyId) {

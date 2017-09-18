@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.PartyDao;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Meeting;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +98,13 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 		.toArray(PartyInfo[]::new);
 	}
 
+
+	@Transactional
+	public Long[] getAllPartyInfoIdWithUser(Long userId) {
+		return subPartyDao.getAllWithUserInParty(userId)
+				.stream().map(SubParty::getId)
+		.toArray(Long[]::new);
+	}
 
 	@Transactional
 	public PartyInfo getPartyInfo(Long partyId, Long userId) {

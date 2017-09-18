@@ -12,6 +12,14 @@ import java.util.Date;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
+ * <h1>Meeting JSON:</h1>
+ * <h2>
+ *     {&nbsp;
+ *         "time":				DATE / LONG, &nbsp;
+ *         "active_after":		DATE / LONG, &nbsp;
+ *         "venue":				CHAR[510]
+ *     &nbsp;}
+ * </h2>
  * @author Henry on 18/09/17.
  */
 @Data @Embeddable
