@@ -54,6 +54,81 @@ public class SubGroupController implements BlinckController {
 	}
 
 
+	/*
+	 *	SubGroup API
+	 *
+	 *		ENDPOINT: 		/protected/user/subgroup
+	 *
+	 *
+	 *	SubPartyInfo:
+	 *
+	 * 		todo
+	 *
+	 *
+	 *	Type:
+	 *
+	 *		"ident": 		CHAR[255],
+	 *		"wanted": 		CHAR[255],
+	 *		"dimension": 	INTEGER
+	 *
+	 *
+	 *		DETAILS:
+	 *
+	 *			ENDPOINT:	/details
+	 *			ARGS:		Long: id
+	 *			METHOD:		GET
+	 *			RETURN:		SubPartyInfo
+	 *
+	 *
+	 * 		PARTY:
+	 *
+	 * 			ENDPOINT:	/details/party
+	 * 			ARGS:		Long: id
+	 * 			METHOD:		GET
+	 * 			RETURN:		Long
+	 *
+	 *
+	 * 		TYPE:
+	 *
+	 * 			ENDPOINT:	/details/type
+	 * 			ARGS:		Long: id
+	 * 			METHOD:		GET
+	 * 			RETURN:		Type
+	 *
+	 *
+	 * 		USERS:
+	 *
+	 * 			ENDPOINT:	/details/users
+	 * 			ARGS:		Long: id
+	 * 			METHOD:		GET
+	 * 			RETURN:		Long[]
+	 *
+	 *
+	 * 		LEAVE:
+	 *
+	 * 			ENDPOINT:	/leave
+	 * 			ARGS:		Long: id
+	 * 			METHOD:		DELETE, POST, GET
+	 * 			RETURN:		VOID
+	 *
+	 *
+	 *		LIST_ID:
+	 *
+	 *			ENDPOINT:	/list/id
+	 *			METHOD:		GET
+	 *			RETURN:		Long[]
+	 *
+	 *
+	 * 		LIST_DETAILS:
+	 *
+	 * 			ENDPOINT:	/list/details
+	 * 			METHOD:		GET
+	 * 			RETURN:		SubPartyInfo[]
+	 *
+	 */
+
+
+
 	public @RequestMapping(
 			value = "/list/id",
 			method = GET,
@@ -77,15 +152,14 @@ public class SubGroupController implements BlinckController {
 			method = GET,
 			produces = JSON
 	) SubPartyInfo getSubParty(Authentication authentication,
-											 @RequestParam("id") Long subPartyId) {
+							   @RequestParam("id") Long subPartyId) {
 		return servicePack.subPartyService.getSubPartyInfoByIdAndUser(longID(authentication), subPartyId);
 	}
 
 
 	public @RequestMapping(
 			value = "/details/party",
-			method = GET,
-			produces = JSON
+			method = GET
 	) Long getPartyId(Authentication authentication,
 					  @RequestParam("id") Long subPartyId) {
 		return getSubParty(authentication, subPartyId).getParty();
