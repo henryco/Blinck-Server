@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.PartyDao;
+import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
-import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,29 +28,56 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 			implements Serializable {
 
 		private @JsonProperty Long id;
-		private @JsonProperty Type type;
 		private @JsonProperty("enable_since") Date date;
 		private @JsonProperty("sub_parties") List<Long> subParties;
+		private @JsonProperty("users") List<Long> users;
 
-		private PartyInfo(Party party) {
+		private PartyInfo(Party party, List<Long> users) {
 			this.id = party.getId();
-			this.type = party.getDetails().getType();
 			this.date = party.getActivationTime();
 			this.subParties = new ArrayList<>(party.getSubParties());
+			this.users = new ArrayList<>(users);
 		}
 	}
 
+	private final SubPartyDao subPartyDao;
+
 
 	@Autowired
-	public PartyService(PartyDao partyDao) {
+	public PartyService(PartyDao partyDao,
+						SubPartyDao subPartyDao) {
 		super(partyDao);
+		this.subPartyDao = subPartyDao;
 	}
+
+
+	private PartyInfo createPartyInfo(Party party) {
+
+		final List<Long> users = new ArrayList<>();
+		for (Long sub : party.getSubParties())
+			users.addAll(subPartyDao.getById(sub).getUsers());
+		return new PartyInfo(party, users);
+	}
+
 
 	private PartyDao getDao() {
 		return provideDao();
 	}
 
 
+
+	@Transactional
+	public PartyInfo[] getAllPartyInfoWithUser(Long userId) {
+		return subPartyDao.getAllWithUserInParty(userId)
+				.stream().map(s -> createPartyInfo(s.getParty()))
+		.toArray(PartyInfo[]::new);
+	}
+
+
+	@Transactional
+	public PartyInfo getPartyInfo(Long partyId) {
+		return createPartyInfo(getDao().getById(partyId));
+	}
 
 
 

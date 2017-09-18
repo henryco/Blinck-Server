@@ -40,7 +40,10 @@ final class TaskExecutors {
 }
 
 
-@Component
+/**
+ *	Utility service provider class
+ *	for internal user only.
+ * */ @Component
 final class MatcherServicePack {
 
 	/**
@@ -58,8 +61,7 @@ final class MatcherServicePack {
 	 * and need to check your vehicle privilege.
 	 * Thank you for being so understanding.
 	 * FIXME: 17/09/17
-	 */
-	private static final String GENDER_FLUID_HELICOPTER
+	 */ private static final String GENDER_FLUID_HELICOPTER
 			= "Gender fluid helicopter McDonnell Douglas AH-64 Apache";
 
 	protected final MatcherService matcherService;
@@ -74,6 +76,7 @@ final class MatcherServicePack {
 					   FriendshipService friendshipService,
 					   UserBaseProfileService profileService,
 					   SubPartyService subPartyService) {
+
 		this.matcherService = matcherService;
 		this.notificationService = notificationService;
 		this.friendshipService = friendshipService;
