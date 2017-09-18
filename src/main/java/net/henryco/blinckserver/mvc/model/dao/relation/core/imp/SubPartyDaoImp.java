@@ -52,6 +52,11 @@ public class SubPartyDaoImp
 		);
 	}
 
+	@Override
+	public boolean existsWithUser(Long id, Long userId) {
+		return getRepository().existsByIdAndUsersIsContaining(id, userId);
+	}
+
 	@Override @Transactional
 	public SubParty getRandomFirstInQueue(String typeWanted, String typeIdent, Integer dimension) {
 		try {

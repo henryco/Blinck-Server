@@ -99,7 +99,6 @@ public class SubPartyService
 		Party party = subParty.getParty();
 
 		if (party == null || party.getSubParties() == null) {
-			System.out.println(subParty);
 			return new SubPartyInfo[]{new SubPartyInfo(subParty)};
 		}
 
@@ -108,5 +107,16 @@ public class SubPartyService
 			infoList.add(new SubPartyInfo(getDao().getById(sub)));
 
 		return infoList.toArray(new SubPartyInfo[0]);
+	}
+
+
+	@Transactional
+	public boolean isExistsWithUser(Long id, Long userId) {
+		return getDao().existsWithUser(id, userId);
+	}
+
+	@Transactional
+	public Long[] getSubPartyUsers(Long subPartyId) {
+		return getDao().getById(subPartyId).getUsers().toArray(new Long[0]);
 	}
 }

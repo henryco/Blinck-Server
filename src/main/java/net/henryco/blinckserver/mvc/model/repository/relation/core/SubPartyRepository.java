@@ -43,4 +43,5 @@ public interface SubPartyRepository extends JpaRepository<SubParty, Long> {
 			Boolean details_inQueue
 	);
 
+	Boolean existsByIdAndUsersIsContaining(Long id, Long user);
 }

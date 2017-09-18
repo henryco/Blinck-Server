@@ -31,11 +31,15 @@ public interface BlinckNotification {
 		String CUSTOM_SUB_PARTY_INVITE = "custom_sub_party_invite";
 		String CUSTOM_SUB_PARTY_LEAVE = "custom_sub_party_leave";
 
+		String SUB_PARTY_MESSAGE_STOMP = "sub_party_message_stomp";
+		String SUB_PARTY_MESSAGE_REST = "sub_party_message_rest";
 		String SUB_PARTY_FOUND = "sub_party_found";
 		String SUB_PARTY_IN_QUEUE = "sub_party_in_queue";
 		String SUB_PARTY_REMOVE = "sub_party_removed";
 		String SUB_PARTY_LEAVE = "sub_party_leave";
 
+		String PARTY_MESSAGE_STOMP = "party_message_stomp";
+		String PARTY_MESSAGE_REST = "party_message_rest";
 		String PARTY_FOUND = "party_found";
 		String PARTY_REMOVE = "party_removed";
 		String PARTY_LEAVE = "party_leave";
