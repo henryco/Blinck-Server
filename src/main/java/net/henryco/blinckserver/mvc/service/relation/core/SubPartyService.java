@@ -115,8 +115,10 @@ public class SubPartyService
 		return getDao().existsWithUser(id, userId);
 	}
 
+
 	@Transactional
 	public Long[] getSubPartyUsers(Long subPartyId) {
 		return getDao().getById(subPartyId).getUsers().toArray(new Long[0]);
 	}
+
 }

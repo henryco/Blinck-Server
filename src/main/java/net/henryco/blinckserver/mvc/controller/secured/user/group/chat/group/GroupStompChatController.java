@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.controller.secured.user.group.chat;
+package net.henryco.blinckserver.mvc.controller.secured.user.group.chat.group;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants;

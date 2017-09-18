@@ -62,15 +62,15 @@ public class SubPartyConversationService
 
 
 	@Transactional
-	public void sendMessage(SubPartyConversation conversation) {
-		getDao().save(conversation);
+	public SubPartyConversation sendMessage(SubPartyConversation conversation) {
+		return getDao().save(conversation);
 	}
 
 	@Transactional
-	public void sendMessage(SubPartyMessageForm messageForm) {
+	public SubPartyConversation sendMessage(SubPartyMessageForm messageForm, Long userId) {
 
 		MessagePart messagePart = new MessagePart();
-		messagePart.setAuthor(messageForm.author);
+		messagePart.setAuthor(userId);
 		messagePart.setMessage(messageForm.message);
 		messagePart.setDate(new Date(System.currentTimeMillis()));
 
@@ -78,7 +78,7 @@ public class SubPartyConversationService
 		conversation.setSubParty(messageForm.subParty);
 		conversation.setMessagePart(messagePart);
 
-		sendMessage(conversation);
+		return sendMessage(conversation);
 	}
 
 	@Transactional

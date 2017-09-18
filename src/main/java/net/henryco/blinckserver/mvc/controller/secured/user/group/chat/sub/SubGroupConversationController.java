@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.controller.secured.user.group.chat;
+package net.henryco.blinckserver.mvc.controller.secured.user.group.chat.sub;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
@@ -6,7 +6,6 @@ import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationSer
 import net.henryco.blinckserver.mvc.service.relation.conversation.SubPartyConversationService;
 import net.henryco.blinckserver.mvc.service.relation.core.SubPartyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -31,34 +30,19 @@ final class SubGroupConversationServicePack {
 		this.notificationService = notificationService;
 		this.subPartyService = subPartyService;
 	}
-
-	protected final void accessCheck(Long subPartyId, Long userId)
-			throws AccessDeniedException{
-		if (!subPartyService.isExistsWithUser(subPartyId, userId))
-			throw new AccessDeniedException("Wrong user or conversation ID");
-	}
-
-	protected final void sendMessageNotification(Long subPartyId) {
-		for (Long user : subPartyService.getSubPartyUsers(subPartyId)) {
-			notificationService.addNotification(user,
-					BlinckNotification.TYPE.SUB_PARTY_MESSAGE_REST,
-					subPartyId.toString()
-			);
-		}
-	}
 }
 
-/**
- * @author Henry on 18/09/17.
- */
+
 @RestController // TODO: 18/09/17 Tests
 @RequestMapping(BlinckController.EndpointAPI.SUB_GROUP_CONVERSATION)
-public class SubGroupConversationController implements BlinckController {
+public class SubGroupConversationController
+		extends SubGroupMessageController implements BlinckNotification{
 
 	private final SubGroupConversationServicePack servicePack;
 
 	@Autowired
 	public SubGroupConversationController(SubGroupConversationServicePack servicePack) {
+		super(servicePack.subPartyService, servicePack.notificationService);
 		this.servicePack = servicePack;
 	}
 
@@ -109,7 +93,7 @@ public class SubGroupConversationController implements BlinckController {
 	) Long countMessages(Authentication authentication,
 						 @RequestParam("id") Long subPartyId) {
 
-		servicePack.accessCheck(subPartyId, longID(authentication));
+		accessCheck(subPartyId, longID(authentication));
 		return servicePack.conversationService.countBySubPartyId(subPartyId);
 	}
 
@@ -119,7 +103,6 @@ public class SubGroupConversationController implements BlinckController {
 	 *	<h2>
 	 * 	{&nbsp;
 	 * 		"sub_party": 	LONG, 		&nbsp;
-	 *		"author": 		LONG, 		&nbsp;
 	 * 		"message": 		CHAR[512], 	&nbsp;
 	 * 		"timestamp": 	DATE/LONG
 	 *	&nbsp;}
@@ -134,9 +117,10 @@ public class SubGroupConversationController implements BlinckController {
 	) void sendMessage(Authentication authentication,
 					   @RequestBody SubPartyMessageForm messageForm) {
 
-		servicePack.accessCheck(messageForm.getSubParty(), longID(authentication));
-		servicePack.conversationService.sendMessage(messageForm);
-		servicePack.sendMessageNotification(messageForm.getSubParty());
+		final Long id = longID(authentication);
+		accessCheck(messageForm.getSubParty(), id);
+		servicePack.conversationService.sendMessage(messageForm, id);
+		sendMessageNotification(messageForm.getSubParty(), TYPE.SUB_PARTY_MESSAGE_REST);
 	}
 
 
@@ -162,7 +146,7 @@ public class SubGroupConversationController implements BlinckController {
 										   @RequestParam("page") int page,
 										   @RequestParam("size") int size) {
 
-		servicePack.accessCheck(subPartyId, longID(authentication));
+		accessCheck(subPartyId, longID(authentication));
 		return servicePack.conversationService.getLastNBySubPartyId(subPartyId, page, size);
 	}
 

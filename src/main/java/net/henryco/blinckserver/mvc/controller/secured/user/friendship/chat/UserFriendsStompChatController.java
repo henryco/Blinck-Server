@@ -55,8 +55,7 @@ public class UserFriendsStompChatController
 	 *	SEND message JSON:
 	 *
 	 *		"friendship":	LONG,
-	 *		"message":		CHAR[512],
-	 *		"timestamp":	DATE/LONG
+	 *		"message":		CHAR[512]
 	 *
 	 *
 	 *	GET message JSON:
