@@ -8,14 +8,14 @@ import net.henryco.blinckserver.mvc.service.relation.queue.PartyMeetingOfferServ
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
 import static net.henryco.blinckserver.mvc.service.relation.core.PartyService.PartyInfo;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Component
 final class GroupServicePack {
@@ -187,6 +187,42 @@ public class GroupController implements BlinckController {
 							  @RequestParam("id") Long partyId) {
 		return getPartyMeeting(authentication, partyId)
 				.getActivationTime().before(new Date(System.currentTimeMillis()));
+	}
+
+
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/meeting/propose",
+			method = POST,
+			consumes = JSON
+	) void proposeMeeting(Authentication authentication,
+						  @RequestBody Meeting proposition) {
+
+		final Long id = longID(authentication);
+		// TODO: 19/09/17
+	}
+
+
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/meeting/vote",
+			method = {GET, POST}
+	) void voteMeeting(Authentication authentication,
+					   @RequestParam("proposition") Long propositionId,
+					   @RequestParam("option") Boolean option) {
+
+		final Long id = longID(authentication);
+		// TODO: 19/09/17
+	}
+
+
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/meeting/vote/final",
+			method = {GET, POST}
+	) void voteMeetingFinal(Authentication authentication,
+					   @RequestParam("proposition") Long propositionId,
+					   @RequestParam("option") Boolean option) {
+
+		final Long id = longID(authentication);
+		// TODO: 19/09/17
 	}
 
 }
