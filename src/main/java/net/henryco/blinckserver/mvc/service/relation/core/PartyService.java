@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static net.henryco.blinckserver.mvc.service.relation.core.PartyService.Helper.activateMeeting;
 import static net.henryco.blinckserver.mvc.service.relation.core.PartyService.Helper.compareActivationTime;
 
 /**
@@ -26,6 +27,8 @@ import static net.henryco.blinckserver.mvc.service.relation.core.PartyService.He
 @Service
 public class PartyService extends BlinckDaoProvider<Party, Long> {
 
+
+	public static final Long TIME_TO_ACTIVATE = 7_200_000L; // 2h
 
 	@Data @NoArgsConstructor
 	public static final class PartyInfo
@@ -63,6 +66,15 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 					party.getMeeting().getActivationTime()
 							.before(new Date(System.currentTimeMillis()));
 		}
+
+		protected static
+		Meeting activateMeeting(Meeting meeting) {
+
+			Date time = meeting.getTime();
+			Date active = new Date(time.getTime() - TIME_TO_ACTIVATE);
+			return new Meeting(time, active, meeting.getVenue());
+		}
+
 	}
 
 
@@ -130,6 +142,14 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 	@Transactional
 	public Boolean isPartyActive(Long partyId) {
 		return getDao().isPartyActive(partyId);
+	}
+
+	@Transactional
+	public Boolean setMeeting(Long partyId, Meeting meeting) {
+
+		Party party = getDao().getById(partyId);
+		party.setMeeting(activateMeeting(meeting));
+		return getDao().save(party) != null;
 	}
 
 }

@@ -1,6 +1,7 @@
 package net.henryco.blinckserver.mvc.model.entity.relation.core.embeded;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +25,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  */
 @Data @Embeddable
 @NoArgsConstructor
+@AllArgsConstructor
 public class Meeting {
 
 

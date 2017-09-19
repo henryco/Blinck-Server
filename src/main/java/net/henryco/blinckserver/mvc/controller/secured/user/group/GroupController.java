@@ -6,6 +6,7 @@ import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Meeting;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.core.PartyService;
 import net.henryco.blinckserver.mvc.service.relation.queue.PartyMeetingOfferService;
+import net.henryco.blinckserver.mvc.service.relation.queue.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -26,13 +27,16 @@ final class GroupServicePack {
 	protected final PartyService party;
 	protected final UpdateNotificationService notification;
 	protected final PartyMeetingOfferService meetingOffer;
+	protected final VoteService vote;
 
 	@Autowired
 	public GroupServicePack(PartyService partyService,
+							VoteService voteService,
 							UpdateNotificationService notificationService,
 							PartyMeetingOfferService meetingOfferService) {
 
 		this.party = partyService;
+		this.vote = voteService;
 		this.notification = notificationService;
 		this.meetingOffer = meetingOfferService;
 	}
@@ -139,6 +143,39 @@ public class GroupController
 	 * 			ENDPOINT:	/list/details
 	 * 			METHOD:		GET
 	 * 			RETURN:		PartyInfo[]
+	 *
+	 *
+	 * 		MEETING_LIST:
+	 *
+	 * 			ENDPOINT:	/meeting/list
+	 * 			ARGS:		Long: id
+	 * 			METHOD:		GET
+	 * 			RETURN:		OfferInfo[]
+	 *
+	 *
+	 * 		MEETING_PROPOSE:
+	 *
+	 * 			ENDPOINT:	/meeting/propose
+	 * 			ARGS:		Long: id
+	 * 			METHOD:		POST
+	 * 			BODY:		Meeting
+	 * 			RETURN:		VOID
+	 *
+	 *
+	 * 		MEETING_VOTE:
+	 *
+	 * 			ENDPOINT:	/meeting/vote
+	 * 			ARGS:		Long: proposition, Boolean: option
+	 * 			METHOD:		POST, GET
+	 * 			RETURN:		VOID
+	 *
+	 *
+	 * 		MEETING_VOTE_FINAL:
+	 *
+	 * 			ENDPOINT:	/meeting/vote/final
+	 * 			ARGS:		Long: proposition, Boolean: option
+	 * 			METHOD:		POST, GET
+	 * 			RETURN:		VOID
 	 *
 	 */
 
@@ -254,8 +291,8 @@ public class GroupController
 		if (option) {
 
 			boolean limit = service.meetingOffer.voteForProposition(id, propositionId, users.length);
+			if (limit) service.vote.deleteAllForTopic(party);
 			service.sendPartyMultiNotification(party, users, limit ? NOTIF_TYPE_TWO : NOTIF_TYPE_ONE);
-
 		} else {
 
 			service.meetingOffer.voteAgainstProposition(id, propositionId);
@@ -274,8 +311,30 @@ public class GroupController
 
 		final Long id = longID(authentication);
 		final Long party = service.meetingOffer.getPartyId(propositionId);
+		final Long[] users = service.party.getAllUsersInParty(party);
 
-		// TODO: 19/09/17
+		if (option) {
+
+			service.vote.vote(party, id, true);
+			if (service.vote.countForTopic(party) >= users.length) {
+
+				Meeting meeting = service.meetingOffer.getOfferedMeetingById(propositionId);
+				boolean activated = service.party.setMeeting(party, meeting);
+
+				if (activated) {
+					service.vote.deleteAllForTopic(party);
+					service.sendPartyMultiNotification(party, users,
+							TYPE.PARTY_MEETING_VOTE_FINAL_SUCCESS,
+							TYPE.PARTY_MEETING_SET
+					);
+				}
+			}
+
+		} else {
+			service.vote.deleteAllForTopic(party);
+			service.sendPartyMultiNotification(party, users, TYPE.PARTY_MEETING_VOTE_FINAL_FAIL);
+		}
+
 	}
 
 }

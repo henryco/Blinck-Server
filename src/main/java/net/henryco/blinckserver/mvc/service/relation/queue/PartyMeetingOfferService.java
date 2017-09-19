@@ -43,6 +43,12 @@ public class PartyMeetingOfferService {
 
 
 	@Transactional
+	public Meeting getOfferedMeetingById(Long offerId) {
+		return offerDao.getById(offerId).getOffer();
+	}
+
+
+	@Transactional
 	public OfferInfo[] getOfferList(Long partyId) {
 
 		return offerDao.getMeetingOfferListByPartyId(partyId)
