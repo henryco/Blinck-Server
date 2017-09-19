@@ -62,5 +62,46 @@ public class PartyMeetingOfferService {
 		return offerDao.save(offer) != null;
 	}
 
+	@Transactional
+	public Long getPartyId(Long propositionId) {
+		return offerDao.getById(propositionId).getParty();
+	}
+
+	@Transactional
+	public Boolean voteForProposition(Long userId, Long propositionId, int limit) {
+
+		PartyMeetingOffer offer = offerDao.getById(propositionId);
+		if (offer == null) return false;
+
+		for (PartyMeetingOffer o: offerDao.getAllWithUserAndPartyId(offer.getParty(), userId)) {
+			if (!o.getId().equals(propositionId)) {
+				o.getUsers().remove(userId);
+				offerDao.save(o);
+			}
+		}
+
+		offer.getUsers().add(userId);
+
+		return offerDao.save(offer)
+				.getUsers().size() >= limit;
+	}
+
+
+	@Transactional
+	public void voteAgainstProposition(Long userId, Long propositionId) {
+
+		PartyMeetingOffer offer = offerDao.getById(propositionId);
+		if (offer == null) return;
+
+		offer.getUsers().remove(userId);
+		offerDao.save(offer);
+	}
+
+
+	@Transactional
+	public void deleteAllProposition(Long partyId) {
+		offerDao.deleteAllByParty(partyId);
+	}
+
 
 }

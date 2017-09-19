@@ -23,25 +23,29 @@ import static net.henryco.blinckserver.mvc.service.relation.queue.PartyMeetingOf
 @Component
 final class GroupServicePack {
 
-	protected final PartyService partyService;
-	protected final UpdateNotificationService notificationService;
-	protected final PartyMeetingOfferService meetingOfferService;
+	protected final PartyService party;
+	protected final UpdateNotificationService notification;
+	protected final PartyMeetingOfferService meetingOffer;
 
 	@Autowired
 	public GroupServicePack(PartyService partyService,
 							UpdateNotificationService notificationService,
 							PartyMeetingOfferService meetingOfferService) {
 
-		this.partyService = partyService;
-		this.notificationService = notificationService;
-		this.meetingOfferService = meetingOfferService;
+		this.party = partyService;
+		this.notification = notificationService;
+		this.meetingOffer = meetingOfferService;
 	}
 
 	protected void sendPartyNotification(Long partyId, String notificationType) {
-		for (Long user: partyService.getAllUsersInParty(partyId))
-			notificationService.addNotification(user, notificationType, partyId);
+		sendPartyMultiNotification(partyId, party.getAllUsersInParty(partyId), notificationType);
 	}
 
+	protected void sendPartyMultiNotification(Long partyId, Long[] users, String ... notificationTypes) {
+		for (Long user: users)
+			for (String notificationType: notificationTypes)
+				notification.addNotification(user, notificationType, partyId);
+	}
 }
 
 @RestController // TODO: 17/09/17 TESTS
@@ -49,11 +53,14 @@ final class GroupServicePack {
 public class GroupController
 		implements BlinckController, BlinckNotification {
 
-	private final GroupServicePack servicePack;
+	private static final String[] NOTIF_TYPE_ONE = {TYPE.PARTY_MEETING_VOTE};
+	private static final String[] NOTIF_TYPE_TWO = {TYPE.PARTY_MEETING_VOTE, TYPE.PARTY_MEETING_VOTE_FINAL};
+
+	private final GroupServicePack service;
 
 	@Autowired
 	public GroupController(GroupServicePack servicePack) {
-		this.servicePack = servicePack;
+		this.service = servicePack;
 	}
 
 
@@ -142,7 +149,7 @@ public class GroupController
 			method = GET,
 			produces = JSON
 	) Long[] getPartyIdList(Authentication authentication) {
-		return servicePack.partyService.getAllPartyInfoIdWithUser(longID(authentication));
+		return service.party.getAllPartyInfoIdWithUser(longID(authentication));
 	}
 
 
@@ -151,7 +158,7 @@ public class GroupController
 			method = GET,
 			produces = JSON
 	) PartyInfo[] getPartyDetailsList(Authentication authentication) {
-		return servicePack.partyService.getAllPartyInfoWithUser(longID(authentication));
+		return service.party.getAllPartyInfoWithUser(longID(authentication));
 	}
 
 
@@ -161,7 +168,7 @@ public class GroupController
 			produces = JSON
 	) PartyInfo getPartyDetails(Authentication authentication,
 								@RequestParam("id") Long partyId) {
-		return servicePack.partyService.getPartyInfo(partyId, longID(authentication));
+		return service.party.getPartyInfo(partyId, longID(authentication));
 	}
 
 
@@ -214,7 +221,7 @@ public class GroupController
 
 		if (Arrays.stream(getPartyUsers(authentication, partyId))
 				.noneMatch(longID(authentication)::equals)) return null;
-		return servicePack.meetingOfferService.getOfferList(partyId);
+		return service.meetingOffer.getOfferList(partyId);
 	}
 
 
@@ -227,8 +234,8 @@ public class GroupController
 						  @RequestBody Meeting proposition) {
 
 		final Long id = longID(authentication);
-		Boolean added = servicePack.meetingOfferService.addProposition(id, partyId, proposition);
-		if (added) servicePack.sendPartyNotification(partyId, TYPE.PARTY_MEETING_PROPOSITION);
+		Boolean added = service.meetingOffer.addProposition(id, partyId, proposition);
+		if (added) service.sendPartyNotification(partyId, TYPE.PARTY_MEETING_PROPOSITION);
 		return added;
 	}
 
@@ -241,7 +248,20 @@ public class GroupController
 					   @RequestParam("option") Boolean option) {
 
 		final Long id = longID(authentication);
-		// TODO: 19/09/17
+		final Long party = service.meetingOffer.getPartyId(propositionId);
+		final Long[] users = service.party.getAllUsersInParty(party);
+
+		if (option) {
+
+			boolean limit = service.meetingOffer.voteForProposition(id, propositionId, users.length);
+			service.sendPartyMultiNotification(party, users, limit ? NOTIF_TYPE_TWO : NOTIF_TYPE_ONE);
+
+		} else {
+
+			service.meetingOffer.voteAgainstProposition(id, propositionId);
+			service.sendPartyMultiNotification(party, users, NOTIF_TYPE_ONE);
+		}
+
 	}
 
 
@@ -249,10 +269,12 @@ public class GroupController
 			value = "/meeting/vote/final",
 			method = {GET, POST}
 	) void voteMeetingFinal(Authentication authentication,
-					   @RequestParam("proposition") Long propositionId,
-					   @RequestParam("option") Boolean option) {
+							@RequestParam("proposition") Long propositionId,
+							@RequestParam("option") Boolean option) {
 
 		final Long id = longID(authentication);
+		final Long party = service.meetingOffer.getPartyId(propositionId);
+
 		// TODO: 19/09/17
 	}
 

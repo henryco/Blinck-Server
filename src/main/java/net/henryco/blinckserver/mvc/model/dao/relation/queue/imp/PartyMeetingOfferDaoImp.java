@@ -7,6 +7,7 @@ import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**
@@ -27,8 +28,28 @@ public class PartyMeetingOfferDaoImp
 	}
 
 
-	@Override
+	@Override @Transactional
+	public PartyMeetingOffer getById(Long id) {
+
+		try {
+			return super.getById(id);
+		} catch (EntityNotFoundException e) {
+			return null;
+		}
+	}
+
+	@Override @Transactional
 	public List<PartyMeetingOffer> getMeetingOfferListByPartyId(Long partyId) {
 		return getRepository().getAllByParty(partyId);
+	}
+
+	@Override @Transactional
+	public List<PartyMeetingOffer> getAllWithUserAndPartyId(Long partyId, Long userId) {
+		return getRepository().getAllByPartyAndUsersIsContaining(partyId, userId);
+	}
+
+	@Override @Transactional
+	public void deleteAllByParty(Long party) {
+		getRepository().deleteAllByParty(party);
 	}
 }

@@ -11,5 +11,7 @@ import java.util.List;
 public interface PartyMeetingOfferDao extends BlinckDaoTemplate<PartyMeetingOffer, Long> {
 
 	List<PartyMeetingOffer> getMeetingOfferListByPartyId(Long partyId);
+	List<PartyMeetingOffer> getAllWithUserAndPartyId(Long partyId, Long userId);
+	void deleteAllByParty(Long party);
 
 }

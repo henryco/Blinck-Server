@@ -41,6 +41,7 @@ public interface BlinckNotification {
 		String PARTY_FOUND = "party_found";
 		String PARTY_MEETING_PROPOSITION = "party_meeting_proposition";
 		String PARTY_MEETING_VOTE = "party_meeting_vote";
+		String PARTY_MEETING_VOTE_FINAL = "party_meeting_vote_final";
 
 		String QUEUE_LEAVE = "queue_leave";
 	}
