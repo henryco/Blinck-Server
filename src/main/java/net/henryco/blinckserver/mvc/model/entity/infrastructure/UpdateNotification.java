@@ -15,7 +15,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  * @author Henry on 06/09/17.
  */
 @Entity @Data @NoArgsConstructor
-public final class UpdateNotification {
+public class UpdateNotification {
 
 
 	private @Id @Column(
@@ -57,7 +57,7 @@ public final class UpdateNotification {
 
 	@Entity @Data
 	@NoArgsConstructor
-	public static final class Details {
+	public static class Details {
 
 		private @Id @Column(
 				name = "id",
