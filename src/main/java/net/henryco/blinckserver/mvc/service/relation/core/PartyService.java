@@ -90,6 +90,15 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 	}
 
 
+	@Transactional
+	public Long[] getAllUsersInParty(Long partyId) {
+
+		final List<Long> users = new ArrayList<>();
+		for (Long sub : getDao().getById(partyId).getSubParties())
+			users.addAll(subPartyDao.getById(sub).getUsers());
+		return users.toArray(new Long[0]);
+	}
+
 
 	@Transactional
 	public PartyInfo[] getAllPartyInfoWithUser(Long userId) {
@@ -112,10 +121,15 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 	}
 
 
-
 	@Transactional
 	public Party[] getAllParties() {
 		return getDao().getAll().toArray(new Party[0]);
+	}
+
+
+	@Transactional
+	public Boolean isPartyActive(Long partyId) {
+		return getDao().isPartyActive(partyId);
 	}
 
 }

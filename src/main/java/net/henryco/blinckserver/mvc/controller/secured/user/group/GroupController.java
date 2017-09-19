@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.controller.secured.user.group;
 
+import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Meeting;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
@@ -10,12 +11,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import static net.henryco.blinckserver.mvc.service.relation.core.PartyService.PartyInfo;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static net.henryco.blinckserver.mvc.service.relation.queue.PartyMeetingOfferService.OfferInfo;
 
 @Component
 final class GroupServicePack {
@@ -33,11 +36,18 @@ final class GroupServicePack {
 		this.notificationService = notificationService;
 		this.meetingOfferService = meetingOfferService;
 	}
+
+	protected void sendPartyNotification(Long partyId, String notificationType) {
+		for (Long user: partyService.getAllUsersInParty(partyId))
+			notificationService.addNotification(user, notificationType, partyId);
+	}
+
 }
 
 @RestController // TODO: 17/09/17 TESTS
 @RequestMapping(BlinckController.EndpointAPI.GROUP)
-public class GroupController implements BlinckController {
+public class GroupController
+		implements BlinckController, BlinckNotification {
 
 	private final GroupServicePack servicePack;
 
@@ -56,6 +66,11 @@ public class GroupController implements BlinckController {
 	 *	PartyInfo:
 	 *
 	 * 		todo
+	 *
+	 *
+	 *	OfferInfo:
+	 *
+	 *		todo
 	 *
 	 *
 	 *	Meeting:
@@ -190,15 +205,31 @@ public class GroupController implements BlinckController {
 	}
 
 
+	public @RequestMapping(
+			value = "/meeting/list",
+			method = GET,
+			produces = JSON
+	) OfferInfo[] getMeetingList(Authentication authentication,
+								 @RequestParam("id") Long partyId) {
+
+		if (Arrays.stream(getPartyUsers(authentication, partyId))
+				.noneMatch(longID(authentication)::equals)) return null;
+		return servicePack.meetingOfferService.getOfferList(partyId);
+	}
+
+
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/meeting/propose",
 			method = POST,
 			consumes = JSON
-	) void proposeMeeting(Authentication authentication,
+	) Boolean proposeMeeting(Authentication authentication,
+						  @RequestParam("id") Long partyId,
 						  @RequestBody Meeting proposition) {
 
 		final Long id = longID(authentication);
-		// TODO: 19/09/17
+		Boolean added = servicePack.meetingOfferService.addProposition(id, partyId, proposition);
+		if (added) servicePack.sendPartyNotification(partyId, TYPE.PARTY_MEETING_PROPOSITION);
+		return added;
 	}
 
 

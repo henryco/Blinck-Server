@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -40,5 +41,12 @@ public class PartyDaoImp
 		} catch (EntityNotFoundException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public Boolean isPartyActive(Long partyId) {
+		return getRepository().existsByIdAndMeetingActivationTimeBefore(
+				partyId, new Date(System.currentTimeMillis())
+		);
 	}
 }

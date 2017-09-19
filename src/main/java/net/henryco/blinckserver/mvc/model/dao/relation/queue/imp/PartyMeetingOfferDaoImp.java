@@ -7,6 +7,8 @@ import net.henryco.blinckserver.util.dao.repo.BlinckRepositoryProvider;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author Henry on 18/09/17.
  */
@@ -25,4 +27,8 @@ public class PartyMeetingOfferDaoImp
 	}
 
 
+	@Override
+	public List<PartyMeetingOffer> getMeetingOfferListByPartyId(Long partyId) {
+		return getRepository().getAllByParty(partyId);
+	}
 }

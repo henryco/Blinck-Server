@@ -35,14 +35,12 @@ public interface BlinckNotification {
 		String SUB_PARTY_MESSAGE_REST = "sub_party_message_rest";
 		String SUB_PARTY_FOUND = "sub_party_found";
 		String SUB_PARTY_IN_QUEUE = "sub_party_in_queue";
-		String SUB_PARTY_REMOVE = "sub_party_removed";
-		String SUB_PARTY_LEAVE = "sub_party_leave";
 
 		String PARTY_MESSAGE_STOMP = "party_message_stomp";
 		String PARTY_MESSAGE_REST = "party_message_rest";
 		String PARTY_FOUND = "party_found";
-		String PARTY_REMOVE = "party_removed";
-		String PARTY_LEAVE = "party_leave";
+		String PARTY_MEETING_PROPOSITION = "party_meeting_proposition";
+		String PARTY_MEETING_VOTE = "party_meeting_vote";
 
 		String QUEUE_LEAVE = "queue_leave";
 	}

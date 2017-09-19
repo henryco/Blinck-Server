@@ -9,5 +9,6 @@ import net.henryco.blinckserver.util.dao.BlinckDaoTemplate;
 public interface PartyDao extends BlinckDaoTemplate<Party, Long> {
 
 	Party getRandomFirstInQueue(String typeWanted, String typeIdent, Integer dimension);
+	Boolean isPartyActive(Long partyId);
 
 }

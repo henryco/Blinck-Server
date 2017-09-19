@@ -6,7 +6,7 @@ import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Meeting;
 
 import javax.persistence.*;
 
-import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.GenerationType.AUTO;
 
@@ -38,7 +38,7 @@ public class PartyMeetingOffer {
 	) @Column(
 			name = "users",
 			nullable = false
-	) List<Long> users;
+	) Set<Long> users;
 
 
 	private @Embedded @JoinColumn(
