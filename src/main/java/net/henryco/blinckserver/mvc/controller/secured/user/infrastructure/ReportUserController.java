@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController // TODO: 19/09/17 TESTS
@@ -24,9 +23,26 @@ public class ReportUserController implements BlinckController {
 	}
 
 
+	/*
+	 *	Meeting offer API
+	 *
+	 *		ENDPOINT: 		/protected/user/report
+	 *
+	 *
+	 * 		REPORT:
+	 *
+	 * 			ENDPOINT:	/
+	 * 			ARGS:		Long: id
+	 * 			BODY:		String
+	 * 			METHOD:		POST
+	 * 			RETURN:		BOOLEAN
+	 *
+	 */
+
+
 	public @RequestMapping(
-			value = "/user",
-			method = {GET, POST}
+			value = "/",
+			method = POST
 	) Boolean reportUser(Authentication authentication,
 						 @RequestParam("id") Long userId,
 						 @RequestBody String reason) {

@@ -28,6 +28,7 @@ public interface BlinckController {
 		String FRIENDSHIP_CONVERSATION = "/protected/user/friends/conversation";
 
 		String MATCHER = "/protected/user/match";
+		String MEETING = "/protected/user/group/meeting";
 
 		String GROUP = "/protected/user/group";
 		String GROUP_CONVERSATION = "/protected/user/group/conversation";
