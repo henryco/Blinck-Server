@@ -46,7 +46,7 @@ public class FriendshipConversation
 			"message"
 	) String message;
 
-
+	// TODO: 20/09/17 REPLACE WITH MESSAGE PART
 	private @Column(
 			name = "time_stamp",
 			updatable = false,

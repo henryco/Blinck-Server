@@ -13,7 +13,8 @@ import static javax.persistence.GenerationType.AUTO;
  */
 @Entity @Data
 @NoArgsConstructor
-public class SubPartyConversation {
+public class SubPartyConversation
+		implements ConversationEntity {
 
 
 	private @Id @Column(
@@ -38,4 +39,8 @@ public class SubPartyConversation {
 	) Long subParty;
 
 
+	@Override
+	public Long getTopic() {
+		return getSubParty();
+	}
 }

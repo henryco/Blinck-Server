@@ -36,5 +36,8 @@ public class GroupConversationController implements BlinckController {
 		this.servicePack = servicePack;
 	}
 
-}
 
+
+
+
+}

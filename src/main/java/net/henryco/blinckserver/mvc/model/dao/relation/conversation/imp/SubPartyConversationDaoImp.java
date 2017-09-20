@@ -31,7 +31,7 @@ public class SubPartyConversationDaoImp
 	}
 
 	@Override
-	public Long countBySubPartyId(Long id) {
+	public long countBySubPartyId(Long id) {
 		return getRepository().countAllBySubParty(id);
 	}
 

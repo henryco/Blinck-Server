@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.Date;
 
-import static net.henryco.blinckserver.mvc.service.relation.conversation.SubPartyConversationService.SubPartyMessageForm;
+import static net.henryco.blinckserver.mvc.service.relation.conversation.SubPartyConversationService.MessageForm;
 
 @Component
 final class SubGroupStompChatServicePack {
@@ -98,16 +98,16 @@ public class SubGroupStompChatController
 	 *	&nbsp;}
 	 *	</h2>
 	 *	@author Henry on 18/09/17.
-	 *	@see SubPartyConversationService.SubPartyMessageForm
+	 *	@see MessageForm
 	 */
 	@MessageMapping({ExternalAPI.SUBGROUP})
 	@SendToUser(ExternalAPI.SUBGROUP + DestinationAPI.Postfix.STAT)
 	public WebSocketStatusJson sendMessage(Authentication authentication,
-										   SubPartyMessageForm messageForm) {
+										   MessageForm messageForm) {
 
 		final Long id = longID(authentication);
 
-		if (!servicePack.subPartyService.isExistsWithUser(messageForm.getSubParty(), id))
+		if (!servicePack.subPartyService.isExistsWithUser(messageForm.getTopic(), id))
 			return createResponse(messageForm, new Date(System.currentTimeMillis()), false);
 
 		processMessage(id, messageForm);
@@ -118,11 +118,11 @@ public class SubGroupStompChatController
 
 
 
-	private void processMessage(Long userId, SubPartyMessageForm messageForm) {
+	private void processMessage(Long userId, MessageForm messageForm) {
 
 		saveMessage(messageForm, userId);
 
-		final Long subParty = messageForm.getSubParty();
+		final Long subParty = messageForm.getTopic();
 		final Long[] users = servicePack.subPartyService.getSubPartyUsers(subParty);
 		final String destination = ExternalAPI.getSubgroup(subParty);
 
@@ -131,7 +131,7 @@ public class SubGroupStompChatController
 	}
 
 
-	private void saveMessage(SubPartyMessageForm messageForm, Long userId) {
+	private void saveMessage(MessageForm messageForm, Long userId) {
 
 		SubPartyConversation saved = servicePack.conversationService.sendMessage(messageForm, userId);
 		messageForm.setAuthor(userId);
@@ -149,8 +149,8 @@ public class SubGroupStompChatController
 
 
 	private static
-	WebSocketStatusJson createResponse(SubPartyMessageForm post, Date date, boolean status) {
-		return new WebSocketStatusJson(post.getSubParty().toString(), date, status);
+	WebSocketStatusJson createResponse(MessageForm post, Date date, boolean status) {
+		return new WebSocketStatusJson(post.getTopic().toString(), date, status);
 	}
 
 }

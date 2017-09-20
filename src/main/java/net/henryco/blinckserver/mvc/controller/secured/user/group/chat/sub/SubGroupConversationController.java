@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static net.henryco.blinckserver.mvc.service.relation.conversation.SubPartyConversationService.SubPartyMessageForm;
+import static net.henryco.blinckserver.mvc.service.relation.conversation.SubPartyConversationService.MessageForm;
 
 @Component
 final class SubGroupConversationServicePack {
@@ -53,7 +53,7 @@ public class SubGroupConversationController
 	 *		ENDPOINT: 		/protected/user/subgroup/conversation
 	 *
 	 *
-	 *	SubPartyMessageForm:
+	 *	MessageForm:
 	 *
 	 * 		"sub_party": 	LONG,
 	 *		"author": 		LONG,			(not required for POST)
@@ -74,13 +74,13 @@ public class SubGroupConversationController
 	 *			ENDPOINT:	/messages/list
 	 *			ARGS:		Int: page, Int: size, Long: id
 	 *			METHOD:		GET
-	 *			RETURN:		SubPartyMessageForm[]
+	 *			RETURN:		MessageForm[]
 	 *
 	 *
 	 * 		SEND:
 	 *
 	 * 			ENDPOINT:	/messages/send
-	 * 			BODY:		SubPartyMessageForm
+	 * 			BODY:		MessageForm
 	 * 			METHOD:		POST
 	 * 			RETURN:		VOID
 	 *
@@ -94,7 +94,7 @@ public class SubGroupConversationController
 						 @RequestParam("id") Long subPartyId) {
 
 		accessCheck(subPartyId, longID(authentication));
-		return servicePack.conversationService.countBySubPartyId(subPartyId);
+		return servicePack.conversationService.countByTopic(subPartyId);
 	}
 
 
@@ -108,19 +108,19 @@ public class SubGroupConversationController
 	 *	&nbsp;}
 	 *	</h2>
 	 *	@author Henry on 18/09/17.
-	 *	@see SubPartyMessageForm
+	 *	@see SubPartyConversationService.MessageForm
 	 */
 	public @ResponseStatus(OK) @RequestMapping(
 			value = "/messages/send",
 			method = POST,
 			consumes = JSON
 	) void sendMessage(Authentication authentication,
-					   @RequestBody SubPartyMessageForm messageForm) {
+					   @RequestBody MessageForm messageForm) {
 
 		final Long id = longID(authentication);
-		accessCheck(messageForm.getSubParty(), id);
+		accessCheck(messageForm.getTopic(), id);
 		servicePack.conversationService.sendMessage(messageForm, id);
-		sendMessageNotification(messageForm.getSubParty(), TYPE.SUB_PARTY_MESSAGE_REST);
+		sendMessageNotification(messageForm.getTopic(), TYPE.SUB_PARTY_MESSAGE_REST);
 	}
 
 
@@ -135,19 +135,19 @@ public class SubGroupConversationController
 	 *	&nbsp;}
 	 *	</h2>
 	 *	@author Henry on 18/09/17.
-	 *	@see SubPartyMessageForm
+	 *	@see SubPartyConversationService.MessageForm
 	 */
 	public @RequestMapping(
 			value = "/messages/list",
 			method = GET,
 			produces = JSON
-	) SubPartyMessageForm[] getAllMessages(Authentication authentication,
-										   @RequestParam("id") Long subPartyId,
-										   @RequestParam("page") int page,
-										   @RequestParam("size") int size) {
+	) MessageForm[] getAllMessages(Authentication authentication,
+								   @RequestParam("id") Long subPartyId,
+								   @RequestParam("page") int page,
+								   @RequestParam("size") int size) {
 
 		accessCheck(subPartyId, longID(authentication));
-		return servicePack.conversationService.getLastNBySubPartyId(subPartyId, page, size);
+		return servicePack.conversationService.getLastNByTopic(subPartyId, page, size);
 	}
 
 }

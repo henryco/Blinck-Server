@@ -11,7 +11,7 @@ import java.util.List;
 public interface SubPartyConversationDao extends BlinckDaoTemplate<SubPartyConversation, Long> {
 
 	List<SubPartyConversation> getLastNBySubPartyId(Long id, int page, int size);
-	Long countBySubPartyId(Long id);
+	long countBySubPartyId(Long id);
 	void deleteAllBySubPartyId(Long id);
 
 }
