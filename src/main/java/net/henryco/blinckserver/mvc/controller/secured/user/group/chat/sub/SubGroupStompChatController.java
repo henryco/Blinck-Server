@@ -1,8 +1,7 @@
 package net.henryco.blinckserver.mvc.controller.secured.user.group.chat.sub;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
-import net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants;
-import net.henryco.blinckserver.mvc.model.entity.relation.conversation.SubPartyConversation;
+import net.henryco.blinckserver.mvc.controller.secured.user.group.chat.BlinckStompChatController;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.conversation.SubPartyConversationService;
 import net.henryco.blinckserver.mvc.service.relation.core.SubPartyService;
@@ -16,7 +15,9 @@ import org.springframework.stereotype.Controller;
 
 import java.util.Date;
 
+import static net.henryco.blinckserver.mvc.controller.secured.user.group.chat.BlinckStompChatController.*;
 import static net.henryco.blinckserver.mvc.service.relation.conversation.SubPartyConversationService.MessageForm;
+
 
 @Component
 final class SubGroupStompChatServicePack {
@@ -45,7 +46,7 @@ final class SubGroupStompChatServicePack {
 @Controller // TODO: 18/09/17 Tests 
 public class SubGroupStompChatController
 		extends SubGroupMessageController
-		implements WebSocketConstants, BlinckNotification {
+		implements BlinckStompChatController, BlinckNotification {
 
 	private final SubGroupStompChatServicePack servicePack;
 
@@ -89,10 +90,10 @@ public class SubGroupStompChatController
 
 
 	/**
-	 * <h1>SubParty Message JSON:</h1>
+	 * <h1>Message JSON:</h1>
 	 *	<h2>
 	 * 	{&nbsp;
-	 * 		"sub_party": 	LONG, 		&nbsp;
+	 * 		"topic": 	LONG, 		&nbsp;
 	 * 		"message": 		CHAR[512], 	&nbsp;
 	 * 		"timestamp": 	DATE/LONG
 	 *	&nbsp;}
@@ -100,7 +101,7 @@ public class SubGroupStompChatController
 	 *	@author Henry on 18/09/17.
 	 *	@see MessageForm
 	 */
-	@MessageMapping({ExternalAPI.SUBGROUP})
+	@Override @MessageMapping({ExternalAPI.SUBGROUP})
 	@SendToUser(ExternalAPI.SUBGROUP + DestinationAPI.Postfix.STAT)
 	public WebSocketStatusJson sendMessage(Authentication authentication,
 										   MessageForm messageForm) {
@@ -110,47 +111,25 @@ public class SubGroupStompChatController
 		if (!servicePack.subPartyService.isExistsWithUser(messageForm.getTopic(), id))
 			return createResponse(messageForm, new Date(System.currentTimeMillis()), false);
 
-		processMessage(id, messageForm);
-
-		return createResponse(messageForm, messageForm.getDate(), true);
+		MessageForm processed = processMessage(id, messageForm);
+		return createResponse(processed, processed.getDate(), true);
 	}
 
 
 
 
-	private void processMessage(Long userId, MessageForm messageForm) {
+	private MessageForm processMessage(Long userId, MessageForm messageForm) {
 
-		saveMessage(messageForm, userId);
+		MessageForm form = saveMessage(servicePack.conversationService, messageForm, userId);
 
-		final Long subParty = messageForm.getTopic();
+		final Long subParty = form.getTopic();
 		final Long[] users = servicePack.subPartyService.getSubPartyUsers(subParty);
 		final String destination = ExternalAPI.getSubgroup(subParty);
 
-		stompSend(users, destination, messageForm);
+		stompSend(servicePack.messagingTemplate, users, destination, form);
 		sendMessageNotification(users, subParty, TYPE.SUB_PARTY_MESSAGE_STOMP);
-	}
 
-
-	private void saveMessage(MessageForm messageForm, Long userId) {
-
-		SubPartyConversation saved = servicePack.conversationService.sendMessage(messageForm, userId);
-		messageForm.setAuthor(userId);
-		messageForm.setDate(saved.getMessagePart().getDate());
-	}
-
-
-	private void stompSend(Long[] users, String destination, Object payload) {
-
-		for (Long user: users) {
-			servicePack.messagingTemplate
-					.convertAndSendToUser(user.toString(), destination, payload);
-		}
-	}
-
-
-	private static
-	WebSocketStatusJson createResponse(MessageForm post, Date date, boolean status) {
-		return new WebSocketStatusJson(post.getTopic().toString(), date, status);
+		return form;
 	}
 
 }

@@ -54,7 +54,7 @@ final class GroupConversationServicePack {
 /**
  * @author Henry on 18/09/17.
  */
-@RestController
+@RestController // TODO: 20/09/17 TESTS
 @RequestMapping(BlinckController.EndpointAPI.GROUP_CONVERSATION)
 public class GroupConversationController
 		implements BlinckController, BlinckConversationController, BlinckNotification {
