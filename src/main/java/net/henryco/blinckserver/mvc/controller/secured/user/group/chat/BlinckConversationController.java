@@ -61,7 +61,7 @@ public interface BlinckConversationController extends BlinckController {
 			method = GET
 	) Long countMessages(
 			Authentication authentication,
-			@RequestParam("id") Long subPartyId
+			@RequestParam("id") Long topic
 	);
 
 
@@ -106,7 +106,7 @@ public interface BlinckConversationController extends BlinckController {
 			produces = JSON
 	) MessageForm[] getAllMessages(
 			Authentication authentication,
-			@RequestParam("id") Long subPartyId,
+			@RequestParam("id") Long topic,
 			@RequestParam("page") int page,
 			@RequestParam("size") int size
 	);

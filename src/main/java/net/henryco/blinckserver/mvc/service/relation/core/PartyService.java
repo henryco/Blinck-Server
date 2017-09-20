@@ -45,6 +45,13 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 			this.subParties = subParties;
 			this.users = users;
 		}
+
+		public final boolean isActiveAndContainsUser(Long userId) {
+			return getUsers().contains(userId) &&
+					getMeeting() != null &&
+					getMeeting().getActivationTime()
+							.before(new Date(System.currentTimeMillis()));
+		}
 	}
 
 	private final SubPartyDao subPartyDao;
@@ -154,12 +161,8 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 
 	@Transactional
 	public boolean isPartyActiveAndContainsUser(Long partyId, Long userId) {
-
-		PartyInfo info = getPartyInfo(partyId, userId);
-		return info.getUsers().contains(userId) &&
-				info.getMeeting() != null &&
-				info.getMeeting().getActivationTime()
-						.before(new Date(System.currentTimeMillis()));
+		return getPartyInfo(partyId, userId).isActiveAndContainsUser(userId);
 	}
+
 
 }

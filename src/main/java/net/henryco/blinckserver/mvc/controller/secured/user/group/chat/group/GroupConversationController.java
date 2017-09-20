@@ -1,15 +1,18 @@
 package net.henryco.blinckserver.mvc.controller.secured.user.group.chat.group;
 
+import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.controller.secured.user.group.chat.BlinckConversationController;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.conversation.PartyConversationService;
 import net.henryco.blinckserver.mvc.service.relation.core.PartyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import static net.henryco.blinckserver.mvc.service.relation.core.PartyService.PartyInfo;
 import static net.henryco.blinckserver.mvc.service.relation.conversation.ConversationService.MessageForm;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -30,6 +33,22 @@ final class GroupConversationServicePack {
 		this.conversation = conversationService;
 		this.party = partyService;
 	}
+
+	protected final void checkAccess(Long party, Long user)
+			throws AccessDeniedException {
+		checkAccess(this.party.getPartyInfo(party, user), user);
+	}
+
+	protected final void checkAccess(PartyInfo partyInfo, Long user)
+			throws AccessDeniedException {
+		if (!partyInfo.isActiveAndContainsUser(user))
+			throw new AccessDeniedException("Wrong user or topic is not active!");
+	}
+
+	protected final void sendNotification(PartyInfo partyInfo, String notificationType) {
+		for (Long user: partyInfo.getUsers())
+			notification.addNotification(user, notificationType, partyInfo.getId());
+	}
 }
 
 /**
@@ -38,7 +57,7 @@ final class GroupConversationServicePack {
 @RestController
 @RequestMapping(BlinckController.EndpointAPI.GROUP_CONVERSATION)
 public class GroupConversationController
-		implements BlinckController, BlinckConversationController {
+		implements BlinckController, BlinckConversationController, BlinckNotification {
 
 	private final GroupConversationServicePack services;
 
@@ -92,9 +111,10 @@ public class GroupConversationController
 			value = "/messages/count",
 			method = GET
 	) Long countMessages(Authentication authentication,
-						 @RequestParam("id") Long subPartyId) {
-		// TODO: 20/09/17
-		return null;
+						 @RequestParam("id") Long partyId) {
+
+		services.checkAccess(partyId, longID(authentication));
+		return services.conversation.countByTopic(partyId);
 	}
 
 
@@ -117,7 +137,13 @@ public class GroupConversationController
 			consumes = JSON
 	) void sendMessage(Authentication authentication,
 					   @RequestBody MessageForm messageForm) {
-		// TODO: 20/09/17
+
+		final Long id = longID(authentication);
+		final PartyInfo info = services.party.getPartyInfo(messageForm.getTopic(), id);
+
+		services.checkAccess(info, id);
+		services.conversation.sendMessage(messageForm, id);
+		services.sendNotification(info, TYPE.PARTY_MESSAGE_REST);
 	}
 
 
@@ -140,11 +166,12 @@ public class GroupConversationController
 			method = GET,
 			produces = JSON
 	) MessageForm[] getAllMessages(Authentication authentication,
-								   @RequestParam("id") Long subPartyId,
+								   @RequestParam("id") Long partyId,
 								   @RequestParam("page") int page,
 								   @RequestParam("size") int size) {
-		// TODO: 20/09/17
-		return null;
+
+		services.checkAccess(partyId, longID(authentication));
+		return services.conversation.getLastNByTopic(partyId, page, size);
 	}
 
 
