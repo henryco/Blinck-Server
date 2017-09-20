@@ -58,4 +58,24 @@ public class ReportAndBanService {
 		return true;
 	}
 
+	@Transactional
+	public Long countReportLists() {
+		return reportListDao.count();
+	}
+
+	@Transactional
+	public ReportList[] getReportList(int page, int size) {
+		return reportListDao.getForAll(page, size).toArray(new ReportList[0]);
+	}
+
+	@Transactional
+	public ReportList[] getReportListForUser(Long userId) {
+		return reportListDao.getAllForUser(userId).toArray(new ReportList[0]);
+	}
+
+	@Transactional
+	public void deleteAllForUser(Long userId) {
+		reportListDao.deleteAllForUser(userId);
+	}
+
 }

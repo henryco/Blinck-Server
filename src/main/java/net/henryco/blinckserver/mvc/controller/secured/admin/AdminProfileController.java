@@ -29,7 +29,7 @@ public class AdminProfileController
 	private final SessionWhiteListService whiteListService;
 	private final UpdateNotificationService notificationService;
 
-	@Autowired
+	@Autowired // TODO: 20/09/17 API LIST
 	public AdminProfileController(AdminDataService adminDataService,
 								  SessionWhiteListService whiteListService,
 								  UpdateNotificationService notificationService) {
@@ -39,8 +39,107 @@ public class AdminProfileController
 	}
 
 
+	/*
+	 *	Admin profile API
+	 *
+	 *		ENDPOINT: 		/protected/admin
+	 *
+	 *
+	 * 	AdminCredentials:
+	 *
+	 * 		"user_id": 		CHAR[255],
+	 * 		"password": 	CHAR[255]
+	 *
+	 *
+	 *	ReportList:
+	 *
+	 * 		"receiver_id": 	LONG,
+	 * 		"type": 		CHAR[255],
+	 * 		"notification": CHAR[255]
+	 *
+	 *
+	 * 		REGISTRATION:
+	 *
+	 * 			ENDPOINT:	/registration
+	 * 			METHOD:		POST
+	 * 			BODY:		AdminCredentials
+	 * 			RETURN:		VOID
+	 *
+	 *
+	 * 		LIST:
+	 *
+	 * 			ENDPOINT:	/list
+	 * 			METHOD:		GET
+	 * 			RETURN:		STRING[]
+	 *
+	 *
+	 * 		DETAILS:
+	 *
+	 * 			ENDPOINT:	/details/user
+	 * 			ARGS:		Long: id
+	 * 			METHOD:		GET
+	 * 			RETURN:		UserAuthProfile
+	 *
+	 *
+	 * 		VERIFICATION:
+	 *
+	 * 			ENDPOINT:	/verification
+	 * 			ARGS:		Int: size
+	 * 			METHOD:		POST, GET
+	 * 			RETURN:		STRING[]
+	 *
+	 *
+	 * 		ACTIVATE:
+	 *
+	 * 			ENDPOINT:	/activate
+	 * 			METHOD:		POST
+	 * 			BODY:		STRING[]
+	 * 			RETURN:		VOID
+	 *
+	 *
+	 * 		AUTHORITY_ADD:
+	 *
+	 * 			ENDPOINT:	/authority/add
+	 * 			ARGS:		String: name, role
+	 * 			METHOD:		POST, GET
+	 *			RETURN:		VOID
+	 *
+	 *
+	 * 		AUTHORITY_REMOVE:
+	 *
+	 * 			ENDPOINT:	/authority/remove
+	 * 			ARGS:		String: name, role
+	 * 			METHOD:		POST, GET
+	 *			RETURN:		VOID
+	 *
+	 *
+	 *		SESSION_CLOSE_USER:
+	 *
+	 *			ENDPOINT:	/session/close/user
+	 *			ARGS:		String: name
+	 *			METHOD:		POST, GET
+	 *			RETURN:		VOID
+	 *
+	 *
+	 * 		SESSION_CLOSE_ADMIN:
+	 *
+	 *			ENDPOINT:	/session/close/admin
+	 *			ARGS:		String: name
+	 *			METHOD:		POST, GET
+	 *			RETURN:		VOID
+	 *
+	 *
+	 *		NOTIFICATION:
+	 *
+	 *			ENDPOINT:	/notification/user
+	 *			METHOD:		POST
+	 *			BODY:		SimpleNotification
+	 *			RETURN:		VOID
+	 *
+	 */
 
-	public @RequestMapping(
+
+	public @ResponseStatus(OK) @RequestMapping(
 			method = POST,
 			value = "/registration"
 	) void registerAdmin(@RequestBody AdminCredentials credentials) {
@@ -78,7 +177,7 @@ public class AdminProfileController
 
 
 
-	public @RequestMapping(
+	public @ResponseStatus(OK) @RequestMapping(
 			method = POST,
 			consumes = JSON,
 			value = "/activate"
@@ -92,7 +191,7 @@ public class AdminProfileController
 
 
 
-	public @RequestMapping(
+	public @ResponseStatus(OK) @RequestMapping(
 			method = {GET, POST},
 			value = "/authority/add"
 	) void grantAuthority(@RequestParam("name") String name,
@@ -105,7 +204,7 @@ public class AdminProfileController
 
 
 
-	public @RequestMapping(
+	public @ResponseStatus(OK) @RequestMapping(
 			method = {GET, POST},
 			value = "/authority/remove"
 	) void removeAuthority(@RequestParam("name") String name,
@@ -118,7 +217,7 @@ public class AdminProfileController
 
 
 
-	public @RequestMapping(
+	public @ResponseStatus(OK) @RequestMapping(
 			method = {GET, POST},
 			value = "/session/close/admin"
 	) void logOutAdmin(@RequestParam("name") String target,

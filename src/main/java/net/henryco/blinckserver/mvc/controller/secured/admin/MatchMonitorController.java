@@ -31,6 +31,28 @@ public class MatchMonitorController implements BlinckController {
 	}
 
 
+	/*
+	 *	Match monitor API
+	 *
+	 *		ENDPOINT: 		/protected/admin/monitor
+	 *
+	 *
+	 * 		LIST_PARTY:
+	 *
+	 * 			ENDPOINT:	/party/all
+	 * 			METHOD:		GET
+	 * 			RETURN:		Party[]
+	 *
+	 *
+	 * 		LIST_SUB_PARTY:
+	 *
+	 * 			ENDPOINT:	/subparty/all
+	 * 			METHOD:		GET
+	 * 			RETURN:		SubParty[]
+	 *
+	 */
+
+
 	public @RequestMapping(
 			value = "/party/all",
 			method = GET,
@@ -38,6 +60,7 @@ public class MatchMonitorController implements BlinckController {
 	) Party[] getAllParties() {
 		return partyService.getAllParties();
 	}
+
 
 	public @RequestMapping(
 			value = "/subparty/all",

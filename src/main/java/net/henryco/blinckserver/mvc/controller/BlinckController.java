@@ -20,6 +20,7 @@ public interface BlinckController {
 
 		String ADMIN = "/protected/admin";
 		String ADMIN_MONITOR = "/protected/admin/monitor";
+		String ADMIN_BANS = "/protected/admin/bans";
 
 		String USER = "/protected/user";
 		String USER_NOTIFICATIONS = "/protected/user/notifications";

@@ -11,9 +11,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
+ * <h1>User Auth profile JSON</h1>
+ * <h2>
+ *     {&nbsp;
+ *         "id":			LONG, 		&nbsp;
+ *         "locked":		BOOLEAN,	&nbsp;
+ *         "authorities":	CHAR[255]
+ *     &nbsp;}
+ * </h2>
  * @author Henry on 22/08/17.
  */
-
 @Entity @Data
 @NoArgsConstructor
 @Proxy(lazy = false)
