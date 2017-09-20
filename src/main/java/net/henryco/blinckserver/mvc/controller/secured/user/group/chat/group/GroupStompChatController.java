@@ -16,9 +16,6 @@ import org.springframework.stereotype.Controller;
 import java.util.Date;
 
 import static net.henryco.blinckserver.mvc.service.relation.conversation.ConversationService.MessageForm;
-import static net.henryco.blinckserver.mvc.controller.secured.user.group.chat.BlinckStompChatController.createResponse;
-import static net.henryco.blinckserver.mvc.controller.secured.user.group.chat.BlinckStompChatController.stompSend;
-import static net.henryco.blinckserver.mvc.controller.secured.user.group.chat.BlinckStompChatController.saveMessage;
 import static net.henryco.blinckserver.mvc.service.relation.core.PartyService.PartyInfo;
 
 

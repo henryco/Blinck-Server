@@ -20,19 +20,19 @@ public interface BlinckStompChatController
 	WebSocketStatusJson sendMessage(Authentication authentication, MessageForm messageForm);
 
 
-	static WebSocketStatusJson
+	default WebSocketStatusJson
 	createResponse(MessageForm post, Date date, boolean status) {
 		return new WebSocketStatusJson(post.getTopic().toString(), date, status);
 	}
 
 
-	static void
+	default void
 	stompSend(SimpMessagingTemplate template, Long[] users, String destination, Object payload) {
 		for (Long user: users)
 			template.convertAndSendToUser(user.toString(), destination, payload);
 	}
 
-	static MessageForm
+	default MessageForm
 	saveMessage(ConversationService service, MessageForm messageForm, Long userId) {
 		return new MessageForm(service.sendMessage(messageForm, userId));
 	}
