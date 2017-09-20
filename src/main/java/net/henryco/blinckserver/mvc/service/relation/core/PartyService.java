@@ -152,4 +152,14 @@ public class PartyService extends BlinckDaoProvider<Party, Long> {
 		return getDao().save(party) != null;
 	}
 
+	@Transactional
+	public boolean isPartyActiveAndContainsUser(Long partyId, Long userId) {
+
+		PartyInfo info = getPartyInfo(partyId, userId);
+		return info.getUsers().contains(userId) &&
+				info.getMeeting() != null &&
+				info.getMeeting().getActivationTime()
+						.before(new Date(System.currentTimeMillis()));
+	}
+
 }

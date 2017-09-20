@@ -2,6 +2,7 @@ package net.henryco.blinckserver.mvc.controller.secured.user.group.chat.sub;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
+import net.henryco.blinckserver.mvc.controller.secured.user.group.chat.BlinckConversationController;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.conversation.SubPartyConversationService;
 import net.henryco.blinckserver.mvc.service.relation.core.SubPartyService;
@@ -36,7 +37,8 @@ final class SubGroupConversationServicePack {
 @RestController // TODO: 18/09/17 Tests
 @RequestMapping(BlinckController.EndpointAPI.SUB_GROUP_CONVERSATION)
 public class SubGroupConversationController
-		extends SubGroupMessageController implements BlinckNotification{
+		extends SubGroupMessageController
+		implements BlinckNotification, BlinckConversationController {
 
 	private final SubGroupConversationServicePack servicePack;
 
@@ -87,7 +89,7 @@ public class SubGroupConversationController
 	 */
 
 
-	public @RequestMapping(
+	public @Override @RequestMapping(
 			value = "/messages/count",
 			method = GET
 	) Long countMessages(Authentication authentication,
@@ -110,7 +112,7 @@ public class SubGroupConversationController
 	 *	@author Henry on 18/09/17.
 	 *	@see SubPartyConversationService.MessageForm
 	 */
-	public @ResponseStatus(OK) @RequestMapping(
+	public @Override @ResponseStatus(OK) @RequestMapping(
 			value = "/messages/send",
 			method = POST,
 			consumes = JSON
@@ -137,7 +139,7 @@ public class SubGroupConversationController
 	 *	@author Henry on 18/09/17.
 	 *	@see SubPartyConversationService.MessageForm
 	 */
-	public @RequestMapping(
+	public @Override @RequestMapping(
 			value = "/messages/list",
 			method = GET,
 			produces = JSON
