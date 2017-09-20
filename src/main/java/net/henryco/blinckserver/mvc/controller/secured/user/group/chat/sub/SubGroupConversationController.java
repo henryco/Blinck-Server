@@ -55,7 +55,7 @@ public class SubGroupConversationController
 	 *
 	 *	MessageForm:
 	 *
-	 * 		"sub_party": 	LONG,
+	 * 		"topic": 		LONG,
 	 *		"author": 		LONG,			(not required for POST)
 	 * 		"message": 		CHAR[512],
 	 * 		"timestamp": 	DATE/LONG		(not required for POST)

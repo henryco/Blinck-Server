@@ -67,13 +67,13 @@ public class SubGroupStompChatController
 	 *
 	 *	SEND message JSON:
 	 *
-	 *		"sub_party":	LONG,
+	 *		"topic":		LONG,
 	 *		"message":		CHAR[512]
 	 *
 	 *
 	 *	GET message JSON:
 	 *
-	 *		"sub_party": 	LONG,
+	 *		"topic":	 	LONG,
 	 *		"author": 		LONG,
 	 *		"message": 		CHAR[512],
 	 *		"timestamp": 	DATE/LONG
