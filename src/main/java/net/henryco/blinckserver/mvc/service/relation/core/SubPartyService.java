@@ -6,6 +6,7 @@ import net.henryco.blinckserver.mvc.model.dao.relation.core.PartyDao;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Meeting;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import java.util.List;
 public class SubPartyService
 		extends BlinckDaoProvider<SubParty, Long> {
 
-	private static final long TIME_BEFORE_DELETE = 86_400_000L;
+	private static final long TIME_BEFORE_DELETE = 86_400_000L; // 1 Day
 
 	@Data @NoArgsConstructor
 	public static final class SubPartyInfo
@@ -74,15 +75,19 @@ public class SubPartyService
 		for (SubParty subParty: all) {
 
 			Party party = subParty.getParty();
-			Date deleteTime = new Date(party.getMeeting().getTime().getTime() + TIME_BEFORE_DELETE);
+			Meeting meeting = party.getMeeting();
 
+			if (meeting == null) {
+				newList.add(subParty);
+				continue;
+			}
+
+			Date deleteTime = new Date(meeting.getTime().getTime() + TIME_BEFORE_DELETE);
 			if (deleteTime.before(new Date(System.currentTimeMillis()))) {
 				for (Long subId : party.getSubParties())
 					getDao().deleteById(subId);
 				partyDao.deleteById(party.getId());
-			}
-
-			else newList.add(subParty);
+			} else newList.add(subParty);
 		}
 
 		return newList.toArray(new SubParty[0]);
