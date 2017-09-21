@@ -49,4 +49,13 @@ public class PartyDaoImp
 				partyId, new Date(System.currentTimeMillis())
 		);
 	}
+
+	@Override
+	public void deleteById(Long id) {
+		try {
+			super.deleteById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

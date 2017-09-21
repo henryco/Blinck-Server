@@ -2,6 +2,7 @@ package net.henryco.blinckserver.mvc.service.relation.core;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.mvc.model.dao.relation.core.PartyDao;
 import net.henryco.blinckserver.mvc.model.dao.relation.core.SubPartyDao;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.Party;
 import net.henryco.blinckserver.mvc.model.entity.relation.core.SubParty;
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +25,7 @@ import java.util.List;
 public class SubPartyService
 		extends BlinckDaoProvider<SubParty, Long> {
 
+	private static final long TIME_BEFORE_DELETE = 86_400_000L;
 
 	@Data @NoArgsConstructor
 	public static final class SubPartyInfo
@@ -41,10 +45,13 @@ public class SubPartyService
 		}
 	}
 
+	private final PartyDao partyDao;
 
 	@Autowired
-	public SubPartyService(SubPartyDao subPartyDao) {
+	public SubPartyService(SubPartyDao subPartyDao,
+						   PartyDao partyDao) {
 		super(((subPartyDao)));
+		this.partyDao = partyDao;
 	}
 
 	private SubPartyDao getDao() {
@@ -60,16 +67,33 @@ public class SubPartyService
 
 	@Transactional
 	public SubParty[] getAllSubPartiesWithUserInParty(Long userId) {
-		return getDao().getAllWithUserInParty(userId).toArray(new SubParty[0]);
+
+		List<SubParty> all = getDao().getAllWithUserInParty(userId);
+		List<SubParty> newList = new ArrayList<>();
+
+		for (SubParty subParty: all) {
+
+			Party party = subParty.getParty();
+			Date deleteTime = new Date(party.getMeeting().getTime().getTime() + TIME_BEFORE_DELETE);
+
+			if (deleteTime.before(new Date(System.currentTimeMillis()))) {
+				for (Long subId : party.getSubParties())
+					getDao().deleteById(subId);
+				partyDao.deleteById(party.getId());
+			}
+
+			else newList.add(subParty);
+		}
+
+		return newList.toArray(new SubParty[0]);
 	}
 
 
 	@Transactional
 	public Long[] getSubPartiesIdListWithUserInParty(Long userId) {
 
-		return getDao().getAllWithUserInParty(userId)
-				.stream().map(SubParty::getId)
-		.toArray(Long[]::new);
+		return Arrays.stream(getAllSubPartiesWithUserInParty(userId))
+				.map(SubParty::getId).toArray(Long[]::new);
 	}
 
 
@@ -86,9 +110,8 @@ public class SubPartyService
 	@Transactional
 	public SubPartyInfo[] getSubPartyInfoListWithUserInParty(Long userId) {
 
-		return getDao().getAllWithUserInParty(userId)
-				.stream().map(SubPartyInfo::new)
-		.toArray(SubPartyInfo[]::new);
+		return Arrays.stream(getAllSubPartiesWithUserInParty(userId))
+				.map(SubPartyInfo::new).toArray(SubPartyInfo[]::new);
 	}
 
 
