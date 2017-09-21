@@ -73,12 +73,12 @@ public abstract class Utils {
 
 			final String userHash = Integer.toString(Math.abs(userName.hashCode()));
 			final String time = Long.toString(System.nanoTime());
-			final String name = Arrays.hashCode(file) + userHash + time + "."+type;
+			final String name = Math.abs(Arrays.hashCode(file)) + userHash + time + "."+type;
 
 			File upFile = new File(upload_path);
-			if (!upFile.exists()) {
-				upFile.mkdirs();
-			}
+			if (!upFile.exists())
+				if (!upFile.mkdirs())
+					return null;
 
 			Files.write(Paths.get(upload_path + name), file);
 			return name;

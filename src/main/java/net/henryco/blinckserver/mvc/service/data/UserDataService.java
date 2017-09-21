@@ -22,9 +22,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static java.io.File.separator;
-import static net.henryco.blinckserver.configuration.spring.WebMvcConfiguration.DATA_PATH_POSTFIX;
 import static net.henryco.blinckserver.configuration.spring.WebMvcConfiguration.REL_FILE_PATH;
+import static net.henryco.blinckserver.configuration.spring.WebMvcConfiguration.USER_IMAGE_POSTFIX;
 import static net.henryco.blinckserver.mvc.service.data.UserDataService.Helper.createUserEntity;
 
 /**
@@ -32,9 +31,6 @@ import static net.henryco.blinckserver.mvc.service.data.UserDataService.Helper.c
  */
 @Service
 public class UserDataService {
-
-
-	public static final String USER_IMAGE_PATH = REL_FILE_PATH + DATA_PATH_POSTFIX + "images" + separator;
 
 	public static final String ROLE_USER = "ROLE_USER";
 	public static final String FB_DATE_FORMAT = "MM/dd/yyyy";
@@ -198,7 +194,7 @@ public class UserDataService {
 			try {
 				byte[] image = operations.getUserProfileImage(user.getId(), ImageType.LARGE);
 
-				String saved = Utils.saveImageFile(image, user.getId(), USER_IMAGE_PATH);
+				String saved = Utils.saveImageFile(image, user.getId(), REL_FILE_PATH + USER_IMAGE_POSTFIX);
 				photoEntity.setAvatar(saved);
 
 			} catch (Exception e) {

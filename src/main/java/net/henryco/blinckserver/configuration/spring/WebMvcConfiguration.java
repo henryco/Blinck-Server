@@ -16,7 +16,13 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
 
 	public static final String REL_FILE_PATH = System.getProperty("user.dir");
 	public static final String ABS_FILE_PATH = System.getProperty("user.home");
+
 	public static final String DATA_PATH_POSTFIX = separator + "res" + separator + "public" + separator;
+	public static final String DATA_PATH_URL = "/rel" + DATA_PATH_POSTFIX;
+
+	public static final String USER_IMAGE_POSTFIX = DATA_PATH_POSTFIX + "images" + separator;
+	public static final String USER_IMAGE_URL = "/rel" + USER_IMAGE_POSTFIX;
+
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
