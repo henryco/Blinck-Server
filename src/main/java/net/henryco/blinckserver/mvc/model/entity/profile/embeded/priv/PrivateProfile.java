@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.model.entity.profile.embeded;
+package net.henryco.blinckserver.mvc.model.entity.profile.embeded.priv;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

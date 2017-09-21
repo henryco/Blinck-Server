@@ -2,18 +2,29 @@ package net.henryco.blinckserver.mvc.service.data;
 
 import net.henryco.blinckserver.mvc.model.dao.profile.UserCoreProfileDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserCoreProfile;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.*;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.priv.PrivateProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.bio.BioEntity;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.media.MediaEntity;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.PublicProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.bio.UserNameEntity;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.media.UserPhotoEntity;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
+import net.henryco.blinckserver.util.Utils;
 import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static java.io.File.separator;
+import static net.henryco.blinckserver.configuration.spring.WebMvcConfiguration.DATA_PATH_POSTFIX;
+import static net.henryco.blinckserver.configuration.spring.WebMvcConfiguration.REL_FILE_PATH;
 import static net.henryco.blinckserver.mvc.service.data.UserDataService.Helper.*;
 
 /**
@@ -21,6 +32,9 @@ import static net.henryco.blinckserver.mvc.service.data.UserDataService.Helper.*
  */
 @Service
 public class UserDataService {
+
+
+	public static final String USER_PATH = REL_FILE_PATH + DATA_PATH_POSTFIX + "images" + separator;
 
 	public static final String ROLE_USER = "ROLE_USER";
 	public static final String FB_DATE_FORMAT = "MM/dd/yyyy";
@@ -78,7 +92,8 @@ public class UserDataService {
 	protected static abstract class Helper {
 
 
-		protected static @BlinckTestName("createUserEntity")
+		protected static
+		@BlinckTestName("createUserEntity")
 		UserCoreProfile createUserEntity(User user, String ... authorities) {
 
 			final Long id = Long.decode(user.getId());
@@ -154,7 +169,6 @@ public class UserDataService {
 			bioEntity.setGender(user.getGender());
 			bioEntity.setUserName(createUserNameEntity(user));
 			bioEntity.setBirthday(parseFacebookDate(user.getBirthday()));
-
 			return bioEntity;
 		}
 
@@ -163,10 +177,34 @@ public class UserDataService {
 		MediaEntity createMediaEntity(User user) {
 
 			MediaEntity mediaEntity = new MediaEntity();
-			// TODO: 21/09/17
+			mediaEntity.setPhoto(createPhotoEntity(user));
 			return mediaEntity;
 		}
 
+
+		protected static
+		UserPhotoEntity createPhotoEntity(User user) {
+
+			UserPhotoEntity photoEntity = new UserPhotoEntity();
+
+			try {
+
+				if (user.getCover() == null) return photoEntity;
+
+				final String cover = user.getCover().getSource();
+
+				if (cover == null || cover.trim().isEmpty()) return photoEntity;
+
+				MultipartFile file = new RestTemplate().getForObject(cover, MultipartFile.class);
+				String saved = Utils.saveMultiPartFileWithNewName(file, user.getId(), USER_PATH);
+				photoEntity.setAvatar(saved);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return photoEntity;
+		}
 
 	}
 

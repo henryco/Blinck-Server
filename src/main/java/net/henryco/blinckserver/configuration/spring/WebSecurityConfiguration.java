@@ -20,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static net.henryco.blinckserver.configuration.spring.WebMvcConfiguration.DATA_PATH_POSTFIX;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
@@ -86,7 +87,7 @@ import static org.springframework.http.HttpMethod.POST;
 
 	private HttpSecurity authorizeRequests(HttpSecurity http) throws Exception {
 		return http.authorizeRequests()
-				.antMatchers("/", "/public/**", "/login/**").permitAll()
+				.antMatchers("/", "/public/**", "/login/**", DATA_PATH_POSTFIX).permitAll()
 				.antMatchers(GET, "/session/**").permitAll()
 				.antMatchers(POST,"/protected/admin/registration").permitAll()
 				.anyRequest().authenticated()

@@ -6,14 +6,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import java.io.File;
 
+import static java.io.File.separator;
+
 /**
  * @author Henry on 23/08/17.
  */
 @Configuration
 public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
 
-	private static final String REL_FILE_PATH = System.getProperty("user.dir");
-	private static final String ABS_FILE_PATH = System.getProperty("user.home");
+	public static final String REL_FILE_PATH = System.getProperty("user.dir");
+	public static final String ABS_FILE_PATH = System.getProperty("user.home");
+	public static final String DATA_PATH_POSTFIX = separator + "res" + separator + "public" + separator;
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

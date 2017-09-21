@@ -2,9 +2,9 @@ package net.henryco.blinckserver.mvc.controller.secured.user;
 
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.controller.secured.BlinckProfileController;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.BioEntity;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.MediaEntity;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.PrivateProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.bio.BioEntity;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.media.MediaEntity;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.priv.PrivateProfile;
 import net.henryco.blinckserver.mvc.service.profile.UserBaseProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

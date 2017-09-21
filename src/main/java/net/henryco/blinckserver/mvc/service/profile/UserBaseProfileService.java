@@ -5,7 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.mvc.model.dao.profile.UserCoreProfileDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserCoreProfile;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.*;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.priv.PrivateProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.bio.BioEntity;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.media.MediaEntity;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.PublicProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.bio.UserNameEntity;
 import net.henryco.blinckserver.util.dao.BlinckDaoProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +21,8 @@ import java.io.Serializable;
  * @author Henry on 23/08/17.
  */
 @Service
-public class UserBaseProfileService extends BlinckDaoProvider<UserCoreProfile, Long> {
+public class UserBaseProfileService
+		extends BlinckDaoProvider<UserCoreProfile, Long> {
 
 
 	@Data @NoArgsConstructor

@@ -2,8 +2,8 @@ package net.henryco.blinckserver.mvc.model.entity.profile;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.PrivateProfile;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.PublicProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.priv.PrivateProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.PublicProfile;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import org.hibernate.annotations.Proxy;
 
