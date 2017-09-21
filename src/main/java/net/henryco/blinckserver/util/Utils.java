@@ -1,12 +1,9 @@
 package net.henryco.blinckserver.util;
 
-import org.springframework.social.facebook.api.ImageType;
-import org.springframework.social.support.URIBuilder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.net.URI;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
