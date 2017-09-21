@@ -144,7 +144,6 @@ public class UserDataService {
 
 			PublicProfile publicProfile = new PublicProfile();
 			publicProfile.setBio(createBioEntity(user));
-			publicProfile.setUserName(createUserNameEntity(user));
 			return publicProfile;
 		}
 
@@ -155,7 +154,9 @@ public class UserDataService {
 			BioEntity bioEntity = new BioEntity();
 			bioEntity.setAbout(user.getAbout());
 			bioEntity.setGender(user.getGender());
+			bioEntity.setUserName(createUserNameEntity(user));
 			bioEntity.setBirthday(parseFacebookDate(user.getBirthday()));
+
 			return bioEntity;
 		}
 

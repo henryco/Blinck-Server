@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Temporal;
+import javax.persistence.*;
 import java.util.Date;
 
 import static javax.persistence.TemporalType.TIMESTAMP;
@@ -22,6 +20,11 @@ public class BioEntity {
 
 	public static final String GENDER_MALE = "male";
 	public static final String GENDER_FEMALE = "female";
+
+
+	private @Embedded @JoinColumn(
+			name = "name_id"
+	) UserNameEntity userName;
 
 
 	private @Column(

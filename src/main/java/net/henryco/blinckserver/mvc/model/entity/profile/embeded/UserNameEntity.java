@@ -27,4 +27,7 @@ public class UserNameEntity {
 	String lastName;
 
 
+	private @Column
+	String nickname;
+
 }
