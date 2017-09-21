@@ -41,6 +41,7 @@ public class UserImageMediaService {
 	@BlinckTestName
 	protected static abstract class ArrayHelper {
 
+
 		protected static @BlinckTestName
 		String[] delete(int index, final String ... array) {
 
@@ -58,6 +59,7 @@ public class UserImageMediaService {
 
 			return newArray;
 		}
+
 
 		protected static @BlinckTestName
 		String[] put(int index, String element, final String ... array) {
@@ -83,6 +85,7 @@ public class UserImageMediaService {
 			return newArray;
 		}
 
+
 		protected static @BlinckTestName
 		String[] swap(int from, int to, final String ... array) {
 
@@ -102,6 +105,7 @@ public class UserImageMediaService {
 			return newArray;
 		}
 
+
 		protected static @BlinckTestName
 		String[] add(String element, final String ... array) {
 			return put(array.length, element, array);
@@ -117,15 +121,6 @@ public class UserImageMediaService {
 
 		private Integer position;
 		private String image;
-	}
-
-
-	private UserPhotoEntity getImageEntity(Long userId) {
-
-		return profileDao.getById(userId)
-				.getPublicProfile()
-				.getMedia()
-		.getPhoto();
 	}
 
 
@@ -219,6 +214,7 @@ public class UserImageMediaService {
 
 
 
+
 	private void
 	photoConsumer(Long userId, Consumer<UserPhotoEntity> photoConsumer) {
 
@@ -226,6 +222,14 @@ public class UserImageMediaService {
 		UserPhotoEntity photo = profile.getPublicProfile().getMedia().getPhoto();
 		photoConsumer.accept(photo);
 		profileDao.save(profile);
+	}
+
+	private UserPhotoEntity
+	getImageEntity(Long userId) {
+		return profileDao.getById(userId)
+				.getPublicProfile()
+				.getMedia()
+				.getPhoto();
 	}
 
 
