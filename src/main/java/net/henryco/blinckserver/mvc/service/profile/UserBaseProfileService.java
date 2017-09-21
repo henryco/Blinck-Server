@@ -25,7 +25,7 @@ public class UserBaseProfileService extends BlinckDaoProvider<UserCoreProfile, L
 
 	@Transactional
 	public String getGender(Long userId) {
-		return getDao().getById(userId).getPublicProfile().getGender();
+		return getDao().getById(userId).getPublicProfile().getBio().getGender();
 	}
 
 }

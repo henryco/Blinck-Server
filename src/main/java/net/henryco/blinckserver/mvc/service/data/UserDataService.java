@@ -2,6 +2,7 @@ package net.henryco.blinckserver.mvc.service.data;
 
 import net.henryco.blinckserver.mvc.model.dao.profile.UserCoreProfileDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserCoreProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.BioEntity;
 import net.henryco.blinckserver.mvc.model.entity.profile.embeded.PrivateProfile;
 import net.henryco.blinckserver.mvc.model.entity.profile.embeded.UserNameEntity;
 import net.henryco.blinckserver.mvc.model.entity.profile.embeded.PublicProfile;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static net.henryco.blinckserver.mvc.service.data.UserDataService.Helper.*;
 
 /**
  * @author Henry on 23/08/17.
@@ -73,72 +76,89 @@ public class UserDataService {
 
 
 
-	private static @BlinckTestName("createUserEntity")
-	UserCoreProfile createUserEntity(User user, String ... authorities) {
-
-		final Long id = Long.decode(user.getId());
-
-		UserCoreProfile userCoreProfile = new UserCoreProfile();
-		userCoreProfile.setId(id);
-		userCoreProfile.setPrivateProfile(createUserPrivateProfile(user));
-		userCoreProfile.setPublicProfile(createUserPublicProfile(user));
-		userCoreProfile.setAuthProfile(createUserAuthProfile(id, authorities));
-
-		return userCoreProfile;
-	}
 
 
-	private static PrivateProfile createUserPrivateProfile(User user) {
-
-		PrivateProfile userPrivateProfile = new PrivateProfile();
-		userPrivateProfile.setEmail(user.getEmail());
-		return userPrivateProfile;
-	}
+	protected static abstract class Helper {
 
 
-	private static
-	UserAuthProfile createUserAuthProfile(Long id, String ... authorities){
+		protected static @BlinckTestName("createUserEntity")
+		UserCoreProfile createUserEntity(User user, String ... authorities) {
 
-		UserAuthProfile userAuthProfile = new UserAuthProfile();
-		userAuthProfile.setId(id);
-		userAuthProfile.setLocked(false);
-		userAuthProfile.setAuthorityArray(authorities);
-		return userAuthProfile;
-	}
+			final Long id = Long.decode(user.getId());
 
+			UserCoreProfile userCoreProfile = new UserCoreProfile();
+			userCoreProfile.setId(id);
+			userCoreProfile.setPrivateProfile(createUserPrivateProfile(user));
+			userCoreProfile.setPublicProfile(createUserPublicProfile(user));
+			userCoreProfile.setAuthProfile(createUserAuthProfile(id, authorities));
 
-	private static
-	UserNameEntity createUserNameEntity(User user) {
-
-		UserNameEntity userNameEntity = new UserNameEntity();
-		userNameEntity.setFirstName(user.getFirstName());
-		userNameEntity.setSecondName(user.getMiddleName());
-		userNameEntity.setLastName(user.getLastName());
-		return userNameEntity;
-	}
-
-
-	private static PublicProfile createUserPublicProfile(User user) {
-
-		PublicProfile publicProfile = new PublicProfile();
-		publicProfile.setGender(user.getGender());
-		publicProfile.setAbout(user.getAbout());
-		publicProfile.setBirthday(parseFacebookDate(user.getBirthday()));
-		publicProfile.setUserName(createUserNameEntity(user));
-		return publicProfile;
-	}
-
-
-	private static
-	@BlinckTestName("parseFacebookDate")
-	Date parseFacebookDate(String date) {
-		try {
-			return new SimpleDateFormat(FB_DATE_FORMAT).parse(date);
-		} catch (ParseException | NullPointerException e) {
-			e.printStackTrace();
-			return null;
+			return userCoreProfile;
 		}
-	}
 
+
+		protected static
+		@BlinckTestName("parseFacebookDate")
+		Date parseFacebookDate(String date) {
+			try {
+				return new SimpleDateFormat(FB_DATE_FORMAT).parse(date);
+			} catch (ParseException | NullPointerException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+
+		protected static
+		PrivateProfile createUserPrivateProfile(User user) {
+
+			PrivateProfile userPrivateProfile = new PrivateProfile();
+			userPrivateProfile.setEmail(user.getEmail());
+			return userPrivateProfile;
+		}
+
+
+		protected static
+		UserAuthProfile createUserAuthProfile(Long id, String ... authorities){
+
+			UserAuthProfile userAuthProfile = new UserAuthProfile();
+			userAuthProfile.setId(id);
+			userAuthProfile.setLocked(false);
+			userAuthProfile.setAuthorityArray(authorities);
+			return userAuthProfile;
+		}
+
+
+		protected static
+		UserNameEntity createUserNameEntity(User user) {
+
+			UserNameEntity userNameEntity = new UserNameEntity();
+			userNameEntity.setFirstName(user.getFirstName());
+			userNameEntity.setSecondName(user.getMiddleName());
+			userNameEntity.setLastName(user.getLastName());
+			return userNameEntity;
+		}
+
+
+		protected static
+		PublicProfile createUserPublicProfile(User user) {
+
+			PublicProfile publicProfile = new PublicProfile();
+			publicProfile.setBio(createBioEntity(user));
+			publicProfile.setUserName(createUserNameEntity(user));
+			return publicProfile;
+		}
+
+
+		protected static
+		BioEntity createBioEntity(User user) {
+
+			BioEntity bioEntity = new BioEntity();
+			bioEntity.setAbout(user.getAbout());
+			bioEntity.setGender(user.getGender());
+			bioEntity.setBirthday(parseFacebookDate(user.getBirthday()));
+			return bioEntity;
+		}
+
+	}
 
 }

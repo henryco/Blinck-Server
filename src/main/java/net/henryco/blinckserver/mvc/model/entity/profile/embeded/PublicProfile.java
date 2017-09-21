@@ -15,26 +15,31 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 @NoArgsConstructor
 public class PublicProfile {
 
-	public static final String GENDER_MALE = "male";
-	public static final String GENDER_FEMALE = "female";
+//	public static final String GENDER_MALE = "male";
+//	public static final String GENDER_FEMALE = "female";
+//
+//
+//	private @Column(
+//			name = "gender"
+//	) String gender;
+//
+//
+//	private @Column(
+//			name = "about",
+//			length = 510
+//	) String about;
+//
+//
+//	private @Column(
+//			name = "birthday"
+//	) @Temporal(
+//			TIMESTAMP
+//	) Date birthday;
 
 
-	private @Column(
-			name = "gender"
-	) String gender;
-
-
-	private @Column(
-			name = "about",
-			length = 510
-	) String about;
-
-
-	private @Column(
-			name = "birthday"
-	) @Temporal(
-			TIMESTAMP
-	) Date birthday;
+	private @Embedded @JoinColumn(
+			name = "bio"
+	) BioEntity bio;
 
 
 	private @Embedded @JoinColumn(

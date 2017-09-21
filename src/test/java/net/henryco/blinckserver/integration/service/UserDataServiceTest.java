@@ -35,8 +35,9 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 	public void parseFacebookDateTest() throws Exception {
 
 		final String birthday = "06/26/1995";
+		Class<?> invokerClass = Class.forName(UserDataService.class.getName() + "$Helper");
 		Method parseFacebookDate = BlinckTestUtil.getMethod(
-				UserDataService.class,
+				invokerClass,
 				"parseFacebookDate"
 		);
 		Object date = parseFacebookDate.invoke(null, birthday);
@@ -103,9 +104,10 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 
 
 	private static Method
-	getEntityCreatorMethod() {
+	getEntityCreatorMethod() throws Exception {
+		Class<?> aClass = Class.forName(UserDataService.class.getName() + "$Helper");
 		return BlinckTestUtil.getMethod(
-				UserDataService.class,
+				aClass,
 				"createUserEntity"
 		);
 	}
@@ -122,7 +124,7 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 	private static void
 	profileIdAssertion(UserCoreProfile coreProfile) {
 		assert coreProfile != null;
-		assert coreProfile.getId() == coreProfile.getAuthProfile().getId();
+		assert coreProfile.getId().equals(coreProfile.getAuthProfile().getId());
 	}
 
 }
