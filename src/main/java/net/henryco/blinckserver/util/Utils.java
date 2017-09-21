@@ -1,7 +1,10 @@
 package net.henryco.blinckserver.util;
 
+import org.springframework.social.facebook.api.ImageType;
+import org.springframework.social.support.URIBuilder;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -51,6 +54,25 @@ public abstract class Utils {
 
 			Files.write(Paths.get(upload_path + name), file.getBytes());
 			return name;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String saveFileWithNewName(byte[] file, String userName, String upload_path) {
+
+		try {
+			if (file.length == 0) return null;
+
+			final String userHash = Integer.toString(Math.abs(userName.hashCode()));
+			final String time = Long.toString(System.nanoTime());
+			final String name = userHash + time;
+
+
+			Files.write(Paths.get(upload_path + name), file);
+			return name;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

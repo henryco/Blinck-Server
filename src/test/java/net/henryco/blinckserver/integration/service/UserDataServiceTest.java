@@ -76,7 +76,7 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 
 		userDataService.addNewFacebookUser(user);
 
-		UserCoreProfile baseProfile = (UserCoreProfile) create.invoke(null, user, authorities);
+		UserCoreProfile baseProfile = (UserCoreProfile) create.invoke(null, null, user, authorities);
 		UserCoreProfile profile = baseProfileService.getById(id);
 
 		assert profile.equals(baseProfile);
@@ -93,7 +93,7 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 				TestUtils.randomGaussNumberString()
 		};
 
-		UserCoreProfile baseProfile = (UserCoreProfile) create.invoke(null, user, authorities);
+		UserCoreProfile baseProfile = (UserCoreProfile) create.invoke(null, null, user, authorities);
 
 		profileIdAssertion(baseProfile);
 		profileAuthAssertion(baseProfile.getAuthProfile());

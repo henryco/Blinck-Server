@@ -43,7 +43,10 @@ public abstract class BlinckIntegrationAccessTest extends BlinckIntegrationTest 
 
 	@Before
 	public final void setUp() {
-		userDataService.addNewFacebookUserIfNotExist(MockFacebookUser.getInstance().getUser());
+		userDataService.addNewFacebookUserIfNotExist(
+				null,
+				MockFacebookUser.getInstance().getUser()
+		);
 	}
 
 

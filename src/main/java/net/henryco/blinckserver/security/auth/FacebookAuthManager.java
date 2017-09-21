@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.User;
+import org.springframework.social.facebook.api.UserOperations;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.stereotype.Component;
 
@@ -55,10 +56,10 @@ public class FacebookAuthManager implements AuthenticationManager {
 		Facebook facebook = new FacebookTemplate(facebook_token.toString(), app_namespace, app_id);
 		checkFacebook(facebook);
 
-		User userProfile = facebook.userOperations().getUserProfile(facebook_uid.toString());
-		checkProfile(userProfile, facebook_uid);
+//		User userProfile = facebook.userOperations().getUserProfile(facebook_uid.toString());
+//		checkProfile(userProfile, facebook_uid);
 
-		UserDetails userDetails = loadDetails(userProfile);
+		UserDetails userDetails = loadDetails(facebook.userOperations(), facebook_uid.toString());
 		checkDetails(userDetails);
 
 		return new UsernamePasswordAuthenticationToken(
@@ -68,12 +69,15 @@ public class FacebookAuthManager implements AuthenticationManager {
 	}
 
 
-	private UserDetails loadDetails(User userProfile) {
+	private UserDetails loadDetails(UserOperations operations, String uid) {
+
+		User userProfile = operations.getUserProfile(uid);
+		checkProfile(userProfile, uid);
 
 		try {
 			return detailsService.loadUserByUsername(userProfile.getId());
 		} catch (UsernameNotFoundException e) {
-			userDataService.addNewFacebookUser(userProfile);
+			userDataService.addNewFacebookUser(operations, userProfile);
 			return detailsService.loadUserByUsername(userProfile.getId());
 		}
 	}
