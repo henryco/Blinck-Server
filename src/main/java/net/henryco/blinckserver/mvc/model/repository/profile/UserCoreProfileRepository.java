@@ -12,4 +12,6 @@ import java.util.List;
 public interface UserCoreProfileRepository extends JpaRepository<UserCoreProfile, Long> {
 
 	List<UserCoreProfile> findAllByPublicProfile_Bio_UserName_NicknameLike(String username, Pageable pageable);
+	UserCoreProfile getByPublicProfile_Bio_UserName_Nickname(String username);
+	boolean existsByPublicProfile_Bio_UserName_Nickname(String username);
 }

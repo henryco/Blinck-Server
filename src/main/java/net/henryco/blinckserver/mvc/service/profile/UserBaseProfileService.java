@@ -66,6 +66,12 @@ public class UserBaseProfileService extends BlinckDaoProvider<UserCoreProfile, L
 
 
 	@Transactional
+	public BioEntity getBio(String nickname) {
+		return getDao().getByNickName(nickname).getPublicProfile().getBio();
+	}
+
+
+	@Transactional
 	public NameDetails[] findByUserName(String username, int page, int size) {
 
 		return getDao().findByUserName(username, page, size)
@@ -87,12 +93,28 @@ public class UserBaseProfileService extends BlinckDaoProvider<UserCoreProfile, L
 
 
 	@Transactional
-	public void updateBio(Long userId, BioEntity profile) {
+	public void updateBio(Long userId, BioEntity profile)
+			throws RuntimeException {
 
 		if (profile == null || profile.getUserName() == null) return;
+		if (getDao().isNickNameExists(profile.getUserName().getNickname()))
+			throw new RuntimeException("Nickname already exists!");
 
 		UserCoreProfile core = getDao().getById(userId);
 		core.getPublicProfile().setBio(profile);
+		getDao().save(core);
+	}
+
+
+	@Transactional
+	public void updateNickname(Long userId, String name) {
+
+		if (name == null || name.isEmpty()) return;
+		if (getDao().isNickNameExists(name))
+			throw new RuntimeException("Nickname already exists!");
+
+		UserCoreProfile core = getDao().getById(userId);
+		core.getPublicProfile().getBio().getUserName().setNickname(name);
 		getDao().save(core);
 	}
 

@@ -78,6 +78,15 @@ public class UserProfileController implements BlinckProfileController {
 
 
 	public @RequestMapping(
+			value = "/find/one",
+			method = GET,
+			produces = JSON
+	) BioEntity findByName(@RequestParam("username") String username) {
+		return services.baseProfile.getBio(username);
+	}
+
+
+	public @RequestMapping(
 			value = "/find",
 			method = GET,
 			produces = JSON
@@ -95,6 +104,16 @@ public class UserProfileController implements BlinckProfileController {
 	) void updateBio(Authentication authentication,
 					 @RequestBody BioEntity bio) {
 		services.baseProfile.updateBio(longID(authentication), bio);
+	}
+
+
+	public @ResponseStatus(OK) @RequestMapping(
+			value = "/profile/update/nickname",
+			method = POST,
+			consumes = JSON
+	) void updateNickname(Authentication authentication,
+						  @RequestBody String name) {
+		services.baseProfile.updateNickname(longID(authentication), name);
 	}
 
 

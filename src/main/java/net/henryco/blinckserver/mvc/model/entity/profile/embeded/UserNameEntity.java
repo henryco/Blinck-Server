@@ -2,7 +2,6 @@ package net.henryco.blinckserver.mvc.model.entity.profile.embeded;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 
@@ -27,7 +26,8 @@ public class UserNameEntity {
 	String lastName;
 
 
-	private @Column
-	String nickname;
+	private @Column(
+			unique = true
+	) String nickname;
 
 }

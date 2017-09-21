@@ -34,4 +34,13 @@ public class UserCoreProfileDaoImp
 		return getRepository().findAllByPublicProfile_Bio_UserName_NicknameLike(username, new PageRequest(page, size));
 	}
 
+	@Override
+	public UserCoreProfile getByNickName(String nick) {
+		return getRepository().getByPublicProfile_Bio_UserName_Nickname(nick);
+	}
+
+	@Override
+	public boolean isNickNameExists(String nick) {
+		return getRepository().existsByPublicProfile_Bio_UserName_Nickname(nick);
+	}
 }

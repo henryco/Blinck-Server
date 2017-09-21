@@ -11,4 +11,6 @@ import java.util.List;
 public interface UserCoreProfileDao extends BlinckDaoTemplate<UserCoreProfile, Long> {
 
 	List<UserCoreProfile> findByUserName(String username, int page, int size);
+	UserCoreProfile getByNickName(String nick);
+	boolean isNickNameExists(String nick);
 }
