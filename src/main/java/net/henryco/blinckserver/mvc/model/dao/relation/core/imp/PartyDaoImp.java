@@ -43,14 +43,14 @@ public class PartyDaoImp
 		}
 	}
 
-	@Override
+	@Override @Transactional
 	public Boolean isPartyActive(Long partyId) {
 		return getRepository().existsByIdAndMeetingActivationTimeBefore(
 				partyId, new Date(System.currentTimeMillis())
 		);
 	}
 
-	@Override
+	@Override @Transactional
 	public void deleteById(Long id) {
 		try {
 			super.deleteById(id);

@@ -21,6 +21,8 @@ public class PublicProfile {
 	) BioEntity bio;
 
 
-
+	private @Embedded @JoinColumn(
+			name = "media"
+	) MediaEntity media;
 
 }

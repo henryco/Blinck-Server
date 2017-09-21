@@ -2,10 +2,7 @@ package net.henryco.blinckserver.mvc.service.data;
 
 import net.henryco.blinckserver.mvc.model.dao.profile.UserCoreProfileDao;
 import net.henryco.blinckserver.mvc.model.entity.profile.UserCoreProfile;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.BioEntity;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.PrivateProfile;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.UserNameEntity;
-import net.henryco.blinckserver.mvc.model.entity.profile.embeded.PublicProfile;
+import net.henryco.blinckserver.mvc.model.entity.profile.embeded.*;
 import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +141,7 @@ public class UserDataService {
 
 			PublicProfile publicProfile = new PublicProfile();
 			publicProfile.setBio(createBioEntity(user));
+			publicProfile.setMedia(createMediaEntity(user));
 			return publicProfile;
 		}
 
@@ -159,6 +157,16 @@ public class UserDataService {
 
 			return bioEntity;
 		}
+
+
+		protected static
+		MediaEntity createMediaEntity(User user) {
+
+			MediaEntity mediaEntity = new MediaEntity();
+			// TODO: 21/09/17
+			return mediaEntity;
+		}
+
 
 	}
 
