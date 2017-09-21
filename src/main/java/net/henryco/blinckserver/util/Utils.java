@@ -4,7 +4,10 @@ import org.springframework.social.facebook.api.ImageType;
 import org.springframework.social.support.URIBuilder;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.net.URI;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -60,15 +63,22 @@ public abstract class Utils {
 		}
 	}
 
-	public static String saveFileWithNewName(byte[] file, String userName, String upload_path) {
+	public static String saveImageFile(byte[] file, String userName, String upload_path) {
 
 		try {
 			if (file.length == 0) return null;
 
+			String[] typo = URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(file)).split("/");
+			String type = typo[typo.length - 1];
+
 			final String userHash = Integer.toString(Math.abs(userName.hashCode()));
 			final String time = Long.toString(System.nanoTime());
-			final String name = userHash + time;
+			final String name = userHash + time + "."+type;
 
+			File upFile = new File(upload_path);
+			if (!upFile.exists()) {
+				upFile.mkdirs();
+			}
 
 			Files.write(Paths.get(upload_path + name), file);
 			return name;

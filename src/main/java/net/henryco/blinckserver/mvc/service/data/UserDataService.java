@@ -34,7 +34,7 @@ import static net.henryco.blinckserver.mvc.service.data.UserDataService.Helper.c
 public class UserDataService {
 
 
-	public static final String USER_PATH = REL_FILE_PATH + DATA_PATH_POSTFIX + "images" + separator;
+	public static final String USER_IMAGE_PATH = REL_FILE_PATH + DATA_PATH_POSTFIX + "images" + separator;
 
 	public static final String ROLE_USER = "ROLE_USER";
 	public static final String FB_DATE_FORMAT = "MM/dd/yyyy";
@@ -201,7 +201,7 @@ public class UserDataService {
 			try {
 				byte[] image = operations.getUserProfileImage(user.getId(), ImageType.LARGE);
 
-				String saved = Utils.saveFileWithNewName(image, user.getId(), USER_PATH);
+				String saved = Utils.saveImageFile(image, user.getId(), USER_IMAGE_PATH);
 				photoEntity.setAvatar(saved);
 
 			} catch (Exception e) {
