@@ -2,8 +2,10 @@ package net.henryco.blinckserver.unit.helper;
 
 import net.henryco.blinckserver.unit.BlinckUnitTest;
 import net.henryco.blinckserver.util.test.BlinckTestName;
+import net.henryco.blinckserver.util.test.BlinckTestUtil;
 import org.junit.Test;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import static net.henryco.blinckserver.util.test.BlinckTestUtil.getMethod;
@@ -56,6 +58,36 @@ public class BlinckTestNameTest extends BlinckUnitTest {
 		assert otherMethod.invoke(new PrivateMethodsClass(), "extra").toString().equals("extra_wow");
 	}
 
+
+	@Test
+	public void innerStaticMethodTest() throws Exception{
+
+		Method getOne = getMethod(PrivateMethodsClass.class, "i1.InnerTwo.getOne");
+		assert getOne.invoke(null).equals(1);
+
+		Method getTwo = getMethod(PrivateMethodsClass.class, "i1.InnerTwo.two");
+		assert getTwo.invoke(null).equals(2d);
+	}
+
+
+	@Test
+	public void innerRegularMethodTest() throws Exception {
+
+		Method get = getMethod(PrivateMethodsClass.class, "i1.i3.wow");
+
+		try {
+			get.invoke(null);
+			assert false;
+		} catch (NullPointerException e) {
+			assert true;
+		}
+
+		Class<?> invoker = BlinckTestUtil.getClass(PrivateMethodsClass.class, "i1");
+		Constructor<?> ctr = BlinckTestUtil.getClass(invoker, "i3").getDeclaredConstructor();
+		ctr.setAccessible(true);
+		assert get.invoke(ctr.newInstance()).equals("wow");
+	}
+
 }
 
 
@@ -79,6 +111,34 @@ final class PrivateMethodsClass {
 
 	private Long unMarked() {
 		return 42L;
+	}
+
+
+	@BlinckTestName("i1")
+	protected static final class InnerOne {
+
+		@BlinckTestName
+		private static abstract class InnerTwo {
+
+			@BlinckTestName
+			private static int getOne() {
+				return 1;
+			}
+
+			@BlinckTestName("two")
+			private static double getTwo() {
+				return 2d;
+			}
+		}
+
+		@BlinckTestName("i3")
+		private static class InnerThree {
+
+			@BlinckTestName
+			protected String wow() {
+				return "wow";
+			}
+		}
 	}
 
 }

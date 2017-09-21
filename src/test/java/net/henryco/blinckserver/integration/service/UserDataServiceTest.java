@@ -35,10 +35,9 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 	public void parseFacebookDateTest() throws Exception {
 
 		final String birthday = "06/26/1995";
-		Class<?> invokerClass = Class.forName(UserDataService.class.getName() + "$Helper");
 		Method parseFacebookDate = BlinckTestUtil.getMethod(
-				invokerClass,
-				"parseFacebookDate"
+				UserDataService.class,
+				"Helper.parseFacebookDate"
 		);
 		Object date = parseFacebookDate.invoke(null, birthday);
 		DateTime dateTime = new DateTime(date);
@@ -105,10 +104,10 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 
 	private static Method
 	getEntityCreatorMethod() throws Exception {
-		Class<?> aClass = Class.forName(UserDataService.class.getName() + "$Helper");
+
 		return BlinckTestUtil.getMethod(
-				aClass,
-				"createUserEntity"
+				UserDataService.class,
+				"Helper.createUserEntity"
 		);
 	}
 

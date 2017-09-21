@@ -77,7 +77,7 @@ public class UserDataService {
 
 
 
-
+	@BlinckTestName
 	protected static abstract class Helper {
 
 
