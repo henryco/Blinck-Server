@@ -71,14 +71,11 @@ public class UserDataService {
 		addNewFacebookUser(null, userProfile);
 	}
 
-
-
 	@Transactional
 	public void deleteUser(long id) {
 		if (baseProfileDao.isExists(id))
 			baseProfileDao.deleteById(id);
 	}
-
 
 	@Transactional
 	public void deleteUser(String id) {

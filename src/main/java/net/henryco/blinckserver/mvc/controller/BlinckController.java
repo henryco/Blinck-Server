@@ -24,6 +24,7 @@ public interface BlinckController {
 
 		String USER = "/protected/user";
 		String USER_NOTIFICATIONS = "/protected/user/notifications";
+		String USER_MEDIA = "/protected/user/media";
 
 		String FRIENDSHIP = "/protected/user/friends";
 		String FRIENDSHIP_CONVERSATION = "/protected/user/friends/conversation";

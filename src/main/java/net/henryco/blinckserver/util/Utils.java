@@ -66,14 +66,14 @@ public abstract class Utils {
 	public static String saveImageFile(byte[] file, String userName, String upload_path) {
 
 		try {
-			if (file.length == 0) return null;
+			if (file == null || file.length == 0) return null;
 
 			String[] typo = URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(file)).split("/");
 			String type = typo[typo.length - 1];
 
 			final String userHash = Integer.toString(Math.abs(userName.hashCode()));
 			final String time = Long.toString(System.nanoTime());
-			final String name = userHash + time + "."+type;
+			final String name = Arrays.hashCode(file) + userHash + time + "."+type;
 
 			File upFile = new File(upload_path);
 			if (!upFile.exists()) {

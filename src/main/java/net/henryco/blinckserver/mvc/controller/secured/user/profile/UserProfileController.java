@@ -1,4 +1,4 @@
-package net.henryco.blinckserver.mvc.controller.secured.user;
+package net.henryco.blinckserver.mvc.controller.secured.user.profile;
 
 import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.controller.secured.BlinckProfileController;
