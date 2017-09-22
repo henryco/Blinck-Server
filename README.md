@@ -37,10 +37,11 @@ todo
 <br>
 <h2> Public </h2>
 
- Endpoint | Method | Body | Response | &nbsp;
---- | --- | --- | --- | ---
-**`/public/about`** | **GET** | *VOID* | String | Get application info
-**`/public/facebook/permissions`** | **GET** | *VOID* | String[] | Get required facebook permission
+ Endpoint | Method  | Response | &nbsp;
+--- | --- | --- | ---
+**`/public/about`** | **GET** | String | Get application info
+**`/public/facebook/permissions`** | **GET** | String[] | Get required facebook permission
+**`/rel/res/public/image/{resource}`** | **GET** | byte[] | Get image resource
 
 
 
