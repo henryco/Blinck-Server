@@ -43,6 +43,24 @@ todo
 **`/public/facebook/permissions`** | **GET** | String[] | Get required facebook permission
 **`/rel/res/public/image/{resource}`** | **GET** | byte[] | Get image resource
 
+<br>
+<h2> Session </h2>
+
+ <h4>StatusResponse JSON:</h4>
+
+```json
+ {
+    "principal":      String,
+    "active":   Boolean
+ }
+ ```
+ 
+ Endpoint | Method | Authorization | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/session/user`** | **GET** | USER | StatusResponse JSON | Get user authorization info
+**`/session/admin`** | **GET** | ADMIN | StatusResponse JSON | Get admin authorization info
+**`/session/user/logout`** | **GET, POST** | USER | String | Logout user
+**`/session/admin/logout`** | **GET, POST** | ADMIN | String | Logout admin
 
 
 
