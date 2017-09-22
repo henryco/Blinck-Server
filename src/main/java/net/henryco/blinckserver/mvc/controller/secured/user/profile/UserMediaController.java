@@ -43,7 +43,7 @@ public class UserMediaController implements BlinckController {
 			method = GET,
 			produces = JSON
 	) void getUserImages(@RequestParam("id") Long id) {
-
+		// TODO: 22/09/17
 	}
 
 

@@ -37,7 +37,7 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 		final String birthday = "06/26/1995";
 		Method parseFacebookDate = BlinckTestUtil.getMethod(
 				UserDataService.class,
-				"ArrayHelper.parseFacebookDate"
+				"Helper.parseFacebookDate"
 		);
 		Object date = parseFacebookDate.invoke(null, birthday);
 		DateTime dateTime = new DateTime(date);
@@ -107,7 +107,7 @@ public class UserDataServiceTest extends BlinckIntegrationTest {
 
 		return BlinckTestUtil.getMethod(
 				UserDataService.class,
-				"ArrayHelper.createUserEntity"
+				"Helper.createUserEntity"
 		);
 	}
 
