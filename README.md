@@ -31,8 +31,14 @@ Blinck backend based on spring boot. <br>
 
  Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
-**`/protected/admin/registration`** | **POST** | *Admin JSON* | 200 | Registren new admin
+**`/protected/admin/registration`** | **POST** | *Admin JSON* | 200 | Register new admin
+todo
 
+<br>
+<h2> Public </h2>
+ Endpoint | Method | Body | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/public/facebook/permissions`** | **GET** | *VOID* | String[] | Get required facebook permission
 
 
 
