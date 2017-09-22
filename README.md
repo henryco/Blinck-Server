@@ -51,7 +51,7 @@ todo
 ```json
  {
     "principal":      String,
-    "active":           Boolean
+    "active":          Boolean
  }
  ```
  
