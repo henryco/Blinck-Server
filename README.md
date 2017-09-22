@@ -2,9 +2,7 @@
 Blinck backend based on spring boot. <br>
 ~15k+ lines of high quality code with 70-80% test coverage.
 <br>
-
 <h2>Api endpoints</h2>
-<br>
 <h4>User login JSON:</h4>
 
 ```json
