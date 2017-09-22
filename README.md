@@ -114,10 +114,21 @@ todo
 }
 ```
 
- Endpoint | Method | Authorization | Response | &nbsp;
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
-**`/session/user`** | **GET** | USER | StatusResponse JSON | Get user authorization info
-**`/session/admin`** | **GET** | ADMIN | StatusResponse JSON | Get admin authorization info
-**`/session/user/logout`** | **GET, POST** | USER | String | Logout user
-**`/session/admin/logout`** | **GET, POST** | ADMIN | String | Logout admin
+**`/protected/user/profile`** | **GET** | **NONE** | BioEntity | Get user bio
+**`/protected/user/profile/bio`** | **GET** | **Long:** id | BioEntity | Get user bio
+**`/protected/user/profile/media`** | **GET** | **Long:** id | MediaEntity | Get user media
+**`/protected/user/profile/priv`** | **GET** | **NONE** | PrivateProfile | Get user private profile
+**`/protected/user/profile/find/one`** | **GET** | **String:** username | BioEntity | Find user profile
+**`/protected/user/profile/find`** | **GET** | **String:** username <br>**Int:** page, size | NameDetails[] | Find user profiles
+**`/protected/user/profile/update/bio`** | **POST** | **BODY:** BioEntity | 200 | Update user bio
+**`/protected/user/profile/update/nickname`** | **POST** | **BODY:** String | 200 | Update username
+**`/protected/user/profile/update/priv`** | **POST** | **BODY:** PrivateProfile | 200 | Update private profile
+
+
+
+
+
+
 
