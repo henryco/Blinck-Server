@@ -2,8 +2,8 @@
 Blinck backend based on spring boot. <br>
 ~15k+ lines of high quality code with 70-80% test coverage.
 <br>
-<h2>Api endpoints</h2>
-<h4>User login JSON:</h4>
+<h2>Login</h2>
+<h4>User JSON:</h4>
 
 ```json
  {
@@ -12,7 +12,7 @@ Blinck backend based on spring boot. <br>
  }
  ```
  
- <h4>Admin login JSON:</h4>
+ <h4>Admin JSON:</h4>
 
 ```json
  {
@@ -23,5 +23,5 @@ Blinck backend based on spring boot. <br>
  
  Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
-**`/login/user`** | **POST** | *User login JSON* | Authorization header | Login as user
-**`/login/admin`** | **POST** | *Admin login JSON* | Authorization header | Login as admin
+**`/login/user`** | **POST** | *User JSON* | Authorization header | Login as user
+**`/login/admin`** | **POST** | *Admin JSON* | Authorization header | Login as admin
