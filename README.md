@@ -62,5 +62,62 @@ todo
 **`/session/user/logout`** | **GET, POST** | USER | String | Logout user
 **`/session/admin/logout`** | **GET, POST** | ADMIN | String | Logout admin
 
+<br>
+<h2> User profile </h2>
 
+<h4>BioEntity JSON</h4>
+
+```json
+{
+  "userName" : {
+    "firstName" :  String,
+    "secondName" :  String,
+    "lastName" : String,
+    "nickname" : String
+  },
+  "gender" : String,
+  "about" : String,
+  "birthday" : Long
+}
+```
+
+<h4>MediaEntity JSON</h4>
+
+```json
+{
+  "photo" : {
+    "avatar" : String,
+    "photos" : String
+  }
+}
+```
+
+<h4>PrivateProfile JSON</h4>
+
+```json
+{
+  "email" : String
+}
+```
+
+<h4>NameDetails JSON</h4>
+
+```json
+{
+  "id" : Long,
+  "user" : {
+    "firstName" : String,
+    "secondName" : String,
+    "lastName" : String,
+    "nickname" : String
+  }
+}
+```
+
+ Endpoint | Method | Authorization | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/session/user`** | **GET** | USER | StatusResponse JSON | Get user authorization info
+**`/session/admin`** | **GET** | ADMIN | StatusResponse JSON | Get admin authorization info
+**`/session/user/logout`** | **GET, POST** | USER | String | Logout user
+**`/session/admin/logout`** | **GET, POST** | ADMIN | String | Logout admin
 
