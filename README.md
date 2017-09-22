@@ -39,6 +39,7 @@ todo
 
  Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
+**`/public/about`** | **GET** | *VOID* | String | Get application info
 **`/public/facebook/permissions`** | **GET** | *VOID* | String[] | Get required facebook permission
 
 
