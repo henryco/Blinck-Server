@@ -165,6 +165,8 @@ public class UserImageMediaService {
 			if (file == null || file.trim().isEmpty())
 				return;
 
+			tryToRemove(photo.getAvatar());
+
 			photo.setAvatar(file);
 		});
 	}
@@ -229,7 +231,7 @@ public class UserImageMediaService {
 		return profileDao.getById(userId)
 				.getPublicProfile()
 				.getMedia()
-				.getPhoto();
+		.getPhoto();
 	}
 
 
