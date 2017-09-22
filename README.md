@@ -36,6 +36,7 @@ todo
 
 <br>
 <h2> Public </h2>
+
  Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/public/facebook/permissions`** | **GET** | *VOID* | String[] | Get required facebook permission
