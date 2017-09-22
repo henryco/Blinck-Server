@@ -23,4 +23,7 @@ Blinck backend based on spring boot. <br>
  }
  ```
  
- 
+ Endpoint | Method | Body | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/login/user`** | **POST** | *User login JSON* | Authorization header | Login as user
+**`/login/admin`** | **POST** | *Admin login JSON* | Authorization header | Login as admin
