@@ -126,6 +126,31 @@ todo
 **`/protected/user/profile/update/nickname`** | **POST** | **BODY:** String | Boolean | Update username
 **`/protected/user/profile/update/priv`** | **POST** | **BODY:** PrivateProfile | Boolean | Update private profile
 
+<br>
+<h2> User media </h2>
+
+<h4>UserImageInfo JSON</h4>
+
+```json
+{
+  "position" : Integer,
+  "image" : String // image url part
+}
+```
+
+ Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/media/image/max`** | **GET** | **NONE** | Integer | Get max numb of images
+**`/protected/user/media/image/list`** | **GET** | **Long:** id | UserImageInfo[] | Get user images
+**`/protected/user/media/image/avatar`** | **GET** | **Long:** id | String | Get user avatar
+**`/protected/user/media/image/swap`** | **POST, GET** | **Int:** one, two | 200 | Swap user images
+**`/protected/user/media/image/delete`** | **DELETE, POST** | **Int:** image | 200 | Delete user image
+**`/protected/user/media/image/add`** | **POST** | **MultipartFile:** image | 200 | Add user image
+**`/protected/user/media/image/set`** | **POST** | **MultipartFile:** image<br>**Int:** index | 200 | Set user image 
+**`/protected/user/media/image/avatar`** | **POST** | **MultipartFile:** image | 200 | Set user avatar
+
+
+
 
 
 
