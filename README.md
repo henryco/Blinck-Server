@@ -439,9 +439,9 @@ Endpoint | Method | Payload | &nbsp;
 
 ```json
 {
-  "time" : null,
-  "active_after" : null,
-  "venue" : null
+  "time" : Long,
+  "active_after" : Long,
+  "venue" : String
 }
 ```
 
