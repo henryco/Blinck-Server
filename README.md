@@ -207,7 +207,7 @@ Endpoint | Method | Arguments | Response | &nbsp;
 **`/protected/user/match/queue/custom/delete`** | **DELETE** | **Long:** id | Boolean | Delete cutom room
 **`/protected/user/match/queue/custom/list`** | **GET** | **NONE** | Long[] | Get id's of users custom rooms
 **`/protected/user/match/queue/custom/join`** | **POST** | **Long:** id | Boolean | Join to custom room
-**`/protected/user/match/queue/custom/invite`** | **POST** | **Long:** id<br>**BODY:** Long[] users | Boolean | Invite users to room
+**`/protected/user/match/queue/custom/invite`** | **POST** | **Long:** id<br>**BODY:** Long[] | Boolean | Invite users to room
 **`/protected/user/match/queue/custom/leave`** | **POST,<br> DELETE** | **Long:** id | Boolean | Leave custom room
 **`/protected/user/match/queue/custom/start`** | **POST** | **Long:** id | Boolean | Move custom room to queue
 
