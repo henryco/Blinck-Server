@@ -35,16 +35,16 @@ Blinck backend based on spring boot. <br>
 **`/protected/admin/registration`** | **POST** | *Admin JSON* | 200 | Register new admin
 
 <br><h3>WebSocket:</h3>
-<h4>Connect header:</h4>
+<h4>Connection header:</h4>
 
 ```
   User:                   Long
   Authorization:    JWT String
 ```
 
- Endpoint | Method  | Connect header | HTTP Authorization Header
---- | --- | --- | ---
-**`/stomp`** | **CONNECT** | YES | YES
+ Endpoint | Method  | Connection header | HTTP Authorization Header
+--- | --- | --- | --- | ---
+**`/stomp`** | **CONNECT** | YES | YES | Connect to server via jwt
 
 <br><br>
 # Public
