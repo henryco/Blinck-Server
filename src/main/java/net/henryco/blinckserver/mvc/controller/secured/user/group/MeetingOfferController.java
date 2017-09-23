@@ -100,7 +100,7 @@ public class MeetingOfferController
 	 * 			ARGS:		Long: id
 	 * 			METHOD:		POST
 	 * 			BODY:		Meeting
-	 * 			RETURN:		VOID
+	 * 			RETURN:		Boolean
 	 *
 	 *
 	 * 		VOTE:

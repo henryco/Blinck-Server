@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.util.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.henryco.blinckserver.util.Utils;
 
 import java.io.Serializable;
@@ -24,7 +25,7 @@ public interface BlinckAuthorityEntity<KEY extends Serializable> {
 	@Deprecated void setAuthorities(String authorities);
 
 
-	default
+	default @JsonIgnore
 	String[] getAuthorityArray() {
 		return Utils.stringToArray(getAuthorities());
 	}

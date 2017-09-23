@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.model.entity.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.util.entity.BlinckAuthorityEntity;
@@ -44,21 +45,21 @@ public class UserAuthProfile implements BlinckAuthorityEntity<Long> {
 	) String authorities;
 
 
-	public @Override
+	public @Override @JsonIgnore
 	String getPassword() {
 		// Users don't use internal passwords
 		return null;
 	}
 
 
-	public @Override
+	public @Override @JsonIgnore
 	boolean isEnabled() {
 		// Always enabled, but might be locked
 		return true;
 	}
 
 
-	public @Override
+	public @Override @JsonIgnore
 	boolean isExpired() {
 		// Never expired, because based on FB
 		return false;

@@ -51,7 +51,7 @@ public class AdminProfileController
 	 * 		"password": 	CHAR[255]
 	 *
 	 *
-	 *	ReportList:
+	 *	SimpleNotification:
 	 *
 	 * 		"receiver_id": 	LONG,
 	 * 		"type": 		CHAR[255],
@@ -71,14 +71,6 @@ public class AdminProfileController
 	 * 			ENDPOINT:	/list
 	 * 			METHOD:		GET
 	 * 			RETURN:		STRING[]
-	 *
-	 *
-	 * 		DETAILS:
-	 *
-	 * 			ENDPOINT:	/details/user
-	 * 			ARGS:		Long: id
-	 * 			METHOD:		GET
-	 * 			RETURN:		UserAuthProfile
 	 *
 	 *
 	 * 		VERIFICATION:
