@@ -184,13 +184,13 @@ todo
 **`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **Long:** id | 200 | Remove notification
 **`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **NONE** | 200 | Remove all notification
 
-<br><h4>WebSocket:</h4>
+<br><h3>WebSocket:</h3>
 
 Endpoint | Method | Response | &nbsp;
 --- | --- | --- | ---
 **`/user/queue/notification`** | **SUBSCRIBE** | NotificationForm | Receive user notificaions instantly
 
-<br><h4>Notification types:</h4>
+<br><h3>Notification types:</h3>
 
 Type | Value
 --- | ---
@@ -295,8 +295,26 @@ Endpoint | Method | Arguments | Response | &nbsp;
 **`/protected/user/friends/request/list/income`** | **GET** | **Int:** page, size  | FriendshipNotification[] | Get friend requests
 **`/protected/user/friends/request/list/outcome`** | **GET** | **Int:** page, size  | FriendshipNotification[] | Get own friend requests
 
+<br><h3>Conversation REST:</h3>
 
+<h4>MessageForm JSON:</h4>
 
+```json
+{
+  "topic" : Long,
+  "author" : Long,
+  "message" : String,
+  "timestamp": Long
+}
+```
+
+Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/friends/conversation/messages/count`** | **GET** | **Long:** id  | Long | Count messages
+**`/protected/user/friends/conversation/messages/list`** | **GET** |  **Long:** id<br> **Int:** page, size  | MessageForm[] | Get messages
+**`/protected/user/friends/conversation/messages/last`** | **GET** | **Long:** id  | MessageForm | Get last message
+**`/protected/user/friends/conversation/messages/send`** | **POST** | **BODY:** MessageForm  | 200 | Send message
+**`/protected/user/friends/conversation/remove`** | **DELETE** | **Long:** id  | 200 | Delete conversation
 
 
 
