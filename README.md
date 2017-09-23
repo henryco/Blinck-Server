@@ -525,7 +525,6 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
-
  Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/list`** | **GET** | **NONE** | String[] | Get admin id's list
@@ -542,9 +541,9 @@ Endpoint | Method | Payload | &nbsp;
 
 ```json
 {
-  "id" : null,
-  "locked" : false,
-  "authorities" : null
+  "id" : Long,
+  "locked" : Boolean,
+  "authorities" : String
 }
 ```
 
@@ -558,6 +557,19 @@ Endpoint | Method | Payload | &nbsp;
   "reported_id" : Long
 }
 ```
+
+ Endpoint | Method | Body | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/admin/bans/count/user`** | **GET** | **NONE** | Long | Get locked users count
+**`/protected/admin/bans/list/user`** | **GET** | **Int:** page, size | UserAuth[] | Get locked users list
+**`/protected/admin/bans/details/user`** | **GET** | **Long:** id | UserAuth | Get locked users
+**`/protected/admin/bans/lock/user`** | **POST, <br>GET** | **Long:** id<br>**Boolean:** option | 200 | Lock (or not) user
+**`/protected/admin/bans/reporst/user/count`** | **GET** | **NONE** | Long | Get user reports count
+**`/protected/admin/bans/reporst/user/list`** | **GET** | **Long:** id | ReportList[] | Get user reports list
+**`/protected/admin/bans/reporst/user/list/all`** | **GET** | **Int:** page, size | ReportList[] | Get all users reports
+**`/protected/admin/bans/reporst/user/clear`** | **POST, <br>GET** | **Long:** id | 200 | Clear user reports history
+
+
 
 
 
