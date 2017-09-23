@@ -515,18 +515,7 @@ Endpoint | Method | Payload | &nbsp;
 <br><br>
 # Admin panel 
 
-<h4>ReportList JSON:</h4>
-
-```json
-{
-  "id" : Long,
-  "reason" : String,
-  "reporter_id" : Long,
-  "reported_id" : Long
-}
-```
-
-<h4>SimpNotification</h4>
+<h4>SimpNotification JSON:</h4>
 
 ```json
 {
@@ -548,8 +537,27 @@ Endpoint | Method | Payload | &nbsp;
 **`/protected/admin/authority/session/admin`** | **POST, <br>GET** | **String:** name | 200 | Close admin session
 **`/protected/admin/notification/user`** | **POST** | **BODY:** SimpNotification | 200 | Send notification to user
 
+<br><h3>Authentication and Bans</h3>
+<h4>UserAuth JSON:</h4>
 
+```json
+{
+  "id" : null,
+  "locked" : false,
+  "authorities" : null
+}
+```
 
+<h4>ReportList JSON:</h4>
+
+```json
+{
+  "id" : Long,
+  "reason" : String,
+  "reporter_id" : Long,
+  "reported_id" : Long
+}
+```
 
 
 
