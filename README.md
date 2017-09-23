@@ -188,7 +188,41 @@ todo
 
 Endpoint | Method | Response | &nbsp;
 --- | --- | --- | ---
-**`/user/queue/notification`** | **SUBSCRIBE** | NotificationForm | Get user notificaions instantly
+**`/user/queue/notification`** | **SUBSCRIBE** | NotificationForm | Receive user notificaions instantly
+
+<h4>Notification types:</h4>
+
+Type | Value
+--- | ---
+**FRIEND_MESSAGE_STOMP** | `"friendship_message_stomp"`
+**FRIEND_MESSAGE_REST** | `"friendship_message_rest"`
+**FRIEND_REQUEST** | `"friendship_request"`
+**FRIEND_ACCEPTED** | `"friendship_accepted"`
+**FRIEND_DECLINED** | `"friendship_declined"`
+**FRIEND_DELETED** | `"friendship_deleted"`
+
+**CUSTOM_SUB_PARTY_REMOVE** | `"custom_sub_party_removed"`
+**CUSTOM_SUB_PARTY_JOIN** | `"custom_sub_party_joined"`
+**CUSTOM_SUB_PARTY_INVITE** | `"custom_sub_party_invite"`
+**CUSTOM_SUB_PARTY_LEAVE** | `"custom_sub_party_leave"`
+
+**SUB_PARTY_MESSAGE_STOMP** | `"sub_party_message_stomp"`
+**SUB_PARTY_MESSAGE_REST** | `"sub_party_message_rest"`
+**SUB_PARTY_FOUND** | `"sub_party_found"`
+**SUB_PARTY_IN_QUEUE** | `"sub_party_in_queue"`
+
+**PARTY_MESSAGE_STOMP** | `"party_message_stomp"`
+**PARTY_MESSAGE_REST** | `"party_message_rest"`
+**PARTY_FOUND** | `"party_found"`
+**PARTY_MEETING_SET** | `"party_meeting_set"`
+**PARTY_MEETING_PROPOSITION** | `"party_meeting_proposition"`
+**PARTY_MEETING_VOTE** | `"party_meeting_vote"`
+**PARTY_MEETING_VOTE_FINAL** | `"party_meeting_vote_final"`
+**PARTY_MEETING_VOTE_FINAL_FAIL** | `"party_meeting_vote_final_fail"`
+**PARTY_MEETING_VOTE_FINAL_SUCCESS** | `"party_meeting_vote_final_success"`
+
+**QUEUE_LEAVE** | `"queue_leave"`
+
 
 <br>
 <h2> Matching </h2>
