@@ -167,10 +167,10 @@ todo
 
 ```json
 {
-  "id" : null,
-  "type" : null,
-  "info" : null,
-  "timestamp" : null
+  "id" : Long,
+  "type" : String,
+  "info" : String,
+  "timestamp" : Long
 }
 ```
 
@@ -181,8 +181,8 @@ todo
 **`/protected/user/notifications/list/all`** | **GET** | **NONE** | NotificationForm[] | Get all notifications
 **`/protected/user/notifications/list/all/pop`** | **GET** | **NONE** | NotificationForm[] | Pop all notifications
 **`/protected/user/notifications/last`** | **GET** | **NONE** | NotificationForm | Get last notification
-**`/protected/user/notifications/remove`** | **DELETE, POST, GET** | **Long:** id | 200 | Remove notification
-**`/protected/user/notifications/remove`** | **DELETE, POST, GET** | **NONE** | 200 | Remove all notification
+**`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **Long:** id | 200 | Remove notification
+**`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **NONE** | 200 | Remove all notification
 
 
 
