@@ -569,7 +569,68 @@ Endpoint | Method | Payload | &nbsp;
 **`/protected/admin/bans/reporst/user/list/all`** | **GET** | **Int:** page, size | ReportList[] | Get all users reports
 **`/protected/admin/bans/reporst/user/clear`** | **POST, <br>GET** | **Long:** id | 200 | Clear user reports history
 
+<br><h3>Matcher monitor</h3>
+I'm highly recommend to don't use it
+<h4>Party JSON:</h4>
 
+```json
+{
+  "id" : Long,
+  "meeting" : {
+    "time" : Long,
+    "active_after" : Long,
+    "venue" : String
+  },
+  "subParties" : [ Long ],
+  "details" : {
+    "type" : {
+      "ident" : String,
+      "wanted" : String,
+      "dimension" : Integer
+    },
+    "inQueue" : Boolean
+  }
+}
+```
+
+<h4>SubParty JSON:</h4>
+
+```json
+{
+  "id" : Long,
+  "party" : {
+    "id" : Long,
+    "meeting" : {
+      "time" : Long,
+      "active_after" : Long,
+      "venue" : String
+    },
+    "subParties" : [ Long ],
+    "details" : {
+      "type" : {
+        "ident" : String,
+        "wanted" : String,
+        "dimension" : Integer
+      },
+      "inQueue" : Boolean
+    }
+  },
+  "details" : {
+    "type" : {
+      "ident" : String,
+      "wanted" : String,
+      "dimension" : Integer
+    },
+    "inQueue" : Boolean
+  },
+  "users" : [ Long ]
+}
+```
+
+ Endpoint | Method | Body | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/admin/monitor/party/all`** | **GET** | **NONE** | Party[] | Get all parties
+**`/protected/admin/monitor/subparty/all`** | **GET** | **NONE** | SubParty[] | Get all subparties
 
 
 
