@@ -296,7 +296,6 @@ Endpoint | Method | Arguments | Response | &nbsp;
 **`/protected/user/friends/request/list/outcome`** | **GET** | **Int:** page, size  | FriendshipNotification[] | Get own friend requests
 
 <br><h3>Conversation REST:</h3>
-
 <h4>MessageForm JSON:</h4>
 
 ```json
@@ -316,6 +315,22 @@ Endpoint | Method | Arguments | Response | &nbsp;
 **`/protected/user/friends/conversation/messages/send`** | **POST** | **BODY:** MessageForm  | 200 | Send message
 **`/protected/user/friends/conversation/remove`** | **DELETE** | **Long:** id  | 200 | Delete conversation
 
+<br><h3>Conversation STOMP:</h3>
+<h4>StatusForm JSON:</h4>
+
+```json
+{
+  "destination" : String,
+  "timestamp": Long,
+  "status": Boolean
+}
+```
+
+Endpoint | Method | Payload | &nbsp;
+--- | --- | --- | ---
+**`/user/message/friendship/{friendship_id}`** | **SUBSCRIBE** | MessageForm | Receive friendship messages
+**`/user/message/friendship/stat`** | **SUBSCRIBE** | StatusForm | Receive status of sended messages
+**`/app/message/friendship`** | **SEND** | MessageForm | Send message to friendship
 
 
 
