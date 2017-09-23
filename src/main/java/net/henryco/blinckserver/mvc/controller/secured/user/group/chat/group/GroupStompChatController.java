@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
-import java.util.Date;
 
 import static net.henryco.blinckserver.mvc.service.relation.conversation.ConversationService.MessageForm;
 import static net.henryco.blinckserver.mvc.service.relation.core.PartyService.PartyInfo;
@@ -70,8 +69,8 @@ public class GroupStompChatController
 	 *	SEND message JSON:
 	 *
 	 *		"topic":		LONG,
-	 *		"message":		CHAR[512]
-	 *
+	 *		"message":		CHAR[512],
+	 *		"timestamp": 	DATE/LONG
 	 *
 	 *	GET message JSON:
 	 *
@@ -111,10 +110,10 @@ public class GroupStompChatController
 		final PartyInfo partyInfo = services.party.getPartyInfo(messageForm.getTopic(), id);
 
 		if (!partyInfo.isActiveAndContainsUser(id))
-			return createResponse(messageForm, new Date(System.currentTimeMillis()), false);
+			return createResponse(messageForm, messageForm.getDate(), false);
 
 		MessageForm processed = processMessage(id, messageForm, partyInfo);
-		return createResponse(processed, processed.getDate(), true);
+		return createResponse(processed, messageForm.getDate(), true);
 	}
 
 

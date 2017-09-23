@@ -7,20 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 /**
  * @author Henry on 03/09/17.
  */
 @Service
 public class FriendshipConversationService
-		extends BlinckDaoProvider<FriendshipConversation, Long> {
+		extends BlinckDaoProvider<FriendshipConversation, Long>
+		implements ConversationService<FriendshipConversation> {
 
 	@Autowired
 	public FriendshipConversationService(FriendshipConversationDao daoTemplate) {
 		super(daoTemplate);
 	}
-
 
 
 	private FriendshipConversationDao getDao() {
@@ -29,27 +28,36 @@ public class FriendshipConversationService
 
 
 
-	@Transactional
-	public List<FriendshipConversation> getByFriendshipId(Long id, int page, int size) {
-		return getDao().getByFriendshipId(id, page, size);
+	@Override @Transactional
+	public FriendshipConversation sendMessage(FriendshipConversation message) {
+		return getDao().save(message);
+	}
+
+	@Override @Transactional
+	public FriendshipConversation sendMessage(MessageForm message, Long userId) {
+
+		FriendshipConversation conversation = new FriendshipConversation();
+		conversation.setFriendship(message.getTopic());
+		conversation.setMessagePart(message.getMessagePart(userId));
+		return sendMessage(conversation);
 	}
 
 
-	@Transactional
-	public List<FriendshipConversation> getByFriendshipId(Long id) {
-		return getDao().getByFriendshipId(id);
+	@Override @Transactional
+	public long countByTopic(Long topicId) {
+		return getDao().countByFriendshipId(topicId);
 	}
 
-
-	@Transactional
-	public void deleteAllByFriendshipId(Long id) {
-		getDao().deleteByFriendshipId(id);
+	@Override @Transactional
+	public void deleteAllInTopic(Long topicId) {
+		getDao().deleteByFriendshipId(topicId);
 	}
 
-
-	@Transactional
-	public long countByFriendshipId(Long id) {
-		return getDao().countByFriendshipId(id);
+	@Override @Transactional
+	public MessageForm[] getLastNByTopic(Long topicId, int page, int size) {
+		return getDao().getByFriendshipId(topicId, page, size)
+				.stream().map(MessageForm::new)
+		.toArray(MessageForm[]::new);
 	}
 
 }

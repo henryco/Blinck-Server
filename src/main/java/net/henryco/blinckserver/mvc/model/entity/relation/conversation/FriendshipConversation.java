@@ -3,12 +3,11 @@ package net.henryco.blinckserver.mvc.model.entity.relation.conversation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.henryco.blinckserver.mvc.model.entity.relation.conversation.embeded.MessagePart;
 
 import javax.persistence.*;
-import java.util.Date;
 
 import static javax.persistence.GenerationType.AUTO;
-import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
  * <h1>Friendship conversation JSON:</h1>
@@ -26,7 +25,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
  */ @Entity
 @Data @NoArgsConstructor
 public class FriendshipConversation
-		implements Cloneable {
+		implements Cloneable, ConversationEntity {
 
 
 	private @Id @Column(
@@ -39,32 +38,11 @@ public class FriendshipConversation
 	) Long id;
 
 
-	private @Column(
-			name = "message",
-			length = 512
-	) @JsonProperty(
-			"message"
-	) String message;
-
-	// TODO: 20/09/17 REPLACE WITH MESSAGE PART
-	private @Column(
-			name = "time_stamp",
+	private @Embedded @JoinColumn(
 			updatable = false,
-			nullable = false
-	) @Temporal(
-			TIMESTAMP
-	) @JsonProperty(
-			"timestamp"
-	) Date date;
-
-
-	private @Column(
-			name = "author_id",
-			updatable = false,
-			nullable = false
-	) @JsonProperty(
-			"author"
-	) Long author;
+			nullable = false,
+			name = "message"
+	) MessagePart messagePart;
 
 
 	private @Column(
@@ -86,4 +64,8 @@ public class FriendshipConversation
 		}
 	}
 
+	@Override
+	public Long getTopic() {
+		return getFriendship();
+	}
 }

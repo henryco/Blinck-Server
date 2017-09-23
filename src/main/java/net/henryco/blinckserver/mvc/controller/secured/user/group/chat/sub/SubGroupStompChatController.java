@@ -68,7 +68,8 @@ public class SubGroupStompChatController
 	 *	SEND message JSON:
 	 *
 	 *		"topic":		LONG,
-	 *		"message":		CHAR[512]
+	 *		"message":		CHAR[512],
+	 *		"timestamp": 	DATE/LONG
 	 *
 	 *
 	 *	GET message JSON:
@@ -108,10 +109,10 @@ public class SubGroupStompChatController
 		final Long id = longID(authentication);
 
 		if (!servicePack.subPartyService.isExistsWithUser(messageForm.getTopic(), id))
-			return createResponse(messageForm, new Date(System.currentTimeMillis()), false);
+			return createResponse(messageForm, messageForm.getDate(), false);
 
 		MessageForm processed = processMessage(id, messageForm);
-		return createResponse(processed, processed.getDate(), true);
+		return createResponse(processed, messageForm.getDate(), true);
 	}
 
 

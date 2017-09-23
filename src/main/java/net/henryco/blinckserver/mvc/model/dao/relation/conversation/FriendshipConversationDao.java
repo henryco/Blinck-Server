@@ -12,7 +12,6 @@ public interface FriendshipConversationDao extends BlinckDaoTemplate<FriendshipC
 
 
 	List<FriendshipConversation> getByFriendshipId(Long id, int page, int size);
-	List<FriendshipConversation> getByFriendshipId(Long id);
 
 	void deleteByFriendshipId(Long id);
 

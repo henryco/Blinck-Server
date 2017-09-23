@@ -21,14 +21,4 @@ public abstract class FriendshipMessageController implements BlinckController, B
 	}
 
 
-	protected static FriendshipConversation createMessage(Long authorId, FriendshipConversation post) {
-
-		FriendshipConversation message = new FriendshipConversation();
-		message.setDate(new Date(System.currentTimeMillis()));
-		message.setFriendship(post.getFriendship());
-		message.setMessage(post.getMessage());
-		message.setAuthor(authorId);
-		return message;
-	}
-
 }

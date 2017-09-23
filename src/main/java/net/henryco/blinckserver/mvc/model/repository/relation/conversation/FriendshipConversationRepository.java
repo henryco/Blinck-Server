@@ -12,8 +12,7 @@ import java.util.List;
 public interface FriendshipConversationRepository extends JpaRepository<FriendshipConversation, Long> {
 
 
-	List<FriendshipConversation> getAllByFriendshipOrderByDateDesc(Long friendship);
-	List<FriendshipConversation> getAllByFriendshipOrderByDateDesc(Long friendship, Pageable pageable);
+	List<FriendshipConversation> getAllByFriendshipOrderByMessagePart_Date_Desc(Long friendship, Pageable pageable);
 
 	void removeAllByFriendship(Long friendship);
 

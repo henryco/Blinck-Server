@@ -32,14 +32,10 @@ public class FriendshipConversationDaoImp
 		getRepository().removeAllByFriendship(id);
 	}
 
-	@Override
-	public List<FriendshipConversation> getByFriendshipId(Long id) {
-		return getRepository().getAllByFriendshipOrderByDateDesc(id);
-	}
 
 	@Override
 	public List<FriendshipConversation> getByFriendshipId(Long id, int page, int size) {
-		return getRepository().getAllByFriendshipOrderByDateDesc(id, new PageRequest(page, size));
+		return getRepository().getAllByFriendshipOrderByMessagePart_Date_Desc(id, new PageRequest(page, size));
 	}
 
 	@Override

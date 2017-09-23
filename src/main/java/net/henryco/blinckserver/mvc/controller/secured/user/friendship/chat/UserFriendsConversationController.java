@@ -2,6 +2,7 @@ package net.henryco.blinckserver.mvc.controller.secured.user.friendship.chat;
 
 import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.controller.BlinckController;
+import net.henryco.blinckserver.mvc.controller.secured.user.group.chat.BlinckConversationController;
 import net.henryco.blinckserver.mvc.model.entity.relation.conversation.FriendshipConversation;
 import net.henryco.blinckserver.mvc.service.infrastructure.UpdateNotificationService;
 import net.henryco.blinckserver.mvc.service.relation.conversation.FriendshipConversationService;
@@ -10,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static net.henryco.blinckserver.mvc.service.relation.conversation.ConversationService.MessageForm;
 
 /**
  * @author Henry on 05/09/17.
@@ -21,7 +22,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping(BlinckController.EndpointAPI.FRIENDSHIP_CONVERSATION)
 public class UserFriendsConversationController
 		extends FriendshipMessageController
-		implements BlinckNotification {
+		implements BlinckNotification, BlinckConversationController {
 
 
  	private final UpdateNotificationService notificationService;
@@ -46,13 +47,12 @@ public class UserFriendsConversationController
 	 *		ENDPOINT: 		/protected/user/friends/conversation
 	 *
 	 *
-	 *	FriendshipConversation:
+	 *	MessageForm:
 	 *
-	 *		"id":			LONG,			(not required for POST)
-	 *		"message":		CHAR[512],
-	 *		"timestamp":	DATE/LONG,		(not required for POST)
-	 *		"author":		LONG,			(not required for POST)
-	 *		"friendship":	LONG
+	 * 		"topic": 		LONG,
+	 *		"author": 		LONG,			(not required for POST)
+	 * 		"message": 		CHAR[512],
+	 * 		"timestamp": 	DATE/LONG		(not required for POST)
 	 *
 	 *
 	 *		COUNT:
@@ -68,7 +68,7 @@ public class UserFriendsConversationController
 	 *			ENDPOINT:	/messages/list
 	 *			ARGS:		Int: page, Int: size, Long: id
 	 *			METHOD:		GET
-	 *			RETURN:		FriendshipConversation[]
+	 *			RETURN:		MessageForm[]
 	 *
 	 *
 	 * 		LAST:
@@ -76,13 +76,13 @@ public class UserFriendsConversationController
 	 * 			ENDPOINT:	/messages/last
 	 * 			ARGS:		Long: id
 	 * 			METHOD:		POST
-	 * 			RETURN:		FriendshipConversation
+	 * 			RETURN:		MessageForm
 	 *
 	 *
 	 * 		SEND:
 	 *
 	 * 			ENDPOINT:	/messages/send
-	 * 			BODY:		FriendshipConversation
+	 * 			BODY:		MessageForm
 	 * 			METHOD:		POST
 	 * 			RETURN:		VOID
 	 *
@@ -98,71 +98,45 @@ public class UserFriendsConversationController
 
 
 
-	// TESTED
-	public @RequestMapping(
+	public @Override @RequestMapping(
 			value = "/messages/count",
 			method = GET
-	) Long getAllMessagesCount(Authentication authentication,
-							   @RequestParam("id") Long friendshipId) {
-
-		accessCheck(friendshipService, friendshipId, longID(authentication));
-		return conversationService.countByFriendshipId(friendshipId);
+	) Long countMessages(Authentication authentication,
+						 @RequestParam("id") Long topic) {
+		accessCheck(friendshipService, topic, longID(authentication));
+		return conversationService.countByTopic(topic);
 	}
 
 
 
-	/**
-	 * <h1>Friendship conversation response ARRAY JSON:</h1>
-	 *	<h3>
-	 * 	[&nbsp;
-	 * 		{
-	 * 			"id": 			LONG, &nbsp;
-	 * 			"message": 		CHAR[512], &nbsp;
-	 * 			"timestamp": 	DATE/LONG, &nbsp;
-	 * 			"author": 		LONG, &nbsp;
-	 * 			"friendship":	LONG
-	 *		}
-	 *	&nbsp;]</h3>
-	 *	@see FriendshipConversation
-	 */ // TESTED
-	public @RequestMapping(
-			value = "/messages/list",
-			method = GET,
-			produces = JSON
-	) FriendshipConversation[] getAllMessages(Authentication authentication,
-											  @RequestParam("page") int page,
-											  @RequestParam("size") int size,
-											  @RequestParam("id") Long friendshipId) {
-
-		accessCheck(friendshipService, friendshipId, longID(authentication));
- 		return conversationService.getByFriendshipId(friendshipId, page, size)
-				.toArray(new FriendshipConversation[0]);
-	}
-
-
-
-	/**
-	 * <h1>Friendship conversation POST JSON:</h1>
-	 *	<h3>
-	 * 	{&nbsp;
-	 * 			"friendship":	LONG, &nbsp;
-	 * 			"message": 		CHAR[512]
-	 *	&nbsp;}</h3>
-	 *	@see FriendshipConversation
-	 */ // TESTED
-	public @ResponseStatus(OK) @RequestMapping(
+	public @Override @ResponseStatus(OK) @RequestMapping(
 			value = "/messages/send",
 			method = POST,
 			consumes = JSON
 	) void sendMessage(Authentication authentication,
-					   @RequestBody FriendshipConversation post) {
+					   @RequestBody MessageForm messageForm) {
 
 		final Long id = longID(authentication);
-		accessCheck(friendshipService, post.getFriendship(), id);
-
-		conversationService.save(createMessage(id, post));
-		sendMessageNotification(post.getFriendship(), id);
+		accessCheck(friendshipService, messageForm.getTopic(), id);
+		conversationService.sendMessage(messageForm, id);
+		sendMessageNotification(messageForm.getTopic(), id);
 	}
+
+
+
+	public @Override @RequestMapping(
+			value = "/messages/list",
+			method = GET,
+			produces = JSON
+	) MessageForm[] getAllMessages(Authentication authentication,
+								   @RequestParam("id") Long topic,
+								   @RequestParam("page") int page,
+								   @RequestParam("size") int size) {
+
+		accessCheck(friendshipService, topic, longID(authentication));
+		return conversationService.getLastNByTopic(topic, page, size);
+	}
+
 
 
 
@@ -183,16 +157,14 @@ public class UserFriendsConversationController
 			value = "/messages/last",
 			method = GET,
 			produces = JSON
-	) FriendshipConversation getLastMessage(Authentication authentication,
+	) MessageForm getLastMessage(Authentication authentication,
 											@RequestParam("id") Long friendshipId) {
 
 		accessCheck(friendshipService, friendshipId, longID(authentication));
 
-		List<FriendshipConversation> list =
-				conversationService.getByFriendshipId(friendshipId, 0, 1);
-		return list.isEmpty() ? null : list.get(0).clone();
+		MessageForm[] messages = getAllMessages(authentication, friendshipId, 0, 1);
+		return messages.length == 0 ? null : messages[0];
 	}
-
 
 
 	// TESTED
@@ -203,7 +175,7 @@ public class UserFriendsConversationController
 							 @RequestParam("id") Long friendshipId) {
 
 		accessCheck(friendshipService, friendshipId, longID(authentication));
-		conversationService.deleteAllByFriendshipId(friendshipId);
+		conversationService.deleteAllInTopic(friendshipId);
 	}
 
 

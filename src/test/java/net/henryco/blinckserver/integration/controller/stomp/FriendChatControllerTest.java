@@ -35,15 +35,14 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 
 	private static final class TestPostForm
 			implements Serializable {
-		public Long friendship;
+		public Long topic;
 		public String message;
 		public Date timestamp;
 	}
 
 	private static final class TestGetForm
 			implements Serializable{
-		public Long id;
-		public Long friendship;
+		public Long topic;
 		public Long author;
 		public String message;
 		public Date timestamp;
@@ -107,7 +106,7 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 		}).start();
 
 		TestPostForm postForm = new TestPostForm();
-		postForm.friendship = relation;
+		postForm.topic = relation;
 		postForm.message = TestUtils.randomGaussNumberString();
 
 		authorizedPostRequest(REST_POST, tokens[1], postForm);
@@ -119,7 +118,7 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 		assert notification.info.equals(relation.toString());
 
 		TestPostForm[] body = authorizedGetRequest(REST_GET + relation, tokens[0], TestPostForm[].class).getBody();
-		assert body[0].friendship.equals(relation);
+		assert body[0].topic.equals(relation);
 		assert body[0].message.equals(postForm.message);
 	}
 
@@ -177,7 +176,7 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 
 			TestGetForm form = new ObjectMapper().readValue(getHandler2.get().get(i), TestGetForm.class);
 			assert form.message.equals(messages1[i]);
-			assert form.friendship.equals(relation);
+			assert form.topic.equals(relation);
 			assert form.author.equals(users[0]);
 
 			TestStatusForm stat = new ObjectMapper().readValue(statHandler1.get().get(i), TestStatusForm.class);
@@ -193,7 +192,7 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 
 			TestGetForm form = new ObjectMapper().readValue(getHandler1.get().get(i), TestGetForm.class);
 			assert form.message.equals(messages2[i]);
-			assert form.friendship.equals(relation);
+			assert form.topic.equals(relation);
 			assert form.author.equals(users[1]);
 
 			TestStatusForm stat = new ObjectMapper().readValue(statHandler2.get().get(i), TestStatusForm.class);
@@ -210,7 +209,7 @@ public class FriendChatControllerTest extends BlinckStompIntegrationTest {
 	private static TestPostForm createPost(String msg, Long relation) {
 		TestPostForm postForm = new TestPostForm();
 		postForm.message = msg;
-		postForm.friendship = relation;
+		postForm.topic = relation;
 		postForm.timestamp = new Date(System.currentTimeMillis());
 		return postForm;
 	}

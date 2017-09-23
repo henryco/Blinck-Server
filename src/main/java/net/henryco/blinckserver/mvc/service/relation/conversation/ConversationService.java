@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.service.relation.conversation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,6 +44,7 @@ public interface ConversationService <T extends ConversationEntity> {
 			this.message = conversation.getMessagePart().getMessage();
 		}
 
+		@JsonIgnore
 		public MessagePart getMessagePart(Long userId) {
 
 			MessagePart messagePart = new MessagePart();

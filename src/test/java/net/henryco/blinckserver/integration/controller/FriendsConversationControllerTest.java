@@ -30,38 +30,33 @@ public class FriendsConversationControllerTest extends BlinckUserIntegrationTest
 	private static class TestMessagePost
 			implements Serializable {
 
-		public Long friendship;
-		public String message;
-	}
-
-
-	private static final class TestMessageFull
-			extends TestMessagePost {
-
-		public Long id;
+		public Long topic;
 		public Long author;
+		public String message;
 		public Date timestamp;
 
 		@Override
 		public String toString() {
 			return "{" +
-					"friendship=" + friendship +
+					"topic=" + topic +
 					", message='" + message + '\'' +
-					", id=" + id +
 					", author=" + author +
 					", timestamp=" + timestamp +
-			'}';
+					'}';
 		}
 	}
+
 
 
 	private static
 	TestMessagePost createRandomPost(Long relation) {
 		TestMessagePost post = new TestMessagePost();
 		post.message = TestUtils.randomGaussNumberString(100000000000000000L);
-		post.friendship = relation;
+		post.topic = relation;
 		return post;
 	}
+
+
 
 
 	private @Autowired FriendshipService friendshipService;
@@ -106,13 +101,13 @@ public class FriendsConversationControllerTest extends BlinckUserIntegrationTest
 		TestMessagePost randomPost = createRandomPost(relation);
 		authorizedPostRequest(SEND, token2, randomPost);
 
-		TestMessageFull body = authorizedGetRequest(LAST + relation, token1, TestMessageFull.class).getBody();
+		TestMessagePost body = authorizedGetRequest(LAST + relation, token1, TestMessagePost.class).getBody();
 		assert body.message.equals(randomPost.message);
-		assert body.friendship.equals(randomPost.friendship);
+		assert body.topic.equals(randomPost.topic);
 		assert body.author.equals(users[1]);
 
 		// access denied because only conversation members (friends) can read and write messages
-		assert authorizedGetRequest(LAST + relation, token3, TestMessageFull.class).getStatusCode().is4xxClientError();
+		assert authorizedGetRequest(LAST + relation, token3, TestMessagePost.class).getStatusCode().is4xxClientError();
 	}
 
 
@@ -151,15 +146,15 @@ public class FriendsConversationControllerTest extends BlinckUserIntegrationTest
 		assert authorizedGetRequest(COUNT + relation3, token2, Long.class).getBody().equals(12L);
 
 
-		TestMessageFull[] res1 = authorizedGetRequest(LIST + relation1, token2, TestMessageFull[].class).getBody();
-		TestMessageFull[] res2 = authorizedGetRequest(LIST + relation2, token3, TestMessageFull[].class).getBody();
-		TestMessageFull[] res3 = authorizedGetRequest(LIST + relation3, token4, TestMessageFull[].class).getBody();
+		TestMessagePost[] res1 = authorizedGetRequest(LIST + relation1, token2, TestMessagePost[].class).getBody();
+		TestMessagePost[] res2 = authorizedGetRequest(LIST + relation2, token3, TestMessagePost[].class).getBody();
+		TestMessagePost[] res3 = authorizedGetRequest(LIST + relation3, token4, TestMessagePost[].class).getBody();
 
 		assert res1.length == 10;
 		assert res2.length == 4;
 		assert res3.length == 12;
 
-		Consumer<TestMessageFull[]> assertion = res -> {
+		Consumer<TestMessagePost[]> assertion = res -> {
 			for (int i = 1; i < res.length; i++) {
 				assert res[i].timestamp.before(res[i - 1].timestamp);
 			}

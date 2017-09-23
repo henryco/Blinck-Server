@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 
 import static net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants.DestinationAPI.Postfix.STAT;
 import static net.henryco.blinckserver.configuration.project.websocket.WebSocketConstants.ExternalAPI.FRIENDSHIP;
+import static net.henryco.blinckserver.mvc.service.relation.conversation.ConversationService.MessageForm;
 
 /**
  * @author Henry on 10/09/17.
@@ -54,17 +55,17 @@ public class UserFriendsStompChatController
 	 *
 	 *	SEND message JSON:
 	 *
-	 *		"friendship":	LONG,
-	 *		"message":		CHAR[512]
+	 *		"topic":		LONG,
+	 *		"message":		CHAR[512],
+	 *		"timestamp": 	DATE/LONG
 	 *
 	 *
 	 *	GET message JSON:
 	 *
-	 *		"id": 			LONG,
- 	 * 		"message": 		CHAR[512],
- 	 * 		"timestamp": 	DATE/LONG,
- 	 * 		"author": 		LONG,
- 	 * 		"friendship":	LONG
+	 *		"topic":	 	LONG,
+	 *		"author": 		LONG,
+	 *		"message": 		CHAR[512],
+	 *		"timestamp": 	DATE/LONG
 	 *
 	 *
 	 *	RESPONSE JSON:
@@ -89,11 +90,11 @@ public class UserFriendsStompChatController
 	@MessageMapping({FRIENDSHIP})
 	@SendToUser(FRIENDSHIP + STAT)
 	public WebSocketStatusJson sendMessage(Authentication authentication,
-										   FriendshipConversation post) {
+										   MessageForm post) {
 
 	 	final Long id = longID(authentication);
 
-		if (!friendshipService.existsRelationWithUser(post.getFriendship(), id))
+		if (!friendshipService.existsRelationWithUser(post.getTopic(), id))
 			createResponse(post, false);
 
 		processMessage(id, post);
@@ -103,23 +104,23 @@ public class UserFriendsStompChatController
 
 
 
-	private void processMessage(Long id, FriendshipConversation post) {
+	private void processMessage(Long id, MessageForm post) {
 
-	 	final FriendshipConversation message = conversationService.save(createMessage(id, post));
+	 	final FriendshipConversation message = conversationService.sendMessage(post, id);
 
-		final Long friendship = post.getFriendship();
+		final Long friendship = post.getTopic();
 		final Long secondUser = friendshipService.getSecondUser(friendship, id);
 		final String destination = ExternalAPI.getFriendship(friendship);
 
-		messagingTemplate.convertAndSendToUser(secondUser.toString(), destination, message.clone());
+		messagingTemplate.convertAndSendToUser(secondUser.toString(), destination, new MessageForm(message));
 		notificationService.addNotification(secondUser, TYPE.FRIEND_MESSAGE_STOMP, friendship.toString());
 	}
 
 
 
 	private static
-	WebSocketStatusJson createResponse(FriendshipConversation post, boolean status) {
-		return new WebSocketStatusJson(post.getFriendship().toString(), post.getDate(), status);
+	WebSocketStatusJson createResponse(MessageForm post, boolean status) {
+		return new WebSocketStatusJson(post.getTopic().toString(), post.getDate(), status);
 	}
 
 
