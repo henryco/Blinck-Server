@@ -248,7 +248,52 @@ Endpoint | Method | Arguments | Response | &nbsp;
 **`/protected/user/match/queue/custom/start`** | **POST** | **Long:** id | Boolean | Move custom room to queue
 
 
+<br><br>
+<h2> Friendship </h2>
 
+<h4>Friendship JSON: </h4>
+
+```json
+{
+  "friendship" : Long,
+  "timestamp" : Long,
+  "user_1" : Long,
+  "user_2": Long
+}
+```
+
+<h4>SimpFriendship JSON: </h4>
+
+```json
+{
+  "friendship" : Long,
+  "friend" : Long
+}
+```
+
+<h4>FriendshipNotification JSON: </h4>
+
+```json
+{
+  "notification" : Long,
+  "from" : Long,
+  "to" : Long,
+  "timestamp": Long
+}
+```
+
+Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/friends/count`** | **GET** | **NONE**  | Long | Get friends count
+**`/protected/user/friends/list`** | **GET** | **Int:** page, size  | Long[] | Get friends ID list
+**`/protected/user/friends/detailed`** | **GET** | **Long:** id  | Friendship | Get friendship
+**`/protected/user/friends/add`** | **POST,<br> GET** | **Long:** user_id  | 200 | Add friend
+**`/protected/user/friends/remove`** | **DELETE,<br> POST,<br> GET** | **Long:** user_id  | 200 | Delete user
+**`/protected/user/friends/request/accept`** | **POST,<br> GET** | **Long:** user_id  | 200 | Accept friend request
+**`/protected/user/friends/request/decline`** | **POST,<br> GET** | **Long:** user_id  | 200 | Decline friend request
+**`/protected/user/friends/request/direct/delete`** | **DELETE,<br> POST,<br> GET** | **Long:** id  | 200 | Delete friend request
+**`/protected/user/friends/request/list/income`** | **GET** | **Int:** page, size  | FriendshipNotification[] | Get friend requests
+**`/protected/user/friends/request/list/outcome`** | **GET** | **Int:** page, size  | FriendshipNotification[] | Get own friend requests
 
 
 
