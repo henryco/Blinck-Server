@@ -130,7 +130,7 @@ todo
 **`/protected/user/profile/update/priv`** | **POST** | **BODY:** PrivateProfile | Boolean | Update private profile
 
 <br>
-<h2> User media </h2>
+<h2> User image media </h2>
 
 <h4>UserImageInfo JSON:</h4>
 
