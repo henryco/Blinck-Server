@@ -20,6 +20,7 @@ public abstract class Utils {
 	}
 
 	public static String[] stringToArray(String string) {
+		if (string == null) return null;
 		return string.substring(1, string.length() - 1).split(", ");
 	}
 

@@ -98,40 +98,43 @@ public class UserBaseProfileService
 
 
 	@Transactional
-	public void updateBio(Long userId, BioEntity profile)
+	public Boolean updateBio(Long userId, BioEntity profile)
 			throws RuntimeException {
 
-		if (profile == null || profile.getUserName() == null) return;
+		if (profile == null || profile.getUserName() == null) return false;
 		if (getDao().isNickNameExists(profile.getUserName().getNickname()))
 			throw new RuntimeException("Nickname already exists!");
 
 		UserCoreProfile core = getDao().getById(userId);
 		core.getPublicProfile().setBio(profile);
 		getDao().save(core);
+		return true;
 	}
 
 
 	@Transactional
-	public void updateNickname(Long userId, String name) {
+	public Boolean updateNickname(Long userId, String name) {
 
-		if (name == null || name.isEmpty()) return;
+		if (name == null || name.isEmpty()) return false;
 		if (getDao().isNickNameExists(name))
-			throw new RuntimeException("Nickname already exists!");
+			return false;
 
 		UserCoreProfile core = getDao().getById(userId);
 		core.getPublicProfile().getBio().getUserName().setNickname(name);
 		getDao().save(core);
+		return true;
 	}
 
 
 	@Transactional
-	public void updatePrivate(Long userId, PrivateProfile profile) {
+	public Boolean updatePrivate(Long userId, PrivateProfile profile) {
 
-		if (profile == null) return;
+		if (profile == null) return false;
 
 		UserCoreProfile core = getDao().getById(userId);
 		core.setPrivateProfile(profile);
 		getDao().save(core);
+		return true;
 	}
 
 }

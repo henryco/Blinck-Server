@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static net.henryco.blinckserver.mvc.service.profile.UserBaseProfileService.NameDetails;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -97,33 +96,33 @@ public class UserProfileController implements BlinckProfileController {
 	}
 
 
-	public @ResponseStatus(OK) @RequestMapping(
+	public @RequestMapping(
 			value = "/profile/update/bio",
 			method = POST,
 			consumes = JSON
-	) void updateBio(Authentication authentication,
+	) Boolean updateBio(Authentication authentication,
 					 @RequestBody BioEntity bio) {
-		services.baseProfile.updateBio(longID(authentication), bio);
+		return services.baseProfile.updateBio(longID(authentication), bio);
 	}
 
 
-	public @ResponseStatus(OK) @RequestMapping(
+	public @RequestMapping(
 			value = "/profile/update/nickname",
 			method = POST,
 			consumes = JSON
-	) void updateNickname(Authentication authentication,
+	) Boolean updateNickname(Authentication authentication,
 						  @RequestBody String name) {
-		services.baseProfile.updateNickname(longID(authentication), name);
+		return services.baseProfile.updateNickname(longID(authentication), name);
 	}
 
 
-	public @ResponseStatus(OK) @RequestMapping(
+	public @RequestMapping(
 			value = "/profile/update/priv",
 			method = POST,
 			consumes = JSON
-	) void updatePrivateProfile(Authentication authentication,
+	) Boolean updatePrivateProfile(Authentication authentication,
 								@RequestBody PrivateProfile profile) {
-		services.baseProfile.updatePrivate(longID(authentication), profile);
+		return services.baseProfile.updatePrivate(longID(authentication), profile);
 	}
 
 

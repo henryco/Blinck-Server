@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.media;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.henryco.blinckserver.util.Utils;
@@ -35,10 +36,12 @@ public class UserPhotoEntity {
 	) String photos;
 
 
+	@JsonIgnore
 	public String[] getPhotoArray() {
 		return Utils.stringToArray(photos);
 	}
 
+	@JsonIgnore
 	public void setPhotoArray(String ... photos) {
 		this.photos = Utils.arrayToString(photos);
 	}
