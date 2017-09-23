@@ -123,7 +123,7 @@ todo
 **`/protected/user/profile/find/one`** | **GET** | **String:** username | BioEntity | Find user profile
 **`/protected/user/profile/find`** | **GET** | **String:** username <br>**Int:** page, size | NameDetails[] | Find user profiles
 **`/protected/user/profile/update/bio`** | **POST** | **BODY:** BioEntity | 200 | Update user bio
-**`/protected/user/profile/update/nickname`** | **POST** | **BODY:** String | 200 | Update username
+**`/protected/user/profile/update/nickname`** | **POST** | **BODY:** String | Boolean | Update username
 **`/protected/user/profile/update/priv`** | **POST** | **BODY:** PrivateProfile | 200 | Update private profile
 
 
