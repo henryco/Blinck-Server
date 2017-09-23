@@ -409,7 +409,7 @@ Endpoint | Method | Payload | &nbsp;
 <br><br>
 # Party
 
-<h4>Info JSON: </h4>
+<h4>PartyInfo JSON: </h4>
 
 ```json
 {
@@ -436,13 +436,34 @@ Endpoint | Method | Payload | &nbsp;
 
 Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
-**`/protected/user/group/details`** | **GET** | **Long:** id  | Info | Get party info
+**`/protected/user/group/details`** | **GET** | **Long:** id  | PartyInfo | Get party info
 **`/protected/user/group/details/meeting`** | **GET** | **Long:** id  | Meeting | Get party meeting
 **`/protected/user/group/details/user`** | **GET** | **Long:** id  | Long[] | Get party users id's
 **`/protected/user/group/details/isactive`** | **GET** | **Long:** id  | Boolean | Get party status
 **`/protected/user/group/list/id`** | **GET** | **NONE**  | Long[] | Get parties id list
-**`/protected/user/group/list/details`** | **GET** | **NONE**  | Info[] | Get parties info list
+**`/protected/user/group/list/details`** | **GET** | **NONE**  | PartyInfo[] | Get parties info list
 
+<br><h3>Meetings:</h3>
+<h4>OfferInfo JSON:</h4>
+
+```json
+{
+  "id" : Long,
+  "votes" : Integer,
+  "offer" : {
+    "time" : Long,
+    "active_after" : Long,
+    "venue" : String
+  }
+}
+```
+
+Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/group/meeting/list`** | **GET** | **Long:** id  | OfferInfo | Get proposed meeting list
+**`/protected/user/group/meeting/propose`** | **POST** | **Long:** id<br> **BODY:** Meeting  | 200 | Propose meeting
+**`/protected/user/group/meeting/vote`** | **POST,<br>GET** | **Long:** proposition<br> **Boolean:** option  | 200 | Vote
+**`/protected/user/group/meeting/vote/final`** | **POST,<br>GET** | **Long:** proposition<br> **Boolean:** option  | 200 | Vote final
 
 
 
