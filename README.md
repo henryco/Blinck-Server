@@ -1,7 +1,10 @@
 # Blinck-Server <br><a href="https://codebeat.co/projects/github-com-henryco-blinck-server-master"><img alt="codebeat badge" src="https://codebeat.co/badges/ee5cad0d-2b6c-48b2-b52f-26adb3c698c2" /></a>
 Blinck backend based on spring boot. <br>
 ~17k+ lines of high quality code with 70-80% test coverage.
+<br><br>
+# Rest API:
 <br>
+
 <h2>Login</h2>
 <h4>User JSON:</h4>
 
@@ -65,7 +68,7 @@ todo
 <br>
 <h2> User profile </h2>
 
-<h4>BioEntity JSON</h4>
+<h4>BioEntity JSON:</h4>
 
 ```json
 {
@@ -81,7 +84,7 @@ todo
 }
 ```
 
-<h4>MediaEntity JSON</h4>
+<h4>MediaEntity JSON:</h4>
 
 ```json
 {
@@ -92,7 +95,7 @@ todo
 }
 ```
 
-<h4>PrivateProfile JSON</h4>
+<h4>PrivateProfile JSON:</h4>
 
 ```json
 {
@@ -100,7 +103,7 @@ todo
 }
 ```
 
-<h4>NameDetails JSON</h4>
+<h4>NameDetails JSON:</h4>
 
 ```json
 {
@@ -125,6 +128,92 @@ todo
 **`/protected/user/profile/update/bio`** | **POST** | **BODY:** BioEntity | Boolean | Update user bio
 **`/protected/user/profile/update/nickname`** | **POST** | **BODY:** String | Boolean | Update username
 **`/protected/user/profile/update/priv`** | **POST** | **BODY:** PrivateProfile | Boolean | Update private profile
+
+<br>
+<h2> User media </h2>
+
+<h4>UserImageInfo JSON:</h4>
+
+```json
+{
+  "position" : Integer,
+  "image" : String
+}
+```
+
+ Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/media/image/max`** | **GET** | **NONE** | Integer | Get max numb of images
+**`/protected/user/media/image/list`** | **GET** | **Long:** id | UserImageInfo[] | Get user images
+**`/protected/user/media/image/avatar`** | **GET** | **Long:** id | String | Get user avatar
+**`/protected/user/media/image/swap`** | **POST, GET** | **Int:** one, two | 200 | Swap user images
+**`/protected/user/media/image/delete`** | **DELETE, POST** | **Int:** image | 200 | Delete user image
+**`/protected/user/media/image/add`** | **POST** | **File:** image | 200 | Add user image
+**`/protected/user/media/image/set`** | **POST** | **File:** image<br>**Int:** index | 200 | Set user image 
+**`/protected/user/media/image/avatar`** | **POST** | **File:** image | 200 | Set user avatar
+
+<br>
+<h2> Report </h2>
+
+ Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/report`** | **POST** | **Long:** id<br>**String:** reason | Boolean | Report user, reason might be null
+
+
+<br>
+<h2> Notifications </h2>
+
+<h4>NotificationForm JSON:</h4>
+
+```json
+{
+  "id" : Long,
+  "type" : String,
+  "info" : String,
+  "timestamp" : Long
+}
+```
+
+ Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/notifications/count`** | **GET** | **NONE** | Long | Get notifications count
+**`/protected/user/notifications/list`** | **GET** | **Int:** page, size | NotificationForm[] | Get notifications
+**`/protected/user/notifications/list/all`** | **GET** | **NONE** | NotificationForm[] | Get all notifications
+**`/protected/user/notifications/list/all/pop`** | **GET** | **NONE** | NotificationForm[] | Pop all notifications
+**`/protected/user/notifications/last`** | **GET** | **NONE** | NotificationForm | Get last notification
+**`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **Long:** id | 200 | Remove notification
+**`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **NONE** | 200 | Remove all notification
+
+<br>
+<h2> Matching </h2>
+
+<h4> TypeForm JSON: </h4>
+
+```json
+{
+  "ident" : String,
+  "wanted" : String,
+  "dimension" : Integer,
+  "ages": String
+}
+```
+
+Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/match/queue/solo`** | **POST** | **BODY:** TypeForm | 200 | Enter to solo queue
+**`/protected/user/match/queue/list`** | **GET** | **NONE** | Long[] | Get id's of user rooms in queue
+**`/protected/user/match/queue/leave`** | **POST,<br> DELETE** | **Long:** id | 200 | Leave room in queue
+**`/protected/user/match/queue/custom`** | **POST** | **BODY:** TypeForm | Long | Create cutom room and returns its ID
+**`/protected/user/match/queue/custom/delete`** | **DELETE** | **Long:** id | Boolean | Delete cutom room
+**`/protected/user/match/queue/custom/list`** | **GET** | **NONE** | Long[] | Get id's of users custom rooms
+**`/protected/user/match/queue/custom/join`** | **POST** | **Long:** id | Boolean | Join to custom room
+**`/protected/user/match/queue/custom/invite`** | **POST** | **Long:** id<br>**BODY:** Long[] | Boolean | Invite users to room
+**`/protected/user/match/queue/custom/leave`** | **POST,<br> DELETE** | **Long:** id | Boolean | Leave custom room
+**`/protected/user/match/queue/custom/start`** | **POST** | **Long:** id | Boolean | Move custom room to queue
+
+
+
+
 
 
 
