@@ -515,6 +515,42 @@ Endpoint | Method | Payload | &nbsp;
 <br><br>
 # Admin panel 
 
+<h4>ReportList JSON:</h4>
+
+```json
+{
+  "id" : Long,
+  "reason" : String,
+  "reporter_id" : Long,
+  "reported_id" : Long
+}
+```
+
+<h4>SimpNotification</h4>
+
+```json
+{
+  "receiver_id" : Long,
+  "type" : String,
+  "notification" : String
+}
+```
+
+
  Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
-todo: documentation
+**`/protected/admin/list`** | **GET** | **NONE** | String[] | Get admin id's list
+**`/protected/admin/verification`** | **POST, <br>GET** | **Int:** size | String[] | Get admin verification id's list
+**`/protected/admin/verification`** | **POST, <br>GET** | **Int:** size | String[] | Get admin verification id's list
+**`/protected/admin/activate`** | **POST** | **BODY:** String[] | 200 | Activate admin profiles
+**`/protected/admin/authority/add`** | **POST, <br>GET** | **String:** name, role | 200 | Add authority to admin
+**`/protected/admin/authority/remove`** | **POST, <br>GET** | **String:** name, role | 200 | Remove authority from admin
+**`/protected/admin/authority/session/close`** | **POST, <br>GET** | **String:** name | 200 | Close user session
+**`/protected/admin/authority/session/admin`** | **POST, <br>GET** | **String:** name | 200 | Close admin session
+**`/protected/admin/notification/user`** | **POST** | **BODY:** SimpNotification | 200 | Send notification to user
+
+
+
+
+
+
