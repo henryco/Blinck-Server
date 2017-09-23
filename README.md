@@ -406,6 +406,37 @@ Endpoint | Method | Payload | &nbsp;
 **`/app/message/subgroup`** | **SEND** | MessageForm | Send message to subgroup
 
 
+<br><br>
+# Party
 
+<h4>Info JSON: </h4>
 
+```json
+{
+  "id" : Long,
+  "meeting" : {
+    "time" : Long,
+    "active_after" : Long,
+    "venue" : String
+  },
+  "sub_parties" : [ Long ],
+  "users" : [ Long ]
+}
+```
+
+<h4>Meeting JSON: </h4>
+
+```json
+{
+  "time" : null,
+  "active_after" : null,
+  "venue" : null
+}
+```
+
+Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/subgroup/conversation/messages/count`** | **GET** | **Long:** id  | Long | Count messages
+**`/protected/user/subgroup/conversation/messages/list`** | **GET** |  **Long:** id<br> **Int:** page, size  | MessageForm[] | Get messages
+**`/protected/user/subgroup/conversation/messages/send`** | **POST** | **BODY:** MessageForm  | 200 | Send message
 
