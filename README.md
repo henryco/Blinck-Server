@@ -184,6 +184,12 @@ todo
 **`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **Long:** id | 200 | Remove notification
 **`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **NONE** | 200 | Remove all notification
 
+<h4>WebSocket:</h4>
+
+Endpoint | Method | Response | &nbsp;
+--- | --- | --- | ---
+**`/user/queue/notification`** | **SUBSCRIBE** | NotificationForm | Get user notificaions instantly
+
 <br>
 <h2> Matching </h2>
 
