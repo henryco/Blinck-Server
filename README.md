@@ -42,7 +42,7 @@ Blinck backend based on spring boot. <br>
   Authorization:    JWT String
 ```
 
- Endpoint | Method  | Connection header | HTTP Authorization Header
+ Endpoint | Method  | Connection header | HTTP Authorization Header | &nbsp;
 --- | --- | --- | --- | ---
 **`/stomp`** | **CONNECT** | YES | YES | Connect to server via jwt
 
