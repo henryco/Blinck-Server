@@ -1,5 +1,6 @@
 package net.henryco.blinckserver.mvc.model.entity.relation.core.embeded;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -61,11 +62,11 @@ public class Type {
 	) Integer dimension;
 
 
-	public Type invertedCopy() {
+	@JsonIgnore public Type invertedCopy() {
 		return new Type(wanted, ident, dimension);
 	}
 
-	public Type copy() {
+	@JsonIgnore public Type copy() {
 		return new Type(ident, wanted, dimension);
 	}
 

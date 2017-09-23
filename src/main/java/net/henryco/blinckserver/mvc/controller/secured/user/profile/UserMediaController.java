@@ -73,8 +73,8 @@ public class UserMediaController implements BlinckController {
 			value = "/image/swap",
 			method = {POST, GET}
 	) void swapUserImages(Authentication authentication,
-							 @RequestParam("one") int one,
-							 @RequestParam("two") int two) {
+						  @RequestParam("one") int one,
+						  @RequestParam("two") int two) {
 		services.media.swapImages(longID(authentication), one, two);
 	}
 
@@ -83,7 +83,7 @@ public class UserMediaController implements BlinckController {
 			value = "/image/delete",
 			method = {DELETE, POST}
 	) void deleteUserImage(Authentication authentication,
-							  @RequestParam("image") int number) {
+						   @RequestParam("image") int number) {
 		services.media.deleteImage(longID(authentication), number);
 	}
 

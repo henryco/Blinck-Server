@@ -2,12 +2,15 @@ package net.henryco.blinckserver.unit.helper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import net.henryco.blinckserver.configuration.project.notification.BlinckNotification;
 import net.henryco.blinckserver.mvc.model.entity.profile.embeded.priv.PrivateProfile;
 import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.bio.BioEntity;
 import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.bio.UserNameEntity;
 import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.media.MediaEntity;
 import net.henryco.blinckserver.mvc.model.entity.profile.embeded.pub.media.UserPhotoEntity;
+import net.henryco.blinckserver.mvc.model.entity.relation.core.embeded.Type;
 import net.henryco.blinckserver.mvc.service.profile.UserBaseProfileService;
+import net.henryco.blinckserver.mvc.service.profile.UserImageMediaService;
 import net.henryco.blinckserver.unit.BlinckUnitTest;
 import org.junit.Test;
 
@@ -53,6 +56,21 @@ public class JsonsTest extends BlinckUnitTest{
 	@Test
 	public void privateProfile() throws Exception {
 		System.out.println(write(new PrivateProfile()));
+	}
+
+	@Test
+	public void userImageInfoTest() throws Exception {
+		System.out.println(write(new UserImageMediaService.UserImageInfo()));
+	}
+
+	@Test
+	public void notificationTest() throws Exception {
+		System.out.println(write(new BlinckNotification.JsonNotificationForm()));
+	}
+
+	@Test
+	public void typeFormTest() throws Exception {
+		System.out.println(write(new Type()));
 	}
 
 }

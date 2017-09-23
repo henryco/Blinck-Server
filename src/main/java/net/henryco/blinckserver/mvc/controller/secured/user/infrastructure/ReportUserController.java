@@ -4,7 +4,6 @@ import net.henryco.blinckserver.mvc.controller.BlinckController;
 import net.henryco.blinckserver.mvc.service.infrastructure.ReportAndBanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,8 +31,7 @@ public class ReportUserController implements BlinckController {
 	 * 		REPORT:
 	 *
 	 * 			ENDPOINT:	/
-	 * 			ARGS:		Long: id
-	 * 			BODY:		String
+	 * 			ARGS:		Long: id, String: reason
 	 * 			METHOD:		POST
 	 * 			RETURN:		BOOLEAN
 	 *
@@ -45,7 +43,7 @@ public class ReportUserController implements BlinckController {
 			method = POST
 	) Boolean reportUser(Authentication authentication,
 						 @RequestParam("id") Long userId,
-						 @RequestBody String reason) {
+						 @RequestParam(value = "reason", required = false) String reason) {
 		return reportAndBanService.report(longID(authentication), userId, reason);
 	}
 
