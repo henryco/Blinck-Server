@@ -68,7 +68,7 @@ todo
 <br>
 <h2> User profile </h2>
 
-<h4>BioEntity JSON</h4>
+<h4>BioEntity JSON:</h4>
 
 ```json
 {
@@ -84,7 +84,7 @@ todo
 }
 ```
 
-<h4>MediaEntity JSON</h4>
+<h4>MediaEntity JSON:</h4>
 
 ```json
 {
@@ -95,7 +95,7 @@ todo
 }
 ```
 
-<h4>PrivateProfile JSON</h4>
+<h4>PrivateProfile JSON:</h4>
 
 ```json
 {
@@ -103,7 +103,7 @@ todo
 }
 ```
 
-<h4>NameDetails JSON</h4>
+<h4>NameDetails JSON:</h4>
 
 ```json
 {
@@ -132,7 +132,7 @@ todo
 <br>
 <h2> User media </h2>
 
-<h4>UserImageInfo JSON</h4>
+<h4>UserImageInfo JSON:</h4>
 
 ```json
 {
@@ -151,6 +151,39 @@ todo
 **`/protected/user/media/image/add`** | **POST** | **File:** image | 200 | Add user image
 **`/protected/user/media/image/set`** | **POST** | **File:** image<br>**Int:** index | 200 | Set user image 
 **`/protected/user/media/image/avatar`** | **POST** | **File:** image | 200 | Set user avatar
+
+<br>
+<h2> Report </h2>
+
+ Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/report`** | **POST** | **Long:** id<br>**String:** reason | Boolean | Report user, reason might be null
+
+
+<br>
+<h2> Notifications </h2>
+
+<h4>NotificationForm JSON:</h4>
+
+```json
+{
+  "id" : null,
+  "type" : null,
+  "info" : null,
+  "timestamp" : null
+}
+```
+
+ Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/notifications/count`** | **GET** | **NONE** | Long | Get notifications count
+**`/protected/user/notifications/list`** | **GET** | **Int:** page, size | NotificationForm[] | Get notifications
+**`/protected/user/notifications/list/all`** | **GET** | **NONE** | NotificationForm[] | Get all notifications
+**`/protected/user/notifications/list/all/pop`** | **GET** | **NONE** | NotificationForm[] | Pop all notifications
+**`/protected/user/notifications/last`** | **GET** | **NONE** | NotificationForm | Get last notification
+**`/protected/user/notifications/remove`** | **DELETE, POST, GET** | **Long:** id | 200 | Remove notification
+**`/protected/user/notifications/remove`** | **DELETE, POST, GET** | **NONE** | 200 | Remove all notification
+
 
 
 
