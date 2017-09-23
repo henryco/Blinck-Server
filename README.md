@@ -347,6 +347,16 @@ Endpoint | Method | Payload | &nbsp;
 <h4>Info JSON: </h4>
 
 ```json
+{
+  "id" : Long,
+  "party" : Long,
+  "type" : {
+    "ident" : String,
+    "wanted" : String,
+    "dimension" : Integer
+  },
+  "users" : [ Long ]
+}
 
 ```
 
