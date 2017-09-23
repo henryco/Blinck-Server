@@ -570,7 +570,7 @@ Endpoint | Method | Payload | &nbsp;
 **`/protected/admin/bans/reporst/user/clear`** | **POST, <br>GET** | **Long:** id | 200 | Clear user reports history
 
 <br><h3>Matcher monitor</h3>
-<h2>I'm highly recommend to don't use it.</h2>
+<h4>I'm highly recommend to don't use it.</h4>
 <h4>Party JSON:</h4>
 
 ```json
