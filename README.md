@@ -2,8 +2,6 @@
 Blinck backend based on spring boot. <br>
 ~17k+ lines of high quality code with 70-80% test coverage.
 <br><br>
-# Rest API:
-<br>
 
 <h2>Login</h2>
 <h4>User JSON:</h4>
@@ -35,7 +33,7 @@ Blinck backend based on spring boot. <br>
  Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/registration`** | **POST** | *Admin JSON* | 200 | Register new admin
-todo
+todo: documentation
 
 <br><br>
 <h2> Public </h2>
@@ -331,6 +329,39 @@ Endpoint | Method | Payload | &nbsp;
 **`/user/message/friendship/{friendship_id}`** | **SUBSCRIBE** | MessageForm | Receive friendship messages
 **`/user/message/friendship/stat`** | **SUBSCRIBE** | StatusForm | Receive status of sended messages
 **`/app/message/friendship`** | **SEND** | MessageForm | Send message to friendship
+
+
+<br><br>
+<h2> SubParty </h2>
+
+<h4>Type JSON: </h4>
+
+```json
+{
+  "ident" : String,
+  "wanted" : String,
+  "dimension" : Integer
+}
+```
+
+<h4>Info JSON: </h4>
+
+```json
+
+```
+
+Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/subgroup/details`** | **GET** | **Long:** id  | Info | Get subparty info
+**`/protected/user/subgroup/details/group`** | **GET** | **Long:** id  | Long | Get parent party id
+**`/protected/user/subgroup/details/type`** | **GET** | **Long:** id  | Type | Get subparty type
+**`/protected/user/subgroup/details/users`** | **GET** | **Long:** id  | Long[] | Get subparty users id's
+**`/protected/user/subgroup/list/id`** | **GET** | **NONE** | Long[] | Get subparty id list
+**`/protected/user/subgroup/list/details`** | **GET** | **NONE** | Info[] | Get subparty info list
+**`/protected/user/subgroup/leave`** | **DELETE,<br>POST,<br>GET** | **Long:** id | 200 | Leave subparty (and parent party)
+
+
+
 
 
 
