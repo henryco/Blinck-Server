@@ -29,7 +29,7 @@ Blinck backend based on spring boot. <br>
 **`/login/user`** | **POST** | *User JSON* | Authorization header | Login as user
 **`/login/admin`** | **POST** | *Admin JSON* | Authorization header | Login as admin
 
-<br>
+<br><br>
 <h2>Admin panel</h2>
 
  Endpoint | Method | Body | Response | &nbsp;
@@ -37,7 +37,7 @@ Blinck backend based on spring boot. <br>
 **`/protected/admin/registration`** | **POST** | *Admin JSON* | 200 | Register new admin
 todo
 
-<br>
+<br><br>
 <h2> Public </h2>
 
  Endpoint | Method  | Response | &nbsp;
@@ -46,7 +46,7 @@ todo
 **`/public/facebook/permissions`** | **GET** | String[] | Get required facebook permission
 **`/rel/res/public/image/{resource}`** | **GET** | byte[] | Get image resource
 
-<br>
+<br><br>
 <h2> Session </h2>
 
  <h4>StatusResponse JSON:</h4>
@@ -65,7 +65,7 @@ todo
 **`/session/user/logout`** | **GET, POST** | USER | String | Logout user
 **`/session/admin/logout`** | **GET, POST** | ADMIN | String | Logout admin
 
-<br>
+<br><br>
 <h2> User profile </h2>
 
 <h4>BioEntity JSON:</h4>
@@ -129,7 +129,7 @@ todo
 **`/protected/user/profile/update/nickname`** | **POST** | **BODY:** String | Boolean | Update username
 **`/protected/user/profile/update/priv`** | **POST** | **BODY:** PrivateProfile | Boolean | Update private profile
 
-<br>
+<br><br>
 <h2> User image media </h2>
 
 <h4>UserImageInfo JSON:</h4>
@@ -152,7 +152,7 @@ todo
 **`/protected/user/media/image/set`** | **POST** | **File:** image<br>**Int:** index | 200 | Set user image 
 **`/protected/user/media/image/avatar`** | **POST** | **File:** image | 200 | Set user avatar
 
-<br>
+<br><br>
 <h2> Report </h2>
 
  Endpoint | Method | Arguments | Response | &nbsp;
@@ -160,7 +160,7 @@ todo
 **`/protected/user/report`** | **POST** | **Long:** id<br>**String:** reason | Boolean | Report user, reason might be null
 
 
-<br>
+<br><br>
 <h2> Notifications </h2>
 
 <h4>NotificationForm JSON:</h4>
@@ -184,13 +184,13 @@ todo
 **`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **Long:** id | 200 | Remove notification
 **`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **NONE** | 200 | Remove all notification
 
-<h4>WebSocket:</h4>
+<br><h4>WebSocket:</h4>
 
 Endpoint | Method | Response | &nbsp;
 --- | --- | --- | ---
 **`/user/queue/notification`** | **SUBSCRIBE** | NotificationForm | Receive user notificaions instantly
 
-<h4>Notification types:</h4>
+<br><h4>Notification types:</h4>
 
 Type | Value
 --- | ---
@@ -220,7 +220,7 @@ Type | Value
 **QUEUE_LEAVE** | `"queue_leave"`
 
 
-<br>
+<br><br>
 <h2> Matching </h2>
 
 <h4> TypeForm JSON: </h4>
