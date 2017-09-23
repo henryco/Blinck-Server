@@ -184,6 +184,34 @@ todo
 **`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **Long:** id | 200 | Remove notification
 **`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **NONE** | 200 | Remove all notification
 
+<br>
+<h2> Matching </h2>
+
+<h4> TypeForm JSON: </h4>
+
+```json
+{
+  "ident" : String,
+  "wanted" : String,
+  "dimension" : Integer,
+  "ages": String
+}
+```
+
+Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/match/queue/solo`** | **POST** | **BODY:** TypeForm | 200 | Enter to solo queue
+**`/protected/user/match/queue/list`** | **GET** | **NONE** | Long[] | Get id's of user rooms in queue
+**`/protected/user/match/queue/leave`** | **POST,<br> DELETE** | **Long:** id | 200 | Leave room in queue
+**`/protected/user/match/queue/custom`** | **POST** | **BODY:** TypeForm | Long | Create cutom room and returns its ID
+**`/protected/user/match/queue/custom/delete`** | **DELETE** | **Long:** id | Boolean | Delete cutom room
+**`/protected/user/match/queue/custom/list`** | **GET** | **NONE** | Long[] | Get id's of users custom rooms
+**`/protected/user/match/queue/custom/join`** | **POST** | **Long:** id | Boolean | Join to custom room
+**`/protected/user/match/queue/custom/invite`** | **POST** | **Long:** id<br>**BODY:** Long[] users | Boolean | Invite users to room
+**`/protected/user/match/queue/custom/leave`** | **POST,<br> DELETE** | **Long:** id | Boolean | Leave custom room
+**`/protected/user/match/queue/custom/start`** | **POST** | **Long:** id | Boolean | Move custom room to queue
+
+
 
 
 
