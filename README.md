@@ -461,10 +461,43 @@ Endpoint | Method | Arguments | Response | &nbsp;
 Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/group/meeting/list`** | **GET** | **Long:** id  | OfferInfo | Get proposed meeting list
-**`/protected/user/group/meeting/propose`** | **POST** | **Long:** id<br> **BODY:** Meeting  | 200 | Propose meeting
+**`/protected/user/group/meeting/propose`** | **POST** | **Long:** id<br> **BODY:** Meeting  | Boolean | Propose meeting
 **`/protected/user/group/meeting/vote`** | **POST,<br>GET** | **Long:** proposition<br> **Boolean:** option  | 200 | Vote
 **`/protected/user/group/meeting/vote/final`** | **POST,<br>GET** | **Long:** proposition<br> **Boolean:** option  | 200 | Vote final
 
+<br><h3>Conversation REST:</h3>
+<h4>MessageForm JSON:</h4>
 
+```json
+{
+  "topic" : Long,
+  "author" : Long,
+  "message" : String,
+  "timestamp": Long
+}
+```
+
+Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/group/conversation/messages/count`** | **GET** | **Long:** id  | Long | Count messages
+**`/protected/user/group/conversation/messages/list`** | **GET** |  **Long:** id<br> **Int:** page, size  | MessageForm[] | Get messages
+**`/protected/user/group/conversation/messages/send`** | **POST** | **BODY:** MessageForm  | 200 | Send message
+
+<br><h3>Conversation STOMP:</h3>
+<h4>StatusForm JSON:</h4>
+
+```json
+{
+  "destination" : String,
+  "timestamp": Long,
+  "status": Boolean
+}
+```
+
+Endpoint | Method | Payload | &nbsp;
+--- | --- | --- | ---
+**`/user/message/group/{group_id}`** | **SUBSCRIBE** | MessageForm | Receive party messages
+**`/user/message/group/stat`** | **SUBSCRIBE** | StatusForm | Receive status of sended messages
+**`/app/message/group`** | **SEND** | MessageForm | Send message to party
 
 
