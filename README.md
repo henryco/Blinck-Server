@@ -3,7 +3,7 @@ Blinck backend based on spring boot. <br>
 ~17k+ lines of high quality code with 70-80% test coverage.
 <br><br>
 
-<h2>Login</h2>
+# Login
 <h4>User JSON:</h4>
 
 ```json
@@ -28,7 +28,7 @@ Blinck backend based on spring boot. <br>
 **`/login/admin`** | **POST** | *Admin JSON* | Authorization header | Login as admin
 
 <br><br>
-<h2>Admin panel</h2>
+# Admin panel 
 
  Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
@@ -36,7 +36,7 @@ Blinck backend based on spring boot. <br>
 todo: documentation
 
 <br><br>
-<h2> Public </h2>
+# Public
 
  Endpoint | Method  | Response | &nbsp;
 --- | --- | --- | ---
@@ -45,7 +45,7 @@ todo: documentation
 **`/rel/res/public/image/{resource}`** | **GET** | byte[] | Get image resource
 
 <br><br>
-<h2> Session </h2>
+# Session 
 
  <h4>StatusResponse JSON:</h4>
 
@@ -64,7 +64,7 @@ todo: documentation
 **`/session/admin/logout`** | **GET, POST** | ADMIN | String | Logout admin
 
 <br><br>
-<h2> User profile </h2>
+# User profile
 
 <h4>BioEntity JSON:</h4>
 
@@ -128,7 +128,7 @@ todo: documentation
 **`/protected/user/profile/update/priv`** | **POST** | **BODY:** PrivateProfile | Boolean | Update private profile
 
 <br><br>
-<h2> User image media </h2>
+# User image media
 
 <h4>UserImageInfo JSON:</h4>
 
@@ -151,7 +151,7 @@ todo: documentation
 **`/protected/user/media/image/avatar`** | **POST** | **File:** image | 200 | Set user avatar
 
 <br><br>
-<h2> Report </h2>
+#  Report 
 
  Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
@@ -159,7 +159,7 @@ todo: documentation
 
 
 <br><br>
-<h2> Notifications </h2>
+#  Notifications
 
 <h4>NotificationForm JSON:</h4>
 
@@ -219,7 +219,7 @@ Type | Value
 
 
 <br><br>
-<h2> Matching </h2>
+# Matching
 
 <h4> TypeForm JSON: </h4>
 
@@ -247,7 +247,7 @@ Endpoint | Method | Arguments | Response | &nbsp;
 
 
 <br><br>
-<h2> Friendship </h2>
+# Friendship
 
 <h4>Friendship JSON: </h4>
 
@@ -332,7 +332,7 @@ Endpoint | Method | Payload | &nbsp;
 
 
 <br><br>
-<h2> SubParty </h2>
+# SubParty
 
 <h4>Type JSON: </h4>
 
@@ -358,9 +358,42 @@ Endpoint | Method | Arguments | Response | &nbsp;
 **`/protected/user/subgroup/details/users`** | **GET** | **Long:** id  | Long[] | Get subparty users id's
 **`/protected/user/subgroup/list/id`** | **GET** | **NONE** | Long[] | Get subparty id list
 **`/protected/user/subgroup/list/details`** | **GET** | **NONE** | Info[] | Get subparty info list
-**`/protected/user/subgroup/leave`** | **DELETE,<br>POST,<br>GET** | **Long:** id | 200 | Leave subparty (and parent party)
+**`/protected/user/subgroup/leave`** | **DELETE,<br>POST,<br>GET** | **Long:** id | 200 | Leave subparty <br>(and parent party)
 
+<br><h3>Conversation REST:</h3>
+<h4>MessageForm JSON:</h4>
 
+```json
+{
+  "topic" : Long,
+  "author" : Long,
+  "message" : String,
+  "timestamp": Long
+}
+```
+
+Endpoint | Method | Arguments | Response | &nbsp;
+--- | --- | --- | --- | ---
+**`/protected/user/subgroup/conversation/messages/count`** | **GET** | **Long:** id  | Long | Count messages
+**`/protected/user/subgroup/conversation/messages/list`** | **GET** |  **Long:** id<br> **Int:** page, size  | MessageForm[] | Get messages
+**`/protected/user/subgroup/conversation/messages/send`** | **POST** | **BODY:** MessageForm  | 200 | Send message
+
+<br><h3>Conversation STOMP:</h3>
+<h4>StatusForm JSON:</h4>
+
+```json
+{
+  "destination" : String,
+  "timestamp": Long,
+  "status": Boolean
+}
+```
+
+Endpoint | Method | Payload | &nbsp;
+--- | --- | --- | ---
+**`/user/message/subgroup/{subgroup_id}`** | **SUBSCRIBE** | MessageForm | Receive subgroup messages
+**`/user/message/subgroup/stat`** | **SUBSCRIBE** | StatusForm | Receive status of sended messages
+**`/app/message/subgroup`** | **SEND** | MessageForm | Send message to subgroup
 
 
 
