@@ -145,9 +145,9 @@ todo
 **`/protected/user/media/image/avatar`** | **GET** | **Long:** id | String | Get user avatar
 **`/protected/user/media/image/swap`** | **POST, GET** | **Int:** one, two | 200 | Swap user images
 **`/protected/user/media/image/delete`** | **DELETE, POST** | **Int:** image | 200 | Delete user image
-**`/protected/user/media/image/add`** | **POST** | **MultipartFile:** image | 200 | Add user image
-**`/protected/user/media/image/set`** | **POST** | **MultipartFile:** image<br>**Int:** index | 200 | Set user image 
-**`/protected/user/media/image/avatar`** | **POST** | **MultipartFile:** image | 200 | Set user avatar
+**`/protected/user/media/image/add`** | **POST** | **File:** image | 200 | Add user image
+**`/protected/user/media/image/set`** | **POST** | **File:** image<br>**Int:** index | 200 | Set user image 
+**`/protected/user/media/image/avatar`** | **POST** | **File:** image | 200 | Set user avatar
 
 
 
