@@ -134,7 +134,7 @@ todo
 ```json
 {
   "position" : Integer,
-  "image" : String // image url part
+  "image" : String
 }
 ```
 
