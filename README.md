@@ -24,16 +24,9 @@ Blinck backend based on spring boot. <br>
  
  Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
-**`/login/user`** | **POST** | *User JSON* | Authorization header | Login as user
+**`/login/user`** | **POST** | *User JSON* | Authorization header | Login as user (register automaticaly)
 **`/login/admin`** | **POST** | *Admin JSON* | Authorization header | Login as admin
-
-<br><br>
-# Admin panel 
-
- Endpoint | Method | Body | Response | &nbsp;
---- | --- | --- | --- | ---
 **`/protected/admin/registration`** | **POST** | *Admin JSON* | 200 | Register new admin
-todo: documentation
 
 <br><br>
 # Public
@@ -501,3 +494,9 @@ Endpoint | Method | Payload | &nbsp;
 **`/app/message/group`** | **SEND** | MessageForm | Send message to party
 
 
+<br><br>
+# Admin panel 
+
+ Endpoint | Method | Body | Response | &nbsp;
+--- | --- | --- | --- | ---
+todo: documentation
