@@ -436,7 +436,14 @@ Endpoint | Method | Payload | &nbsp;
 
 Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
-**`/protected/user/subgroup/conversation/messages/count`** | **GET** | **Long:** id  | Long | Count messages
-**`/protected/user/subgroup/conversation/messages/list`** | **GET** |  **Long:** id<br> **Int:** page, size  | MessageForm[] | Get messages
-**`/protected/user/subgroup/conversation/messages/send`** | **POST** | **BODY:** MessageForm  | 200 | Send message
+**`/protected/user/group/details`** | **GET** | **Long:** id  | Info | Get party info
+**`/protected/user/group/details/meeting`** | **GET** | **Long:** id  | Meeting | Get party meeting
+**`/protected/user/group/details/user`** | **GET** | **Long:** id  | Long[] | Get party users id's
+**`/protected/user/group/details/isactive`** | **GET** | **Long:** id  | Boolean | Get party status
+**`/protected/user/group/list/id`** | **GET** | **NONE**  | Long[] | Get parties id list
+**`/protected/user/group/list/details`** | **GET** | **NONE**  | Info[] | Get parties info list
+
+
+
+
 
