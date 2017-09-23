@@ -22,11 +22,29 @@ Blinck backend based on spring boot. <br>
  }
  ```
  
+ <h4>HTTP Authorization header: </h4>
+ 
+ ```
+   Authorization:    JWT String
+ ```
+ 
  Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
-**`/login/user`** | **POST** | *User JSON* | Authorization header | Login as user <br>(register automaticaly)
-**`/login/admin`** | **POST** | *Admin JSON* | Authorization header | Login as admin
+**`/login/user`** | **POST** | *User JSON* | HTTP Authorization header | Login as user <br>(register automaticaly)
+**`/login/admin`** | **POST** | *Admin JSON* | HTTP Authorization header | Login as admin
 **`/protected/admin/registration`** | **POST** | *Admin JSON* | 200 | Register new admin
+
+<br><h3>WebSocket:</h3>
+<h4>Connect header:</h4>
+
+```
+  User:                   Long
+  Authorization:    JWT String
+```
+
+ Endpoint | Method  | Connect header | HTTP Authorization Header
+--- | --- | --- | ---
+**`/stomp`** | **CONNECT** | YES | YES
 
 <br><br>
 # Public
