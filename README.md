@@ -541,7 +541,6 @@ Endpoint | Method | Payload | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/list`** | **GET** | **NONE** | String[] | Get admin id's list
 **`/protected/admin/verification`** | **POST, <br>GET** | **Int:** size | String[] | Get admin verification id's list
-**`/protected/admin/verification`** | **POST, <br>GET** | **Int:** size | String[] | Get admin verification id's list
 **`/protected/admin/activate`** | **POST** | **BODY:** String[] | 200 | Activate admin profiles
 **`/protected/admin/authority/add`** | **POST, <br>GET** | **String:** name, role | 200 | Add authority to admin
 **`/protected/admin/authority/remove`** | **POST, <br>GET** | **String:** name, role | 200 | Remove authority from admin
