@@ -237,12 +237,33 @@ Type | Value
 
 ```json
 {
-  "ident" : String,
-  "wanted" : String,
-  "dimension" : Integer,
+  "ident" : Gender,
+  "wanted" : Gender,
+  "dimension" : Dimension,
   "ages": String
 }
 ```
+
+<table><tr><td>
+<h4>Type Genders: </h4>
+
+Gender | Value
+--- | ---
+**MALE** | "male"
+**FEMALE** | "female"
+**BOTH** | "both"
+
+</td><td>
+<h4> Type Dimensions: </h4>
+
+Dimension | Value
+--- | ---
+**1x1** | 1
+**2x2** | 2
+**3x3** | 3
+**5x5** | 1
+
+</td></tr></table>
 
 Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
