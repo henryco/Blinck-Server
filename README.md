@@ -526,7 +526,7 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
- Endpoint | Method | Body | Response | &nbsp;
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/list`** | **GET** | **NONE** | String[] | Get admin id's list
 **`/protected/admin/verification`** | **POST, <br>GET** | **Int:** size | String[] | Get admin verification id's list
@@ -559,7 +559,7 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
- Endpoint | Method | Body | Response | &nbsp;
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/bans/count/user`** | **GET** | **NONE** | Long | Get locked users count
 **`/protected/admin/bans/list/user`** | **GET** | **Int:** page, size | UserAuth[] | Get locked users list
@@ -628,7 +628,7 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
- Endpoint | Method | Body | Response | &nbsp;
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/monitor/party/all`** | **GET** | **NONE** | Party[] | Get all parties
 **`/protected/admin/monitor/subparty/all`** | **GET** | **NONE** | SubParty[] | Get all subparties
