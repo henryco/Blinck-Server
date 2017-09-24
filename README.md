@@ -245,15 +245,6 @@ Type | Value
 ```
 
 <table><tr><td>
-<h4>Type Genders: </h4>
-
-Gender | Value
---- | ---
-**MALE** | "male"
-**FEMALE** | "female"
-**BOTH** | "both"
-
-</td><td>
 <h4> Type Dimensions: </h4>
 
 Dimension | Value
@@ -262,6 +253,15 @@ Dimension | Value
 **2x2** | 2
 **3x3** | 3
 **5x5** | 1
+
+</td><td>
+<h4>Type Genders: </h4>
+
+Gender | Value
+--- | ---
+**MALE** | "male"
+**FEMALE** | "female"
+**BOTH** | "both"
 
 </td></tr></table>
 
