@@ -1,6 +1,7 @@
 # Blinck-Server <br><a href="https://codebeat.co/projects/github-com-henryco-blinck-server-master"><img alt="codebeat badge" src="https://codebeat.co/badges/ee5cad0d-2b6c-48b2-b52f-26adb3c698c2" /></a>
 Blinck backend based on spring boot. <br>
-~17k+ lines of high quality code with 70-80% test coverage.
+~17k+ lines of high quality code with 70-80% test coverage.<br><br>
+<b>Android application you can find <a href="https://github.com/henryco/Blinck-Android">here</a>.</b>
 <br><br>
 
 # Login
@@ -236,12 +237,33 @@ Type | Value
 
 ```json
 {
-  "ident" : String,
-  "wanted" : String,
-  "dimension" : Integer,
+  "ident" : Gender,
+  "wanted" : Gender,
+  "dimension" : Dimension,
   "ages": String
 }
 ```
+
+<table><tr><td>
+<h4> Type Dimensions: </h4>
+
+Dimension | Value
+--- | ---
+**1x1** | 1
+**2x2** | 2
+**3x3** | 3
+**5x5** | 1
+
+</td><td>
+<h4>Type Genders: </h4>
+
+Gender | Value
+--- | ---
+**MALE** | "male"
+**FEMALE** | "female"
+**BOTH** | "both"
+
+</td></tr></table>
 
 Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
@@ -439,9 +461,9 @@ Endpoint | Method | Payload | &nbsp;
 
 ```json
 {
-  "time" : null,
-  "active_after" : null,
-  "venue" : null
+  "time" : Long,
+  "active_after" : Long,
+  "venue" : String
 }
 ```
 
@@ -525,7 +547,7 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
- Endpoint | Method | Body | Response | &nbsp;
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/list`** | **GET** | **NONE** | String[] | Get admin id's list
 **`/protected/admin/verification`** | **POST, <br>GET** | **Int:** size | String[] | Get admin verification id's list
@@ -558,7 +580,7 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
- Endpoint | Method | Body | Response | &nbsp;
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/bans/count/user`** | **GET** | **NONE** | Long | Get locked users count
 **`/protected/admin/bans/list/user`** | **GET** | **Int:** page, size | UserAuth[] | Get locked users list
@@ -627,7 +649,7 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
- Endpoint | Method | Body | Response | &nbsp;
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/monitor/party/all`** | **GET** | **NONE** | Party[] | Get all parties
 **`/protected/admin/monitor/subparty/all`** | **GET** | **NONE** | SubParty[] | Get all subparties
