@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 
-import static net.henryco.blinckserver.BlinckServerApplication.FACEBOOK_PERMISSIONS;
 
 /**
  * @author Henry on 23/08/17.
@@ -32,9 +31,12 @@ import static net.henryco.blinckserver.BlinckServerApplication.FACEBOOK_PERMISSI
 @Component @PropertySource("classpath:/static/props/base.properties")
 public class FacebookAuthManager implements AuthenticationManager {
 
+	private static final String[] FACEBOOK_PERMISSIONS = {
+			"id", "name", "birthday", "gender", "first_name", "about",
+			"last_name", "middle_name", "locale", "location", "email"
+	};
 
 	private @Value("facebook.app.id") String app_id;
-//	private @Value("facebook.app.namespace") String app_namespace;
 	private @Value("facebook.app.secret") String app_secret;
 
 	private final UserDetailsService detailsService;

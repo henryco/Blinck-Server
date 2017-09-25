@@ -9,17 +9,6 @@ import org.springframework.context.annotation.Import;
 @Import({MainConfiguration.class})
 public class BlinckServerApplication {
 
-	public static final String[] FACEBOOK_PERMISSIONS = {
-
-			"user_about_me",
-			"user_birthday",
-			"user_education_history",
-			"user_friends",
-			"user_likes",
-			"user_location",
-			"user_photos",
-			"read_custom_friendlists"
-	};
 
 
 	public static void main(String[] args) {
