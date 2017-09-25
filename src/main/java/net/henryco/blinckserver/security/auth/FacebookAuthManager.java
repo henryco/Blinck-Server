@@ -15,13 +15,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
+import org.springframework.social.connect.Connection;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.User;
-import org.springframework.social.facebook.api.UserOperations;
-import org.springframework.social.facebook.api.impl.FacebookTemplate;
+import org.springframework.social.facebook.connect.FacebookConnectionFactory;
+import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+
+import static net.henryco.blinckserver.BlinckServerApplication.FACEBOOK_PERMISSIONS;
 
 /**
  * @author Henry on 23/08/17.
@@ -31,7 +34,8 @@ public class FacebookAuthManager implements AuthenticationManager {
 
 
 	private @Value("facebook.app.id") String app_id;
-	private @Value("facebook.app.namespace") String app_namespace;
+//	private @Value("facebook.app.namespace") String app_namespace;
+	private @Value("facebook.app.secret") String app_secret;
 
 	private final UserDetailsService detailsService;
 	private final UserDataService userDataService;
@@ -53,13 +57,13 @@ public class FacebookAuthManager implements AuthenticationManager {
 		Object facebook_uid = authentication.getPrincipal();
 		Object facebook_token = authentication.getCredentials();
 
-		Facebook facebook = new FacebookTemplate(facebook_token.toString(), app_namespace, app_id);
+		FacebookConnectionFactory factory = new FacebookConnectionFactory(app_id, app_secret);
+		Connection<Facebook> connection = factory.createConnection(new AccessGrant(facebook_token.toString()));
+		Facebook facebook = connection.getApi();
 		checkFacebook(facebook);
 
-//		User userProfile = facebook.userOperations().getUserProfile(facebook_uid.toString());
-//		checkProfile(userProfile, facebook_uid);
 
-		UserDetails userDetails = loadDetails(facebook.userOperations(), facebook_uid.toString());
+		UserDetails userDetails = loadDetails(facebook, facebook_uid.toString());
 		checkDetails(userDetails);
 
 		return new UsernamePasswordAuthenticationToken(
@@ -69,15 +73,15 @@ public class FacebookAuthManager implements AuthenticationManager {
 	}
 
 
-	private UserDetails loadDetails(UserOperations operations, String uid) {
+	private UserDetails loadDetails(Facebook facebook, String uid) {
 
-		User userProfile = operations.getUserProfile(uid);
+		User userProfile = facebook.fetchObject("me", User.class, FACEBOOK_PERMISSIONS);
 		checkProfile(userProfile, uid);
 
 		try {
 			return detailsService.loadUserByUsername(userProfile.getId());
 		} catch (UsernameNotFoundException e) {
-			userDataService.addNewFacebookUser(operations, userProfile);
+			userDataService.addNewFacebookUser(facebook, userProfile);
 			return detailsService.loadUserByUsername(userProfile.getId());
 		}
 	}

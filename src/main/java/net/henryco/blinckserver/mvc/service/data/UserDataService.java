@@ -12,9 +12,9 @@ import net.henryco.blinckserver.mvc.model.entity.security.UserAuthProfile;
 import net.henryco.blinckserver.util.Utils;
 import net.henryco.blinckserver.util.test.BlinckTestName;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.ImageType;
 import org.springframework.social.facebook.api.User;
-import org.springframework.social.facebook.api.UserOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,10 +45,10 @@ public class UserDataService {
 
 
 	@Transactional
-	public void addNewFacebookUserIfNotExist(UserOperations operations, User userProfile) {
+	public void addNewFacebookUserIfNotExist(Facebook facebook, User userProfile) {
 		final Long id = Long.decode(userProfile.getId());
 		if (baseProfileDao.isExists(id)) return;
-		addNewFacebookUser(operations, userProfile);
+		addNewFacebookUser(facebook, userProfile);
 	}
 
 	@Transactional
@@ -57,8 +57,8 @@ public class UserDataService {
 	}
 
 	@Transactional
-	public void addNewFacebookUser(UserOperations operations, User userProfile) {
-		UserCoreProfile user = createNewUser(operations, userProfile, ROLE_USER);
+	public void addNewFacebookUser(Facebook facebook, User userProfile) {
+		UserCoreProfile user = createNewUser(facebook, userProfile, ROLE_USER);
 		baseProfileDao.save(user);
 	}
 
@@ -79,12 +79,12 @@ public class UserDataService {
 	}
 
 
-	private UserCoreProfile createNewUser(UserOperations operations, User user, String ... authorities) {
+	private UserCoreProfile createNewUser(Facebook facebook, User user, String ... authorities) {
 
 		final Long id = Long.decode(user.getId());
 		if (baseProfileDao.isExists(id))
 			throw new RuntimeException("User: ["+id+"] already exists!");
-		return createUserEntity(operations, user, authorities);
+		return createUserEntity(facebook, user, authorities);
 	}
 
 
@@ -97,14 +97,14 @@ public class UserDataService {
 
 		protected static
 		@BlinckTestName("createUserEntity")
-		UserCoreProfile createUserEntity(UserOperations operations, User user, String ... authorities) {
+		UserCoreProfile createUserEntity(Facebook facebook, User user, String ... authorities) {
 
 			final Long id = Long.decode(user.getId());
 
 			UserCoreProfile userCoreProfile = new UserCoreProfile();
 			userCoreProfile.setId(id);
 			userCoreProfile.setPrivateProfile(createUserPrivateProfile(user));
-			userCoreProfile.setPublicProfile(createUserPublicProfile(operations, user));
+			userCoreProfile.setPublicProfile(createUserPublicProfile(facebook, user));
 			userCoreProfile.setAuthProfile(createUserAuthProfile(id, authorities));
 
 			return userCoreProfile;
@@ -155,11 +155,11 @@ public class UserDataService {
 
 
 		protected static
-		PublicProfile createUserPublicProfile(UserOperations operations, User user) {
+		PublicProfile createUserPublicProfile(Facebook facebook, User user) {
 
 			PublicProfile publicProfile = new PublicProfile();
 			publicProfile.setBio(createBioEntity(user));
-			publicProfile.setMedia(createMediaEntity(operations, user));
+			publicProfile.setMedia(createMediaEntity(facebook, user));
 			return publicProfile;
 		}
 
@@ -177,23 +177,22 @@ public class UserDataService {
 
 
 		protected static
-		MediaEntity createMediaEntity(UserOperations operations, User user) {
+		MediaEntity createMediaEntity(Facebook facebook, User user) {
 
 			MediaEntity mediaEntity = new MediaEntity();
-			mediaEntity.setPhoto(createPhotoEntity(operations, user));
+			mediaEntity.setPhoto(createPhotoEntity(facebook, user));
 			return mediaEntity;
 		}
 
 
 		protected static
-		UserPhotoEntity createPhotoEntity(UserOperations operations, User user) {
+		UserPhotoEntity createPhotoEntity(Facebook facebook, User user) {
 
 			UserPhotoEntity photoEntity = new UserPhotoEntity();
-			if (operations == null) return photoEntity;
+			if (facebook == null) return photoEntity;
 
 			try {
-				byte[] image = operations.getUserProfileImage(user.getId(), ImageType.LARGE);
-
+				byte[] image = facebook.fetchImage(user.getId(), "picture", ImageType.LARGE);
 				String saved = Utils.saveImageFile(image, user.getId(), REL_FILE_PATH + USER_IMAGE_POSTFIX);
 				photoEntity.setAvatar(saved);
 

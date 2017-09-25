@@ -6,6 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static net.henryco.blinckserver.BlinckServerApplication.FACEBOOK_PERMISSIONS;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
@@ -39,16 +40,7 @@ public class PublicController {
 			method = GET, produces = JSON,
 			value = "/facebook/permissions"
 	) String[] getRequestedFbPermissions() {
-		return new String[]{
-				"user_about_me",
-				"user_birthday",
-				"user_education_history",
-				"user_friends",
-				"user_likes",
-				"user_location",
-				"user_photos",
-				"read_custom_friendlists"
-		};
+		return FACEBOOK_PERMISSIONS;
 	}
 
 }
