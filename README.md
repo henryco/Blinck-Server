@@ -54,7 +54,7 @@ Blinck backend based on spring boot. <br>
 --- | --- | --- | ---
 **`/public/about`** | **GET** | String | Get application info
 **`/public/facebook/permissions`** | **GET** | String[] | Get required facebook permission
-**`/rel/res/public/image/{resource}`** | **GET** | byte[] | Get image resource
+**`/rel/res/public/images/{resource}`** | **GET** | byte[] | Get image resource
 
 <br><br>
 # Session 
@@ -129,7 +129,6 @@ Blinck backend based on spring boot. <br>
 
  Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
-**`/protected/user/profile`** | **GET** | **NONE** | BioEntity | Get user bio
 **`/protected/user/profile/bio`** | **GET** | **Long:** id | BioEntity | Get user bio
 **`/protected/user/profile/media`** | **GET** | **Long:** id | MediaEntity | Get user media
 **`/protected/user/profile/priv`** | **GET** | **NONE** | PrivateProfile | Get user private profile
