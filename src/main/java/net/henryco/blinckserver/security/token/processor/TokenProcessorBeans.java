@@ -11,8 +11,9 @@ import org.springframework.security.core.Authentication;
  */
 @Configuration
 public class TokenProcessorBeans extends BeansConfiguration {
-
-
+	
+	//todo: REPLACING WHITE LIST SESSION FOR THE SAME USER
+	
 	public @Bean TokenAuthenticationProcessor
 	userTokenPostProcessor(SessionWhiteListService whiteListService) {
 
