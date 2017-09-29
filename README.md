@@ -251,7 +251,7 @@ Dimension | Value
 **1x1** | 1
 **2x2** | 2
 **3x3** | 3
-**5x5** | 1
+**5x5** | 5
 
 </td><td>
 <h4>Type Genders: </h4>
