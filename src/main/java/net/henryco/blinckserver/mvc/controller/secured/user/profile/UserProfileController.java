@@ -112,7 +112,8 @@ public class UserProfileController implements BlinckProfileController {
 			consumes = JSON
 	) Boolean updateNickname(Authentication authentication,
 						  @RequestBody String name) {
-		return services.baseProfile.updateNickname(longID(authentication), name);
+		return services.baseProfile.updateNickname(longID(authentication),
+				name.replace("\"", "").trim());
 	}
 
 

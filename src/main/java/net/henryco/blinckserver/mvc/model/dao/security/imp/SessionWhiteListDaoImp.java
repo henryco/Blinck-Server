@@ -28,12 +28,12 @@ public class SessionWhiteListDaoImp
 
 	@Override
 	public void removeAdminSession(String id) {
-		getRepository().deleteSessionWhiteListByAdminId(id);
+		getRepository().deleteAllByAdminId(id);
 	}
 
 	@Override
 	public void removeUserSession(Long id) {
-		getRepository().deleteSessionWhiteListByUserId(id);
+		getRepository().deleteAllByUserId(id);
 	}
 
 	@Override
