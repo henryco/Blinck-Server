@@ -75,6 +75,7 @@ public class FacebookAuthManager implements AuthenticationManager {
 	}
 
 
+
 	private UserDetails loadDetails(Facebook facebook, String uid) {
 
 		User userProfile = facebook.fetchObject("me", User.class, FACEBOOK_PERMISSIONS);
