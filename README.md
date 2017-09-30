@@ -1,6 +1,6 @@
 # Blinck-Server <br><a href="https://codebeat.co/projects/github-com-henryco-blinck-server-master"><img alt="codebeat badge" src="https://codebeat.co/badges/ee5cad0d-2b6c-48b2-b52f-26adb3c698c2" /></a>
 Blinck backend based on spring boot. <br>
-~17k+ lines of high quality code with 70-80% test coverage.<br><br>
+High quality code with 70-80% test coverage.<br><br>
 <b>Android application you can find <a href="https://github.com/henryco/Blinck-Android">here</a>.</b>
 <br><br>
 
@@ -54,7 +54,7 @@ Blinck backend based on spring boot. <br>
 --- | --- | --- | ---
 **`/public/about`** | **GET** | String | Get application info
 **`/public/facebook/permissions`** | **GET** | String[] | Get required facebook permission
-**`/rel/res/public/image/{resource}`** | **GET** | byte[] | Get image resource
+**`/rel/res/public/images/{resource}`** | **GET** | byte[] | Get image resource
 
 <br><br>
 # Session 
@@ -129,7 +129,6 @@ Blinck backend based on spring boot. <br>
 
  Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
-**`/protected/user/profile`** | **GET** | **NONE** | BioEntity | Get user bio
 **`/protected/user/profile/bio`** | **GET** | **Long:** id | BioEntity | Get user bio
 **`/protected/user/profile/media`** | **GET** | **Long:** id | MediaEntity | Get user media
 **`/protected/user/profile/priv`** | **GET** | **NONE** | PrivateProfile | Get user private profile
@@ -252,7 +251,7 @@ Dimension | Value
 **1x1** | 1
 **2x2** | 2
 **3x3** | 3
-**5x5** | 1
+**5x5** | 5
 
 </td><td>
 <h4>Type Genders: </h4>

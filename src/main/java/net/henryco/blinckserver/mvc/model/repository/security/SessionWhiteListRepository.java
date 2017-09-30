@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface SessionWhiteListRepository extends JpaRepository<SessionWhiteList, Long> {
 
+	// todo: replace with DELETE ALL 
 	void deleteSessionWhiteListByAdminId(String adminId);
 	void deleteSessionWhiteListByUserId(Long userId);
 
