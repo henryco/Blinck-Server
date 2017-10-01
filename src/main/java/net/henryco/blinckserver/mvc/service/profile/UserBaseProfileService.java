@@ -102,10 +102,19 @@ public class UserBaseProfileService
 			throws RuntimeException {
 
 		if (profile == null || profile.getUserName() == null) return false;
-		if (getDao().isNickNameExists(profile.getUserName().getNickname()))
-			throw new RuntimeException("Nickname already exists!");
 
 		UserCoreProfile core = getDao().getById(userId);
+
+		String nickname = core.getPublicProfile().getBio().getUserName().getNickname();
+		String name = profile.getUserName().getNickname();
+		if (name.isEmpty()) name = null;
+
+		if (name != null && getDao().isNickNameExists(name)) {
+			if (nickname == null || !name.equals(nickname))
+				throw new RuntimeException("Nickname already exists!");
+		}
+
+
 		core.getPublicProfile().setBio(profile);
 		getDao().save(core);
 		return true;
@@ -116,8 +125,7 @@ public class UserBaseProfileService
 	public Boolean updateNickname(Long userId, String name) {
 
 		if (name == null || name.isEmpty()) return false;
-		if (getDao().isNickNameExists(name))
-			return false;
+		if (getDao().isNickNameExists(name)) return false;
 
 		UserCoreProfile core = getDao().getById(userId);
 		core.getPublicProfile().getBio().getUserName().setNickname(name);
