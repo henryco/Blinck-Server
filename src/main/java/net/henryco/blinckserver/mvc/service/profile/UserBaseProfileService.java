@@ -125,9 +125,13 @@ public class UserBaseProfileService
 	public Boolean updateNickname(Long userId, String name) {
 
 		if (name == null || name.isEmpty()) return false;
-		if (getDao().isNickNameExists(name)) return false;
 
 		UserCoreProfile core = getDao().getById(userId);
+		if (core.getPublicProfile().getBio().getUserName().getNickname().equals(name))
+			return true;
+
+		if (getDao().isNickNameExists(name)) return false;
+
 		core.getPublicProfile().getBio().getUserName().setNickname(name);
 		getDao().save(core);
 		return true;
