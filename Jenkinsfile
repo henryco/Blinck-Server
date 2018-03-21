@@ -20,18 +20,18 @@ pipeline {
             archiveArtifacts(artifacts: 'build/libs/*', onlyIfSuccessful: true)
           }
         }
-        stage('Tests') {
-          steps {
-            junit(testResults: 'build/reports/tests/*', allowEmptyResults: true)
-            junit(testResults: 'build/test-results/*.xml', allowEmptyResults: true)
-          }
-        }
       }
     }
     stage('Clean') {
       steps {
         sh '(pkill -f gradle) || true'
       }
+    }
+  }
+  post {
+    always {
+      junit(testResults: 'build/reports/**/*', allowEmptyResults: true)
+      junit(testResults: 'build/test-results/*', allowEmptyResults: true)
     }
   }
 }
