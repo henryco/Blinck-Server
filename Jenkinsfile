@@ -15,7 +15,7 @@ pipeline {
         sh 'rm -f -r test-arch'
         sh 'mkdir test-arch'
         sh 'zip -r test-arch/test-report.zip build/reports'
-        archiveArtifacts 'build/test-arch/*.zip'
+        archiveArtifacts 'test-arch/*.zip'
       }
     }
     stage('Build') {
