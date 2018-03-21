@@ -10,12 +10,7 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'gradle build -x test --stacktrace'
-      }
-    }
-    stage('Test') {
-      steps {
-        sh 'gradle test --stacktrace'
+        sh 'gradle build --stacktrace'
       }
     }
     stage('Prepare results') {
@@ -28,7 +23,7 @@ pipeline {
         stage('Tests') {
           steps {
             junit(testResults: 'build/reports/tests/*', allowEmptyResults: true)
-            junit(testResults: 'build/test-results/*', allowEmptyResults: true)
+            junit(testResults: 'build/test-results/*.xml', allowEmptyResults: true)
           }
         }
       }
