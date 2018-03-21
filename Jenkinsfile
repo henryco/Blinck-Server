@@ -8,7 +8,7 @@ pipeline {
         sh 'gradle check -x build -x test --stacktrace'
       }
     }
-    stage('test') {
+    stage('Test') {
       steps {
         sh '(gradle test --stacktrace) || true'
         junit 'build/test-results/*.xml'
