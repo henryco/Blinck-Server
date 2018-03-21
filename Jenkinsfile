@@ -13,9 +13,8 @@ pipeline {
     stage('test') {
       steps {
         sh '(gradle test --stacktrace) || true'
-        junit 'build/reports/**/*'
-        junit 'build/reports/*'
         junit 'build/test-results/*.xml'
+        archiveArtifacts 'build/reports/**/*'
       }
     }
     
@@ -30,19 +29,12 @@ pipeline {
         archiveArtifacts(artifacts: 'build/libs/*', onlyIfSuccessful: true)
       }
     }
-  }
-  
-  post {
-    always {
-      junit 'build/reports/**/*'
-      junit 'build/reports/*'
-      junit 'build/test-results/*.xml'
-     
-      archiveArtifacts 'build/reports/*'
-      archiveArtifacts 'build/test-results/*.xml'
-      
-      sh 'gradle clean'
-      sh '(pkill -f gradle) || true'
+    
+    stage('Clean') {
+      steps {
+        sh 'gradle clean'
+        sh '(pkill -f gradle) || true'
+      }
     }
     
   }
