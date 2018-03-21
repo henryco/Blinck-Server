@@ -14,10 +14,8 @@ pipeline {
       }
     }
     stage('Prepare results') {
-      stage('Artifacts') {
-        steps {
-          archiveArtifacts(artifacts: 'build/libs/*', onlyIfSuccessful: true)
-        }
+      steps {
+        archiveArtifacts(artifacts: 'build/libs/*', onlyIfSuccessful: true)
       }
     }
   }
