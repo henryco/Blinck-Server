@@ -25,10 +25,11 @@ pipeline {
   }
   post {
     always {
-      junit(testResults: 'build/reports/**/*', allowEmptyResults: true)
-      junit(testResults: 'build/test-results/*', allowEmptyResults: true)
-      sh '(pkill -f gradle) || true'
-      
+      junit 'build/reports/**/*'
+      junit 'build/reports/*'
+      junit 'build/test-results/*.xml'
+      archiveArtifacts 'build/reports/*'
+      archiveArtifacts 'build/test-results/*.xml'
     }
     
   }
