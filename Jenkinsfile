@@ -14,17 +14,10 @@ pipeline {
       }
     }
     stage('Prepare results') {
-      parallel {
-        stage('Artifacts') {
-          steps {
-            archiveArtifacts(artifacts: 'build/libs/*', onlyIfSuccessful: true)
-          }
+      stage('Artifacts') {
+        steps {
+          archiveArtifacts(artifacts: 'build/libs/*', onlyIfSuccessful: true)
         }
-      }
-    }
-    stage('Clean') {
-      steps {
-        sh '(pkill -f gradle) || true'
       }
     }
   }
@@ -32,6 +25,7 @@ pipeline {
     always {
       junit(testResults: 'build/reports/**/*', allowEmptyResults: true)
       junit(testResults: 'build/test-results/*', allowEmptyResults: true)
+      sh '(pkill -f gradle) || true'
     }
   }
 }
