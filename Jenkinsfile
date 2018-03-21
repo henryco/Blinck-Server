@@ -14,7 +14,10 @@ pipeline {
       steps {
         sh '(gradle test --stacktrace) || true'
         junit 'build/test-results/*.xml'
-        archiveArtifacts 'build/reports/**/*'
+        sh 'rm -f -r test-arch'
+        sh 'mkdir test-arch'
+        sh 'zip -r build/test-arch/test-report.zip build/reports'
+        archiveArtifacts 'build/test-arch/*.zip'
       }
     }
     
