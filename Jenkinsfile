@@ -10,12 +10,16 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'gradle build --stacktrace'
+        sh 'gradle test --stacktrace'
+        sh 'gradle build -x test --stacktrace'
       }
     }
     stage('Prepare results') {
       steps {
         archiveArtifacts(artifacts: 'build/libs/*', onlyIfSuccessful: true)
+        junit 'build/reports/**/*'
+        junit 'build/reports/*'
+        junit 'build/test-results/*.xml'
       }
     }
   }
@@ -24,6 +28,8 @@ pipeline {
       junit(testResults: 'build/reports/**/*', allowEmptyResults: true)
       junit(testResults: 'build/test-results/*', allowEmptyResults: true)
       sh '(pkill -f gradle) || true'
+      
     }
+    
   }
 }
