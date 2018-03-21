@@ -1,6 +1,7 @@
 pipeline {
   agent any
   stages {
+    
     stage('Check and Prepare') {
       steps {
         sh 'rm -f src/main/resources/application.properties'
@@ -8,28 +9,40 @@ pipeline {
         sh 'gradle check -x build -x test --stacktrace'
       }
     }
-    stage('Build') {
+    
+    stage('test') {
       steps {
-        sh 'gradle test --stacktrace'
-        sh 'gradle build -x test --stacktrace'
-      }
-    }
-    stage('Prepare results') {
-      steps {
-        archiveArtifacts(artifacts: 'build/libs/*', onlyIfSuccessful: true)
+        sh '(gradle test --stacktrace) || true'
         junit 'build/reports/**/*'
         junit 'build/reports/*'
         junit 'build/test-results/*.xml'
       }
     }
+    
+    stage('Build') {
+      steps {
+        sh 'gradle build --stacktrace'
+      }
+    }
+    
+    stage('Prepare artifacts') {
+      steps {
+        archiveArtifacts(artifacts: 'build/libs/*', onlyIfSuccessful: true)
+      }
+    }
   }
+  
   post {
     always {
       junit 'build/reports/**/*'
       junit 'build/reports/*'
       junit 'build/test-results/*.xml'
+     
       archiveArtifacts 'build/reports/*'
       archiveArtifacts 'build/test-results/*.xml'
+      
+      sh 'gradle clean'
+      sh '(pkill -f gradle) || true'
     }
     
   }
