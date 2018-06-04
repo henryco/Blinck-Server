@@ -1,6 +1,9 @@
-# Blinck-Server [![codebeat badge](https://codebeat.co/badges/ee5cad0d-2b6c-48b2-b52f-26adb3c698c2)](https://codebeat.co/projects/github-com-henryco-blinck-server-master)
-Blinck backend based on spring boot.  
+# **Blinck-Server** [![codebeat badge](https://codebeat.co/badges/ee5cad0d-2b6c-48b2-b52f-26adb3c698c2)](https://codebeat.co/projects/github-com-henryco-blinck-server-master)
+Blinck backend based on spring boot.   
 High quality code with 70-80% test coverage.  
+
+____
+
 
 # Login
 #### User JSON:
