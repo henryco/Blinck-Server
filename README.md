@@ -1,84 +1,85 @@
-# Blinck-Server <br><a href="https://codebeat.co/projects/github-com-henryco-blinck-server-master"><img alt="codebeat badge" src="https://codebeat.co/badges/ee5cad0d-2b6c-48b2-b52f-26adb3c698c2" /></a>
-Blinck backend based on spring boot. <br>
-High quality code with 70-80% test coverage.<br><br>
-<b>Android application you can find <a href="https://github.com/henryco/Blinck-Android">here</a>.</b>
-<br><br>
+# Blinck-Server [![codebeat badge](https://codebeat.co/badges/ee5cad0d-2b6c-48b2-b52f-26adb3c698c2)](https://codebeat.co/projects/github-com-henryco-blinck-server-master)
+Blinck backend based on spring boot.  
+High quality code with 70-80% test coverage.  
 
 # Login
-<h4>User JSON:</h4>
+#### User JSON:
 
-```json
+``` json
  {
-    "facebook_id":         "",
+    "facebook_id":      "",
     "facebook_token":   ""
  }
- ```
+```
  
- <h4>Admin JSON:</h4>
+#### Admin JSON:
 
-```json
+``` json
  {
-    "user_id":      "",
+    "user_id":    "",
     "password":   ""
  }
- ```
+```
  
- <h4>HTTP Authorization header: </h4>
+#### HTTP Authorization header:
  
  ```
    Authorization:    JWT String
  ```
  
- Endpoint | Method | Body | Response | &nbsp;
+ Endpoint | Method | Body | Response |  
 --- | --- | --- | --- | ---
-**`/login/user`** | **POST** | *User JSON* | HTTP Authorization header | Login as user <br>(register automaticaly)
+**`/login/user`** | **POST** | *User JSON* | HTTP Authorization header | Login as user  (register automaticaly)
 **`/login/admin`** | **POST** | *Admin JSON* | HTTP Authorization header | Login as admin
 **`/protected/admin/registration`** | **POST** | *Admin JSON* | 200 | Register new admin
 
-<br><h3>WebSocket:</h3>
-<h4>Connection header:</h4>
+### WebSocket:
+#### Connection header:
 
 ```
   User:                   Long
   Authorization:    JWT String
 ```
 
- Endpoint | Method  | Connection header | HTTP Authorization Header | &nbsp;
+ Endpoint | Method  | Connection header | HTTP Authorization Header | 
 --- | --- | --- | --- | ---
 **`/stomp`** | **CONNECT** | YES | YES | Connect to server via jwt
 
-<br><br>
+____
+
 # Public
 
- Endpoint | Method  | Response | &nbsp;
+ Endpoint | Method  | Response |  
 --- | --- | --- | ---
-**`/public/about`** | **GET** | String | Get application info
-**`/public/facebook/permissions`** | **GET** | String[] | Get required facebook permission
-**`/rel/res/public/images/{resource}`** | **GET** | byte[] | Get image resource
+**`/public/about`** | **GET** | ```String``` | Get application info
+**`/public/facebook/permissions`** | **GET** | ```String[]``` | Get required facebook permission
+**`/rel/res/public/images/{resource}`** | **GET** | ```byte[]``` | Get image resource
 
-<br><br>
+____
+
 # Session 
 
- <h4>StatusResponse JSON:</h4>
+#### StatusResponse JSON:
 
 ```json
  {
     "principal":      String,
     "active":          Boolean
  }
- ```
+```
  
- Endpoint | Method | Authorization | Response | &nbsp;
---- | --- | --- | --- | ---
-**`/session/user`** | **GET** | USER | StatusResponse JSON | Get user authorization info
-**`/session/admin`** | **GET** | ADMIN | StatusResponse JSON | Get admin authorization info
-**`/session/user/logout`** | **GET, POST** | USER | String | Logout user
-**`/session/admin/logout`** | **GET, POST** | ADMIN | String | Logout admin
+ Endpoint | Method | Authorization | Response |  
+--- | --- | --- | --- | --- 
+**`/session/user`** | **GET** | USER | ```StatusResponse JSON``` | Get user authorization info
+**`/session/admin`** | **GET** | ADMIN | ```StatusResponse JSON``` | Get admin authorization info
+**`/session/user/logout`** | **GET, POST** | USER | ```String``` | Logout user
+**`/session/admin/logout`** | **GET, POST** | ADMIN | ```String``` | Logout admin
 
-<br><br>
+____
+
 # User profile
 
-<h4>BioEntity JSON:</h4>
+#### BioEntity JSON:
 
 ```json
 {
@@ -94,7 +95,7 @@ High quality code with 70-80% test coverage.<br><br>
 }
 ```
 
-<h4>MediaEntity JSON:</h4>
+#### MediaEntity JSON:
 
 ```json
 {
@@ -105,7 +106,7 @@ High quality code with 70-80% test coverage.<br><br>
 }
 ```
 
-<h4>PrivateProfile JSON:</h4>
+#### PrivateProfile JSON:
 
 ```json
 {
@@ -113,7 +114,7 @@ High quality code with 70-80% test coverage.<br><br>
 }
 ```
 
-<h4>NameDetails JSON:</h4>
+#### NameDetails JSON:
 
 ```json
 {
@@ -127,21 +128,22 @@ High quality code with 70-80% test coverage.<br><br>
 }
 ```
 
- Endpoint | Method | Arguments | Response | &nbsp;
+ Endpoint | Method | Arguments | Response | 
 --- | --- | --- | --- | ---
-**`/protected/user/profile/bio`** | **GET** | **Long:** id | BioEntity | Get user bio
-**`/protected/user/profile/media`** | **GET** | **Long:** id | MediaEntity | Get user media
-**`/protected/user/profile/priv`** | **GET** | **NONE** | PrivateProfile | Get user private profile
-**`/protected/user/profile/find/one`** | **GET** | **String:** username | BioEntity | Find user profile
-**`/protected/user/profile/find`** | **GET** | **String:** username <br>**Int:** page, size | NameDetails[] | Find user profiles
-**`/protected/user/profile/update/bio`** | **POST** | **BODY:** BioEntity | Boolean | Update user bio
-**`/protected/user/profile/update/nickname`** | **POST** | **BODY:** String | Boolean | Update username
-**`/protected/user/profile/update/priv`** | **POST** | **BODY:** PrivateProfile | Boolean | Update private profile
+**`/protected/user/profile/bio`** | **GET** | ```Long```: id | ```BioEntity``` | Get user bio
+**`/protected/user/profile/media`** | **GET** | ```Long```: id | ```MediaEntity``` | Get user media
+**`/protected/user/profile/priv`** | **GET** | **NONE** | ```PrivateProfile``` | Get user private profile
+**`/protected/user/profile/find/one`** | **GET** | ```String```: username | ```BioEntity``` | Find user profile
+**`/protected/user/profile/find`** | **GET** | ```String```: username ```Int```: page, size | ```NameDetails[]``` | Find user profiles
+**`/protected/user/profile/update/bio`** | **POST** | **BODY:** ```BioEntity``` | ```Boolean```| Update user bio
+**`/protected/user/profile/update/nickname`** | **POST** | **BODY:** ```String``` | ```Boolean``` | Update username
+**`/protected/user/profile/update/priv`** | **POST** | **BODY:** ```PrivateProfile``` | ```Boolean``` | Update private profile
 
-<br><br>
+____
+
 # User image media
 
-<h4>UserImageInfo JSON:</h4>
+#### UserImageInfo JSON:
 
 ```json
 {
@@ -150,29 +152,31 @@ High quality code with 70-80% test coverage.<br><br>
 }
 ```
 
- Endpoint | Method | Arguments | Response | &nbsp;
+ Endpoint | Method | Arguments | Response |  
 --- | --- | --- | --- | ---
-**`/protected/user/media/image/max`** | **GET** | **NONE** | Integer | Get max numb of images
-**`/protected/user/media/image/list`** | **GET** | **Long:** id | UserImageInfo[] | Get user images
-**`/protected/user/media/image/avatar`** | **GET** | **Long:** id | String | Get user avatar
-**`/protected/user/media/image/swap`** | **POST, GET** | **Int:** one, two | 200 | Swap user images
-**`/protected/user/media/image/delete`** | **DELETE, POST** | **Int:** image | 200 | Delete user image
+**`/protected/user/media/image/max`** | **GET** | **NONE** | ```Integer``` | Get max numb of images
+**`/protected/user/media/image/list`** | **GET** | ```Long```: id | ```UserImageInfo[]``` | Get user images
+**`/protected/user/media/image/avatar`** | **GET** | ```Long```: id | ```String``` | Get user avatar
+**`/protected/user/media/image/swap`** | **POST, GET** | ```Int```: one, two | 200 | Swap user images
+**`/protected/user/media/image/delete`** | **DELETE, POST** | ```Int```: image | 200 | Delete user image
 **`/protected/user/media/image/add`** | **POST** | **File:** image | 200 | Add user image
-**`/protected/user/media/image/set`** | **POST** | **File:** image<br>**Int:** index | 200 | Set user image 
+**`/protected/user/media/image/set`** | **POST** | **File:** image ```Int```: index | 200 | Set user image 
 **`/protected/user/media/image/avatar`** | **POST** | **File:** image | 200 | Set user avatar
 
-<br><br>
+____
+
 #  Report 
 
- Endpoint | Method | Arguments | Response | &nbsp;
+ Endpoint | Method | Arguments | Response |  
 --- | --- | --- | --- | ---
-**`/protected/user/report`** | **POST** | **Long:** id<br>**String:** reason | Boolean | Report user, reason might be null
+**`/protected/user/report`** | **POST** | ```Long```: id ```String```: reason | ```Boolean``` | Report user, reason might be null
 
 
-<br><br>
+____
+
 #  Notifications
 
-<h4>NotificationForm JSON:</h4>
+#### NotificationForm JSON:
 
 ```json
 {
@@ -183,23 +187,23 @@ High quality code with 70-80% test coverage.<br><br>
 }
 ```
 
- Endpoint | Method | Arguments | Response | &nbsp;
+ Endpoint | Method | Arguments | Response |  
 --- | --- | --- | --- | ---
-**`/protected/user/notifications/count`** | **GET** | **NONE** | Long | Get notifications count
-**`/protected/user/notifications/list`** | **GET** | **Int:** page, size | NotificationForm[] | Get notifications
-**`/protected/user/notifications/list/all`** | **GET** | **NONE** | NotificationForm[] | Get all notifications
-**`/protected/user/notifications/list/all/pop`** | **GET** | **NONE** | NotificationForm[] | Pop all notifications
-**`/protected/user/notifications/last`** | **GET** | **NONE** | NotificationForm | Get last notification
-**`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **Long:** id | 200 | Remove notification
-**`/protected/user/notifications/remove`** | **DELETE, <br>POST,<br> GET** | **NONE** | 200 | Remove all notification
+**`/protected/user/notifications/count`** | **GET** | **NONE** | ```Long``` | Get notifications count
+**`/protected/user/notifications/list`** | **GET** | **Int:** page, size | ```NotificationForm[]``` | Get notifications
+**`/protected/user/notifications/list/all`** | **GET** | **NONE** | ```NotificationForm[]``` | Get all notifications
+**`/protected/user/notifications/list/all/pop`** | **GET** | **NONE** | ```NotificationForm[]``` | Pop all notifications
+**`/protected/user/notifications/last`** | **GET** | **NONE** | ```NotificationForm``` | Get last notification
+**`/protected/user/notifications/remove`** | **DELETE,  POST, GET** | **Long:** id | 200 | Remove notification
+**`/protected/user/notifications/remove`** | **DELETE,  POST, GET** | **NONE** | 200 | Remove all notification
 
-<br><h3>WebSocket:</h3>
+### WebSocket:
 
-Endpoint | Method | Response | &nbsp;
+Endpoint | Method | Response | 
 --- | --- | --- | ---
-**`/user/queue/notification`** | **SUBSCRIBE** | NotificationForm | Receive user notificaions instantly
+**`/user/queue/notification`** | **SUBSCRIBE** | ```NotificationForm``` | Receive user notificaions instantly
 
-<br><h3>Notification types:</h3>
+### Notification types:
 
 Type | Value
 --- | ---
@@ -228,11 +232,11 @@ Type | Value
 **PARTY_MEETING_VOTE_FINAL_SUCCESS** | `"party_meeting_vote_final_success"`
 **QUEUE_LEAVE** | `"queue_leave"`
 
+____
 
-<br><br>
 # Matching
 
-<h4> TypeForm JSON: </h4>
+#### TypeForm JSON:
 
 ```json
 {
@@ -243,8 +247,8 @@ Type | Value
 }
 ```
 
-<table><tr><td>
-<h4> Type Dimensions: </h4>
+
+#### Type Dimensions: 
 
 Dimension | Value
 --- | ---
@@ -253,8 +257,7 @@ Dimension | Value
 **3x3** | 3
 **5x5** | 5
 
-</td><td>
-<h4>Type Genders: </h4>
+#### Type Genders:
 
 Gender | Value
 --- | ---
@@ -262,26 +265,27 @@ Gender | Value
 **FEMALE** | "female"
 **BOTH** | "both"
 
-</td></tr></table>
 
-Endpoint | Method | Arguments | Response | &nbsp;
+
+Endpoint | Method | Arguments | Response | 
 --- | --- | --- | --- | ---
-**`/protected/user/match/queue/solo`** | **POST** | **BODY:** TypeForm | 200 | Enter to solo queue
-**`/protected/user/match/queue/list`** | **GET** | **NONE** | Long[] | Get id's of user rooms in queue
-**`/protected/user/match/queue/leave`** | **POST,<br> DELETE** | **Long:** id | 200 | Leave room in queue
-**`/protected/user/match/queue/custom`** | **POST** | **BODY:** TypeForm | Long | Create cutom room and returns its ID
-**`/protected/user/match/queue/custom/delete`** | **DELETE** | **Long:** id | Boolean | Delete cutom room
-**`/protected/user/match/queue/custom/list`** | **GET** | **NONE** | Long[] | Get id's of users custom rooms
-**`/protected/user/match/queue/custom/join`** | **POST** | **Long:** id | Boolean | Join to custom room
-**`/protected/user/match/queue/custom/invite`** | **POST** | **Long:** id<br>**BODY:** Long[] | Boolean | Invite users to room
-**`/protected/user/match/queue/custom/leave`** | **POST,<br> DELETE** | **Long:** id | Boolean | Leave custom room
-**`/protected/user/match/queue/custom/start`** | **POST** | **Long:** id | Boolean | Move custom room to queue
+**`/protected/user/match/queue/solo`** | **POST** | **BODY:** ```TypeForm``` | 200 | Enter to solo queue
+**`/protected/user/match/queue/list`** | **GET** | **NONE** | ```Long[]``` | Get id's of user rooms in queue
+**`/protected/user/match/queue/leave`** | **POST, DELETE** | **Long:** id | 200 | Leave room in queue
+**`/protected/user/match/queue/custom`** | **POST** | **BODY:** ```TypeForm``` | ```Long``` | Create cutom room and returns its ID
+**`/protected/user/match/queue/custom/delete`** | **DELETE** | **Long:** id | ```Boolean``` | Delete cutom room
+**`/protected/user/match/queue/custom/list`** | **GET** | **NONE** | ```Long[]``` | Get id's of users custom rooms
+**`/protected/user/match/queue/custom/join`** | **POST** | **Long:** id | ```Boolean``` | Join to custom room
+**`/protected/user/match/queue/custom/invite`** | **POST** | **Long:** id **BODY:** ```Long[]``` | Boolean | Invite users to room
+**`/protected/user/match/queue/custom/leave`** | **POST,  DELETE** | **Long:** id | ```Boolean``` | Leave custom room
+**`/protected/user/match/queue/custom/start`** | **POST** | **Long:** id | ```Boolean``` | Move custom room to queue
+
+____
 
 
-<br><br>
 # Friendship
 
-<h4>Friendship JSON: </h4>
+#### Friendship JSON: 
 
 ```json
 {
@@ -292,7 +296,7 @@ Endpoint | Method | Arguments | Response | &nbsp;
 }
 ```
 
-<h4>SimpFriendship JSON: </h4>
+#### SimpFriendship JSON:
 
 ```json
 {
@@ -301,7 +305,7 @@ Endpoint | Method | Arguments | Response | &nbsp;
 }
 ```
 
-<h4>FriendshipNotification JSON: </h4>
+#### FriendshipNotification JSON:
 
 ```json
 {
@@ -312,21 +316,21 @@ Endpoint | Method | Arguments | Response | &nbsp;
 }
 ```
 
-Endpoint | Method | Arguments | Response | &nbsp;
+Endpoint | Method | Arguments | Response | 
 --- | --- | --- | --- | ---
-**`/protected/user/friends/count`** | **GET** | **NONE**  | Long | Get friends count
-**`/protected/user/friends/list`** | **GET** | **Int:** page, size  | Long[] | Get friends ID list
-**`/protected/user/friends/detailed`** | **GET** | **Long:** id  | Friendship | Get friendship
-**`/protected/user/friends/add`** | **POST,<br> GET** | **Long:** user_id  | 200 | Add friend
-**`/protected/user/friends/remove`** | **DELETE,<br> POST,<br> GET** | **Long:** user_id  | 200 | Delete user
-**`/protected/user/friends/request/accept`** | **POST,<br> GET** | **Long:** user_id  | 200 | Accept friend request
-**`/protected/user/friends/request/decline`** | **POST,<br> GET** | **Long:** user_id  | 200 | Decline friend request
-**`/protected/user/friends/request/direct/delete`** | **DELETE,<br> POST,<br> GET** | **Long:** id  | 200 | Delete friend request
-**`/protected/user/friends/request/list/income`** | **GET** | **Int:** page, size  | FriendshipNotification[] | Get friend requests
-**`/protected/user/friends/request/list/outcome`** | **GET** | **Int:** page, size  | FriendshipNotification[] | Get own friend requests
+**`/protected/user/friends/count`** | **GET** | **NONE**  | ```Long``` | Get friends count
+**`/protected/user/friends/list`** | **GET** | **Int:** page, size  | ```Long[]``` | Get friends ID list
+**`/protected/user/friends/detailed`** | **GET** | **Long:** id  | ```Friendship``` | Get friendship
+**`/protected/user/friends/add`** | **POST, GET** | **Long:** user_id  | 200 | Add friend
+**`/protected/user/friends/remove`** | **DELETE, POST, GET** | **Long:** user_id  | 200 | Delete user
+**`/protected/user/friends/request/accept`** | **POST, GET** | **Long:** user_id  | 200 | Accept friend request
+**`/protected/user/friends/request/decline`** | **POST,  GET** | **Long:** user_id  | 200 | Decline friend request
+**`/protected/user/friends/request/direct/delete`** | **DELETE, POST,  GET** | **Long:** id  | 200 | Delete friend request
+**`/protected/user/friends/request/list/income`** | **GET** | **Int:** page, size  | ```FriendshipNotification[]``` | Get friend requests
+**`/protected/user/friends/request/list/outcome`** | **GET** | **Int:** page, size  | ```FriendshipNotification[]``` | Get own friend requests
 
-<br><h3>Conversation REST:</h3>
-<h4>MessageForm JSON:</h4>
+### Conversation REST:
+#### MessageForm JSON:
 
 ```json
 {
@@ -337,16 +341,16 @@ Endpoint | Method | Arguments | Response | &nbsp;
 }
 ```
 
-Endpoint | Method | Arguments | Response | &nbsp;
+Endpoint | Method | Arguments | Response | 
 --- | --- | --- | --- | ---
-**`/protected/user/friends/conversation/messages/count`** | **GET** | **Long:** id  | Long | Count messages
-**`/protected/user/friends/conversation/messages/list`** | **GET** |  **Long:** id<br> **Int:** page, size  | MessageForm[] | Get messages
-**`/protected/user/friends/conversation/messages/last`** | **GET** | **Long:** id  | MessageForm | Get last message
-**`/protected/user/friends/conversation/messages/send`** | **POST** | **BODY:** MessageForm  | 200 | Send message
+**`/protected/user/friends/conversation/messages/count`** | **GET** | **Long:** id  | ```Long``` | Count messages
+**`/protected/user/friends/conversation/messages/list`** | **GET** |  **Long:** id **Int:** page, size  | ```MessageForm[]``` | Get messages
+**`/protected/user/friends/conversation/messages/last`** | **GET** | **Long:** id  | ```MessageForm``` | Get last message
+**`/protected/user/friends/conversation/messages/send`** | **POST** | **BODY:** ```MessageForm```  | 200 | Send message
 **`/protected/user/friends/conversation/remove`** | **DELETE** | **Long:** id  | 200 | Delete conversation
 
-<br><h3>Conversation STOMP:</h3>
-<h4>StatusForm JSON:</h4>
+### Conversation STOMP:
+#### StatusForm JSON:
 
 ```json
 {
@@ -356,17 +360,16 @@ Endpoint | Method | Arguments | Response | &nbsp;
 }
 ```
 
-Endpoint | Method | Payload | &nbsp;
+Endpoint | Method | Payload | 
 --- | --- | --- | ---
-**`/user/message/friendship/{friendship_id}`** | **SUBSCRIBE** | MessageForm | Receive friendship messages
-**`/user/message/friendship/stat`** | **SUBSCRIBE** | StatusForm | Receive status of sended messages
-**`/app/message/friendship`** | **SEND** | MessageForm | Send message to friendship
+**`/user/message/friendship/{friendship_id}`** | **SUBSCRIBE** | ```MessageForm``` | Receive friendship messages
+**`/user/message/friendship/stat`** | **SUBSCRIBE** | ```StatusForm``` | Receive status of sended messages
+**`/app/message/friendship`** | **SEND** | ```MessageForm``` | Send message to friendship
 
 
-<br><br>
 # SubParty
 
-<h4>Type JSON: </h4>
+#### Type JSON: 
 
 ```json
 {
@@ -376,7 +379,7 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
-<h4>Info JSON: </h4>
+#### Info JSON: 
 
 ```json
 {
@@ -392,18 +395,18 @@ Endpoint | Method | Payload | &nbsp;
 
 ```
 
-Endpoint | Method | Arguments | Response | &nbsp;
+Endpoint | Method | Arguments | Response |
 --- | --- | --- | --- | ---
-**`/protected/user/subgroup/details`** | **GET** | **Long:** id  | Info | Get subparty info
-**`/protected/user/subgroup/details/group`** | **GET** | **Long:** id  | Long | Get parent party id
-**`/protected/user/subgroup/details/type`** | **GET** | **Long:** id  | Type | Get subparty type
-**`/protected/user/subgroup/details/users`** | **GET** | **Long:** id  | Long[] | Get subparty users id's
-**`/protected/user/subgroup/list/id`** | **GET** | **NONE** | Long[] | Get subparty id list
-**`/protected/user/subgroup/list/details`** | **GET** | **NONE** | Info[] | Get subparty info list
-**`/protected/user/subgroup/leave`** | **DELETE,<br>POST,<br>GET** | **Long:** id | 200 | Leave subparty <br>(and parent party)
+**`/protected/user/subgroup/details`** | **GET** | **Long:** id  | ```Info``` | Get subparty info
+**`/protected/user/subgroup/details/group`** | **GET** | **Long:** id  | ```Long``` | Get parent party id
+**`/protected/user/subgroup/details/type`** | **GET** | **Long:** id  | ```Type``` | Get subparty type
+**`/protected/user/subgroup/details/users`** | **GET** | **Long:** id  | ```Long[]``` | Get subparty users id's
+**`/protected/user/subgroup/list/id`** | **GET** | **NONE** | ```Long[]``` | Get subparty id list
+**`/protected/user/subgroup/list/details`** | **GET** | **NONE** | ```Info[]``` | Get subparty info list
+**`/protected/user/subgroup/leave`** | **DELETE, POST, GET** | **Long:** id | 200 | Leave subparty (and parent party)
 
-<br><h3>Conversation REST:</h3>
-<h4>MessageForm JSON:</h4>
+### Conversation REST: 
+#### MessageForm JSON: 
 
 ```json
 {
@@ -414,14 +417,14 @@ Endpoint | Method | Arguments | Response | &nbsp;
 }
 ```
 
-Endpoint | Method | Arguments | Response | &nbsp;
+Endpoint | Method | Arguments | Response |
 --- | --- | --- | --- | ---
-**`/protected/user/subgroup/conversation/messages/count`** | **GET** | **Long:** id  | Long | Count messages
-**`/protected/user/subgroup/conversation/messages/list`** | **GET** |  **Long:** id<br> **Int:** page, size  | MessageForm[] | Get messages
-**`/protected/user/subgroup/conversation/messages/send`** | **POST** | **BODY:** MessageForm  | 200 | Send message
+**`/protected/user/subgroup/conversation/messages/count`** | **GET** | **Long:** id  | ```Long``` | Count messages
+**`/protected/user/subgroup/conversation/messages/list`** | **GET** |  **Long:** id  **Int:** page, size  | ```MessageForm[]``` | Get messages
+**`/protected/user/subgroup/conversation/messages/send`** | **POST** | **BODY:** ```MessageForm```  | 200 | Send message
 
-<br><h3>Conversation STOMP:</h3>
-<h4>StatusForm JSON:</h4>
+### Conversation STOMP:
+#### StatusForm JSON:
 
 ```json
 {
@@ -431,17 +434,18 @@ Endpoint | Method | Arguments | Response | &nbsp;
 }
 ```
 
-Endpoint | Method | Payload | &nbsp;
+Endpoint | Method | Payload | 
 --- | --- | --- | ---
-**`/user/message/subgroup/{subgroup_id}`** | **SUBSCRIBE** | MessageForm | Receive subgroup messages
-**`/user/message/subgroup/stat`** | **SUBSCRIBE** | StatusForm | Receive status of sended messages
-**`/app/message/subgroup`** | **SEND** | MessageForm | Send message to subgroup
+**`/user/message/subgroup/{subgroup_id}`** | **SUBSCRIBE** | ```MessageForm``` | Receive subgroup messages
+**`/user/message/subgroup/stat`** | **SUBSCRIBE** | ```StatusForm``` | Receive status of sended messages
+**`/app/message/subgroup`** | **SEND** | ```MessageForm``` | Send message to subgroup
 
 
-<br><br>
+____
+
 # Party
 
-<h4>PartyInfo JSON: </h4>
+#### PartyInfo JSON: 
 
 ```json
 {
@@ -456,7 +460,7 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
-<h4>Meeting JSON: </h4>
+#### Meeting JSON:
 
 ```json
 {
@@ -466,17 +470,17 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
-Endpoint | Method | Arguments | Response | &nbsp;
+Endpoint | Method | Arguments | Response | 
 --- | --- | --- | --- | ---
-**`/protected/user/group/details`** | **GET** | **Long:** id  | PartyInfo | Get party info
-**`/protected/user/group/details/meeting`** | **GET** | **Long:** id  | Meeting | Get party meeting
-**`/protected/user/group/details/user`** | **GET** | **Long:** id  | Long[] | Get party users id's
-**`/protected/user/group/details/isactive`** | **GET** | **Long:** id  | Boolean | Get party status
-**`/protected/user/group/list/id`** | **GET** | **NONE**  | Long[] | Get parties id list
-**`/protected/user/group/list/details`** | **GET** | **NONE**  | PartyInfo[] | Get parties info list
+**`/protected/user/group/details`** | **GET** | **Long:** id  | ```PartyInfo``` | Get party info
+**`/protected/user/group/details/meeting`** | **GET** | **Long:** id  | ```Meeting``` | Get party meeting
+**`/protected/user/group/details/user`** | **GET** | **Long:** id  | ```Long[]``` | Get party users id's
+**`/protected/user/group/details/isactive`** | **GET** | **Long:** id  | ```Boolean``` | Get party status
+**`/protected/user/group/list/id`** | **GET** | **NONE**  | ```Long[]``` | Get parties id list
+**`/protected/user/group/list/details`** | **GET** | **NONE**  | ```PartyInfo[]``` | Get parties info list
 
-<br><h3>Meetings:</h3>
-<h4>OfferInfo JSON:</h4>
+### Meetings:
+#### OfferInfo JSON:
 
 ```json
 {
@@ -490,14 +494,14 @@ Endpoint | Method | Arguments | Response | &nbsp;
 }
 ```
 
-Endpoint | Method | Arguments | Response | &nbsp;
+Endpoint | Method | Arguments | Response |
 --- | --- | --- | --- | ---
-**`/protected/user/group/meeting/list`** | **GET** | **Long:** id  | OfferInfo | Get proposed meeting list
-**`/protected/user/group/meeting/propose`** | **POST** | **Long:** id<br> **BODY:** Meeting  | Boolean | Propose meeting
-**`/protected/user/group/meeting/vote`** | **POST,<br>GET** | **Long:** proposition<br> **Boolean:** option  | 200 | Vote
-**`/protected/user/group/meeting/vote/final`** | **POST,<br>GET** | **Long:** proposition<br> **Boolean:** option  | 200 | Vote final
+**`/protected/user/group/meeting/list`** | **GET** | **Long:** id  | ```OfferInfo``` | Get proposed meeting list
+**`/protected/user/group/meeting/propose`** | **POST** | **Long:** id **BODY:** Meeting  | ```Boolean``` | Propose meeting
+**`/protected/user/group/meeting/vote`** | **POST, GET** | **Long:** proposition **Boolean:** option  | 200 | Vote
+**`/protected/user/group/meeting/vote/final`** | **POST, GET** | **Long:** proposition  **Boolean:** option  | 200 | Vote final
 
-<br><h3>Conversation REST:</h3>
+### Conversation REST:
 <h4>MessageForm JSON:</h4>
 
 ```json
@@ -509,14 +513,14 @@ Endpoint | Method | Arguments | Response | &nbsp;
 }
 ```
 
-Endpoint | Method | Arguments | Response | &nbsp;
+Endpoint | Method | Arguments | Response |
 --- | --- | --- | --- | ---
-**`/protected/user/group/conversation/messages/count`** | **GET** | **Long:** id  | Long | Count messages
-**`/protected/user/group/conversation/messages/list`** | **GET** |  **Long:** id<br> **Int:** page, size  | MessageForm[] | Get messages
+**`/protected/user/group/conversation/messages/count`** | **GET** | **Long:** id  | ```Long``` | Count messages
+**`/protected/user/group/conversation/messages/list`** | **GET** |  **Long:** id **Int:** page, size  | ```MessageForm[]``` | Get messages
 **`/protected/user/group/conversation/messages/send`** | **POST** | **BODY:** MessageForm  | 200 | Send message
 
-<br><h3>Conversation STOMP:</h3>
-<h4>StatusForm JSON:</h4>
+### Conversation STOMP:
+#### StatusForm JSON:
 
 ```json
 {
@@ -526,17 +530,17 @@ Endpoint | Method | Arguments | Response | &nbsp;
 }
 ```
 
-Endpoint | Method | Payload | &nbsp;
+Endpoint | Method | Payload | 
 --- | --- | --- | ---
 **`/user/message/group/{group_id}`** | **SUBSCRIBE** | MessageForm | Receive party messages
 **`/user/message/group/stat`** | **SUBSCRIBE** | StatusForm | Receive status of sended messages
 **`/app/message/group`** | **SEND** | MessageForm | Send message to party
 
 
-<br><br>
+
 # Admin panel 
 
-<h4>SimpNotification JSON:</h4>
+#### SimpNotification JSON:
 
 ```json
 {
@@ -546,19 +550,19 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
- Endpoint | Method | Arguments | Response | &nbsp;
+ Endpoint | Method | Arguments | Response | 
 --- | --- | --- | --- | ---
-**`/protected/admin/list`** | **GET** | **NONE** | String[] | Get admin id's list
-**`/protected/admin/verification`** | **POST, <br>GET** | **Int:** size | String[] | Get admin verification id's list
-**`/protected/admin/activate`** | **POST** | **BODY:** String[] | 200 | Activate admin profiles
-**`/protected/admin/authority/add`** | **POST, <br>GET** | **String:** name, role | 200 | Add authority to admin
-**`/protected/admin/authority/remove`** | **POST, <br>GET** | **String:** name, role | 200 | Remove authority from admin
-**`/protected/admin/authority/session/close`** | **POST, <br>GET** | **String:** name | 200 | Close user session
-**`/protected/admin/authority/session/admin`** | **POST, <br>GET** | **String:** name | 200 | Close admin session
-**`/protected/admin/notification/user`** | **POST** | **BODY:** SimpNotification | 200 | Send notification to user
+**`/protected/admin/list`** | **GET** | **NONE** | ```String[]``` | Get admin id's list
+**`/protected/admin/verification`** | **POST,  GET** | **Int:** size | ```String[]``` | Get admin verification id's list
+**`/protected/admin/activate`** | **POST** | **BODY:** ```String[]``` | 200 | Activate admin profiles
+**`/protected/admin/authority/add`** | **POST,  GET** | **String:** name, role | 200 | Add authority to admin
+**`/protected/admin/authority/remove`** | **POST,  GET** | **String:** name, role | 200 | Remove authority from admin
+**`/protected/admin/authority/session/close`** | **POST, GET** | **String:** name | 200 | Close user session
+**`/protected/admin/authority/session/admin`** | **POST,  GET** | **String:** name | 200 | Close admin session
+**`/protected/admin/notification/user`** | **POST** | **BODY:** ```SimpNotification``` | 200 | Send notification to user
 
-<br><h3>Authentication and Bans</h3>
-<h4>UserAuth JSON:</h4>
+### Authentication and Bans
+#### UserAuth JSON:
 
 ```json
 {
@@ -568,7 +572,7 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
-<h4>ReportList JSON:</h4>
+#### ReportList JSON:
 
 ```json
 {
@@ -579,20 +583,20 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
- Endpoint | Method | Arguments | Response | &nbsp;
+ Endpoint | Method | Arguments | Response |
 --- | --- | --- | --- | ---
-**`/protected/admin/bans/count/user`** | **GET** | **NONE** | Long | Get locked users count
-**`/protected/admin/bans/list/user`** | **GET** | **Int:** page, size | UserAuth[] | Get locked users list
-**`/protected/admin/bans/details/user`** | **GET** | **Long:** id | UserAuth | Get locked users
-**`/protected/admin/bans/lock/user`** | **POST, <br>GET** | **Long:** id<br>**Boolean:** option | 200 | Lock (or not) user
-**`/protected/admin/bans/reporst/user/count`** | **GET** | **NONE** | Long | Get user reports count
-**`/protected/admin/bans/reporst/user/list`** | **GET** | **Long:** id | ReportList[] | Get user reports list
-**`/protected/admin/bans/reporst/user/list/all`** | **GET** | **Int:** page, size | ReportList[] | Get all users reports
-**`/protected/admin/bans/reporst/user/clear`** | **POST, <br>GET** | **Long:** id | 200 | Clear user reports history
+**`/protected/admin/bans/count/user`** | **GET** | **NONE** | ```Long``` | Get locked users count
+**`/protected/admin/bans/list/user`** | **GET** | **Int:** page, size | ```UserAuth[]``` | Get locked users list
+**`/protected/admin/bans/details/user`** | **GET** | **Long:** id | ```UserAuth``` | Get locked users
+**`/protected/admin/bans/lock/user`** | **POST,  GET** | **Long:** id **Boolean:** option | 200 | Lock (or not) user
+**`/protected/admin/bans/reporst/user/count`** | **GET** | **NONE** | ```Long``` | Get user reports count
+**`/protected/admin/bans/reporst/user/list`** | **GET** | **Long:** id | ```ReportList[]``` | Get user reports list
+**`/protected/admin/bans/reporst/user/list/all`** | **GET** | **Int:** page, size | ```ReportList[]``` | Get all users reports
+**`/protected/admin/bans/reporst/user/clear`** | **POST,  GET** | **Long:** id | 200 | Clear user reports history
 
-<br><h3>Matcher monitor</h3>
-<h4>I'm highly recommend to don't use it.</h4>
-<h4>Party JSON:</h4>
+### Matcher monitor
+#### I'm highly recommend to don't use it.
+#### Party JSON:
 
 ```json
 {
@@ -614,7 +618,7 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
-<h4>SubParty JSON:</h4>
+#### SubParty JSON:
 
 ```json
 {
@@ -648,10 +652,10 @@ Endpoint | Method | Payload | &nbsp;
 }
 ```
 
- Endpoint | Method | Arguments | Response | &nbsp;
+ Endpoint | Method | Arguments | Response |
 --- | --- | --- | --- | ---
-**`/protected/admin/monitor/party/all`** | **GET** | **NONE** | Party[] | Get all parties
-**`/protected/admin/monitor/subparty/all`** | **GET** | **NONE** | SubParty[] | Get all subparties
+**`/protected/admin/monitor/party/all`** | **GET** | **NONE** | ```Party[]``` | Get all parties
+**`/protected/admin/monitor/subparty/all`** | **GET** | **NONE** | ```SubParty[]``` | Get all subparties
 
 
 
