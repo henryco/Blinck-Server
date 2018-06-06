@@ -11,7 +11,7 @@ pipeline {
     }
     stage('Test') {
       steps {
-	sh 'cd build/test-results/ && touch *.xml'
+	sh '(cd build/test-results/ && touch *.xml) || true'
         sh 'gradle test --stacktrace'
       }
     }
