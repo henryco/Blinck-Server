@@ -5,7 +5,9 @@ pipeline {
       steps {
 	sh 'gradle clean'
         sh 'rm -f src/main/resources/application.properties'
+	sh 'rm -f src/main/resources/static/props/base.properties'
         sh 'cp /home/deploy-props/Blinck-Server/application.properties src/main/resources/application.properties'
+	sh 'cp /home/deploy-props/Blinck-Server/base.properties src/main/resources/static/props/base.properties'
         sh 'gradle check -x build -x test --stacktrace'
       }
     }
