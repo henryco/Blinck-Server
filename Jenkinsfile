@@ -13,7 +13,6 @@ pipeline {
     }
     stage('Test') {
       steps {
-	sh '(cd build/test-results/ && touch *.xml) || true'
         sh 'gradle test --stacktrace'
       }
     }
@@ -29,7 +28,6 @@ pipeline {
     }
     stage('Clean') {
       steps {
-        sh 'gradle clean'
         sh '(pkill -f gradle) || true'
       }
     }
