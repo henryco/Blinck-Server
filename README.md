@@ -1,4 +1,4 @@
-# **Blinck-Server** [![codebeat badge](https://codebeat.co/badges/ee5cad0d-2b6c-48b2-b52f-26adb3c698c2)](https://codebeat.co/projects/github-com-henryco-blinck-server-master)
+# **Blinck-Server** [![codebeat badge](https://codebeat.co/badges/ee5cad0d-2b6c-48b2-b52f-26adb3c698c2)](https://codebeat.co/projects/github-com-henryco-blinck-server-master) [![Build Status](http://174.138.0.194:1997/buildStatus/icon?job=tinder-samurai/blinck-server/master)](http://174.138.0.194:1997/job/tinder-samurai/job/blinck-server/job/master/)
 Blinck backend based on spring boot.   
 High quality code with 70-80% test coverage.  
 
