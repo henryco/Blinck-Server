@@ -30,7 +30,7 @@ ____
    Authorization:    JWT String
  ```
  
- Endpoint | Method | Body | Response |  
+ Endpoint | Method | Body | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/login/user`** | **POST** | *User JSON* | HTTP Authorization header | Login as user  (register automaticaly)
 **`/login/admin`** | **POST** | *Admin JSON* | HTTP Authorization header | Login as admin
@@ -44,7 +44,7 @@ ____
   Authorization:    JWT String
 ```
 
- Endpoint | Method  | Connection header | HTTP Authorization Header | 
+ Endpoint | Method  | Connection header | HTTP Authorization Header | &nbsp;
 --- | --- | --- | --- | ---
 **`/stomp`** | **CONNECT** | YES | YES | Connect to server via jwt
 
@@ -52,7 +52,7 @@ ____
 
 # Public
 
- Endpoint | Method  | Response |  
+ Endpoint | Method  | Response | &nbsp;
 --- | --- | --- | ---
 **`/public/about`** | **GET** | ```String``` | Get application info
 **`/public/facebook/permissions`** | **GET** | ```String[]``` | Get required facebook permission
@@ -71,7 +71,7 @@ ____
  }
 ```
  
- Endpoint | Method | Authorization | Response |  
+ Endpoint | Method | Authorization | Response | &nbsp;
 --- | --- | --- | --- | --- 
 **`/session/user`** | **GET** | USER | ```StatusResponse JSON``` | Get user authorization info
 **`/session/admin`** | **GET** | ADMIN | ```StatusResponse JSON``` | Get admin authorization info
@@ -131,7 +131,7 @@ ____
 }
 ```
 
- Endpoint | Method | Arguments | Response | 
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/profile/bio`** | **GET** | ```Long```: id | ```BioEntity``` | Get user bio
 **`/protected/user/profile/media`** | **GET** | ```Long```: id | ```MediaEntity``` | Get user media
@@ -155,7 +155,7 @@ ____
 }
 ```
 
- Endpoint | Method | Arguments | Response |  
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/media/image/max`** | **GET** | **NONE** | ```Integer``` | Get max numb of images
 **`/protected/user/media/image/list`** | **GET** | ```Long```: id | ```UserImageInfo[]``` | Get user images
@@ -170,7 +170,7 @@ ____
 
 #  Report 
 
- Endpoint | Method | Arguments | Response |  
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/report`** | **POST** | ```Long```: id ```String```: reason | ```Boolean``` | Report user, reason might be null
 
@@ -190,7 +190,7 @@ ____
 }
 ```
 
- Endpoint | Method | Arguments | Response |  
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/notifications/count`** | **GET** | **NONE** | ```Long``` | Get notifications count
 **`/protected/user/notifications/list`** | **GET** | **Int:** page, size | ```NotificationForm[]``` | Get notifications
@@ -202,7 +202,7 @@ ____
 
 ### WebSocket:
 
-Endpoint | Method | Response | 
+Endpoint | Method | Response | &nbsp;
 --- | --- | --- | ---
 **`/user/queue/notification`** | **SUBSCRIBE** | ```NotificationForm``` | Receive user notificaions instantly
 
@@ -270,7 +270,7 @@ Gender | Value
 
 
 
-Endpoint | Method | Arguments | Response | 
+Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/match/queue/solo`** | **POST** | **BODY:** ```TypeForm``` | 200 | Enter to solo queue
 **`/protected/user/match/queue/list`** | **GET** | **NONE** | ```Long[]``` | Get id's of user rooms in queue
@@ -319,7 +319,7 @@ ____
 }
 ```
 
-Endpoint | Method | Arguments | Response | 
+Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/friends/count`** | **GET** | **NONE**  | ```Long``` | Get friends count
 **`/protected/user/friends/list`** | **GET** | **Int:** page, size  | ```Long[]``` | Get friends ID list
@@ -344,7 +344,7 @@ Endpoint | Method | Arguments | Response |
 }
 ```
 
-Endpoint | Method | Arguments | Response | 
+Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/friends/conversation/messages/count`** | **GET** | **Long:** id  | ```Long``` | Count messages
 **`/protected/user/friends/conversation/messages/list`** | **GET** |  **Long:** id **Int:** page, size  | ```MessageForm[]``` | Get messages
@@ -363,7 +363,7 @@ Endpoint | Method | Arguments | Response |
 }
 ```
 
-Endpoint | Method | Payload | 
+Endpoint | Method | Payload | &nbsp;
 --- | --- | --- | ---
 **`/user/message/friendship/{friendship_id}`** | **SUBSCRIBE** | ```MessageForm``` | Receive friendship messages
 **`/user/message/friendship/stat`** | **SUBSCRIBE** | ```StatusForm``` | Receive status of sended messages
@@ -398,7 +398,7 @@ Endpoint | Method | Payload |
 
 ```
 
-Endpoint | Method | Arguments | Response |
+Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/subgroup/details`** | **GET** | **Long:** id  | ```Info``` | Get subparty info
 **`/protected/user/subgroup/details/group`** | **GET** | **Long:** id  | ```Long``` | Get parent party id
@@ -420,7 +420,7 @@ Endpoint | Method | Arguments | Response |
 }
 ```
 
-Endpoint | Method | Arguments | Response |
+Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/subgroup/conversation/messages/count`** | **GET** | **Long:** id  | ```Long``` | Count messages
 **`/protected/user/subgroup/conversation/messages/list`** | **GET** |  **Long:** id  **Int:** page, size  | ```MessageForm[]``` | Get messages
@@ -437,7 +437,7 @@ Endpoint | Method | Arguments | Response |
 }
 ```
 
-Endpoint | Method | Payload | 
+Endpoint | Method | Payload | &nbsp;
 --- | --- | --- | ---
 **`/user/message/subgroup/{subgroup_id}`** | **SUBSCRIBE** | ```MessageForm``` | Receive subgroup messages
 **`/user/message/subgroup/stat`** | **SUBSCRIBE** | ```StatusForm``` | Receive status of sended messages
@@ -473,7 +473,7 @@ ____
 }
 ```
 
-Endpoint | Method | Arguments | Response | 
+Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/group/details`** | **GET** | **Long:** id  | ```PartyInfo``` | Get party info
 **`/protected/user/group/details/meeting`** | **GET** | **Long:** id  | ```Meeting``` | Get party meeting
@@ -497,7 +497,7 @@ Endpoint | Method | Arguments | Response |
 }
 ```
 
-Endpoint | Method | Arguments | Response |
+Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/group/meeting/list`** | **GET** | **Long:** id  | ```OfferInfo``` | Get proposed meeting list
 **`/protected/user/group/meeting/propose`** | **POST** | **Long:** id **BODY:** Meeting  | ```Boolean``` | Propose meeting
@@ -516,7 +516,7 @@ Endpoint | Method | Arguments | Response |
 }
 ```
 
-Endpoint | Method | Arguments | Response |
+Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/group/conversation/messages/count`** | **GET** | **Long:** id  | ```Long``` | Count messages
 **`/protected/user/group/conversation/messages/list`** | **GET** |  **Long:** id **Int:** page, size  | ```MessageForm[]``` | Get messages
@@ -533,7 +533,7 @@ Endpoint | Method | Arguments | Response |
 }
 ```
 
-Endpoint | Method | Payload | 
+Endpoint | Method | Payload | &nbsp;
 --- | --- | --- | ---
 **`/user/message/group/{group_id}`** | **SUBSCRIBE** | MessageForm | Receive party messages
 **`/user/message/group/stat`** | **SUBSCRIBE** | StatusForm | Receive status of sended messages
@@ -553,7 +553,7 @@ Endpoint | Method | Payload |
 }
 ```
 
- Endpoint | Method | Arguments | Response | 
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/list`** | **GET** | **NONE** | ```String[]``` | Get admin id's list
 **`/protected/admin/verification`** | **POST,  GET** | **Int:** size | ```String[]``` | Get admin verification id's list
@@ -586,7 +586,7 @@ Endpoint | Method | Payload |
 }
 ```
 
- Endpoint | Method | Arguments | Response |
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/bans/count/user`** | **GET** | **NONE** | ```Long``` | Get locked users count
 **`/protected/admin/bans/list/user`** | **GET** | **Int:** page, size | ```UserAuth[]``` | Get locked users list
@@ -655,7 +655,7 @@ Endpoint | Method | Payload |
 }
 ```
 
- Endpoint | Method | Arguments | Response |
+ Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/admin/monitor/party/all`** | **GET** | **NONE** | ```Party[]``` | Get all parties
 **`/protected/admin/monitor/subparty/all`** | **GET** | **NONE** | ```SubParty[]``` | Get all subparties
