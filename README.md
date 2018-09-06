@@ -71,7 +71,7 @@ ____
  }
 ```
  
- Endpoint | Method | Authorization | Response |  
+ Endpoint | Method | Authorization | Response | &nbsp;
 --- | --- | --- | --- | --- 
 **`/session/user`** | **GET** | USER | ```StatusResponse JSON``` | Get user authorization info
 **`/session/admin`** | **GET** | ADMIN | ```StatusResponse JSON``` | Get admin authorization info
@@ -270,7 +270,7 @@ Gender | Value
 
 
 
-Endpoint | Method | Arguments | Response | 
+Endpoint | Method | Arguments | Response | &nbsp;
 --- | --- | --- | --- | ---
 **`/protected/user/match/queue/solo`** | **POST** | **BODY:** ```TypeForm``` | 200 | Enter to solo queue
 **`/protected/user/match/queue/list`** | **GET** | **NONE** | ```Long[]``` | Get id's of user rooms in queue
