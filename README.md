@@ -10,7 +10,7 @@ ____
 
 ``` json
  {
-    "facebook_id":      "",
+    "facebook_uid":      "",
     "facebook_token":   ""
  }
 ```
